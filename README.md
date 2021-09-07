@@ -1,6 +1,5 @@
-<a href="https://softserve.academy/"><img src="https://s.057.ua/section/newsInternalIcon/upload/images/news/icon/000/050/792/vnutr_5ce4f980ef15f.jpg" title="SoftServe IT Academy" alt="SoftServe IT Academy"></a>
-
-***INSERT GRAPHIC HERE (include hyperlink in image)***
+[![Home](https://i.postimg.cc/dtdVKck6/photo-2021-06-16-16-06-28.jpg)](https://github.com/ita-social-projects/Home)
+___
 
 # Repository Title Goes Here
 
@@ -31,12 +30,11 @@
 
 - For more on these wonderful  badges, refer to <a href="https://shields.io/" target="_blank">shields.io</a>.
 
----
+___
 
 ## Table of Contents (Optional)
 
-> If your `README` has a lot of info, section headers might be nice.
-
+- [About the project](#About-the-project)
 - [Installation](#installation)
   - [Required to install](#Required-to-install)
   - [Environment](#Environment)
@@ -57,6 +55,38 @@
 - [License](#license)
 
 ---
+
+## About the project
+__Home__ - is an all-in-one social service that will cover all
+aspects of your communication with your home and neighbors.
+- Internal notification and news system
+
+
+- Private messages, chat with selected residents and general OSBB
+  group with all residents or OSBB's modules separately
+
+
+- Residents independently form a budget, determine
+  contributions for the maintenance of the house,
+  the sequence of solving problems. This makes it possible
+  to quickly respond to emergencies, to decide what needs to be
+  done in the house or on the adjacent territory in the first place,
+  to ensure the protection of the personal and common property of residents
+
+
+- The ability to choose a service provider such as
+  (water, electricity, gas), and pay utility bills
+
+
+- The best offers and wishes can be implemented in the OSBB
+  by residents through internal voting system
+
+
+- Transparency of expense. The residents' funds go exclusively to the needs
+  of their home and are spent rationally. The head of the OSBB reports
+  directly to the residents, so they are always aware of what the funds were spent on
+
+
 
 ## Installation
 
