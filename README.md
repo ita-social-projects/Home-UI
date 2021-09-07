@@ -2,12 +2,12 @@
 ___
 
 # Home
-
+[![Version](https://img.shields.io/github/package-json/v/ita-social-projects/Home-UI)](https://github.com/ita-social-projects/Home-UI/releases)
 [![Build Status](https://img.shields.io/travis/ita-social-projects/GreenCity/master?style=flat-square)](https://travis-ci.org/github/ita-social-projects/GreenCity)
 [![Coverage Status](https://img.shields.io/gitlab/coverage/ita-social-projects/GreenCity/master?style=flat-square)](https://coveralls.io)
 [![Github Issues](https://img.shields.io/github/issues-pr/ita-social-projects/Home-UI?style=flat-square)](https://github.com/ita-social-projects/Home-UI/issues)
 [![Pending Pull-Requests](https://img.shields.io/github/issues-pr/ita-social-projects/Home-UI?style=flat-square)](https://github.com/ita-social-projects/Home-UI/pulls)
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
+[![License](http://img.shields.io/:license-mit-green.svg?style=flat-square)](http://badges.mit-license.org)
 
 ___
 
@@ -24,7 +24,7 @@ ___
   - [How to run local](#How-to-run-local)
   - [How to run tests](#How-to-run-tests)
   - [How to run linter](#How-to-run-linter)
-- [Documentation](#Documentation))
+- [Documentation](#Documentation)
 - [Contributing](#contributing)
   - [git flow](#git-flow)
   - [issue flow](#git-flow)
@@ -84,20 +84,14 @@ $ npm install or npm i
 ### Tools
 | Project | Package | Version | Links |
 |---|---|---|---|
-**Vue** | [`vue`](https://www.npmjs.com/package/vue) | [![version](https://img.shields.io/npm/v/vue/latest.svg)](https://www.npmjs.com/package/vue) | [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vue/blob/dev/README.md) 
-**Vue Router** | [`vue-router`](https://www.npmjs.com/package/vue-router) | [![latest](https://img.shields.io/npm/v/vue-router/latest.svg)](https://www.npmjs.com/package/vue-router) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vue-router/blob/dev/README.md)
-**Vuex** | [`vuex`](https://www.npmjs.com/package/vuex) | [![latest](https://img.shields.io/npm/v/vuex/latest.svg)](https://www.npmjs.com/package/vuex) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vuex/blob/dev/README.md)
+**Vue** | [`vue`](https://www.npmjs.com/package/vue) | [![version](https://img.shields.io/npm/v/vue/next)](https://www.npmjs.com/package/vue) | [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vue/blob/dev/README.md) 
+**Vue Router** | [`vue-router`](https://www.npmjs.com/package/vue-router) | [![latest](https://img.shields.io/npm/v/vue-router/next)](https://www.npmjs.com/package/vue-router) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vue-router/blob/dev/README.md)
+**Vuex** | [`vuex`](https://www.npmjs.com/package/vuex) | [![latest](https://img.shields.io/npm/v/vuex/next)](https://www.npmjs.com/package/vuex) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vuex/blob/dev/README.md)
 **Axios** | [`axios`](https://www.npmjs.com/package/axios) | [![latest](https://img.shields.io/npm/v/axios/latest.svg)](https://www.npmjs.com/package/axios) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/axios/axios/blob/master/README.md)
 
 ### Environment
 environmental variables
-```properties
-spring.datasource.url=${DATASOURCE_URL}
-spring.datasource.username=${DATASOURCE_USER}
-spring.datasource.password=${DATASOURCE_PASSWORD}
-spring.mail.username=${EMAIL_ADDRESS}
-spring.mail.password=${EMAIL_PASSWORD}
-```
+
 ---
 
 ## Usage
@@ -122,7 +116,6 @@ $ npm run lint
 ## Contributing
 
 ### Git flow
-> To get started...
 #### Step 1
 
 - **Option 1**
@@ -149,7 +142,7 @@ $ npm run lint
 - Mentor of SoftServe ITA - [so2niko](https://github.com/so2niko)
 
 Contributors that have worked on this project:
-<a href="https://github.com/ita-social-projects/Home-UI/graphs/contributors">
+<a href="https://github.com/ita-social-projects/Home-UI/graphs/contributors"></br>
   <img src="https://contrib.rocks/image?repo=ita-social-projects/Home-UI" />
 </a>
 ---
@@ -166,4 +159,4 @@ Contributors that have worked on this project:
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
 - **[MIT license](http://opensource.org/licenses/mit-license.php)**
-- Copyright 2020 © <a href="https://softserve.academy/" target="_blank"> SoftServe IT Academy</a>.
+- Copyright 2021 © <a href="https://softserve.academy/" target="_blank"> SoftServe IT Academy</a>.
