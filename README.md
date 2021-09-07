@@ -17,13 +17,13 @@ ___
 - [Installation](#installation)
   - [Clone](#Clone)
   - [Setup](#Setup)
-  - [Required to install](#Required to install)
+  - [Required to install](#Required-to-install)
   - [Tools](#Tools)
   - [Environment](#Environment)
 - [Usage](#Usage)
   - [How to run local](#How-to-run-local)
   - [How to run tests](#How-to-run-tests)
-  - [How to Checkstyle](#How-to-Checkstyle)
+  - [How to run linter](#How-to-run-linter)
 - [Documentation](#Documentation))
 - [Contributing](#contributing)
   - [git flow](#git-flow)
@@ -74,7 +74,7 @@ aspects of your communication with your home and neighbors.
 
 ### Setup
 ```shell
-$ npm install
+$ npm install or npm i
 ```
 
 ### Required to install
@@ -84,9 +84,10 @@ $ npm install
 ### Tools
 | Project | Package | Version | Links |
 |---|---|---|---|
-**Vue CLI** | [`@vue/cli`](https://npmjs.com/package/@angular/cli) | [![latest](https://img.shields.io/npm/v/%40angular%2Fcli/latest.svg)](https://npmjs.com/package/@angular/cli) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/angular/cli/README.md) 
-**Vuex** | [`@vuex`](https://npmjs.com/package/@angular-devkit/architect-cli) | [![latest](https://img.shields.io/npm/v/%40angular-devkit%2Farchitect-cli/latest.svg)](https://npmjs.com/package/@angular-devkit/architect-cli) |  [![snapshot](https://img.shields.io/badge/snapshot--blue.svg)](https://github.com/angular/angular-devkit-architect-cli-builds)
-**Axios** | [`@axios`](https://npmjs.com/package/@angular-devkit/schematics-cli) | [![latest](https://img.shields.io/npm/v/%40angular-devkit%2Fschematics-cli/latest.svg)](https://npmjs.com/package/@angular-devkit/schematics-cli) |  [![snapshot](https://img.shields.io/badge/snapshot--blue.svg)](https://github.com/angular/angular-devkit-schematics-cli-builds)
+**Vue** | [`vue`](https://www.npmjs.com/package/vue) | [![version](https://img.shields.io/npm/v/vue/latest.svg)](https://www.npmjs.com/package/vue) | [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vue/blob/dev/README.md) 
+**Vue Router** | [`vue-router`](https://www.npmjs.com/package/vue-router) | [![latest](https://img.shields.io/npm/v/vue-router/latest.svg)](https://www.npmjs.com/package/vue-router) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vue-router/blob/dev/README.md)
+**Vuex** | [`vuex`](https://www.npmjs.com/package/vuex) | [![latest](https://img.shields.io/npm/v/vuex/latest.svg)](https://www.npmjs.com/package/vuex) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vuex/blob/dev/README.md)
+**Axios** | [`axios`](https://www.npmjs.com/package/axios) | [![latest](https://img.shields.io/npm/v/axios/latest.svg)](https://www.npmjs.com/package/axios) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/axios/axios/blob/master/README.md)
 
 ### Environment
 environmental variables
@@ -101,9 +102,17 @@ spring.mail.password=${EMAIL_PASSWORD}
 
 ## Usage
 ### How to run local
+```shell
+$ npm run serve
+```
 ### How to run tests
-### How to Checkstyle
-
+```shell
+$ npm run test:unit
+```
+### How to run linter
+```shell
+$ npm run lint
+```
 ---
 
 ## Documentation
