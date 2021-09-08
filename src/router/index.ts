@@ -3,13 +3,13 @@ import {
   createWebHistory,
   RouteRecordRaw,
 } from 'vue-router'
-import App from '@/App.vue';
+import Home from '@/views/Home.vue';
 
 const routes: RouteRecordRaw[] = [
-  // initial route, should be removed
+  // initial route; should be customized or removed
   {
     path: '/',
-    component: App,
+    component: Home,
   }
 ]
 
