@@ -2,7 +2,7 @@ module.exports = {
   lintOnSave: false,
   css: {
     loaderOptions: {
-      sass: {
+      scss: {
         prependData: `@import "@/styles/index.scss";`,
       },
     },
