@@ -45,11 +45,6 @@
     "typescript": "~4.1.5",
     "vue-jest": "^5.0.0-0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.{html,vue,css,scss}": [
       "stylelint --fix",
@@ -59,5 +54,10 @@
     "*.{js,vue}": [
       "lint"
     ]
-  }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && npm run test:unit"
+    }
+  }  
 }
