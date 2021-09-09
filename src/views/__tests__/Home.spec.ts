@@ -1,9 +1,9 @@
 import { shallowMount } from '@vue/test-utils'
-import App from '@/App.vue';
+import Home from '@/views/Home.vue';
 
-describe('App.vue', () => {
+describe('Home.vue', () => {
   it('should be exists', () => {
-    const wrapper = shallowMount(App)
+    const wrapper = shallowMount(Home)
 
     expect(wrapper.exists()).toBeTruthy()
   })

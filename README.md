@@ -81,8 +81,8 @@ $ npm ci
 ```
 
 ### Required to install
-* NodeJS (^14.17.5)
-* npm (^6.14.14)
+* NodeJS (>=14)
+* npm (=>6)
 
 ### Tools
 | Project | Package | Version | Links |
