@@ -91,6 +91,8 @@ $ npm ci
 **Vue Router** | [`vue-router`](https://www.npmjs.com/package/vue-router) | [![latest](https://img.shields.io/npm/v/vue-router/next)](https://www.npmjs.com/package/vue-router) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vue-router/blob/dev/README.md)
 **Vuex** | [`vuex`](https://www.npmjs.com/package/vuex) | [![latest](https://img.shields.io/npm/v/vuex/next)](https://www.npmjs.com/package/vuex) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vuex/blob/dev/README.md)
 **Axios** | [`axios`](https://www.npmjs.com/package/axios) | [![latest](https://img.shields.io/npm/v/axios/latest.svg)](https://www.npmjs.com/package/axios) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/axios/axios/blob/master/README.md)
+**PrimeVue** | [`axios`](https://www.npmjs.com/package/primevue) | [![latest](https://img.shields.io/npm/v/primevue/latest.svg)](https://www.npmjs.com/package/primevue) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/primefaces/primevue/blob/master/README.md)
+**PrimeIcons** | [`axios`](https://www.npmjs.com/package/primeicons) | [![latest](https://img.shields.io/npm/v/primeicons/latest.svg)](https://www.npmjs.com/package/primeicons) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/primefaces/primeicons/blob/master/README.md)
 ---
 
 ## Usage
@@ -118,7 +120,8 @@ Here is the back-end part of our project: https://github.com/ita-social-projects
 
 ---
 
-## Documentation
+## Documentation  
+All documentation can be found in `Wiki` tab.
 
 ---
 
