@@ -4,7 +4,8 @@ ___
 # Home
 [![License](http://img.shields.io/:license-mit-green.svg?style=flat-square)](http://badges.mit-license.org)
 [![Version](https://img.shields.io/github/package-json/v/ita-social-projects/Home-UI)](https://github.com/ita-social-projects/Home-UI/releases)
-[![Coverage Status](https://img.shields.io/gitlab/coverage/ita-social-projects/GreenCity/master?style=flat-square)](https://coveralls.io)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ita-social-projects_Home-UI&metric=alert_status)](https://sonarcloud.io/dashboard?id=ita-social-projects_Home-UI)
+[![Coverage Status](https://img.shields.io/sonar/coverage/ita-social-projects_Home-UI?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/component_measures?id=ita-social-projects_Home-UI&metric=coverage&view=treemap)
 [![Github Issues](https://img.shields.io/github/issues/ita-social-projects/Home-UI?style=flat-square)](https://github.com/ita-social-projects/Home-UI/issues)
 [![Pending Pull-Requests](https://img.shields.io/github/issues-pr/ita-social-projects/Home-UI?style=flat-square)](https://github.com/ita-social-projects/Home-UI/pulls)
 ___
