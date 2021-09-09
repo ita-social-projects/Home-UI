@@ -57,7 +57,7 @@
     ],
     "*.{js,vue}": [
       "prettier --write",
-      "eslint --fix",
+      "eslint --cache --fix",
       "git add -A"
     ]
   }
