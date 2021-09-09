@@ -47,7 +47,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm precommit"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
@@ -57,9 +57,7 @@
       "git add"
     ],
     "*.{js,vue}": [
-      "eslint --fix",
-      "prettier --write",
-      "git add -A"
+      "lint"
     ]
   }
 }
