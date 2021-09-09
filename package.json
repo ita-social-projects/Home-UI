@@ -10,17 +10,6 @@
     "test:watch": "vue-cli-service test:unit --watch",
     "lint": "vue-cli-service lint"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "vue-cli-service test:unit",
-      "...": "..."
-    }
-  },
-  "lint-staged": {
-    "*.js": ["npm run lint", "git add"]
-  },
-
   "dependencies": {
     "axios": "0.21.4",
     "core-js": "3.17.2",
@@ -54,5 +43,22 @@
     "sass-loader": "^8.0.2",
     "typescript": "~4.1.5",
     "vue-jest": "^5.0.0-0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{html,vue,css,scss}": [
+      "prettier --write",
+      "stylelint --fix",
+      "git add"
+    ],
+    "*.{js,vue}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add -A"
+    ]
   }
 }
