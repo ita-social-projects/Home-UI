@@ -6,8 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "test:coverage": "vue-cli-service test:unit --collectCoverage",
     "test:watch": "vue-cli-service test:unit --watch",
+    "test:coverage": "vue-cli-service test:unit --collectCoverage",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -41,7 +41,7 @@
     "node-sass": "^4.12.0",
     "prettier": "^2.2.1",
     "sass-loader": "^8.0.2",
-    "typescript": "~4.1.5",
+    "typescript": "3.9.10",
     "vue-jest": "^5.0.0-0"
   }
 }
