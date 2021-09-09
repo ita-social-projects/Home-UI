@@ -8,7 +8,8 @@
     "test:unit": "vue-cli-service test:unit",
     "test:coverage": "vue-cli-service test:unit --collectCoverage",
     "test:watch": "vue-cli-service test:unit --watch",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "axios": "0.21.4",
@@ -46,18 +47,18 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "npm precommit"
     }
   },
   "lint-staged": {
     "*.{html,vue,css,scss}": [
-      "prettier --write",
       "stylelint --fix",
+      "prettier --write",
       "git add"
     ],
     "*.{js,vue}": [
+      "eslint --fix",
       "prettier --write",
-      "eslint --cache --fix",
       "git add -A"
     ]
   }
