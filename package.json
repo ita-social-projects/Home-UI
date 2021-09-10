@@ -9,7 +9,7 @@
     "test:coverage": "vue-cli-service test:unit --collectCoverage",
     "test:watch": "vue-cli-service test:unit --watch",
     "lint": "vue-cli-service lint",
-    "precommit": "lint-staged"
+    "prepare": "husky install"
   },
   "dependencies": {
     "axios": "0.21.4",
@@ -54,11 +54,7 @@
     "*.{js,vue}": [
       "eslint --fix"
     ],
-    "*": "prettier --ignore-unknown --write"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && npm run test:unit"
-    }
+    "*": "prettier --ignore-unknown --write",
+    "*.js": "eslint --cache --fix"
   }
 }
