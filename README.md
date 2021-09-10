@@ -4,7 +4,8 @@ ___
 # Home
 [![License](http://img.shields.io/:license-mit-green.svg?style=flat-square)](http://badges.mit-license.org)
 [![Version](https://img.shields.io/github/package-json/v/ita-social-projects/Home-UI)](https://github.com/ita-social-projects/Home-UI/releases)
-[![Coverage Status](https://img.shields.io/gitlab/coverage/ita-social-projects/GreenCity/master?style=flat-square)](https://coveralls.io)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ita-social-projects_Home-UI&metric=alert_status)](https://sonarcloud.io/dashboard?id=ita-social-projects_Home-UI)
+[![Coverage Status](https://img.shields.io/sonar/coverage/ita-social-projects_Home-UI?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/component_measures?id=ita-social-projects_Home-UI&metric=coverage&view=treemap)
 [![Github Issues](https://img.shields.io/github/issues/ita-social-projects/Home-UI?style=flat-square)](https://github.com/ita-social-projects/Home-UI/issues)
 [![Pending Pull-Requests](https://img.shields.io/github/issues-pr/ita-social-projects/Home-UI?style=flat-square)](https://github.com/ita-social-projects/Home-UI/pulls)
 ___
@@ -80,8 +81,8 @@ $ npm ci
 ```
 
 ### Required to install
-* NodeJS (^14.17.5)
-* npm (^6.14.14)
+* NodeJS (>=14)
+* npm (=>6)
 
 ### Tools
 | Project | Package | Version | Links |
@@ -90,6 +91,8 @@ $ npm ci
 **Vue Router** | [`vue-router`](https://www.npmjs.com/package/vue-router) | [![latest](https://img.shields.io/npm/v/vue-router/next)](https://www.npmjs.com/package/vue-router) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vue-router/blob/dev/README.md)
 **Vuex** | [`vuex`](https://www.npmjs.com/package/vuex) | [![latest](https://img.shields.io/npm/v/vuex/next)](https://www.npmjs.com/package/vuex) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/vuejs/vuex/blob/dev/README.md)
 **Axios** | [`axios`](https://www.npmjs.com/package/axios) | [![latest](https://img.shields.io/npm/v/axios/latest.svg)](https://www.npmjs.com/package/axios) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/axios/axios/blob/master/README.md)
+**PrimeVue** | [`axios`](https://www.npmjs.com/package/primevue) | [![latest](https://img.shields.io/npm/v/primevue/latest.svg)](https://www.npmjs.com/package/primevue) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/primefaces/primevue/blob/master/README.md)
+**PrimeIcons** | [`axios`](https://www.npmjs.com/package/primeicons) | [![latest](https://img.shields.io/npm/v/primeicons/latest.svg)](https://www.npmjs.com/package/primeicons) |  [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/primefaces/primeicons/blob/master/README.md)
 ---
 
 ## Usage
@@ -117,7 +120,8 @@ Here is the back-end part of our project: https://github.com/ita-social-projects
 
 ---
 
-## Documentation
+## Documentation  
+All documentation can be found in `Wiki` tab.
 
 ---
 
