@@ -1,4 +1,4 @@
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
 
 export default createStore({
   strict: process.env.NODE_ENV !== 'production',
@@ -6,4 +6,4 @@ export default createStore({
   mutations: {},
   actions: {},
   modules: {},
-})
+});
