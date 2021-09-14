@@ -2,4 +2,8 @@
   <router-view> </router-view>
 </template>
 
-<style lang="scss"></style>
+<script lang="ts">
+</script>
+
+<style lang="scss">
+</style>
