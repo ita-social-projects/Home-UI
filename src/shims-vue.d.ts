@@ -1,4 +1,4 @@
-import { HTTP } from '@/core/api/http-common'
+import { HTTP } from '@/core/api/http-common';
 /* eslint-disable */
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'
