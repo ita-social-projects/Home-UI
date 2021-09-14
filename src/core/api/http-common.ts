@@ -1,7 +1,7 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const encodedCredentials = window.btoa('admin@example.com:password')
-const auth = `Basic ${encodedCredentials}`
+const encodedCredentials = window.btoa('admin@example.com:password');
+const auth = `Basic ${encodedCredentials}`;
 
 export const HTTP = axios.create({
   baseURL: 'https://home-project-academy.herokuapp.com/api/0',
@@ -10,4 +10,4 @@ export const HTTP = axios.create({
     'Content-Type': 'application/json',
   },
   withCredentials: true,
-})
+});

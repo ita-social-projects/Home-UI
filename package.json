@@ -8,17 +8,16 @@
     "test:unit": "vue-cli-service test:unit",
     "test:watch": "vue-cli-service test:unit --watch",
     "test:coverage": "vue-cli-service test:unit --collectCoverage",
-    "lint": "vue-cli-service lint",
-    "prepare": "husky install"
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "axios": "0.21.4",
-    "core-js": "3.17.2",
+    "core-js": "^3.6.5",
     "primeicons": "4.1.0",
     "primevue": "3.7.0",
-    "vue": "3.2.9",
-    "vue-router": "4.0.11",
-    "vuex": "4.0.2"
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.0.0-0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
@@ -44,19 +43,17 @@
     "node-sass": "^4.12.0",
     "prettier": "^2.2.1",
     "sass-loader": "^8.0.2",
-    "typescript": "3.9.10",
+    "typescript": "~4.1.5",
     "vue-jest": "^5.0.0-0"
   },
   "lint-staged": {
+    "*": "prettier --ignore-unknown --write",
     "*.{html,vue,css,scss}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "*.{js,ts,vue}": [
       "eslint --fix"
-    ],
-    "*": "prettier --ignore-unknown --write",
-    "*.{js,ts}": "eslint --fix"
+    ]
   },
   "husky": {
     "hooks": {
