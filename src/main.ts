@@ -6,6 +6,10 @@ import App from './App.vue'
 import { HTTP } from './core/api/http-common'
 import PrimeVue from 'primevue/config'
 
+import 'primevue/resources/themes/tailwind-light/theme.css'
+import 'primevue/resources/primevue.min.css'
+import 'primeicons/primeicons.css'
+
 const app = createApp(App)
 
 app.config.globalProperties.$http = HTTP
