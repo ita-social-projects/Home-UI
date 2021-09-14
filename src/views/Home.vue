@@ -1,13 +1,16 @@
 <template>
-  <h1>Home</h1>
+  <h1>{{ title }}</h1>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+  name: 'home',
   data() {
-    return {};
+    return {
+      title: 'home',
+    };
   },
 });
 </script>

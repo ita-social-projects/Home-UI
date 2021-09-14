@@ -1,9 +1,9 @@
 import { createApp } from 'vue';
 import router from './router';
 import store from './store';
-import { HTTP } from '@/core/api/http-common';
 
-import App from '@/App.vue';
+import { HTTP } from '@/core/api/http-common';
+import App from './App.vue';
 
 const app = createApp(App);
 
