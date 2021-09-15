@@ -11,6 +11,7 @@
             v-model.trim="email"
             :class="{ 'p-invalid': v$.email.$error }"
             @blur="v$.email.$touch"
+            maxlength="320"
           />
           <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
         </div>
@@ -35,9 +36,6 @@
           <Button label="Заре'єструвати" type="submit" />
         </section>
       </form>
-      <div>
-        <pre>{{ JSON.stringify({ email, edrpou }, null, 2) }}</pre>
-      </div>
     </div>
   </div>
 </template>
@@ -45,7 +43,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import { helpers } from '@vuelidate/validators';
+import { helpers, maxLength, minLength } from '@vuelidate/validators';
 import { customRequired, edrpouValidator } from '@/utils/validators';
 
 import InputText from 'primevue/inputtext';
@@ -82,6 +80,8 @@ export default defineComponent({
     return {
       email: {
         required: customRequired,
+        minLength: helpers.withMessage('Мінімальна довжина електронної пошти - 5 символів', minLength(5)),
+        maxLength: helpers.withMessage('Максимальна довжина електронної пошти - 320 символів', maxLength(320)),
       },
       edrpou: {
         required: customRequired,
