@@ -1,14 +1,16 @@
 <template>
   <header>
-    Home
-    <Button
-      type="button"
-      label="Messages"
-      icon="pi pi-users"
-      class="p-button-warning"
-      badge="8"
-      badgeClass="p-badge-info"
-    />
+    <div>Home</div>
+    <div>
+      <Button
+        type="button"
+        label="Messages"
+        icon="pi pi-users"
+        class="p-button-warning"
+        badge="8"
+        badgeClass="p-badge-info"
+      />
+    </div>
   </header>
 </template>
 
@@ -24,10 +26,12 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background-color: #b0ffe3;
+  height: 10vh;
 }
 </style>

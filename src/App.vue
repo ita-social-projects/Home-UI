@@ -23,7 +23,7 @@ export default defineComponent({
   },
   methods: {
     getUsers() {
-      // this.$http.get('/users').then(console.log).catch(console.log)
+      // this.$http.get('/users').then(console.log).catch(console.log);
       console.log(this.$store);
     },
   },

@@ -1,18 +1,157 @@
 <template>
-  <div>
-    <div>
-      <h1>REGISTER COOPERATION</h1>
-      <form></form>
+  <div class="cooperation-wrap">
+    <div class="form-wrap">
+      <h1>ЗАРЕЄСТРУВАТИ ОБ'ЄДНАННЯ</h1>
+      <form @submit.prevent="registerCooperation" class="coop-reg">
+        <div>
+          <label for="email">Електронна пошта <span>*</span></label>
+          <InputText
+            id="email"
+            placeholder="john.doe@gmail.com"
+            v-model.trim="email"
+            :class="{ 'p-invalid': v$.email.$error }"
+            @blur="v$.email.$touch"
+          />
+          <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
+        </div>
+        <div>
+          <label for="edrpou">ЄДРПОУ <span>*</span></label>
+          <InputText
+            id="edrpou"
+            placeholder="12345678"
+            v-model="edrpou"
+            :class="{ 'p-invalid': v$.edrpou.$error }"
+            @blur="v$.edrpou.$touch"
+            maxlength="8"
+          />
+          <small v-if="v$.edrpou.$error" id="edrpou-help" class="p-error">{{ v$.edrpou.$errors[0].$message }}</small>
+          <div class="counter" :class="{ 'counter-ok': count === 8 }">
+            <span>{{ count }}</span
+            >/8
+          </div>
+        </div>
+        <section class="submit-buttons">
+          <Button label="Відмінити" class="p-button-outlined" type="reset" />
+          <Button label="Заре'єструвати" type="submit" />
+        </section>
+      </form>
+      <div>
+        <pre>{{ JSON.stringify({ email, edrpou }, null, 2) }}</pre>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import useVuelidate from '@vuelidate/core';
+import { helpers } from '@vuelidate/validators';
+import { customRequired, edrpouValidator } from '@/utils/validators';
+
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
 
 export default defineComponent({
   name: 'RegisterCooperation',
+  components: {
+    InputText,
+    Button,
+  },
+  setup() {
+    return {
+      v$: useVuelidate(),
+    };
+  },
+  data() {
+    return {
+      email: '',
+      edrpou: '',
+      count: 0,
+    };
+  },
+  methods: {
+    registerCooperation() {
+      this.v$.$validate().then((isCorrect) => {
+        if (isCorrect) {
+          console.log(this.v$);
+        }
+      });
+    },
+  },
+  validations() {
+    return {
+      email: {
+        required: customRequired,
+      },
+      edrpou: {
+        required: customRequired,
+        edrpouValidator: helpers.withMessage('Код ЄДРПОУ складається з 8 цифр', edrpouValidator),
+      },
+    };
+  },
+  watch: {
+    edrpou(newValue) {
+      console.log(newValue);
+      this.count = newValue.length;
+    },
+  },
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.cooperation-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2em;
+}
+
+.form-wrap {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2feff;
+  border-radius: 10px;
+  padding: 2em;
+}
+
+.coop-reg {
+  width: 85%;
+}
+
+.form-wrap .coop-reg > div {
+  display: flex;
+  flex-flow: column;
+  margin: 1em 0;
+}
+
+.coop-reg label {
+  margin: 0.8em 0;
+}
+
+.coop-reg label span {
+  color: red;
+  font-weight: 600;
+}
+
+.coop-reg small {
+  margin: 0.4em 0;
+}
+
+.counter {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.6em 1em;
+}
+
+.counter-ok {
+  color: #664fff;
+}
+
+.submit-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+</style>
