@@ -2,7 +2,7 @@
   <BaseHeader />
   <div class="login__component">
     <h1 class="title">Вхід до Особистого кабінету</h1>
-    <div class="input__group">
+    <form @submit.prevent="" class="input__group">
       <span class="p-input-icon-right">
         <i class="pi pi-envelope"></i>
         <InputText
@@ -12,9 +12,10 @@
           v-model="email"
           @input="email = $event.target.value"
           @blur="v$.email.$touch"
+          :class="{ 'p-invalid': v$.email.$error }"
         />
       </span>
-      <div class="error__message" v-if="v$.email.$error">Потрібно заповнити поле</div>
+      <small class="error__message" v-if="v$.email.$error">Потрібно заповнити поле</small>
       <span span class="p-input-icon-right">
         <i class="pi pi-lock"></i>
         <InputText
@@ -23,12 +24,14 @@
           placeholder="Пароль"
           v-model="password"
           @input="password = $event.target.value"
+          @blur="v$.password.$touch"
+          :class="{ 'p-invalid': v$.password.$error }"
         />
       </span>
       <div class="btn">
         <Button label="Увiйти" icon="pi pi-user" class="p-button-sm" @click="userLogin" />
       </div>
-    </div>
+    </form>
   </div>
 </template>
 
@@ -38,7 +41,7 @@ import useVuelidate from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import BaseHeader from './base/BaseHeader.vue';
+import BaseHeader from '../components/base/BaseHeader.vue';
 export default defineComponent({
   name: 'userlogin',
   components: {
@@ -75,13 +78,6 @@ export default defineComponent({
       }
     },
   },
-  // computed: {
-  //   nameErrors() {
-  //     const errors = [];
-  //     if (!this.v$.email.required) errors.push('Потрібно заповнити поле');
-  //     return errors;
-  //   }
-  // },
 });
 </script>
 
@@ -104,7 +100,7 @@ export default defineComponent({
     align-items: center;
   }
   .p-input-icon-right {
-    margin: 1rem;
+    margin: 1rem 0;
   }
   .btn {
     display: flex;
