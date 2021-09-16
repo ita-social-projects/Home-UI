@@ -9,5 +9,5 @@ export const HTTP = axios.create({
     Authorization: auth,
     'Content-Type': 'application/json',
   },
-  withCredentials: true,
+  // withCredentials: true,
 });

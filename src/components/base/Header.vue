@@ -9,6 +9,7 @@
         class="p-button-warning"
         badge="8"
         badgeClass="p-badge-info"
+        @click="$router.push({ path: '/cooperation' })"
       />
     </div>
   </header>

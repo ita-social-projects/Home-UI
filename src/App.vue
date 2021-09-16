@@ -1,19 +1,16 @@
 <template>
   <Header></Header>
-  <!--  <router-view></router-view>-->
-  <RegisterCooperation></RegisterCooperation>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Header from '@/components/base/Header.vue';
-import RegisterCooperation from '@/views/RegisterCooperation.vue';
 
 export default defineComponent({
   name: 'dad',
   components: {
     Header,
-    RegisterCooperation,
   },
   created() {
     this.getUsers();
