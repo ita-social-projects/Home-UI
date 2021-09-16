@@ -43,8 +43,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import { helpers, maxLength, minLength } from '@vuelidate/validators';
-import { customRequired, edrpouValidator } from '@/utils/validators';
+import {
+  requiredValidator,
+  edrpouValidator,
+  emailValidator,
+  emailMinLength,
+  emailMaxLength,
+  emailLastCharsValidator,
+} from '@/utils/validators';
 
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
@@ -79,13 +85,15 @@ export default defineComponent({
   validations() {
     return {
       email: {
-        required: customRequired,
-        minLength: helpers.withMessage('Мінімальна довжина електронної пошти - 5 символів', minLength(5)),
-        maxLength: helpers.withMessage('Максимальна довжина електронної пошти - 320 символів', maxLength(320)),
+        requiredValidator,
+        emailMinLength,
+        emailLastCharsValidator,
+        emailValidator,
+        emailMaxLength,
       },
       edrpou: {
-        required: customRequired,
-        edrpouValidator: helpers.withMessage('Код ЄДРПОУ складається з 8 цифр', edrpouValidator),
+        requiredValidator,
+        edrpouValidator,
       },
     };
   },
@@ -137,6 +145,7 @@ export default defineComponent({
 
 .coop-reg small {
   margin: 0.4em 0;
+  width: 80%;
 }
 
 .counter {
