@@ -4,7 +4,6 @@
     <h1 class="title">Вхід до Особистого кабінету</h1>
     <form @submit.prevent="" class="input__group">
       <span class="p-input-icon-right">
-        <i class="pi pi-envelope"></i>
         <InputText
           id="email"
           type="text"
@@ -17,7 +16,6 @@
       </span>
       <small class="error__message" v-if="v$.email.$error">Потрібно заповнити поле</small>
       <span span class="p-input-icon-right">
-        <i class="pi pi-lock"></i>
         <InputText
           id="password"
           type="password"
