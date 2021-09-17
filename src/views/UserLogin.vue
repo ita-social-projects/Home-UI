@@ -83,7 +83,6 @@ export default defineComponent({
   margin: 150px auto;
   max-width: 450px;
   .title {
-    font-family: 'Open sans';
     color: #646e7c;
     font-weight: bold;
     line-height: 120%;
