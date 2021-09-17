@@ -33,7 +33,7 @@
         </div>
         <section class="submit-buttons">
           <Button label="Відмінити" class="p-button-outlined" type="reset" />
-          <Button label="Заре'єструвати" :disabled="!isEdrpouValid" type="submit" />
+          <Button label="Заре'єструвати" :disabled="!isEdrpouValid" class="p-button-info" type="submit" />
         </section>
       </form>
     </div>
@@ -88,7 +88,7 @@ export default defineComponent({
       this.v$.$validate().then((isValid) => {
         if (isValid) {
           this.isEmailValid = true;
-          this.isEdrpouValid = true;
+          this.isEmailValid = true;
           alert('successfully registered');
         }
       });
@@ -115,7 +115,7 @@ export default defineComponent({
     },
     isEmailValid(newValue) {
       if (newValue === true) {
-        this.isEmailRegistered();
+        // this.isEmailRegistered();
       }
     },
   },
