@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="header__logo">
-      <img :src="require('@/assets/logo.svg')" />
+      <img :src="require('@/assets/logo.svg')" alt="logo" />
     </div>
 
     <div class="header__info">

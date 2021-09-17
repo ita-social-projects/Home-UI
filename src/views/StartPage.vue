@@ -17,35 +17,35 @@
 
     <div class="features">
       <div class="y feature__item">
-        <i class="pi pi-book"></i>
+        <span class="pi pi-book"></span>
         <h3>Управлiння</h3>
       </div>
       <div class="y feature__item">
-        <i class="pi pi-sliders-v"></i>
+        <span class="pi pi-sliders-v"></span>
         <h3>Голосування</h3>
       </div>
       <div class="y feature__item">
-        <i class="pi pi-info-circle"></i>
+        <span class="pi pi-info-circle"></span>
         <h3>Нова фіча</h3>
       </div>
       <div class="y feature__item">
-        <i class="pi pi-briefcase"></i>
+        <span class="pi pi-briefcase"></span>
         <h3>Запрошуй</h3>
       </div>
       <div class="y feature__item">
-        <i class="pi pi-chart-bar"></i>
+        <span class="pi pi-chart-bar"></span>
         <h3>Гарна штука</h3>
       </div>
       <div class="y feature__item">
-        <i class="pi pi-print"></i>
+        <span class="pi pi-print"></span>
         <h3>Друкуй результати</h3>
       </div>
       <div class="y feature__item">
-        <i class="pi pi-book"></i>
+        <span class="pi pi-book"></span>
         <h3>Управлiння</h3>
       </div>
       <div class="y feature__item">
-        <i class="pi pi-info-circle"></i>
+        <span class="pi pi-info-circle"></span>
         <h3>Нова фіча</h3>
       </div>
     </div>
@@ -111,7 +111,7 @@ export default defineComponent({
   text-align: center;
   flex-direction: column;
 }
-i {
+span {
   font-size: 55px;
   display: block;
   padding: 25px;
