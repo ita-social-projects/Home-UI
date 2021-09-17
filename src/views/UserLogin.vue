@@ -1,5 +1,4 @@
 <template>
-  <BaseHeader />
   <div class="login__component">
     <h1 class="title">Вхід до Особистого кабінету</h1>
     <form @submit.prevent="" class="input__group">
@@ -29,7 +28,7 @@
         />
       </span>
       <div class="btn">
-        <Button label="Увiйти" icon="pi pi-user" class="p-button-sm" @click="userLogin" />
+        <Button label="Увiйти" class="p-button-sm p-button-info" @click="userLogin" type="submit" />
       </div>
     </form>
   </div>
@@ -41,13 +40,11 @@ import useVuelidate from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import BaseHeader from '../components/base/BaseHeader.vue';
 export default defineComponent({
   name: 'userlogin',
   components: {
     InputText,
     Button,
-    BaseHeader,
   },
   data() {
     return {
