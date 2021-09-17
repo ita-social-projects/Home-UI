@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import UserLogin from '@/views/UserLogin.vue';
 import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
 
@@ -8,10 +7,6 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: StartPage,
-  },
-  {
-    path: '/login',
-    component: UserLogin,
   },
   {
     path: '/register-cooperation',
