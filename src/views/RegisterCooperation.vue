@@ -10,7 +10,7 @@
             placeholder="john.doe@gmail.com"
             v-model.trim="email"
             :class="{ 'p-invalid': v$.email.$error }"
-            @blur="v$.email.$touch"
+            @blur="emailBlur"
             maxlength="320"
           />
           <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
@@ -33,7 +33,7 @@
         </div>
         <section class="submit-buttons">
           <Button label="Відмінити" class="p-button-outlined" type="reset" />
-          <Button label="Заре'єструвати" type="submit" />
+          <Button label="Заре'єструвати" :disabled="!isFormValid" type="submit" />
         </section>
       </form>
     </div>
@@ -71,12 +71,23 @@ export default defineComponent({
       email: '',
       edrpou: '',
       count: 0,
+      isEmailValid: false,
+      isFormValid: false,
     };
   },
   methods: {
+    emailBlur() {
+      this.v$.email.$touch();
+      this.v$.email.$validate().then((isValid) => {
+        if (isValid) {
+          this.isEmailValid = true;
+        }
+      });
+    },
     registerCooperation() {
-      this.v$.$validate().then((isCorrect) => {
-        if (isCorrect) {
+      this.v$.$validate().then((isValid) => {
+        if (isValid) {
+          this.isFormValid = true;
           console.log(this.v$);
         }
       });
@@ -101,6 +112,9 @@ export default defineComponent({
     edrpou(newValue) {
       console.log(newValue);
       this.count = newValue.length;
+    },
+    isEmailValid(newValue) {
+      console.log(newValue);
     },
   },
 });
