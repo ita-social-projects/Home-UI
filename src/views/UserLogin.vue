@@ -64,11 +64,11 @@ export default defineComponent({
     userLogin() {
       this.v$.$validate();
       if (!this.v$.$error) {
-        alert('success');
+        // if success
         this.email = '';
         this.password = '';
       } else {
-        alert('failed');
+        // if failed
       }
     },
   },
