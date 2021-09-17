@@ -1,7 +1,6 @@
 import { helpers, required, minLength, maxLength } from '@vuelidate/validators';
 
-const email = helpers.regex(/[a-z\d][a-z\d!#$%&'*+\-/=?^_`{|().,:;<>@[\]]+@[a-z\d.-]+\.[\w-]{2,4}/i);
-
+const email = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-\/=?^_`{|().,:;<>@[\]]+@[a-z\d.-]+\.[\w-]{2,4}$/i);
 export const emailValidator = helpers.withMessage(
   'Електронна пошта містить латинські букви, цифри, та спеціальні символи',
   email
