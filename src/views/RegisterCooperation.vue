@@ -84,23 +84,11 @@ export default defineComponent({
       this.v$.edrpou.$touch();
       this.isEdrpouValid = !this.v$.edrpou.$error;
     },
-    isEmailRegistered() {
-      this.$http
-        .get('/users', {
-          params: { email: this.email },
-        })
-        .then((r) => {
-          console.log(r);
-          const isEmailAvailable = r.data.length === 0;
-          if (!isEmailAvailable) {
-          }
-          console.log(isEmailAvailable);
-        });
-    },
-    // isCooperationRegistered() {},
     registerCooperation() {
       this.v$.$validate().then((isValid) => {
         if (isValid) {
+          this.isEmailValid = true;
+          this.isEdrpouValid = true;
           alert('successfully registered');
         }
       });
@@ -123,12 +111,9 @@ export default defineComponent({
   },
   watch: {
     edrpou(newValue) {
-      console.log(newValue);
       this.count = newValue.length;
     },
     isEmailValid(newValue) {
-      console.log('isEmailValid:', newValue);
-
       if (newValue === true) {
         this.isEmailRegistered();
       }
