@@ -22,7 +22,7 @@
             placeholder="12345678"
             v-model="edrpou"
             :class="{ 'p-invalid': v$.edrpou.$error }"
-            @blur="v$.edrpou.$touch"
+            @blur="edrpouBlur"
             maxlength="8"
           />
           <small v-if="v$.edrpou.$error" id="edrpou-help" class="p-error">{{ v$.edrpou.$errors[0].$message }}</small>
@@ -33,7 +33,7 @@
         </div>
         <section class="submit-buttons">
           <Button label="Відмінити" class="p-button-outlined" type="reset" />
-          <Button label="Заре'єструвати" :disabled="!isFormValid" type="submit" />
+          <Button label="Заре'єструвати" :disabled="!isEdrpouValid" type="submit" />
         </section>
       </form>
     </div>
@@ -72,23 +72,36 @@ export default defineComponent({
       edrpou: '',
       count: 0,
       isEmailValid: false,
-      isFormValid: false,
+      isEdrpouValid: false,
     };
   },
   methods: {
     emailBlur() {
       this.v$.email.$touch();
-      this.v$.email.$validate().then((isValid) => {
-        if (isValid) {
-          this.isEmailValid = true;
-        }
-      });
+      this.isEmailValid = !this.v$.email.$error;
     },
+    edrpouBlur() {
+      this.v$.edrpou.$touch();
+      this.isEdrpouValid = !this.v$.edrpou.$error;
+    },
+    isEmailRegistered() {
+      this.$http
+        .get('/users', {
+          params: { email: this.email },
+        })
+        .then((r) => {
+          console.log(r);
+          const isEmailAvailable = r.data.length === 0;
+          if (!isEmailAvailable) {
+          }
+          console.log(isEmailAvailable);
+        });
+    },
+    // isCooperationRegistered() {},
     registerCooperation() {
       this.v$.$validate().then((isValid) => {
         if (isValid) {
-          this.isFormValid = true;
-          console.log(this.v$);
+          alert('successfully registered');
         }
       });
     },
@@ -114,7 +127,11 @@ export default defineComponent({
       this.count = newValue.length;
     },
     isEmailValid(newValue) {
-      console.log(newValue);
+      console.log('isEmailValid:', newValue);
+
+      if (newValue === true) {
+        this.isEmailRegistered();
+      }
     },
   },
 });
