@@ -27,6 +27,7 @@ module.exports = {
     'max-len': ['error', { code: 120, tabWidth: 2 }],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-useless-escape': 'off',
   },
   overrides: [
     {
