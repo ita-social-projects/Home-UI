@@ -1,11 +1,16 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import Home from '@/views/Home.vue';
+import UserLogin from '@/views/UserLogin.vue';
+import StartPage from '@/views/StartPage.vue';
 
 const routes: RouteRecordRaw[] = [
   // initial route; should be customized or removed
   {
     path: '/',
-    component: Home,
+    component: StartPage,
+  },
+  {
+    path: '/login',
+    component: UserLogin,
   },
 ];
 
