@@ -15,7 +15,7 @@
         />
       </span>
       <small class="error__message" v-if="v$.email.$error">Потрібно заповнити поле</small>
-      <span span class="p-input-icon-right">
+      <span class="p-input-icon-right">
         <InputText
           id="password"
           type="password"
@@ -40,6 +40,7 @@ import { required, email } from '@vuelidate/validators';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import BaseHeader from '../components/base/BaseHeader.vue';
+
 export default defineComponent({
   name: 'userlogin',
   components: {
