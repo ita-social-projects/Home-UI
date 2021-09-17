@@ -82,10 +82,7 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
   margin: 150px auto;
-  max-width: 450px;
   .title {
-    color: #646e7c;
-    font-weight: bold;
     line-height: 120%;
   }
   .input__group {
