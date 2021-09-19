@@ -67,8 +67,8 @@ import {
   emailLastCharsValidator,
 } from '@/utils/validators';
 
-import BaseSuccessPopup from '@/components/base/BaseSuccessPopup.vue';
-import BaseErrorPopup from '@/components/base/BaseErrorPopup.vue';
+import BaseSuccessPopup from '@/components/base/popups/BaseSuccessPopup.vue';
+import BaseErrorPopup from '@/components/base/popups/BaseErrorPopup.vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 
