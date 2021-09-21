@@ -11,7 +11,7 @@
             v-model.trim="email"
             :class="{ 'p-invalid': v$.email.$error || check.email.registered }"
             @blur="emailBlur"
-            maxlength="320"
+            maxlength="321"
           />
           <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
           <small v-else-if="check.email.registered" id="email-registered" class="p-error">
@@ -135,7 +135,7 @@ export default defineComponent({
     },
     checkEmailRegistered() {
       this.$http
-        .get('/usersы', { params: { email: this.email } })
+        .get('/users', { params: { email: this.email } })
         .then((r) => {
           this.check.email.registered = r.data.length !== 0;
         })
@@ -174,9 +174,9 @@ export default defineComponent({
       email: {
         requiredValidator,
         emailMinLength,
+        emailMaxLength,
         emailLastCharsValidator,
         emailValidator,
-        emailMaxLength,
         $lazy: true,
       },
       edrpou: {
