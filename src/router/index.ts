@@ -9,7 +9,7 @@ const routes: RouteRecordRaw[] = [
     component: Home,
   },
   {
-    path: '/userregistration',
+    path: '/usersignin',
     component: UserRegistration,
   },
 ];
