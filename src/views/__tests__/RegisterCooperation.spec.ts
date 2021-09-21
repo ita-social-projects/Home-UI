@@ -34,17 +34,6 @@ describe('RegisterCooperation.vue', () => {
     expect(wrapper.find('small#email-help').exists()).toBe(false);
   });
 
-  // it('should pass the validation - email is not registered', async () => {
-  //   const wrapper = mount(RegisterCooperation);  // jest.mock('@/utils/__mocks__/http-common');
-  //   const input = wrapper.find('#email');
-  //   await input.setValue('email@email.com');
-  //   await input.trigger('blur');
-  //   expect(http.get).toHaveBeenCalledTimes(1);
-  //   expect(http.get).toHaveBeenCalledWith('/users');
-  //   await flushPromises();
-  //   expect(wrapper.find('small#email-help').exists()).toBe(false);
-  // });
-
   it('should not display validation message for email on page load', () => {
     const wrapper = mount(RegisterCooperation);
     expect(wrapper.find('small#email-help').exists()).toBe(false);
@@ -179,32 +168,4 @@ describe('RegisterCooperation.vue', () => {
     await input.trigger('blur');
     expect(wrapper.find('small#edrpou-help').text()).toBe('Код ЄДРПОУ складається з 8 цифр');
   });
-
-  it('should fail the validation - edrpou field [already registered]', async () => {
-    const wrapper = mount(RegisterCooperation);
-    const input = wrapper.find('#edrpou');
-
-    await input.setValue('1234567');
-    await input.trigger('blur');
-    expect(wrapper.find('small#edrpou-help').text()).toBe('Код ЄДРПОУ складається з 8 цифр');
-  });
-
-  // Submit button
-  /// Is enabled
-
-  // it('should display success message on submit', async () => {
-  //   const wrapper = mount(RegisterCooperation);
-  //   const emailInput = wrapper.find('#email');
-  //   const edrpouInput = wrapper.find('#edrpou');
-  //   const submit = wrapper.find('button[type="submit"]');
-  //
-  //   await emailInput.setValue('email@email.com');
-  //   await emailInput.trigger('blur');
-  //   await edrpouInput.setValue('00002222');
-  //
-  //   await edrpouInput.trigger('blur');
-  //   await submit.trigger('click');
-  //   await flushPromises();
-  //   expect(wrapper.get('.popup.success').isVisible()).toBe(true);
-  // });
 });
