@@ -1,5 +1,4 @@
 <template>
-  <baseHeader />
   <div class="wrapper">
     <div class="welcome_text">
       <div>
@@ -59,9 +58,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import baseHeader from '@/components/base/BaseHeader.vue';
-import Button from 'primevue/button';
 import { Routes } from '@/router/types';
+import Button from 'primevue/button';
 
 export default defineComponent({
   name: 'startPage',
@@ -70,7 +68,6 @@ export default defineComponent({
   },
   components: {
     Button,
-    baseHeader,
   },
   methods: {
     registrationOSBB() {
