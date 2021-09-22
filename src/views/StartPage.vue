@@ -61,6 +61,7 @@
 import { defineComponent } from 'vue';
 import baseHeader from '@/components/base/BaseHeader.vue';
 import Button from 'primevue/button';
+import { Routes } from '@/router/types';
 
 export default defineComponent({
   name: 'startPage',
@@ -73,7 +74,7 @@ export default defineComponent({
   },
   methods: {
     registrationOSBB() {
-      this.$router.push('/');
+      this.$router.push(Routes.RegisterCooperation);
     },
   },
 });
