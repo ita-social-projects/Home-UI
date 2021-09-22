@@ -18,6 +18,8 @@ describe('RegisterCooperation.vue', () => {
     const wrapper = mount(RegisterCooperation);
     const input = wrapper.find('#email');
     await input.setValue('email@email.com');
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     expect(input.element._value).toBe('email@email.com');
   });
 
@@ -25,6 +27,8 @@ describe('RegisterCooperation.vue', () => {
     const wrapper = mount(RegisterCooperation);
     const input = wrapper.find('#edrpou');
     await input.setValue('12345678');
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     expect(input.element._value).toBe('12345678');
   });
 
