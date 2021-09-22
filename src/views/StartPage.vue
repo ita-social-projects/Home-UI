@@ -73,7 +73,7 @@ export default defineComponent({
   },
   methods: {
     registrationOSBB() {
-      this.$router.push('/register-cooperation');
+      this.$router.push('/');
     },
   },
 });

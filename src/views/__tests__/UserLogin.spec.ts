@@ -1,0 +1,10 @@
+import { shallowMount } from '@vue/test-utils';
+import Home from '@/views/UserLogin.vue';
+
+describe('UserLogin.vue', () => {
+  it('should be exists', () => {
+    const wrapper = shallowMount(Home);
+
+    expect(wrapper.exists()).toBeTruthy();
+  });
+});

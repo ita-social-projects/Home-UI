@@ -22,3 +22,11 @@ export const requiredValidator = helpers.withMessage("Це обов'язкове
 
 const edrpou = helpers.regex(/^\d{8}$/);
 export const edrpouValidator = helpers.withMessage('Код ЄДРПОУ складається з 8 цифр', edrpou);
+
+const validPassword = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
+export const passwordValidator = helpers.withMessage(
+  'Пароль повинен містити латинські великі та маленькі літери, цифри',
+  validPassword
+);
+
+export const passwordLenght = helpers.withMessage('Максимальна кількість символів - 128', maxLength(128));
