@@ -12,6 +12,7 @@ html {
 
 body {
   margin: 0;
+  color: $main-color;
 }
 
 h1 {
@@ -34,23 +35,16 @@ label {
   user-select: none;
 }
 
-// General styles and classes
-.popup {
-  position: absolute;
-  top: 10em;
-  right: 5em;
-  width: 30em;
-  display: flex;
-  padding: 1.6em;
-  border-radius: 1.6em;
+input {
+  color: $main-color;
 }
 
+// General styles and classes
 .bold {
   font-weight: 700;
 }
 
-// Popup transitions
-/// Success popup
+// Transitions - not used yet
 .success-enter-from,
 .success-leave-to {
   opacity: 0;
@@ -117,6 +111,3 @@ label {
     transform: translateY(0);
   }
 }
-
-/// Info popup
-/// T O D O

@@ -41,17 +41,8 @@
           <Button label="Заре'єструвати" :disabled="!isFormValid" class="p-button-info" type="submit" />
         </section>
       </form>
+      <button @click="tess">sfdadsad</button>
     </div>
-    <!--    <transition name="success">-->
-    <!--      <BaseSuccessPopup v-show="isLetterSent">-->
-    <!--        На пошту <span class="bold"> {{ this.email }} </span> було вислано лист з кодом активації-->
-    <!--      </BaseSuccessPopup>-->
-    <!--    </transition>-->
-    <!--    <transition name="error">-->
-    <!--      <BaseErrorPopup v-show="check.error">-->
-    <!--        Під час перевірки даних виникла помилка. Будь ласка спробуйте пізніше-->
-    <!--      </BaseErrorPopup>-->
-    <!--    </transition>-->
   </div>
 </template>
 
@@ -67,8 +58,6 @@ import {
   emailLastCharsValidator,
 } from '@/utils/validators';
 
-// import BaseSuccessPopup from '@/components/base/popups/BaseSuccessPopup.vue';
-// import BaseErrorPopup from '@/components/base/popups/BaseErrorPopup.vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { AxiosResponse } from 'axios';
@@ -76,8 +65,6 @@ import { AxiosResponse } from 'axios';
 export default defineComponent({
   name: 'RegisterCooperation',
   components: {
-    // BaseSuccessPopup,
-    // BaseErrorPopup,
     InputText,
     Button,
   },
@@ -100,18 +87,26 @@ export default defineComponent({
           valid: false,
           registered: false,
         },
-        error: false,
+      },
+      errors: {
+        checkError: false,
+        submitError: false,
       },
       isLetterSent: false,
     };
   },
   computed: {
     isFormValid(): boolean {
-      const fieldsValid = this.check.email.valid && this.check.edrpou.valid;
-      const nameAvailable = !this.check.email.registered && !this.check.edrpou.registered;
-      const noError = !this.check.error;
+      const fieldsValid: boolean = this.check.email.valid && this.check.edrpou.valid;
+      const nameAvailable: boolean = !this.check.email.registered && !this.check.edrpou.registered;
+      const noError = !this.errors.checkError;
       return fieldsValid && noError && nameAvailable;
     },
+    helloWorld(): string {
+      return this.$store.getters['cooperationStore/getHelloWorldTwice'];
+    },
+    // hellWoll(): string {    //   return this.$store.state.hello;    // },
+    // tess() {    //   console.log(this.$store.state.cooperationStore.helloWorld);    // },
   },
   methods: {
     emailBlur() {
@@ -136,40 +131,33 @@ export default defineComponent({
     },
     checkEmailRegistered() {
       this.$http
-        .get('/usersі', { params: { email: this.email } })
+        .get('/users', { params: { email: this.email } })
         .then((r: AxiosResponse) => {
+          this.errors.checkError = false;
           this.check.email.registered = r.data.length !== 0;
         })
         .catch(() => {
-          // this.showError();
-          this.$toast.add({
-            severity: 'error',
-            summary: 'Помилка',
-            detail: 'Під час перевірки даних виникла помилка. Будь ласка спробуйте пізніше',
-          });
+          this.errors.checkError = true;
         });
     },
     checkEdrpouRegistered() {
       this.$http
         .get('/cooperations', { params: { usreo: this.edrpou } })
         .then((r: AxiosResponse) => {
+          this.errors.checkError = false;
           this.check.edrpou.registered = r.data.length !== 0;
         })
         .catch(() => {
-          this.showError();
+          this.errors.checkError = true;
         });
     },
     showSuccess() {
       this.isLetterSent = true;
-      setTimeout(() => {
-        this.isLetterSent = false;
-      }, 10000);
-    },
-    showError() {
-      this.check.error = true;
-      setTimeout(() => {
-        this.check.error = false;
-      }, 3000);
+      this.$toast.add({
+        severity: 'success',
+        summary: 'Юхуууу!',
+        detail: 'Будь ласка, перевірте пошту для завершення реєстрації',
+      });
     },
     registerCooperation() {
       this.v$.$validate().then((isValid) => {
@@ -198,6 +186,19 @@ export default defineComponent({
   watch: {
     edrpou(newValue) {
       this.count = newValue.length;
+    },
+    errors: {
+      handler(newValue) {
+        let detail = '';
+        if (newValue.checkError) {
+          detail = 'Під час перевірки даних виникла помилка. Будь ласка спробуйте пізніше';
+        }
+        if (newValue.submitError) {
+          detail = 'Під час реєстрації виникла помилка. Будь ласка спробуйте пізніше';
+        }
+        this.$toast.add({ severity: 'error', summary: 'Помилка', detail });
+      },
+      deep: true,
     },
   },
 });
