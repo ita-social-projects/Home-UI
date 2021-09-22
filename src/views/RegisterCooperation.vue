@@ -42,16 +42,16 @@
         </section>
       </form>
     </div>
-    <transition name="success">
-      <BaseSuccessPopup v-show="isLetterSent">
-        На пошту <span class="bold"> {{ this.email }} </span> було вислано лист з кодом активації
-      </BaseSuccessPopup>
-    </transition>
-    <transition name="error">
-      <BaseErrorPopup v-show="check.error">
-        Під час перевірки даних виникла помилка. Будь ласка спробуйте пізніше
-      </BaseErrorPopup>
-    </transition>
+    <!--    <transition name="success">-->
+    <!--      <BaseSuccessPopup v-show="isLetterSent">-->
+    <!--        На пошту <span class="bold"> {{ this.email }} </span> було вислано лист з кодом активації-->
+    <!--      </BaseSuccessPopup>-->
+    <!--    </transition>-->
+    <!--    <transition name="error">-->
+    <!--      <BaseErrorPopup v-show="check.error">-->
+    <!--        Під час перевірки даних виникла помилка. Будь ласка спробуйте пізніше-->
+    <!--      </BaseErrorPopup>-->
+    <!--    </transition>-->
   </div>
 </template>
 
@@ -67,8 +67,8 @@ import {
   emailLastCharsValidator,
 } from '@/utils/validators';
 
-import BaseSuccessPopup from '@/components/base/popups/BaseSuccessPopup.vue';
-import BaseErrorPopup from '@/components/base/popups/BaseErrorPopup.vue';
+// import BaseSuccessPopup from '@/components/base/popups/BaseSuccessPopup.vue';
+// import BaseErrorPopup from '@/components/base/popups/BaseErrorPopup.vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { AxiosResponse } from 'axios';
@@ -76,8 +76,8 @@ import { AxiosResponse } from 'axios';
 export default defineComponent({
   name: 'RegisterCooperation',
   components: {
-    BaseSuccessPopup,
-    BaseErrorPopup,
+    // BaseSuccessPopup,
+    // BaseErrorPopup,
     InputText,
     Button,
   },
@@ -136,12 +136,17 @@ export default defineComponent({
     },
     checkEmailRegistered() {
       this.$http
-        .get('/users', { params: { email: this.email } })
+        .get('/usersі', { params: { email: this.email } })
         .then((r: AxiosResponse) => {
           this.check.email.registered = r.data.length !== 0;
         })
         .catch(() => {
-          this.showError();
+          // this.showError();
+          this.$toast.add({
+            severity: 'error',
+            summary: 'Помилка',
+            detail: 'Під час перевірки даних виникла помилка. Будь ласка спробуйте пізніше',
+          });
         });
     },
     checkEdrpouRegistered() {
@@ -212,7 +217,7 @@ export default defineComponent({
   flex-flow: column;
   align-items: center;
   justify-content: center;
-  background-color: #f2fbff;
+  background-color: rgba(242, 251, 255, 0.4);
   border-radius: 1em;
   padding: 2em;
 
