@@ -52,7 +52,6 @@ import {
   emailMinLength,
   emailMaxLength,
   emailLastCharsValidator,
-  validPassword,
   passwordLenght,
 } from '@/utils/validators';
 const EMPTY_EMAIL = '';
@@ -111,6 +110,7 @@ export default defineComponent({
       },
       password: {
         requiredValidator,
+        passwordLenght,
       },
     };
   },
@@ -124,6 +124,10 @@ $form-login__width: 75%;
 $login-item__mr: 0.7em 0;
 $login-label__mr: 0.8em 0;
 $btn-mr: 2em;
+%error-message {
+  margin: 0.4em 0;
+  width: 80%;
+}
 
 .login-component {
   display: flex;
@@ -148,8 +152,7 @@ $btn-mr: 2em;
     }
   }
   small {
-    margin: 0.4em 0;
-    width: 80%;
+    @extend %error-message;
   }
   .btn {
     margin-top: $btn-mr;

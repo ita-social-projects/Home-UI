@@ -10,7 +10,7 @@ const routes: RouteRecordRaw[] = [
     component: StartPage,
   },
   {
-    path: '/login',
+    path: '/signin',
     component: UserLogin,
   },
   {
