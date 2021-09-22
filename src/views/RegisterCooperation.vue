@@ -71,6 +71,7 @@ import BaseSuccessPopup from '@/components/base/popups/BaseSuccessPopup.vue';
 import BaseErrorPopup from '@/components/base/popups/BaseErrorPopup.vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import { AxiosResponse } from 'axios';
 
 export default defineComponent({
   name: 'RegisterCooperation',
@@ -136,18 +137,22 @@ export default defineComponent({
     checkEmailRegistered() {
       this.$http
         .get('/users', { params: { email: this.email } })
-        .then((r) => {
+        .then((r: AxiosResponse) => {
           this.check.email.registered = r.data.length !== 0;
         })
-        .catch(this.showError);
+        .catch(() => {
+          this.showError();
+        });
     },
     checkEdrpouRegistered() {
       this.$http
-        .get('/cooperation', { params: { usreo: this.edrpou } })
-        .then((r) => {
+        .get('/cooperations', { params: { usreo: this.edrpou } })
+        .then((r: AxiosResponse) => {
           this.check.edrpou.registered = r.data.length !== 0;
         })
-        .catch(this.showError);
+        .catch(() => {
+          this.showError();
+        });
     },
     showSuccess() {
       this.isLetterSent = true;
