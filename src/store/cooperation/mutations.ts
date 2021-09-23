@@ -1,5 +1,7 @@
 import { MutationTree } from 'vuex';
 import { CooperationInterface, CooperationMutationTypes, Mutations } from '@/store/cooperation/types';
+import { HTTP } from '@/core/api/http-common';
+import { AxiosResponse } from 'axios';
 
 /**
  * объект мутаций имеет тип MutationTree & Mutations (определен выше)
@@ -9,8 +11,17 @@ import { CooperationInterface, CooperationMutationTypes, Mutations } from '@/sto
  * */
 // mutation definition
 export const mutations: MutationTree<CooperationInterface> & Mutations = {
-  [CooperationMutationTypes.SAY_HELLO](state: CooperationInterface, payload: string) {
+  [CooperationMutationTypes.SAY_HELLO](state: CooperationInterface, payload) {
     state.helloWorld = payload;
     console.log(state.helloWorld);
+  },
+  [CooperationMutationTypes.IS_COOPERATION_REGISTERED](state: CooperationInterface, payload) {
+    HTTP.get('/cooperations', { params: { usreo: payload.params.edrpou } })
+      .then((r: AxiosResponse) => {
+        payload.successCallback(r);
+      })
+      .catch((e) => {
+        payload.errorCallback(e);
+      });
   },
 };

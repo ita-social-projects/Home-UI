@@ -1,14 +1,17 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
+import { AxiosError, AxiosResponse } from 'axios';
 
 /** mutation enums - названия для мутаций */
 export enum CooperationMutationTypes {
   SAY_HELLO = 'SAY_HELLO',
+  IS_COOPERATION_REGISTERED = 'IS_COOPERATION_REGISTERED',
 }
 
 /** action enums - названия для экшенов */
 export enum CooperationActionTypes {
   SAY_HELLO = 'SAY_HELLO',
+  IS_COOPERATION_REGISTERED = 'IS_COOPERATION_REGISTERED',
 }
 
 /**
@@ -26,16 +29,23 @@ export interface CooperationInterface {
  */
 export type Mutations<S = CooperationInterface> = {
   [CooperationMutationTypes.SAY_HELLO](state: S, payload: string): void;
+  [CooperationMutationTypes.IS_COOPERATION_REGISTERED](state: S, payload: requestPayload): void;
 };
-
 /** action contracts */
 export interface Actions {
   [CooperationActionTypes.SAY_HELLO]({ commit }: AugmentedActionContext): void;
+  [CooperationActionTypes.IS_COOPERATION_REGISTERED]({ commit }: AugmentedActionContext, payload: requestPayload): void;
 }
 
 /** getter contracts */
 export type Getters<S = CooperationInterface> = {
   getHelloWorldTwice(state: S): string;
+};
+
+type requestPayload = {
+  params: { [key: string]: string | number | boolean };
+  successCallback(response: AxiosResponse): void;
+  errorCallback(error?: AxiosError): void;
 };
 
 /**
@@ -44,7 +54,6 @@ export type Getters<S = CooperationInterface> = {
  * также здесь проверяется тип payload
  * компилятор подсветит, если будет вызван/передан неверный экшен/payload
  * */
-
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
 } & Omit<ActionContext<CooperationInterface, RootStateInterface>, 'commit'>;
