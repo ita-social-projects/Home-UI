@@ -1,13 +1,16 @@
 import { helpers, required, minLength, maxLength } from '@vuelidate/validators';
 
-const email = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-/=?^_`{|().,:;<>@[\]]+@[a-z\d.-]+\.[\w-]{2,4}$/i);
+const email = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-\/=?^_`{|().,:;<>@[\]]+@[a-z\d.-]+\.[\w-]{2,4}$/i);
 export const emailValidator = helpers.withMessage(
   'Електронна пошта містить латинські букви, цифри, та спеціальні символи',
   email
 );
 
-export const emailMinLength = helpers.withMessage('Мінімальна довжина ел.пошти - 5', minLength(5));
-export const emailMaxLength = helpers.withMessage('Максимальна довжина ел.пошти - 320', maxLength(320));
+export const emailMinLength = helpers.withMessage('Мінімальна довжина електронної пошти - 5 символів', minLength(5));
+export const emailMaxLength = helpers.withMessage(
+  'Максимальна довжина електронної пошти - 320 символів',
+  maxLength(320)
+);
 
 const emailLastChars = helpers.regex(/^[a-z\d].*[a-z]$/i);
 export const emailLastCharsValidator = helpers.withMessage(

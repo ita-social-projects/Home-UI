@@ -1,12 +1,22 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import Home from '@/views/Home.vue';
+import StartPage from '@/views/StartPage.vue';
+import RegisterCooperation from '@/views/RegisterCooperation.vue';
+import UserLogin from '@/views/UserLogin.vue';
 import UserRegistration from '@/views/UserRegistration.vue';
 
 const routes: RouteRecordRaw[] = [
   // initial route; should be customized or removed
   {
     path: '/',
-    component: Home,
+    component: StartPage,
+  },
+  {
+    path: '/login',
+    component: UserLogin,
+  },
+  {
+    path: '/register-cooperation',
+    component: RegisterCooperation,
   },
   {
     path: '/usersignin',

@@ -179,7 +179,7 @@ export default defineComponent({
   mounted() {
     const checkApi = () => {
       this.$http.get('/users', { params: { page_number: 1 } }).then((r) => {
-        console.log(r);
+        console.log(r.data);
       });
     };
     checkApi();
