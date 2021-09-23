@@ -1,12 +1,16 @@
 import { Module, Store as VuexStore, CommitOptions, DispatchOptions } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { CooperationInterface } from '@/store/cooperation/types';
-import { state } from '@/store/cooperation/state';
-import { getters, Getters } from '@/store/cooperation/getters';
-import { mutations, Mutations } from '@/store/cooperation/mutations';
-import { actions, Actions } from '@/store/cooperation/actions';
+import { Actions, CooperationInterface, Mutations, Getters } from '@/store/cooperation/types';
+import { getters } from '@/store/cooperation/getters';
+import { mutations } from '@/store/cooperation/mutations';
+import { actions } from '@/store/cooperation/actions';
 
-// один из модулей, из которых состоит основной стор
+/** state текущего модуля */
+export const state: CooperationInterface = {
+  helloWorld: 'hello world',
+};
+
+/** экспортируем один из модулей, из которых состоит основной стор */
 export const cooperationStore: Module<CooperationInterface, RootStateInterface> = {
   namespaced: true,
   state,
@@ -15,8 +19,13 @@ export const cooperationStore: Module<CooperationInterface, RootStateInterface> 
   getters,
 };
 
-// экспортируется тип стейта для текущего модуля
-// в дальнейшем используется чтобы создать тип основного стора
+/**
+ * экспортируется тип стейта для текущего модуля
+ * в дальнейшем используется чтобы создать тип основного стора
+ * тип основного стора нужно имплементировать из существующих типов стейта модулей
+ * для того, чтобы основной стор был строго типизированным, в него нельзя было
+ * передать
+ * */
 export { CooperationInterface };
 
 /**
