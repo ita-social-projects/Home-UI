@@ -105,8 +105,6 @@ export default defineComponent({
     helloWorld(): string {
       return this.$store.getters['cooperationStore/getHelloWorldTwice'];
     },
-    // hellWoll(): string {    //   return this.$store.state.hello;    // },
-    // tess() {    //   console.log(this.$store.state.cooperationStore.helloWorld);    // },
   },
   methods: {
     emailBlur() {
@@ -141,6 +139,20 @@ export default defineComponent({
         });
     },
     checkEdrpouRegistered() {
+      // const payload = {
+      //   params: {
+      //     edrpou: this.edrpou,
+      //   },
+      //   successCallback: (r: AxiosResponse): void => {
+      //     this.errors.checkError = false;
+      //     this.check.edrpou.registered = r.data.length !== 0;
+      //   },
+      //   errorCallback: (): void => {
+      //     this.errors.checkError = true;
+      //   },
+      // };
+      //
+      // this.$store.dispatch('cooperationStore/IS_COOPERATION_REGISTERED', payload);
       this.$http
         .get('/cooperations', { params: { usreo: this.edrpou } })
         .then((r: AxiosResponse) => {
