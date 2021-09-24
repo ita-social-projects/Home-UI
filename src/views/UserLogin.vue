@@ -1,6 +1,7 @@
 <template>
   <div class="login-component">
     <div class="form-group">
+      <h4 v-for="user in users" :key="user.id">Привет {{ user.first_name }} {{ user.last_name }}</h4>
       <h1>Вхід до Особистого кабінету</h1>
       <form class="form-login" @submit.prevent="userLogin">
         <div class="form-login__item">
@@ -52,8 +53,8 @@ import {
   emailMinLength,
   emailMaxLength,
   emailLastCharsValidator,
-  passwordMaxLenght,
   passwordMinLenght,
+  passwordMaxLenght,
   passwordValidator,
 } from '@/utils/validators';
 const EMPTY_EMAIL = '';
@@ -74,6 +75,7 @@ export default defineComponent({
     return {
       email: '',
       password: '',
+      users: {},
       isEmailValid: false,
       isPasswordValid: false,
     };
@@ -82,7 +84,9 @@ export default defineComponent({
     userLogin() {
       this.v$.$validate();
       if (!this.v$.$error) {
-        this.$http.get('/users', { params: { mail: this.email } }).then((response) => console.log(response.data));
+        // this.$http
+        // .get('/users', { params: { email: this.email } }).
+        // then((response) => this.users = response.data);
         // async check if user exist in DB
         // if exist - set to store
         // else - show validation error
