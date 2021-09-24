@@ -178,14 +178,6 @@ export default defineComponent({
       handleSubmit,
     };
   },
-  mounted() {
-    // const checkApi = () => {
-    //   this.$http.get('/users', { params: { page_number: 1 } }).then((r) => {
-    //     console.log(r.data);
-    //   });
-    // };
-    // console.log('Mounted works', checkApi());
-  },
   methods: {
     getInfoFromForm() {
       console.log(this.state);
@@ -206,7 +198,6 @@ export default defineComponent({
 
   .registration__component {
     display: flex;
-    font-family: 'Open sans';
     flex-direction: column;
     align-items: center;
     margin: auto;

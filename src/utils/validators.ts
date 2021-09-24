@@ -26,7 +26,7 @@ export const edrpouValidator = helpers.withMessage('Код ЄДРПОУ скла
 const validKey = helpers.regex(/^[a-zA-Z0-9]{36}$/);
 export const keyValidator = helpers.withMessage('Ключ з E-mail, 36 символів', validKey);
 
-const validPassword = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]*$/);
+const validPassword = helpers.regex(/[a-zA-Z]+\d/);
 export const passwordValidator = helpers.withMessage(
   'Пароль повинен містити латинські великі та маленькі літери, цифри',
   validPassword
@@ -34,6 +34,6 @@ export const passwordValidator = helpers.withMessage(
 export const passwordMaxLenght = helpers.withMessage('Максимальна кількість символів - 128', maxLength(128));
 export const passwordMinLenght = helpers.withMessage('Мінімальна кількість символів - 8', minLength(8));
 
-const validName = helpers.regex(/^[A-Za-z0-9!@#$%&'*+\-/=?^_`{|().,:;<>@[\]]*$/i);
+const validName = helpers.regex(/^[a-zA-Z0-9!@#$%&'*+\-/=?^_`{|().,:;<>@[\]]*$/i);
 export const nameValidator = helpers.withMessage('Латинські літери, цифри та спец.символи', validName);
 export const nameLenghtValidator = helpers.withMessage('Максимальна кількість символів - 50', maxLength(50));
