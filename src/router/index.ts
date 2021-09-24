@@ -3,6 +3,7 @@ import { Routes } from '@/router/types';
 import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
 import UserLogin from '@/views/UserLogin.vue';
+import RegisterUser from '@/views/RegisterUser.vue';
 
 const routes: RouteRecordRaw[] = [
   // initial route; should be customized or removed
@@ -17,6 +18,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: Routes.RegisterCooperation,
     component: RegisterCooperation,
+  },
+  {
+    path: Routes.RegisterUser,
+    component: RegisterUser,
   },
 ];
 
