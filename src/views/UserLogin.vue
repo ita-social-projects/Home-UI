@@ -39,14 +39,12 @@ import useVuelidate from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import BaseHeader from '../components/base/BaseHeader.vue';
 
 export default defineComponent({
   name: 'userlogin',
   components: {
     InputText,
     Button,
-    BaseHeader,
   },
   data() {
     return {
