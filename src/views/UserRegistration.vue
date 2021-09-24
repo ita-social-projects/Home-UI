@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, reactive, computed } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
@@ -100,7 +100,6 @@ import {
   nameLenghtValidator,
 } from '@/utils/validators';
 import { sameAs } from '@vuelidate/validators';
-import { reactive, computed } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 export default defineComponent({
@@ -163,19 +162,9 @@ export default defineComponent({
       };
     });
     const v$ = useVuelidate(rules, state);
-    const handleSubmit = (isFormValid: boolean) => {
-      if (isFormValid) {
-        console.log(v$.value.firstName);
-        console.log(v$.value.firstName);
-        console.log(v$.value.firstName);
-        return;
-      } else return console.log(isFormValid, 'isFormValid');
-    };
-
     return {
       state,
       v$,
-      handleSubmit,
     };
   },
   methods: {
