@@ -6,6 +6,7 @@ import { HTTP } from '@/core/api/http-common';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import App from './App.vue';
+import '@/styles/style.scss';
 
 const app = createApp(App);
 
