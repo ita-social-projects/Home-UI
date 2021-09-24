@@ -1,12 +1,15 @@
 import { Module, Store as VuexStore, CommitOptions, DispatchOptions } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { CooperationInterface } from '@/store/cooperation/types';
-import { state } from '@/store/cooperation/state';
-import { getters, Getters } from '@/store/cooperation/getters';
-import { mutations, Mutations } from '@/store/cooperation/mutations';
-import { actions, Actions } from '@/store/cooperation/actions';
+import { Actions, CooperationInterface, Mutations, Getters } from '@/store/cooperation/types';
+import { getters } from '@/store/cooperation/getters';
+import { mutations } from '@/store/cooperation/mutations';
+import { actions } from '@/store/cooperation/actions';
 
-// один из модулей, из которых состоит основной стор
+export const state: CooperationInterface = {
+  erdpou: '',
+  name: '',
+};
+
 export const cooperationStore: Module<CooperationInterface, RootStateInterface> = {
   namespaced: true,
   state,
@@ -15,15 +18,8 @@ export const cooperationStore: Module<CooperationInterface, RootStateInterface> 
   getters,
 };
 
-// экспортируется тип стейта для текущего модуля
-// в дальнейшем используется чтобы создать тип основного стора
 export { CooperationInterface };
 
-/**
- * тип для текущего стора
- * убирает из дефолтного типа стора типы для 'getters' | 'commit' | 'dispatch'
- * заменяет их на нашу имплементацию
- * */
 export type CooperationStore<S = CooperationInterface> = Omit<VuexStore<S>, 'getters' | 'commit' | 'dispatch'> & {
   commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
     key: K,
