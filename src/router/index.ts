@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { Routes } from '@/router/types';
 import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
 import UserLogin from '@/views/UserLogin.vue';
@@ -6,15 +7,15 @@ import UserLogin from '@/views/UserLogin.vue';
 const routes: RouteRecordRaw[] = [
   // initial route; should be customized or removed
   {
-    path: '/',
+    path: Routes.StartPage,
     component: StartPage,
   },
   {
-    path: '/signin',
+    path: Routes.UserLogin,
     component: UserLogin,
   },
   {
-    path: '/register-cooperation',
+    path: Routes.RegisterCooperation,
     component: RegisterCooperation,
   },
 ];

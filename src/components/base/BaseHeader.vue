@@ -18,6 +18,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { Routes } from '@/router/types';
 import Button from 'primevue/button';
 
 export default defineComponent({
@@ -32,7 +33,7 @@ export default defineComponent({
   },
   methods: {
     loginUser() {
-      this.$router.push('/login');
+      this.$router.push(Routes.UserLogin);
     },
   },
 });
