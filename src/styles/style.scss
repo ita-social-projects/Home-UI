@@ -1,4 +1,3 @@
-// Generic styles and CSS resets
 * {
   font-family: 'Open Sans', 'Montserrat', 'Helvetica', sans-serif;
   outline: none;
@@ -6,25 +5,25 @@
 
 body,
 html {
+  margin: 0;
   height: 100%;
   width: 100%;
 }
 
 body {
   margin: 0;
-  color: $main-color;
 }
 
 h1 {
   font-weight: 700;
   font-size: 36px;
-  color: $headline-color;
+  color: #646e7c;
 }
 
 h2 {
   font-weight: 700;
   font-size: 24px;
-  color: $headline-color;
+  color: #646e7c;
 }
 
 img {
@@ -33,81 +32,4 @@ img {
 
 label {
   user-select: none;
-}
-
-input {
-  color: $main-color;
-}
-
-// General styles and classes
-.bold {
-  font-weight: 700;
-}
-
-// Transitions - not used yet
-.success-enter-from,
-.success-leave-to {
-  opacity: 0;
-}
-
-.success-enter-to,
-.success-leave-from {
-  opacity: 1;
-}
-
-.success-enter-active {
-  transition: all 0.5s;
-}
-
-.success-leave-active {
-  transition: all 0.8s ease;
-}
-
-.success-move {
-  transition: all 0.8s ease;
-}
-
-/// Error popup
-.error-enter-active {
-  animation: errorEnter 5s ease;
-}
-
-.error-leave-from {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.error-leave-to {
-  transform: translateY(8em);
-  opacity: 0;
-}
-
-.error-leave-active {
-  transition: all 1s;
-}
-
-@keyframes errorEnter {
-  0% {
-    opacity: 0;
-    transform: translateY(-8em);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(0em);
-  }
-  60% {
-    transform: translateX(-8px);
-  }
-  70% {
-    transform: translateX(8px);
-  }
-  80% {
-    transform: translateX(-4px);
-  }
-  90% {
-    transform: translateX(4px);
-  }
-  100% {
-    transform: translateY(0);
-  }
 }
