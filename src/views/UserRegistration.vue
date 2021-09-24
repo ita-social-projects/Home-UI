@@ -94,7 +94,8 @@ import {
   emailLastCharsValidator,
   keyValidator,
   passwordValidator,
-  passwordLenghtValidator,
+  passwordMinLenght,
+  passwordMaxLenght,
   nameValidator,
   nameLenghtValidator,
 } from '@/utils/validators';
@@ -146,7 +147,8 @@ export default defineComponent({
           password: {
             requiredValidator,
             passwordValidator,
-            passwordLenghtValidator,
+            passwordMinLenght,
+            passwordMaxLenght,
           },
           confirm: {
             requiredValidator,
