@@ -20,7 +20,7 @@ const routes: RouteRecordRaw[] = [
     component: RegisterCooperation,
   },
   {
-    path: '/usersignin',
+    path: Routes.RegisterUser,
     component: UserRegistration,
   },
 ];

@@ -167,7 +167,7 @@ export default defineComponent({
         console.log(v$.value.firstName);
         console.log(v$.value.firstName);
         return;
-      } else return console.log(isFormValid, 'is))))))))))');
+      } else return console.log(isFormValid, 'isFormValid');
     };
 
     return {
@@ -177,13 +177,12 @@ export default defineComponent({
     };
   },
   mounted() {
-    const checkApi = () => {
-      this.$http.get('/users', { params: { page_number: 1 } }).then((r) => {
-        console.log(r.data);
-      });
-    };
-    checkApi();
-    console.log('Mounted works', checkApi());
+    // const checkApi = () => {
+    //   this.$http.get('/users', { params: { page_number: 1 } }).then((r) => {
+    //     console.log(r.data);
+    //   });
+    // };
+    // console.log('Mounted works', checkApi());
   },
   methods: {
     getInfoFromForm() {
@@ -213,14 +212,14 @@ export default defineComponent({
     .field {
       display: flex;
       position: relative;
-      margin: 10px;
+      margin: 15px;
       flex-direction: column;
       align-items: center;
       .p-inputtext {
         min-width: 500px;
       }
       small {
-        bottom: -40%;
+        bottom: -23px;
         position: absolute;
       }
     }
@@ -233,7 +232,7 @@ export default defineComponent({
       color: #f43c3c;
     }
     Button {
-      margin: 10px;
+      margin: 15px;
     }
   }
 }
