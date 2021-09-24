@@ -1,15 +1,15 @@
 <template>
   <div class="login-component">
-    <div class="form__group">
+    <div class="form-group">
       <h1>Вхід до Особистого кабінету</h1>
-      <form class="form__login" @submit.prevent="userLogin">
-        <div class="form__login-item">
+      <form class="form-login" @submit.prevent="userLogin">
+        <div class="form-login__item">
           <label for="email">Email</label>
           <InputText
             id="email"
             type="text"
             placeholder="Email"
-            v-model="email"
+            v-model.trim="email"
             @input="email = $event.target.value"
             @blur="emailBlur"
             maxlength="320"
@@ -18,7 +18,7 @@
           />
           <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
         </div>
-        <div class="form__login-item">
+        <div class="form-login__item">
           <label for="password">Пароль</label>
           <InputText
             id="password"
@@ -52,7 +52,9 @@ import {
   emailMinLength,
   emailMaxLength,
   emailLastCharsValidator,
-  passwordLenght,
+  passwordMaxLenght,
+  passwordMinLenght,
+  passwordValidator,
 } from '@/utils/validators';
 const EMPTY_EMAIL = '';
 const EMPTY_PASSWORD = '';
@@ -110,7 +112,9 @@ export default defineComponent({
       },
       password: {
         requiredValidator,
-        passwordLenght,
+        passwordMaxLenght,
+        passwordMinLenght,
+        passwordValidator,
       },
     };
   },
@@ -134,14 +138,14 @@ $btn-mr: 2em;
   align-items: center;
   justify-content: center;
   margin-top: $login-component__mt;
-  .form__group {
+  .form-group {
     display: flex;
     flex-flow: column;
     align-items: center;
     justify-content: center;
-    .form__login {
+    .form-login {
       width: $form-login__width;
-      .form__login-item {
+      .form-login__item {
         display: flex;
         flex-flow: column;
         margin: $login-item__mr;
