@@ -139,29 +139,20 @@ export default defineComponent({
         });
     },
     checkEdrpouRegistered() {
-      // const payload = {
-      //   params: {
-      //     edrpou: this.edrpou,
-      //   },
-      //   successCallback: (r: AxiosResponse): void => {
-      //     this.errors.checkError = false;
-      //     this.check.edrpou.registered = r.data.length !== 0;
-      //   },
-      //   errorCallback: (): void => {
-      //     this.errors.checkError = true;
-      //   },
-      // };
-      //
-      // this.$store.dispatch('cooperationStore/IS_COOPERATION_REGISTERED', payload);
-      this.$http
-        .get('/cooperations', { params: { usreo: this.edrpou } })
-        .then((r: AxiosResponse) => {
+      const payload = {
+        params: {
+          edrpou: this.edrpou,
+        },
+        successCallback: (r: AxiosResponse): void => {
           this.errors.checkError = false;
           this.check.edrpou.registered = r.data.length !== 0;
-        })
-        .catch(() => {
+        },
+        errorCallback: (): void => {
           this.errors.checkError = true;
-        });
+        },
+      };
+
+      this.$store.dispatch('cooperationStore/IS_COOPERATION_REGISTERED', payload);
     },
     showSuccess() {
       this.isLetterSent = true;
