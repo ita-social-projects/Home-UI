@@ -145,8 +145,8 @@ export default defineComponent({
         password: {
           password: {
             requiredValidator,
-            passwordValidator,
             passwordMinLenght,
+            passwordValidator,
             passwordMaxLenght,
           },
           confirm: {
