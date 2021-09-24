@@ -41,7 +41,6 @@
           <Button label="Заре'єструвати" :disabled="!isFormValid" class="p-button-info" type="submit" />
         </section>
       </form>
-      <button @click="tess">sfdadsad</button>
     </div>
   </div>
 </template>
