@@ -6,6 +6,9 @@
         <th>Прізвище</th>
         <th>E-mail</th>
       </tr>
+      <tr>
+        <td>{{ userName }}</td>
+      </tr>
     </thead>
     <tbody>
       <tr></tr>
@@ -18,6 +21,16 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'userProfile',
+  computed: {
+    userName: {
+      get(): string {
+        return this.$store.state.userStore.user.first_name;
+      },
+      set(value): void {
+        this.$store.commit('userStore/UserMutation.SET_USER', value);
+      },
+    },
+  },
 });
 </script>
 

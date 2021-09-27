@@ -10,7 +10,7 @@ export enum UserActionTypes {
   SET_USER = 'SET_USER',
 }
 
-export interface UserInterface {
+export interface User {
   first_name: string;
   last_name: string;
   email: string;
@@ -25,7 +25,11 @@ export interface Contact {
   email: string;
 }
 
-export type Mutations<S = UserInterface> = {
+export interface UserStateInterface {
+  user: User;
+}
+
+export type Mutations<S = UserStateInterface> = {
   [UserMutationTypes.SET_USER](state: S, payload: string): void;
 };
 
@@ -34,10 +38,10 @@ export interface Actions {
   [UserActionTypes.SET_USER]({ commit }: AugmentedActionContext, payload: string): void;
 }
 
-export type Getters<S = UserInterface> = {
-  getCooperationNameAndEdrpou(state: S): string;
+export type Getters<S = UserStateInterface> = {
+  getEmailAndPassword(state: S): string;
 };
 
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
-} & Omit<ActionContext<UserInterface, RootStateInterface>, 'commit'>;
+} & Omit<ActionContext<UserStateInterface, RootStateInterface>, 'commit'>;

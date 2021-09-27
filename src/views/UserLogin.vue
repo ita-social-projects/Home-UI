@@ -49,7 +49,7 @@
 import { defineComponent } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-// import { Routes } from '@/router/types';
+import { Routes } from '@/router/types';
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
@@ -85,7 +85,7 @@ export default defineComponent({
     login() {
       this.v$.$validate();
       if (!this.v$.$error) {
-        // this.$store.dispatch('login', this.email)
+        this.$store.dispatch('userStore/IS_USER_REGISTERED', this.email);
         // .then((loggedIn: boolean) => {
         //   if (loggedIn) {
         //     this.$router.push(Routes.UserProfile);
