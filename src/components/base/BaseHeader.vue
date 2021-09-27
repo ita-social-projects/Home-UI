@@ -10,7 +10,7 @@
 
     <div class="header__btn">
       <div>
-        <Button label="Увійти" @click="loginUser" class="p-button-info" />
+        <Button v-show="$route.name !== '/login'" label="Увійти" @click="loginUser" class="p-button-info" />
       </div>
     </div>
   </div>
@@ -30,6 +30,9 @@ export default defineComponent({
   },
   components: {
     Button,
+  },
+  computed: {
+    // route check
   },
   methods: {
     loginUser() {

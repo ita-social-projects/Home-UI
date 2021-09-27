@@ -2,8 +2,9 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { Routes } from '@/router/types';
 import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
-import UserLogin from '@/views/UserLogin.vue';
 import RegisterUser from '@/views/RegisterUser.vue';
+import UserLogin from '@/views/UserLogin.vue';
+import UserProfile from '@/views/UserProfile.vue';
 
 const routes: RouteRecordRaw[] = [
   // initial route; should be customized or removed
@@ -12,6 +13,7 @@ const routes: RouteRecordRaw[] = [
     component: StartPage,
   },
   {
+    name: Routes.UserLogin,
     path: Routes.UserLogin,
     component: UserLogin,
   },
@@ -22,6 +24,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: Routes.RegisterUser,
     component: RegisterUser,
+  },
+  {
+    path: Routes.UserProfile,
+    component: UserProfile,
   },
 ];
 

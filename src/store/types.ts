@@ -1,5 +1,4 @@
 import { AxiosError, AxiosResponse } from 'axios';
-
 export interface RootStateInterface {
   hello: string;
   world: string;

@@ -1,9 +1,9 @@
 <template>
   <div class="login-component">
     <div class="form-group">
-      <h4 v-for="user in users" :key="user.id">Привет {{ user.first_name }} {{ user.last_name }}</h4>
+      <span></span>
       <h1>Вхід до Особистого кабінету</h1>
-      <form class="form-login" @submit.prevent="userLogin">
+      <form class="form-login" @submit.prevent="login">
         <div class="form-login__item">
           <label for="email">Email</label>
           <InputText
@@ -18,6 +18,9 @@
             :class="{ 'p-invalid': v$.email.$error }"
           />
           <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
+          <!-- <small v-else-if="check.email.registered" id="email-registered" class="p-error">
+            Такого користувача немає в системі
+          </small> -->
         </div>
         <div class="form-login__item">
           <label for="password">Пароль</label>
@@ -46,6 +49,7 @@
 import { defineComponent } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+// import { Routes } from '@/router/types';
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
@@ -57,11 +61,9 @@ import {
   passwordMaxLenght,
   passwordValidator,
 } from '@/utils/validators';
-const EMPTY_EMAIL = '';
-const EMPTY_PASSWORD = '';
 
 export default defineComponent({
-  name: 'userlogin',
+  name: 'login',
   components: {
     InputText,
     Button,
@@ -75,25 +77,22 @@ export default defineComponent({
     return {
       email: '',
       password: '',
-      users: {},
       isEmailValid: false,
       isPasswordValid: false,
     };
   },
   methods: {
-    userLogin() {
+    login() {
       this.v$.$validate();
       if (!this.v$.$error) {
-        // this.$http
-        // .get('/users', { params: { email: this.email } }).
-        // then((response) => this.users = response.data);
-        // async check if user exist in DB
-        // if exist - set to store
-        // else - show validation error
-        this.email = EMPTY_EMAIL;
-        this.password = EMPTY_PASSWORD;
-      } else {
-        // if failed
+        // this.$store.dispatch('login', this.email)
+        // .then((loggedIn: boolean) => {
+        //   if (loggedIn) {
+        //     this.$router.push(Routes.UserProfile);
+        //   } else {
+        //     alert('Fail');
+        //   }
+        // })
       }
     },
     emailBlur() {
