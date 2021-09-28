@@ -14,9 +14,7 @@ export const actions: ActionTree<UserStateInterface, RootStateInterface> = {
         if (r.data.length !== 0) {
           router.push(Routes.UserProfile);
           commit(UserMutationTypes.SET_USER, r.data[0]);
-          const encodedCredentials = window.btoa(`${payload.userData.email}:${payload.userData.password}`);
-          const auth = `Basic ${encodedCredentials}`;
-          localStorage.setItem('token', JSON.stringify(auth));
+          commit(UserMutationTypes.SET_TOKEN, payload.userData);
         }
       })
       .catch((r: AxiosResponse) => {

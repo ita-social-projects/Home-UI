@@ -3,6 +3,7 @@ import { requestPayload, RootStateInterface } from '@/store/types';
 
 export enum UserMutationTypes {
   SET_USER = 'SET_USER',
+  SET_TOKEN = 'SET_TOKEN',
 }
 
 export enum UserActionTypes {
@@ -30,6 +31,7 @@ export interface UserStateInterface {
 
 export type Mutations<S = UserStateInterface> = {
   [UserMutationTypes.SET_USER](state: S, payload: string): void;
+  [UserMutationTypes.SET_TOKEN](state: S, payload: string): void;
 };
 
 export interface Actions {
