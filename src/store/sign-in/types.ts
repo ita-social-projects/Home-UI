@@ -6,8 +6,7 @@ export enum UserMutationTypes {
 }
 
 export enum UserActionTypes {
-  IS_USER_REGISTERED = 'IS_USER_REGISTERED',
-  SET_USER = 'SET_USER',
+  SIGN_IN = 'SIGN_IN',
 }
 
 export interface User {
@@ -26,7 +25,7 @@ export interface Contact {
 }
 
 export interface UserStateInterface {
-  user: User;
+  user: User | null;
 }
 
 export type Mutations<S = UserStateInterface> = {
@@ -34,8 +33,7 @@ export type Mutations<S = UserStateInterface> = {
 };
 
 export interface Actions {
-  [UserActionTypes.IS_USER_REGISTERED]({ commit }: AugmentedActionContext, payload: requestPayload): void;
-  [UserActionTypes.SET_USER]({ commit }: AugmentedActionContext, payload: string): void;
+  [UserActionTypes.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload): void;
 }
 
 export type Getters<S = UserStateInterface> = {

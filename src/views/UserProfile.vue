@@ -5,9 +5,13 @@
         <th>Iм'я</th>
         <th>Прізвище</th>
         <th>E-mail</th>
+        <th>Контакти</th>
       </tr>
       <tr>
-        <td>{{ userName }}</td>
+        <td>{{ userData.first_name }}</td>
+        <td>{{ userData.last_name }}</td>
+        <td>{{ userData.email }}</td>
+        <td>{{ userData.contacts }}</td>
       </tr>
     </thead>
     <tbody>
@@ -22,12 +26,12 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'userProfile',
   computed: {
-    userName: {
+    userData: {
       get(): string {
-        return this.$store.state.userStore.user.first_name;
+        return this.$store.state.userStore.user;
       },
-      set(value): void {
-        this.$store.commit('userStore/UserMutation.SET_USER', value);
+      set(): void {
+        return this.$store.state.userStore.user;
       },
     },
   },
@@ -37,9 +41,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 .table {
   margin: auto;
+  margin-top: 50px;
   border-collapse: collapse;
   & th {
-    padding: 12px;
+    padding: 28px;
     text-align: left;
     background-color: #04aa6d;
     color: white;
@@ -47,7 +52,7 @@ export default defineComponent({
   td,
   th {
     border: 1px solid black;
-    padding: 8px;
+    padding: 18px;
   }
 }
 </style>

@@ -6,20 +6,21 @@ import { mutations } from '@/store/sign-in/mutations';
 import { actions } from '@/store/sign-in/actions';
 
 export const state: UserStateInterface = {
-  user: {
-    first_name: '',
-    last_name: '',
-    email: '',
-    id: 0,
-    contacts: [
-      {
-        type: '',
-        main: false,
-        id: 0,
-        email: '',
-      },
-    ],
-  },
+  user: null,
+  //   user: {
+  //     first_name: '',
+  //     last_name: '',
+  //     email: '',
+  //     id: 0,
+  //     contacts: [
+  //       {
+  //         type: '',
+  //         main: false,
+  //         id: 0,
+  //         email: '',
+  //       },
+  //     ],
+  //   },
 };
 
 export const userStore: Module<UserStateInterface, RootStateInterface> = {

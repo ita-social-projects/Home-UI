@@ -1,31 +1,23 @@
 import { ActionTree } from 'vuex';
-import { UserStateInterface, UserActionTypes, UserMutationTypes, Actions } from '@/store/sign-in/types';
+import { UserStateInterface, UserActionTypes, UserMutationTypes } from '@/store/sign-in/types';
 import { RootStateInterface } from '@/store/types';
 import { HTTP } from '@/core/api/http-common';
 import { AxiosResponse } from 'axios';
+import router from '@/router';
+import { Routes } from '@/router/types';
 
 export const actions: ActionTree<UserStateInterface, RootStateInterface> = {
-  [UserActionTypes.IS_USER_REGISTERED]: ({ commit }, payload) => {
-    HTTP.get('/users', { params: { email: payload } }).then((response) => {
-      commit(UserMutationTypes.SET_USER, response.data[0]);
-    });
-    // .then((r: AxiosResponse) => {
-    //   payload.successCallback(r);
-    // })
-    // .catch(() => {
-    //   payload.errorCallback();
-    // });
-  },
-  [UserActionTypes.SET_USER]: ({ commit }, payload) => {
-    commit(UserMutationTypes.SET_USER, payload);
+  [UserActionTypes.SIGN_IN]: ({ commit }, payload) => {
+    HTTP.get('/users', { params: { email: payload.userData.email } })
+      .then((r: AxiosResponse) => {
+        payload.successCallback(r);
+        if (r.data.length !== 0) {
+          router.push(Routes.UserProfile);
+          commit(UserMutationTypes.SET_USER, r.data[0]);
+        }
+      })
+      .catch((r: AxiosResponse) => {
+        payload.errorCallback(r);
+      });
   },
 };
-
-//     return HTTP
-//         .get('/users', { params: { email: payload } })
-//         .then( response => {
-//           commit('SET_USERS', response.data[0]);
-//           return response.data.length !== 0;
-//         });
-//     }
-//   },

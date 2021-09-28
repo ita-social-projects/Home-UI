@@ -15,12 +15,12 @@
             @blur="emailBlur"
             maxlength="320"
             class="p-inputtext"
-            :class="{ 'p-invalid': v$.email.$error }"
+            :class="{ 'p-invalid': v$.email.$error || check.email.registered }"
           />
           <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
-          <!-- <small v-else-if="check.email.registered" id="email-registered" class="p-error">
+          <small v-else-if="check.email.unregistered" id="email-unregistered" class="p-error">
             Такого користувача немає в системі
-          </small> -->
+          </small>
         </div>
         <div class="form-login__item">
           <label for="password">Пароль</label>
@@ -49,7 +49,7 @@
 import { defineComponent } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import { Routes } from '@/router/types';
+import { AxiosResponse } from 'axios';
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
@@ -77,32 +77,22 @@ export default defineComponent({
     return {
       email: '',
       password: '',
+      check: {
+        email: {
+          valid: false,
+          unregistered: false,
+        },
+        password: {
+          valid: false,
+        },
+      },
+      errors: {
+        checkError: false,
+        submitError: false,
+      },
       isEmailValid: false,
       isPasswordValid: false,
     };
-  },
-  methods: {
-    login() {
-      this.v$.$validate();
-      if (!this.v$.$error) {
-        this.$store.dispatch('userStore/IS_USER_REGISTERED', this.email);
-        // .then((loggedIn: boolean) => {
-        //   if (loggedIn) {
-        //     this.$router.push(Routes.UserProfile);
-        //   } else {
-        //     alert('Fail');
-        //   }
-        // })
-      }
-    },
-    emailBlur() {
-      this.v$.email.$touch();
-      this.isEmailValid = !this.v$.email.$error;
-    },
-    passwordBlur() {
-      this.v$.password.$touch();
-      this.isPasswordValid = !this.v$.password.$error;
-    },
   },
   validations() {
     return {
@@ -120,6 +110,39 @@ export default defineComponent({
         passwordValidator,
       },
     };
+  },
+  computed: {
+    isLoggedIn(): boolean {
+      return this.$store.getters['userStore/loggedIn'];
+    },
+  },
+  methods: {
+    emailBlur() {
+      this.v$.email.$touch();
+      this.isEmailValid = !this.v$.email.$error;
+    },
+    passwordBlur() {
+      this.v$.password.$touch();
+      this.isPasswordValid = !this.v$.password.$error;
+    },
+    login() {
+      const payload = {
+        userData: {
+          email: this.email,
+          password: this.password,
+        },
+        successCallback: (r: AxiosResponse): void => {
+          this.errors.checkError = false;
+          this.check.email.unregistered = r.data.length == 0;
+        },
+        errorCallback: (): void => {
+          this.errors.checkError = true;
+        },
+      };
+      if (!this.v$.$error) {
+        this.$store.dispatch('userStore/SIGN_IN', payload);
+      }
+    },
   },
   watch: {},
 });
