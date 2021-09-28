@@ -77,7 +77,7 @@ export default defineComponent({
 });
 </script>
 
-<style leng="scss" scoped>
+<style lang="scss" scoped>
 .wrapper {
   width: 70%;
   margin: 0 auto;

@@ -4,9 +4,10 @@ import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
 import UserLogin from '@/views/UserLogin.vue';
 import RegisterUser from '@/views/RegisterUser.vue';
+import MainPage from '@/views/MainPage.vue';
+import CooperationInfo from '@/views/CooperationInfo.vue';
 
 const routes: RouteRecordRaw[] = [
-  // initial route; should be customized or removed
   {
     path: Routes.StartPage,
     component: StartPage,
@@ -23,6 +24,16 @@ const routes: RouteRecordRaw[] = [
     path: Routes.RegisterUser,
     component: RegisterUser,
   },
+  {
+    path: Routes.MainPage,
+    component: MainPage,
+    children: [
+      {
+        path: Routes.Cooperation,
+        component: CooperationInfo,
+      },
+    ],
+  },
 ];
 
 const router = createRouter({
@@ -31,7 +42,3 @@ const router = createRouter({
 });
 
 export default router;
-/*
-    path: '/main-page',
-    component: MainPage,
-*/

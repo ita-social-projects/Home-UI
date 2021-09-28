@@ -15,16 +15,23 @@ body {
   color: $main-color;
 }
 
-h1 {
+h1,
+h2,
+h3 {
   font-weight: 700;
-  font-size: 36px;
   color: $headline-color;
 }
 
+h1 {
+  font-size: 36px;
+}
+
 h2 {
-  font-weight: 700;
   font-size: 24px;
-  color: $headline-color;
+}
+
+h3 {
+  font-size: 20px;
 }
 
 img {
@@ -33,6 +40,12 @@ img {
 
 label {
   user-select: none;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
 }
 
 // General styles and classes

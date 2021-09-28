@@ -1,13 +1,14 @@
 <template>
-  <div class="main-page-wrap">
-    <baseHeader />
-    <sideBar />
+  <div class="main-page">
+    <Sidebar />
+    <div class="content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import sideBar from '@/components/base/SideBar.vue';
-import baseHeader from '@/components/base/BaseHeader.vue';
+import Sidebar from '@/components/base/Sidebar.vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -18,17 +19,15 @@ export default defineComponent({
     };
   },
   components: {
-    sideBar,
-    baseHeader,
+    Sidebar,
   },
 });
 </script>
 
 <style lang="scss" scoped>
-  .main-page-wrap {
-    position: relative;
-    display: block;
-
-    background: #ffffff;
-  }
+.main-page {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  height: 100%;
+}
 </style>
