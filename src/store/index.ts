@@ -1,12 +1,16 @@
 import { createStore } from 'vuex';
-import { cooperationModule } from '@/store/cooperationModule';
+import { RootStateInterface } from '@/store/types';
+import { cooperationStore } from '@/store/cooperation';
+
+const state: RootStateInterface = {
+  hello: 'hello',
+  world: 'world',
+};
 
 export default createStore({
   strict: process.env.NODE_ENV !== 'production',
-  state: {},
-  mutations: {},
-  actions: {},
+  state,
   modules: {
-    c: cooperationModule,
+    cooperationStore,
   },
 });

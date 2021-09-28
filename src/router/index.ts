@@ -1,26 +1,27 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { Routes } from '@/router/types';
 import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
 import UserLogin from '@/views/UserLogin.vue';
-import MainPage from '@/views/MainPage.vue';
+import RegisterUser from '@/views/RegisterUser.vue';
 
 const routes: RouteRecordRaw[] = [
   // initial route; should be customized or removed
   {
-    path: '/',
+    path: Routes.StartPage,
     component: StartPage,
   },
   {
-    path: '/login',
+    path: Routes.UserLogin,
     component: UserLogin,
   },
   {
-    path: '/register-cooperation',
+    path: Routes.RegisterCooperation,
     component: RegisterCooperation,
   },
   {
-    path: '/main-page',
-    component: MainPage,
+    path: Routes.RegisterUser,
+    component: RegisterUser,
   },
 ];
 
@@ -30,3 +31,7 @@ const router = createRouter({
 });
 
 export default router;
+/*
+    path: '/main-page',
+    component: MainPage,
+*/

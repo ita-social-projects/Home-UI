@@ -1,3 +1,4 @@
+// Generic styles and CSS resets
 * {
   font-family: 'Open Sans', 'Montserrat', 'Helvetica', sans-serif;
   outline: none;
@@ -11,16 +12,19 @@ html {
 
 body {
   margin: 0;
+  color: $main-color;
 }
 
 h1 {
   font-weight: 700;
   font-size: 36px;
+  color: $headline-color;
 }
 
 h2 {
   font-weight: 700;
   font-size: 24px;
+  color: $headline-color;
 }
 
 img {
@@ -29,4 +33,9 @@ img {
 
 label {
   user-select: none;
+}
+
+// General styles and classes
+.bold {
+  font-weight: 700;
 }
