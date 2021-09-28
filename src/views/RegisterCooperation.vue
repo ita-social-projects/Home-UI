@@ -9,14 +9,11 @@
             id="email"
             placeholder="john.doe@gmail.com"
             v-model.trim="email"
-            :class="{ 'p-invalid': v$.email.$error || check.email.registered }"
+            :class="{ 'p-invalid': v$.email.$error || !check.isRegistrationAvailable }"
             @blur="emailBlur"
             maxlength="321"
           />
           <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
-          <small v-else-if="check.email.registered" id="email-registered" class="p-error">
-            Ця адреса вже зареєстрована
-          </small>
         </div>
         <div>
           <label for="edrpou">ЄДРПОУ <span>*</span></label>
@@ -24,14 +21,11 @@
             id="edrpou"
             placeholder="12345678"
             v-model="edrpou"
-            :class="{ 'p-invalid': v$.edrpou.$error || check.edrpou.registered }"
+            :class="{ 'p-invalid': v$.edrpou.$error || !check.isRegistrationAvailable }"
             @blur="edrpouBlur"
             maxlength="8"
           />
           <small v-if="v$.edrpou.$error" id="edrpou-help" class="p-error">{{ v$.edrpou.$errors[0].$message }}</small>
-          <small v-else-if="check.edrpou.registered" id="edrpou-registered" class="p-error">
-            На цей ЄДРПОУ вже зареєстровано кооперацію
-          </small>
           <div class="counter" :class="{ 'counter-ok': count === 8 }">
             <span> {{ count }} </span>/8
           </div>
@@ -49,12 +43,12 @@
 import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import {
-  requiredValidator,
   edrpouValidator,
-  emailValidator,
-  emailMinLength,
-  emailMaxLength,
   emailLastCharsValidator,
+  emailMaxLength,
+  emailMinLength,
+  emailValidator,
+  requiredValidator,
 } from '@/utils/validators';
 
 import InputText from 'primevue/inputtext';
@@ -78,95 +72,73 @@ export default defineComponent({
       edrpou: '',
       count: 0,
       check: {
-        email: {
-          valid: false,
-          registered: false,
-        },
-        edrpou: {
-          valid: false,
-          registered: false,
-        },
+        isEmailValid: false,
+        isEdrpouValid: false,
+        isRegistrationAvailable: true,
       },
-      errors: {
-        checkError: false,
-        submitError: false,
-      },
-      isLetterSent: false,
+      submitError: false,
     };
   },
   computed: {
     isFormValid(): boolean {
-      const fieldsValid: boolean = this.check.email.valid && this.check.edrpou.valid;
-      const nameAvailable: boolean = !this.check.email.registered && !this.check.edrpou.registered;
-      const noError = !this.errors.checkError;
-      return fieldsValid && noError && nameAvailable;
-    },
-    helloWorld(): string {
-      return this.$store.getters['cooperationStore/getHelloWorldTwice'];
+      return this.check.isEmailValid && this.check.isEdrpouValid && this.check.isRegistrationAvailable;
     },
   },
   methods: {
-    emailBlur() {
+    async emailBlur() {
       this.v$.email.$touch();
-      this.v$.email.$validate().then((isValid) => {
-        this.check.email.valid = false;
-        if (isValid) {
-          this.check.email.valid = true;
-          this.checkEmailRegistered();
-        }
-      });
+      this.check.isEmailValid = await this.v$.email.$validate();
+      this.check.isRegistrationAvailable = true;
     },
-    edrpouBlur() {
+    async edrpouBlur() {
       this.v$.edrpou.$touch();
-      this.v$.edrpou.$validate().then((isValid) => {
-        this.check.edrpou.valid = false;
-        if (isValid) {
-          this.check.edrpou.valid = true;
-          this.checkEdrpouRegistered();
-        }
-      });
+      this.check.isEdrpouValid = await this.v$.edrpou.$validate();
+      this.check.isRegistrationAvailable = true;
     },
-    checkEmailRegistered() {
-      this.$http
-        .get('/users', { params: { email: this.email } })
-        .then((r: AxiosResponse) => {
-          this.errors.checkError = false;
-          this.check.email.registered = r.data.length !== 0;
-        })
-        .catch(() => {
-          this.errors.checkError = true;
-        });
-    },
-    checkEdrpouRegistered() {
-      const payload = {
-        params: {
-          edrpou: this.edrpou,
-        },
-        successCallback: (r: AxiosResponse): void => {
-          this.errors.checkError = false;
-          this.check.edrpou.registered = r.data.length !== 0;
-        },
-        errorCallback: (): void => {
-          this.errors.checkError = true;
-        },
-      };
-
-      this.$store.dispatch('cooperationStore/IS_COOPERATION_REGISTERED', payload);
-    },
-    showSuccess() {
-      this.isLetterSent = true;
+    showSuccessToast() {
       this.$toast.add({
         severity: 'success',
         summary: 'Юхуууу!',
         detail: 'Будь ласка, перевірте пошту для завершення реєстрації',
       });
     },
-    registerCooperation() {
-      this.v$.$validate().then((isValid) => {
-        if (isValid) {
-          this.showSuccess();
-        }
+    showAlreadyRegisteredToast() {
+      this.$toast.add({
+        severity: 'warn',
+        summary: 'Помилка',
+        detail: `Неможливо зареєструвати об'єднання з ЄДРПОУ ${this.edrpou} на адресу ${this.email}.
+         Ви вже реєстрували об'єднання з таким кодом.`,
       });
+    },
+    showErrorToast() {
+      this.$toast.add({
+        severity: 'error',
+        summary: 'Помилка',
+        detail: 'Під час реєстрації виникла помилка. Будь ласка спробуйте пізніше',
+      });
+    },
+    async registerCooperation() {
+      const isValid = await this.v$.$validate();
+      if (!isValid) {
+        return;
+      }
+
+      const payload = {
+        data: {
+          email: this.email,
+          edrpou: this.edrpou,
+        },
+        successCallback: (r: AxiosResponse) => {
+          console.log('suc', r);
+          // if (r.status === 202) {
+          // }
+          this.showSuccessToast();
+        },
+        errorCallback: () => {
+          this.showErrorToast();
+        },
+      };
+      this.$store.dispatch('cooperationStore/CREATE_COOPERATION', payload);
     },
   },
   validations() {
@@ -177,7 +149,6 @@ export default defineComponent({
         emailMaxLength,
         emailLastCharsValidator,
         emailValidator,
-        $lazy: true,
       },
       edrpou: {
         requiredValidator,
@@ -186,21 +157,11 @@ export default defineComponent({
     };
   },
   watch: {
-    edrpou(newValue) {
-      this.count = newValue.length;
+    edrpou(value) {
+      this.count = value.length;
     },
-    errors: {
-      handler(newValue) {
-        let detail = '';
-        if (newValue.checkError) {
-          detail = 'Під час перевірки даних виникла помилка. Будь ласка спробуйте пізніше';
-        }
-        if (newValue.submitError) {
-          detail = 'Під час реєстрації виникла помилка. Будь ласка спробуйте пізніше';
-        }
-        this.$toast.add({ severity: 'error', summary: 'Помилка', detail });
-      },
-      deep: true,
+    submitError(value) {
+      value && this.showErrorToast();
     },
   },
 });
