@@ -10,15 +10,14 @@ export const actions: ActionTree<UserStateInterface, RootStateInterface> = {
   [UserActionTypes.SIGN_IN]: ({ commit }, payload) => {
     HTTP.get('/users', { params: { email: payload.userData.email } })
       .then((r: AxiosResponse) => {
-        payload.successCallback(r);
         if (r.data.length !== 0) {
-          router.push(Routes.UserProfile);
           commit(UserMutationTypes.SET_USER, r.data[0]);
           commit(UserMutationTypes.SET_TOKEN, payload.userData);
         }
+        payload.successCallback(r);
       })
-      .catch((r: AxiosResponse) => {
-        payload.errorCallback(r);
+      .catch(() => {
+        payload.errorCallback();
       });
   },
 };

@@ -7,20 +7,6 @@ import { actions } from '@/store/sign-in/actions';
 
 export const state: UserStateInterface = {
   user: null,
-  //   user: {
-  //     first_name: '',
-  //     last_name: '',
-  //     email: '',
-  //     id: 0,
-  //     contacts: [
-  //       {
-  //         type: '',
-  //         main: false,
-  //         id: 0,
-  //         email: '',
-  //       },
-  //     ],
-  //   },
 };
 
 export const userStore: Module<UserStateInterface, RootStateInterface> = {

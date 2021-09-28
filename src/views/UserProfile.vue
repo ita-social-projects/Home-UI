@@ -26,13 +26,8 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'userProfile',
   computed: {
-    userData: {
-      get(): string {
-        return this.$store.state.userStore.user;
-      },
-      set(): void {
-        return this.$store.state.userStore.user;
-      },
+    userData() {
+      return this.$store.getters['userStore/userData'];
     },
   },
 });

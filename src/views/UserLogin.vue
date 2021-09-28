@@ -51,6 +51,7 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { AxiosResponse } from 'axios';
 import useVuelidate from '@vuelidate/core';
+import { Routes } from '@/router/types';
 import {
   requiredValidator,
   emailValidator,
@@ -133,7 +134,10 @@ export default defineComponent({
         },
         successCallback: (r: AxiosResponse): void => {
           this.errors.checkError = false;
-          this.check.email.unregistered = r.data.length == 0;
+          this.check.email.unregistered = r.data.length === 0;
+          if (this.isLoggedIn) {
+            this.$router.push(Routes.UserProfile);
+          }
         },
         errorCallback: (): void => {
           this.errors.checkError = true;
