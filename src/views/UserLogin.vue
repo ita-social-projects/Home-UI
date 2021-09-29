@@ -136,7 +136,7 @@ export default defineComponent({
           this.errors.checkError = false;
           this.check.email.unregistered = r.data.length === 0;
           if (this.isLoggedIn) {
-            this.$router.push(Routes.UserProfile);
+            this.$router.push(Routes.MainPage);
           }
         },
         errorCallback: (): void => {

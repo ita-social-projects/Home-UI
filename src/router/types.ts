@@ -3,5 +3,6 @@ export enum Routes {
   UserLogin = '/login',
   RegisterCooperation = '/register-cooperation',
   RegisterUser = '/register-user',
-  UserProfile = '/profile',
+  MainPage = '/main',
+  Cooperation = '/main/cooperation',
 }

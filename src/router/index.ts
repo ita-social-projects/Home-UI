@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { Routes } from '@/router/types';
+import store from '@/store/index';
 import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
 import RegisterUser from '@/views/RegisterUser.vue';
 import UserLogin from '@/views/UserLogin.vue';
-import UserProfile from '@/views/UserProfile.vue';
-import store from '@/store/index';
+import MainPage from '@/views/MainPage.vue';
+import CooperationInfo from '@/views/CooperationInfo.vue';
 
 const routes: RouteRecordRaw[] = [
-  // initial route; should be customized or removed
   {
     path: Routes.StartPage,
     component: StartPage,
@@ -27,8 +27,14 @@ const routes: RouteRecordRaw[] = [
     component: RegisterUser,
   },
   {
-    path: Routes.UserProfile,
-    component: UserProfile,
+    path: Routes.MainPage,
+    component: MainPage,
+    children: [
+      {
+        path: Routes.Cooperation,
+        component: CooperationInfo,
+      },
+    ],
   },
 ];
 
@@ -38,7 +44,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.path === Routes.UserProfile && !store.getters['userStore/loggedIn']) {
+  if (to.path === Routes.MainPage && !store.getters['userStore/loggedIn']) {
     next({ path: Routes.UserLogin });
   } else {
     next();
