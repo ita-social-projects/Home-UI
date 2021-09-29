@@ -6,6 +6,7 @@ import UserLogin from '@/views/UserLogin.vue';
 import RegisterUser from '@/views/RegisterUser.vue';
 import MainPage from '@/views/MainPage.vue';
 import CooperationInfo from '@/views/CooperationInfo.vue';
+import PageNotFound from '@/components/PageNotFound.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -33,6 +34,10 @@ const routes: RouteRecordRaw[] = [
         component: CooperationInfo,
       },
     ],
+  },
+  {
+    path: Routes.NotFound,
+    component: PageNotFound,
   },
 ];
 

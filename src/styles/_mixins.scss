@@ -1,0 +1,19 @@
+@mixin flex-center-all{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-center-all-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+@mixin flex-custom($justify: flex-start, $align: flex-start, $flow: row nowrap) {
+  display:flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-flow: $flow;
+}

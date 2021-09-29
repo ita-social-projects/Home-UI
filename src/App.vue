@@ -1,7 +1,7 @@
 <template>
   <BaseHeader />
   <Toast />
-  <router-view></router-view>
+  <router-view />
 </template>
 
 <script lang="ts">

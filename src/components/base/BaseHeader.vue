@@ -1,7 +1,7 @@
 <template>
-  <div class="header">
+  <header class="header">
     <div class="header__logo">
-      <img :src="require('@/assets/logo.svg')" alt="logo" />
+      <div class="logo" @click="redirectToMain"></div>
     </div>
 
     <div class="header__info">
@@ -10,10 +10,10 @@
 
     <div class="header__btn">
       <div>
-        <Button label="Увійти" @click="loginUser" class="p-button-info" />
+        <Button label="Увійти" @click="redirectToLogin" class="p-button-info" />
       </div>
     </div>
-  </div>
+  </header>
 </template>
 
 <script lang="ts">
@@ -32,8 +32,12 @@ export default defineComponent({
     Button,
   },
   methods: {
-    loginUser() {
+    redirectToLogin() {
       this.$router.push(Routes.UserLogin);
+    },
+    redirectToMain() {
+      const currentRoute = this.$route.path;
+      console.log(currentRoute);
     },
   },
 });
@@ -43,36 +47,41 @@ export default defineComponent({
 .header {
   height: 80px;
   width: 100%;
-  background-color: #dbf1ed;
+  background-color: $main-background-color;
   box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
   display: flex;
   padding: 20px;
-
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
   color: #495057;
+  user-select: none;
 }
+
 .header__logo {
+  @include flex-custom(flex-start);
   height: 40px;
   width: 100%;
   padding-left: 65px;
   padding-right: 15px;
-  display: flex;
   flex: 1 1 auto;
-  justify-content: flex-start;
+
+  .logo {
+    height: 100%;
+    width: 30%;
+    background-image: url('../../assets/logo.svg');
+    background-repeat: no-repeat;
+    background-position: 0 center;
+    cursor: pointer;
+  }
 }
 .header__info {
+  @include flex-center-all();
   width: 100%;
-  display: flex;
   flex: 1 1 auto;
-  align-items: center;
-  justify-content: center;
 }
 .header__btn {
+  @include flex-custom(flex-end);
   padding-left: 15px;
   padding-right: 65px;
-  display: flex;
   width: 100%;
   flex: 1 1 auto;
-  justify-content: flex-end;
 }
 </style>
