@@ -21,6 +21,11 @@ export default defineComponent({
   components: {
     Sidebar,
   },
+  computed: {
+    userData() {
+      return this.$store.getters['userStore/userData'];
+    },
+  },
 });
 </script>
 

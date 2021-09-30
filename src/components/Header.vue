@@ -10,7 +10,14 @@
 
     <div class="header__btn">
       <div>
-        <Button label="Увійти" @click="redirectToLogin" class="p-button-info" />
+        <Button
+          v-if="!isLoggedIn"
+          v-show="$route.name !== '/login'"
+          label="Увійти"
+          @click="redirectToLogin"
+          class="p-button-info"
+        />
+        <Button v-else label="Вийти" @click="userLogout" class="p-button-info" />
       </div>
     </div>
   </header>
@@ -31,13 +38,21 @@ export default defineComponent({
   components: {
     Button,
   },
+  computed: {
+    isLoggedIn(): boolean {
+      return this.$store.getters['userStore/loggedIn'];
+    },
+  },
   methods: {
+    redirectToMain() {
+      this.isLoggedIn ? this.$router.push(Routes.MainPage) : this.$router.push(Routes.StartPage);
+    },
     redirectToLogin() {
       this.$router.push(Routes.UserLogin);
     },
-    redirectToMain() {
-      const currentRoute = this.$route.path;
-      console.log(currentRoute);
+    userLogout() {
+      this.$router.push(Routes.StartPage);
+      localStorage.removeItem('user');
     },
   },
 });

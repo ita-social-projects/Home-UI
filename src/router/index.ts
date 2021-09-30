@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { Routes } from '@/router/types';
+import store from '@/store/index';
 import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
-import UserLogin from '@/views/UserLogin.vue';
 import RegisterUser from '@/views/RegisterUser.vue';
+import UserLogin from '@/views/UserLogin.vue';
 import MainPage from '@/views/MainPage.vue';
 import CooperationInfo from '@/views/CooperationInfo.vue';
 import PageNotFound from '@/components/PageNotFound.vue';
@@ -14,6 +15,7 @@ const routes: RouteRecordRaw[] = [
     component: StartPage,
   },
   {
+    name: Routes.UserLogin,
     path: Routes.UserLogin,
     component: UserLogin,
   },
@@ -44,6 +46,14 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.path === Routes.MainPage && !store.getters['userStore/loggedIn']) {
+    next({ path: Routes.StartPage });
+  } else {
+    next();
+  }
 });
 
 export default router;

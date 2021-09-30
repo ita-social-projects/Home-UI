@@ -3,7 +3,7 @@
     <section class="info">
       <div>
         <p class="name-hint">Ви зайшли як</p>
-        <h3 class="user-fullname">{{ userName }}</h3>
+        <h3 class="user-fullname">{{ userData.first_name }} {{ userData.last_name }}</h3>
       </div>
       <div class="settings-btn-wrap">
         <button><span class="pi pi-cog"></span></button>
@@ -12,7 +12,7 @@
 
     <nav class="sidebar-navigation">
       <BaseSidebarNavButton btn-text="Повідомлення" icon="pi-comments" :badge-counter="notifications" />
-      <BaseSidebarNavButton btn-text="Управління ОСББ" icon="pi-inbox" />
+      <BaseSidebarNavButton btn-text="Управління ОСББ" icon="pi-inbox" @click="openCooperation" />
       <BaseSidebarNavButton btn-text="Вибір ОСББ" icon="pi-bookmark" />
       <BaseSidebarNavButton btn-text="Запрошення" icon="pi-globe" />
       <BaseSidebarNavButton btn-text="Опитування" icon="pi-users" />
@@ -28,18 +28,29 @@
 import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import BaseSidebarNavButton from '@/components/base/BaseSidebarNavButton.vue';
+import { Routes } from '@/router/types';
 
 export default defineComponent({
   name: 'Sidebar',
   data() {
     return {
-      userName: 'Іван Несторович Семків',
+      userName: '',
       notifications: 2,
     };
   },
   components: {
     Button,
     BaseSidebarNavButton,
+  },
+  methods: {
+    openCooperation() {
+      this.$router.push(Routes.Cooperation);
+    },
+  },
+  computed: {
+    userData() {
+      return this.$store.getters['userStore/userData'];
+    },
   },
 });
 </script>
@@ -97,6 +108,10 @@ export default defineComponent({
 }
 
 .sidebar-navigation {
+  div,
+  button {
+    width: 100%;
+  }
 }
 
 .create-btn-wrap {
