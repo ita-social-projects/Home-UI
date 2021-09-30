@@ -66,7 +66,7 @@ export default defineComponent({
   .logo {
     height: 100%;
     width: 30%;
-    background-image: url('../../assets/logo.svg');
+    background-image: url('../assets/logo.svg');
     background-repeat: no-repeat;
     background-position: 0 center;
     cursor: pointer;

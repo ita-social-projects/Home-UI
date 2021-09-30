@@ -52,6 +52,7 @@ export default defineComponent({
   padding: 0 3em 3em;
   margin: 2em;
   border-radius: 1em;
+  box-shadow: 2px 2px 3px #00000030;
 
   nav {
     @include flex-custom(center, flex-start, column nowrap);
@@ -65,6 +66,8 @@ export default defineComponent({
       text-decoration: none;
       border-bottom: 3px solid transparent;
       transition: color 0.6s;
+      user-select: none;
+      -webkit-user-drag: none;
 
       span {
         margin: 0 0 0 1em;

@@ -138,15 +138,11 @@ $btn-mr: 2em;
 }
 
 .login-component {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center-all();
   margin-top: $login-component__mt;
   .form-group {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    justify-content: center;
+    @include flex-center-all-column();
+
     .form-login {
       width: $form-login__width;
       .form-login__item {
