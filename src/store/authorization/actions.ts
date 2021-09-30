@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex';
-import { UserStateInterface, UserActionTypes, UserMutationTypes } from '@/store/auth/types';
+import { UserStateInterface, UserActionTypes, UserMutationTypes } from '@/store/authorization/types';
 import { RootStateInterface } from '@/store/types';
 import { HTTP } from '@/core/api/http-common';
 import { AxiosResponse, AxiosInterceptorManager } from 'axios';

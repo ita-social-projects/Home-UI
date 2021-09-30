@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { UserStateInterface, UserMutationTypes } from '@/store/auth/types';
+import { UserStateInterface, UserMutationTypes } from '@/store/authorization/types';
 
 export const mutations: MutationTree<UserStateInterface> = {
   [UserMutationTypes.SET_USER]: (state, payload) => {
