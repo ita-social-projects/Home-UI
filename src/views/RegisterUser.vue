@@ -102,6 +102,7 @@ import {
 import { sameAs } from '@vuelidate/validators';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import store from '@/store';
 export default defineComponent({
   name: 'userRegistration',
   components: { InputText, Button },
@@ -162,14 +163,31 @@ export default defineComponent({
       };
     });
     const v$ = useVuelidate(rules, state);
+    console.log(state.registrationKey, 'sssssss');
+
+    const payload = {
+      params: {
+        registration_token: state.registrationKey,
+        first_name: state.firstName,
+        last_name: state.lastName,
+        email: state.email,
+        password: state.password.confirm,
+        contacts: [{ type: 'email', main: true, email: state.email }],
+      },
+    };
     return {
       state,
       v$,
+      payload,
+      // sendInfo: () => store.dispatch('userStore/SET_FIRST_NAME', payload)
     };
   },
   methods: {
     getInfoFromForm() {
       console.log(this.state);
+      console.log(this.state.password.confirm);
+      console.log(this.payload);
+      // console.log(this.sendInfo);
     },
   },
 });
