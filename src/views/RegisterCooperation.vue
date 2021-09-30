@@ -101,9 +101,6 @@ export default defineComponent({
       const noError = !this.errors.checkError;
       return fieldsValid && noError && nameAvailable;
     },
-    helloWorld(): string {
-      return this.$store.getters['cooperationStore/getHelloWorldTwice'];
-    },
   },
   methods: {
     emailBlur() {

@@ -3,7 +3,7 @@
     <section class="info">
       <div>
         <p class="name-hint">Ви зайшли як</p>
-        <h3 class="user-fullname">{{ userName }}</h3>
+        <h3 class="user-fullname">{{ userData.first_name }} {{ userData.last_name }}</h3>
       </div>
       <div class="settings-btn-wrap">
         <button><span class="pi pi-cog"></span></button>
@@ -52,12 +52,17 @@ export default defineComponent({
   name: 'Sidebar',
   data() {
     return {
-      userName: 'Іван Несторович Семків',
+      userName: '',
       newMails: '2',
     };
   },
   components: {
     Button,
+  },
+  computed: {
+    userData() {
+      return this.$store.getters['userStore/userData'];
+    },
   },
 });
 </script>
