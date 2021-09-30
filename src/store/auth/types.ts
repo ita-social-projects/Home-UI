@@ -8,6 +8,7 @@ export enum UserMutationTypes {
 
 export enum UserActionTypes {
   SIGN_IN = 'SIGN_IN',
+  SIGN_OUT = 'SIGN_OUT',
 }
 
 export interface User {
@@ -36,6 +37,7 @@ export type Mutations<S = UserStateInterface> = {
 
 export interface Actions {
   [UserActionTypes.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload): void;
+  [UserActionTypes.SIGN_OUT]({ commit }: AugmentedActionContext, payload: requestPayload): void;
 }
 
 export type Getters<S = UserStateInterface> = {

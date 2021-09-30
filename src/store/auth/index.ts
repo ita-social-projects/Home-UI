@@ -1,9 +1,9 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { UserStateInterface } from '@/store/sign-in/types';
-import { getters } from '@/store/sign-in/getters';
-import { mutations } from '@/store/sign-in/mutations';
-import { actions } from '@/store/sign-in/actions';
+import { UserStateInterface } from '@/store/auth/types';
+import { getters } from '@/store/auth/getters';
+import { mutations } from '@/store/auth/mutations';
+import { actions } from '@/store/auth/actions';
 
 export const state: UserStateInterface = {
   user: null,

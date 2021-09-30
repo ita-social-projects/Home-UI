@@ -45,7 +45,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.path === Routes.MainPage && !store.getters['userStore/loggedIn']) {
-    next({ path: Routes.UserLogin });
+    next({ path: Routes.StartPage });
   } else {
     next();
   }

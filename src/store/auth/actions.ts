@@ -1,10 +1,8 @@
 import { ActionTree } from 'vuex';
-import { UserStateInterface, UserActionTypes, UserMutationTypes } from '@/store/sign-in/types';
+import { UserStateInterface, UserActionTypes, UserMutationTypes } from '@/store/auth/types';
 import { RootStateInterface } from '@/store/types';
 import { HTTP } from '@/core/api/http-common';
-import { AxiosResponse } from 'axios';
-import router from '@/router';
-import { Routes } from '@/router/types';
+import { AxiosResponse, AxiosInterceptorManager } from 'axios';
 
 export const actions: ActionTree<UserStateInterface, RootStateInterface> = {
   [UserActionTypes.SIGN_IN]: ({ commit }, payload) => {
