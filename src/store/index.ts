@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { cooperationStore } from '@/store/cooperation';
-import { userStore } from '@/store/authorization';
+import { userStore } from '@/store/user';
 
 const state: RootStateInterface = {
   hello: 'hello',

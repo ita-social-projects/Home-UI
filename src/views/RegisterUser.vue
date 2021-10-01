@@ -1,16 +1,15 @@
 <template>
   <div class="wrapper">
-    <form class="registration__component" @submit.prevent="getInfoFromForm">
-      <h1 class="title">Реєстрація користувача</h1>
+    <form class="registration__component" @submit.prevent="sendInfo">
       <div class="field">
         <input-text
           type="text"
-          v-model="v$.firstName.$model"
+          v-model="state.firstName"
           placeholder="Ім'я"
           :class="{ 'p-invalid': v$.firstName.$error }"
           @blur="v$.firstName.$touch"
         />
-        <small v-if="v$.firstName.$error" id="email-help" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
+        <small v-if="v$.firstName.$error" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
@@ -20,7 +19,7 @@
           :class="{ 'p-invalid': v$.midleName.$error }"
           @blur="v$.midleName.$touch"
         />
-        <small v-if="v$.midleName.$error" id="email-help" class="p-error">{{ v$.midleName.$errors[0].$message }}</small>
+        <small v-if="v$.midleName.$error" class="p-error">{{ v$.midleName.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
@@ -30,7 +29,7 @@
           :class="{ 'p-invalid': v$.lastName.$error }"
           @blur="v$.lastName.$touch"
         />
-        <small v-if="v$.lastName.$error" id="email-help" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
+        <small v-if="v$.lastName.$error" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
@@ -40,7 +39,7 @@
           :class="{ 'p-invalid': v$.email.$error }"
           @blur="v$.email.$touch"
         />
-        <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
+        <small v-if="v$.email.$error" class="p-error">{{ v$.email.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
@@ -50,9 +49,7 @@
           :class="{ 'p-invalid': v$.password.password.$error }"
           @blur="v$.password.password.$touch"
         />
-        <small v-if="v$.password.password.$error" id="email-help" class="p-error">{{
-          v$.password.password.$errors[0].$message
-        }}</small>
+        <small v-if="v$.password.password.$error" class="p-error">{{ v$.password.password.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
@@ -62,9 +59,7 @@
           :class="{ 'p-invalid': v$.password.confirm.$error }"
           @blur="v$.password.confirm.$touch"
         />
-        <small v-if="v$.password.confirm.$error" id="email-help" class="p-error">{{
-          v$.password.confirm.$errors[0].$message
-        }}</small>
+        <small v-if="v$.password.confirm.$error" class="p-error">{{ v$.password.confirm.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
@@ -74,9 +69,7 @@
           :class="{ 'p-invalid': v$.registrationKey.$error }"
           @blur="v$.registrationKey.$touch"
         />
-        <small v-if="v$.registrationKey.$error" id="email-help" class="p-error">{{
-          v$.registrationKey.$errors[0].$message
-        }}</small>
+        <small v-if="v$.registrationKey.$error" class="p-error">{{ v$.registrationKey.$errors[0].$message }}</small>
       </div>
       <Button class="p-button-info" type="submit" :disabled="v$.$invalid">Зареєструватися</Button>
     </form>
@@ -163,33 +156,27 @@ export default defineComponent({
       };
     });
     const v$ = useVuelidate(rules, state);
-    console.log(state.registrationKey, 'sssssss');
 
-    const payload = {
-      params: {
+    const payload = computed(() => {
+      return {
         registration_token: state.registrationKey,
         first_name: state.firstName,
         last_name: state.lastName,
         email: state.email,
         password: state.password.confirm,
-        contacts: [{ type: 'email', main: true, email: state.email }],
-      },
-    };
+        contacts: [{ type: 'email', main: false, email: state.email }],
+      };
+    });
     return {
       state,
       v$,
       payload,
-      // sendInfo: () => store.dispatch('userStore/SET_FIRST_NAME', payload)
+      sendInfo: () => store.dispatch('userStore/SET_USER_INFO', payload),
     };
   },
-  methods: {
-    getInfoFromForm() {
-      console.log(this.state);
-      console.log(this.state.password.confirm);
-      console.log(this.payload);
-      // console.log(this.sendInfo);
-    },
-  },
+  // methods: {
+  //   getInfoFromForm() {},
+  // },
 });
 </script>
 
