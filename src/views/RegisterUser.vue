@@ -197,24 +197,16 @@ export default defineComponent({
 .wrapper {
   width: 100%;
   height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
-  overflow: auto;
 
   .registration__component {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @include flex-custom(flex-start, center, column nowrap);
     margin: auto;
     min-width: 400px;
     .field {
-      display: flex;
+      @include flex-custom(flex-start, center, column nowrap);
       position: relative;
       margin: 15px;
-      flex-direction: column;
-      align-items: center;
       .p-inputtext {
         min-width: 500px;
       }
@@ -224,14 +216,12 @@ export default defineComponent({
       }
     }
     .title {
-      color: #646e7c;
-      font-weight: bold;
       line-height: 120%;
     }
     .error__message {
       color: #f43c3c;
     }
-    Button {
+    button {
       margin: 15px;
     }
   }

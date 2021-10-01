@@ -1,14 +1,14 @@
 <template>
   <div class="main-page">
     <Sidebar />
-    <div class="content">
-      <router-view></router-view>
-    </div>
+    <main class="content">
+      <router-view />
+    </main>
   </div>
 </template>
 
 <script lang="ts">
-import Sidebar from '@/components/base/Sidebar.vue';
+import Sidebar from '@/components/Sidebar.vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -20,6 +20,11 @@ export default defineComponent({
   },
   components: {
     Sidebar,
+  },
+  computed: {
+    userData() {
+      return this.$store.getters['userStore/userData'];
+    },
   },
 });
 </script>
