@@ -12,7 +12,7 @@ export const actions: ActionTree<UserStateInterface, RootStateInterface> & Actio
         console.log(r);
       })
       .catch((e) => {
-        console.log(e);
+        console.log(e.response);
       });
   },
 };

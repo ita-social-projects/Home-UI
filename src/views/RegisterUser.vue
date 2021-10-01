@@ -167,16 +167,20 @@ export default defineComponent({
         contacts: [{ type: 'email', main: false, email: state.email }],
       };
     });
+    console.log(payload, 'payload');
+
     return {
       state,
       v$,
       payload,
-      sendInfo: () => store.dispatch('userStore/SET_USER_INFO', payload),
     };
   },
-  // methods: {
-  //   getInfoFromForm() {},
-  // },
+  methods: {
+    sendInfo() {
+      console.log(this.payload, 'method');
+      store.dispatch('userStore/SET_USER_INFO', this.payload);
+    },
+  },
 });
 </script>
 
