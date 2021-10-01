@@ -5,4 +5,6 @@ export enum Routes {
   RegisterUser = '/register-user',
   MainPage = '/main',
   Cooperation = '/main/cooperation',
+
+  NotFound = '/:catchAll(.*)',
 }

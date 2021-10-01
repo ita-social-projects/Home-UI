@@ -205,21 +205,17 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .cooperation-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-custom(center);
   height: 100%;
-  padding: 2em;
+  padding: 0 2em;
 }
 
 .form-wrap {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
+  @include flex-custom(center, center, column nowrap);
   background-color: rgba(242, 251, 255, 0.4);
   border-radius: 1em;
   padding: 2em;
+  margin: 6em;
 
   .coop-reg > div {
     display: flex;
@@ -247,8 +243,7 @@ export default defineComponent({
 }
 
 .counter {
-  display: flex;
-  justify-content: flex-end;
+  @include flex-custom(flex-end);
   margin: 0.6em 1em;
 }
 
@@ -259,6 +254,6 @@ export default defineComponent({
 .submit-buttons {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  @include flex-custom(space-between);
 }
 </style>
