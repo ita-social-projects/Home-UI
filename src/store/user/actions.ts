@@ -9,10 +9,10 @@ export const actions: ActionTree<UserStateInterface, RootStateInterface> & Actio
   [UserActionTypes.SET_USER_INFO]: ({ commit }, payload) => {
     HTTP.post('/users', payload)
       .then((r: AxiosResponse) => {
-        payload.successCallback(r);
+        console.log(r);
       })
-      .catch(() => {
-        payload.errorCallback();
+      .catch((e) => {
+        console.log(e);
       });
   },
 };
