@@ -52,6 +52,7 @@ export default defineComponent({
     },
     userLogout() {
       this.$router.push(Routes.StartPage);
+      this.$store.dispatch('userStore/SIGN_OUT', null);
       localStorage.removeItem('user');
     },
   },

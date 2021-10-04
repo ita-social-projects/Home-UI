@@ -21,6 +21,13 @@ export default defineComponent({
   components: {
     Sidebar,
   },
+  mounted() {
+    let user: any = localStorage.getItem('user');
+    if (user !== null && !this.userData) {
+      user = JSON.parse(user);
+      this.$store.dispatch('userStore/GET_DATA', user.id);
+    }
+  },
   computed: {
     userData() {
       return this.$store.getters['userStore/userData'];

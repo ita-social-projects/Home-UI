@@ -7,7 +7,8 @@ export const mutations: MutationTree<UserStateInterface> = {
   },
   [UserMutationTypes.SET_TOKEN]: (state, payload) => {
     const currentUser = {
-      email: state.user?.email,
+      id: payload.id,
+      email: payload.email,
       token: window.btoa(`${payload.email}:${payload.password}`),
     };
     localStorage.setItem('user', JSON.stringify(currentUser));

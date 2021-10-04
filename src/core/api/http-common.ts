@@ -11,3 +11,16 @@ export const HTTP = axios.create({
   },
   withCredentials: process.env.NODE_ENV === 'production',
 });
+
+HTTP.interceptors.request.use((req) => {
+  const userData: any = localStorage.getItem('user');
+  if (req.url !== '/users') {
+    if (userData !== null) {
+      const user = JSON.parse(userData);
+      req.headers.Authorization = `Basic ${user.token}`;
+    } else {
+      delete req.headers.Authorization;
+    }
+  }
+  return req;
+});

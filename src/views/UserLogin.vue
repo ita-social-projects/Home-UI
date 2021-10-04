@@ -11,7 +11,6 @@
             type="text"
             placeholder="Email"
             v-model.trim="email"
-            @input="email = $event.target.value"
             @blur="emailBlur"
             maxlength="320"
             class="p-inputtext"
@@ -29,7 +28,6 @@
             type="password"
             placeholder="Пароль"
             v-model="password"
-            @input="password = $event.target.value"
             @blur="passwordBlur"
             :class="{ 'p-invalid': v$.password.$error }"
           />
@@ -108,7 +106,7 @@ export default defineComponent({
         requiredValidator,
         passwordMaxLenght,
         passwordMinLenght,
-        passwordValidator,
+        // passwordValidator,
       },
     };
   },

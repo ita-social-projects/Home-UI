@@ -3,7 +3,7 @@
     <section class="info">
       <div>
         <p class="name-hint">Ви зайшли як</p>
-        <h3 class="user-fullname">{{ userData.first_name }} {{ userData.last_name }}</h3>
+        <h3 class="user-fullname">{{ userData?.first_name }} {{ userData?.last_name }}</h3>
       </div>
       <div class="settings-btn-wrap">
         <button><span class="pi pi-cog"></span></button>
