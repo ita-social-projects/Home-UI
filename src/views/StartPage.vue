@@ -77,14 +77,12 @@ export default defineComponent({
 });
 </script>
 
-<style leng="scss" scoped>
+<style lang="scss" scoped>
 .wrapper {
   width: 70%;
   margin: 0 auto;
   padding-top: 90px;
-
-  color: #5a6474;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: $thin-text-color;
 }
 .welcome_text {
   margin-bottom: 40px;
@@ -100,12 +98,10 @@ export default defineComponent({
   flex-wrap: wrap;
 }
 .feature__item {
-  padding: 25px;
-  margin: 20px;
+  padding: 18px 25px;
+  margin: 16px 20px;
   display: flex;
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: 180px;
+  flex: 1 1 180px;
   text-align: center;
   flex-direction: column;
 }
@@ -115,7 +111,6 @@ span {
   padding: 25px;
 }
 .btn {
-  display: flex;
-  justify-content: center;
+  @include flex-center-all();
 }
 </style>

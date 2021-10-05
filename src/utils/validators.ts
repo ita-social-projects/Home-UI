@@ -28,3 +28,10 @@ export const passwordValidator = helpers.withMessage(
 );
 export const passwordMaxLenght = helpers.withMessage('Максимальна кількість символів - 128', maxLength(128));
 export const passwordMinLenght = helpers.withMessage('Мінімальна кількість символів - 8', minLength(8));
+
+const validKey = helpers.regex(/^[a-zA-Z0-9]{36}$/);
+export const keyValidator = helpers.withMessage('Ключ з E-mail, 36 символів', validKey);
+
+const validName = helpers.regex(/^[a-zA-Z0-9!#$%&'*+\-/=?^_`{|(),:;<>@[\]]*$/);
+export const nameValidator = helpers.withMessage('Латинські літери, цифри та спец.символи', validName);
+export const nameLenghtValidator = helpers.withMessage('Максимальна кількість символів - 50', maxLength(50));

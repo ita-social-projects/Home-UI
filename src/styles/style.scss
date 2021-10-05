@@ -13,18 +13,24 @@ html {
 body {
   margin: 0;
   color: $main-color;
+  //overflow: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  color: $headline-color;
 }
 
 h1 {
-  font-weight: 700;
   font-size: 36px;
-  color: $headline-color;
 }
 
 h2 {
-  font-weight: 700;
   font-size: 24px;
-  color: $headline-color;
+}
+
+h3 {
+  font-size: 22px;
 }
 
 img {
@@ -35,7 +41,33 @@ label {
   user-select: none;
 }
 
+#app {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
 // General styles and classes
 .bold {
   font-weight: 700;
 }
+
+// Transition classes
+.router-enter-from {
+  opacity: 0;
+  //transform: translateX(50px);
+}
+
+.router-enter-active{
+  transition: all 0.3s ease-out;
+}
+
+.router-leave-to {
+  opacity: 0;
+  //transform: translateX(-50px);
+}
+
+.router-leave-active{
+  transition: all 0.3s ease-in;
+}
+

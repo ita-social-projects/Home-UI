@@ -1,26 +1,21 @@
 <template>
-  <BaseHeader />
+  <Header />
   <Toast />
-  <router-view></router-view>
+  <router-view />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import BaseHeader from '@/components/base/BaseHeader.vue';
+import Header from '@/components/Header.vue';
 import Toast from 'primevue/toast';
 
 export default defineComponent({
   name: 'app',
   components: {
-    BaseHeader,
+    Header,
     Toast,
   },
 });
 </script>
 
-<style lang="scss">
-* {
-  margin: 0;
-  padding: 0;
-}
-</style>
+<style lang="scss"></style>
