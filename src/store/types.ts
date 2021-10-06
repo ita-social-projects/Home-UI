@@ -49,6 +49,7 @@ export type UserStore<S = UserStateInterface> = Omit<VuexStore<S>, 'getters' | '
 
 export type requestPayload = {
   params: { [key: string]: string | number | boolean };
+  data: UserStateInterface;
   successCallback(response: AxiosResponse): void;
   errorCallback(error?: AxiosError): void;
 };

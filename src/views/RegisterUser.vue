@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
-    <form class="registration__component" @submit.prevent="sendInfo">
+    <form class="registration__component" @submit.prevent="showStatus">
+      <h1>Рєєстрація користувача</h1>
       <div class="field">
         <input-text
           type="text"
@@ -77,7 +78,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed } from 'vue';
+import { defineComponent, reactive, computed, onUpdated, watch } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
@@ -85,7 +86,6 @@ import {
   emailMinLength,
   emailMaxLength,
   emailLastCharsValidator,
-  keyValidator,
   passwordValidator,
   passwordMinLenght,
   passwordMaxLenght,
@@ -96,10 +96,14 @@ import { sameAs } from '@vuelidate/validators';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import store from '@/store';
+import { UserStateInterface } from '@/store/user';
+import { useToast } from 'primevue/usetoast';
+
 export default defineComponent({
   name: 'userRegistration',
   components: { InputText, Button },
   setup() {
+    const toast = useToast();
     const state = reactive({
       firstName: '',
       midleName: '',
@@ -145,41 +149,67 @@ export default defineComponent({
           },
           confirm: {
             requiredValidator,
-
             sameAs: sameAs(state.password.password),
           },
         },
         registrationKey: {
           requiredValidator,
-          keyValidator,
         },
       };
     });
     const v$ = useVuelidate(rules, state);
-
-    const payload = computed(() => {
-      return {
+    async function sendInfo() {
+      const userData: UserStateInterface['Data'] = {
         registration_token: state.registrationKey,
         first_name: state.firstName,
         last_name: state.lastName,
         email: state.email,
         password: state.password.confirm,
-        contacts: [{ type: 'email', main: false, email: state.email }],
+        contacts: [{ id: Date.now(), type: 'email', main: false, email: state.email }],
       };
-    });
-    console.log(payload, 'payload');
+      store.dispatch('userStore/SET_USER_INFO', userData);
+    }
+    const showInfo = (status: string, message: string) => {
+      toast.add({ severity: status, summary: message, life: 6000 });
+    };
+    const resetFields = () => {
+      state.firstName = '';
+      state.midleName = '';
+      state.lastName = '';
+      state.email = '';
+      state.password = {
+        password: '',
+        confirm: '',
+      };
+      state.registrationKey = '';
+    };
 
+    async function showStatus() {
+      await sendInfo();
+      watch(
+        () => store.getters['userStore/getErrorMessage'],
+        function () {
+          const errMessage = store.getters['userStore/getErrorMessage'];
+          const severityStatus = 'error';
+          showInfo(severityStatus, errMessage);
+          resetFields();
+        }
+      );
+      watch(
+        () => store.getters['userStore/getSuccessMessage'],
+        function () {
+          const severityStatus = 'success';
+          const sucMessage = store.getters['userStore/getSuccessMessage'];
+          showInfo(severityStatus, sucMessage);
+          resetFields();
+        }
+      );
+    }
     return {
       state,
       v$,
-      payload,
+      showStatus,
     };
-  },
-  methods: {
-    sendInfo() {
-      console.log(this.payload, 'method');
-      store.dispatch('userStore/SET_USER_INFO', this.payload);
-    },
   },
 });
 </script>
@@ -205,9 +235,6 @@ export default defineComponent({
         bottom: -23px;
         position: absolute;
       }
-    }
-    .title {
-      line-height: 120%;
     }
     .error__message {
       color: #f43c3c;

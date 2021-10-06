@@ -1,31 +1,33 @@
 import { ActionContext } from 'vuex';
-import { requestPayload, RootStateInterface } from '@/store/types';
+import { RootStateInterface } from '@/store/types';
 
-export enum UserMutationTypes {}
-// SET_REGISTRATION_TOKEN = 'SET_REGISTRATION_TOKEN',
-// SET_FIRST_NAME = 'SET_FIRST_NAME',
-// SET_MIDLE_NAME = 'SET_MIDLE_NAME',
-// SET_LAST_NAME = 'SET_LAST_NAME',
-// SET_EMAIL = 'SET_EMAIL',
-// SET_PASSWORD = 'SET_PASSWORD',
-// SET_CONTACTS = 'SET_CONTACTS',
+export enum UserMutationTypes {
+  SET_ERROR = 'SET_ERROR',
+  SET_SUCCESS = 'SET_SUCCESS',
+}
 
 export enum UserActionTypes {
   SET_USER_INFO = 'SET_USER_INFO',
-  // SET_EMAIL = 'SET_EMAIL',
-  // SET_FIRST_NAME = 'SET_FIRST_NAME',
-  // SET_MIDLE_NAME = 'SET_MIDLE_NAME',
-  // SET_LAST_NAME = 'SET_LAST_NAME',
 }
 
-export interface UserStateInterface {
+export type Error = {
+  message: string;
+};
+
+export interface UserData {
   registration_token: string;
   first_name: string;
-  midle_name: string;
+  // midle_name: string;
   last_name: string;
   email: string;
   password: string;
   contacts: Contact[];
+}
+
+export interface UserStateInterface {
+  Data: UserData | null;
+  Error: string;
+  Success: string;
 }
 
 export interface Contact {
@@ -36,21 +38,17 @@ export interface Contact {
 }
 
 export type Mutations<S = UserStateInterface> = {
-  // [UserMutationTypes.SET_EDRPOU](state: S, payload: string): void;
-  // [UserMutationTypes.SET_EMAIL](state: S, payload: string): void;
-  // [UserMutationTypes.SET_FIRST_NAME](state: S, payload: string): void;
-  // [UserMutationTypes.SET_MIDLE_NAME](state: S, payload: string): void;
-  // [UserMutationTypes.SET_LAST_NAME](state: S, payload: string): void;
-  // [UserMutationTypes.SET_PASSWORD](state: S, payload: string): void;
-  // [UserMutationTypes.SET_CONTACTS](state: S, payload: string): void;
+  [UserMutationTypes.SET_ERROR](state: S, errorMessage: string): void;
+  [UserMutationTypes.SET_SUCCESS](state: S, successMessage: string): void;
 };
 
 export interface Actions {
-  [UserActionTypes.SET_USER_INFO]({ commit }: AugmentedActionContext, payload: requestPayload): void;
+  [UserActionTypes.SET_USER_INFO](context: AugmentedActionContext, data: UserStateInterface['Data']): void;
 }
 
 export type Getters<S = UserStateInterface> = {
-  //ssss
+  getErrorMessage(state: S): string;
+  getSuccessMessage(state: S): string;
 };
 
 export type AugmentedActionContext = {
