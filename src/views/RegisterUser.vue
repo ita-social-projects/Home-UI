@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, onUpdated, watch } from 'vue';
+import { defineComponent, reactive, computed, watch } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
