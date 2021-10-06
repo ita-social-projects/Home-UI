@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const encodedCredentials = window.btoa('admin@example.com:password');
+const encodedCredentials = window.btoa('admin@example.com:passworD123');
 const auth = `Basic ${encodedCredentials}`;
 
 export const HTTP = axios.create({
