@@ -15,12 +15,12 @@
       <div class="field">
         <input-text
           type="text"
-          v-model="state.formData.midleName"
+          v-model="state.formData.middleName"
           placeholder="По-батькові"
-          :class="{ 'p-invalid': v$.midleName.$error }"
-          @blur="v$.midleName.$touch"
+          :class="{ 'p-invalid': v$.middleName.$error }"
+          @blur="v$.middleName.$touch"
         />
-        <small v-if="v$.midleName.$error" class="p-error">{{ v$.midleName.$errors[0].$message }}</small>
+        <small v-if="v$.middleName.$error" class="p-error">{{ v$.middleName.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
@@ -107,7 +107,7 @@ export default defineComponent({
     const state = reactive({
       formData: {
         firstName: '',
-        midleName: '',
+        middleName: '',
         lastName: '',
         email: '',
         password: {
@@ -125,7 +125,7 @@ export default defineComponent({
           nameValidator,
           nameLenghtValidator,
         },
-        midleName: {
+        middleName: {
           requiredValidator,
           nameValidator,
           nameLenghtValidator,
@@ -176,7 +176,7 @@ export default defineComponent({
     };
     const resetFields = () => {
       state.formData.firstName = '';
-      state.formData.midleName = '';
+      state.formData.middleName = '';
       state.formData.lastName = '';
       state.formData.email = '';
       state.formData.password = {
