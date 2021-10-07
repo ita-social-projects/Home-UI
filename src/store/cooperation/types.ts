@@ -20,7 +20,10 @@ export type Mutations<S = CooperationStateInterface> = {
 };
 
 export interface Actions {
-  [CooperationActionTypes.CREATE_COOPERATION]({ commit }: AugmentedActionContext, payload: requestPayload): void;
+  [CooperationActionTypes.CREATE_COOPERATION](
+    { commit }: AugmentedActionContext,
+    payload: requestPayload<string>
+  ): void;
   [CooperationActionTypes.SET_EDRPOU]({ commit }: AugmentedActionContext, payload: string): void;
 }
 

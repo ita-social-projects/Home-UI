@@ -36,8 +36,8 @@ export type Mutations<S = UserStateInterface> = {
 };
 
 export interface Actions {
-  [UserActionTypes.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload): void;
-  [UserActionTypes.SIGN_OUT]({ commit }: AugmentedActionContext, payload: requestPayload): void;
+  [UserActionTypes.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload<string>): void;
+  [UserActionTypes.SIGN_OUT]({ commit }: AugmentedActionContext, payload: requestPayload<string>): void;
 }
 
 export type Getters<S = UserStateInterface> = {
