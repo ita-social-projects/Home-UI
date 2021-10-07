@@ -52,7 +52,7 @@ export default defineComponent({
     },
     userLogout() {
       this.$router.push(Routes.StartPage);
-      localStorage.removeItem('user');
+      this.$store.dispatch('userStore/SIGN_OUT', null);
     },
   },
 });
