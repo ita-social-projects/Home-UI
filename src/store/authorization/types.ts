@@ -11,15 +11,15 @@ export enum AuthActionTypes {
   GET_DATA = 'GET_DATA',
 }
 
-export interface User {
+export interface UserInterface {
   first_name: string;
   last_name: string;
   email: string;
   id: number;
-  contacts: Contact[];
+  contacts: ContactInterface[];
 }
 
-export interface Contact {
+export interface ContactInterface {
   type: string;
   main: boolean;
   id: number;
@@ -27,7 +27,7 @@ export interface Contact {
 }
 
 export interface UserStateInterface {
-  user: User | null;
+  user: UserInterface | null;
 }
 
 export type Mutations<S = UserStateInterface> = {
