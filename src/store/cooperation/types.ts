@@ -19,8 +19,11 @@ export type Mutations<S = CooperationStateInterface> = {
   [CooperationMutationTypes.SET_EDRPOU](state: S, payload: string): void;
 };
 
-export interface Actions<requestPayload> {
-  [CooperationActionTypes.CREATE_COOPERATION]({ commit }: AugmentedActionContext, payload: requestPayload): void;
+export interface Actions {
+  [CooperationActionTypes.CREATE_COOPERATION](
+    { commit }: AugmentedActionContext,
+    payload: requestPayload<string>
+  ): void;
   [CooperationActionTypes.SET_EDRPOU]({ commit }: AugmentedActionContext, payload: string): void;
 }
 

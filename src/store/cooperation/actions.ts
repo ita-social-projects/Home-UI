@@ -17,7 +17,7 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
         admin_email: payload.data.email,
       });
       payload.successCallback(response);
-    } catch (e: any) {
+    } catch (e) {
       console.log(e.response);
       payload.errorCallback();
     }

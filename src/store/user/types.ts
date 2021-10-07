@@ -17,7 +17,7 @@ export type Error = {
 export interface UserData {
   registrationToken: string;
   firstName: string;
-  // midleName: string;
+  // middleName: string;
   lastName: string;
   email: string;
   password: string;
