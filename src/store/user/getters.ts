@@ -5,9 +5,9 @@ import { UserStateInterface, Getters } from '@/store/user/types';
 
 export const getters: GetterTree<UserStateInterface, RootStateInterface> & Getters = {
   getErrorMessage: (state) => {
-    return state.Error;
+    return state.error;
   },
   getSuccessMessage: (state) => {
-    return state.Success;
+    return state.success;
   },
 };

@@ -6,7 +6,7 @@ import { mutations } from '@/store/user/mutations';
 import { actions } from '@/store/user/actions';
 
 export const state: UserStateInterface = {
-  Data: {
+  data: {
     registration_token: '',
     first_name: '',
     // midle_name: '',
@@ -15,8 +15,8 @@ export const state: UserStateInterface = {
     password: '',
     contacts: [],
   },
-  Error: '',
-  Success: '',
+  error: '',
+  success: '',
 };
 
 export const userStore: Module<UserStateInterface, RootStateInterface> = {

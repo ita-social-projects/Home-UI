@@ -161,7 +161,7 @@ export default defineComponent({
     });
     const v$ = useVuelidate(rules, state.formData);
     async function sendInfo() {
-      const userData: UserStateInterface['Data'] = {
+      const userData: UserStateInterface['data'] = {
         registration_token: state.formData.registrationKey,
         first_name: state.formData.firstName,
         last_name: state.formData.lastName,

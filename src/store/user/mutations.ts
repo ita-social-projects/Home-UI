@@ -3,9 +3,9 @@ import { UserStateInterface, UserMutationTypes, Mutations } from '@/store/user/t
 
 export const mutations: MutationTree<UserStateInterface> & Mutations = {
   [UserMutationTypes.SET_ERROR]: (state, errorMessage) => {
-    state.Error = errorMessage;
+    state.error = errorMessage;
   },
   [UserMutationTypes.SET_SUCCESS]: (state, successMessage) => {
-    state.Success = successMessage;
+    state.success = successMessage;
   },
 };

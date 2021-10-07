@@ -25,9 +25,9 @@ export interface UserData {
 }
 
 export interface UserStateInterface {
-  Data: UserData | null;
-  Error: string;
-  Success: string;
+  data: UserData | null;
+  error: string;
+  success: string;
 }
 
 export interface Contact {
@@ -43,7 +43,7 @@ export type Mutations<S = UserStateInterface> = {
 };
 
 export interface Actions {
-  [UserActionTypes.SET_USER_INFO](context: AugmentedActionContext, data: UserStateInterface['Data']): void;
+  [UserActionTypes.SET_USER_INFO](context: AugmentedActionContext, data: UserStateInterface['data']): void;
 }
 
 export type Getters<S = UserStateInterface> = {
