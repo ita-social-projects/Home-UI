@@ -1,8 +1,7 @@
-import { CommitOptions, DispatchOptions, Store as VuexStore } from 'vuex';
 import { AxiosError, AxiosResponse } from 'axios';
-import { UserStateInterface } from '@/store/user/types';
-import { AuthorizationStateInterface } from '@/store/authorization/types';
-import { Actions, Getters, Mutations, CooperationStateInterface } from '@/store/cooperation/types';
+import { UserStateInterface, UserStoreType } from '@/store/user/types';
+import { AuthorizationStateInterface, AuthorizationStoreType } from '@/store/authorization/types';
+import { CooperationStateInterface, CooperationStoreType } from '@/store/cooperation/types';
 
 export interface RootStateInterface {
   cooperationStore: CooperationStateInterface;
@@ -10,26 +9,30 @@ export interface RootStateInterface {
   authorizationStore: AuthorizationStateInterface;
 }
 
-export type StoreType<S> = Omit<VuexStore<S>, 'getters' | 'commit' | 'dispatch'> & {
-  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
-    key: K,
-    payload: P,
-    options?: CommitOptions
-  ): ReturnType<Mutations[K]>;
-} & {
-  dispatch<K extends keyof Actions>(
-    key: K,
-    payload: Parameters<Actions[K]>[1],
-    options?: DispatchOptions
-  ): ReturnType<Actions[K]>;
-} & {
-  getters: {
-    [K in keyof Getters]: ReturnType<Getters[K]>;
-  };
-};
+export type StoreType = CooperationStoreType<CooperationStateInterface> &
+  AuthorizationStoreType<AuthorizationStateInterface> &
+  UserStoreType<UserStateInterface>;
+
+// export type StoreType<S> = Omit<VuexStore<S>, 'getters' | 'commit' | 'dispatch'> & {
+//   commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
+//     key: K,
+//     payload: P,
+//     options?: CommitOptions
+//   ): ReturnType<Mutations[K]>;
+// } & {
+//   dispatch<K extends keyof Actions>(
+//     key: K,
+//     payload: Parameters<Actions[K]>[1],
+//     options?: DispatchOptions
+//   ): ReturnType<Actions[K]>;
+// } & {
+//   getters: {
+//     [K in keyof Getters]: ReturnType<Getters[K]>;
+//   };
+// };
 
 export type requestPayload<T> = {
-  data: { [key: string]: T };
+  data: T;
   successCallback(response?: AxiosResponse): void;
   errorCallback(error?: AxiosError): void;
 };

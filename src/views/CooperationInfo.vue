@@ -103,10 +103,10 @@ export default defineComponent({
     };
   },
   mounted() {
-    let basicInfo: CooperationStateInterface = this.$store.state.cooperationStore;
-    this.name = basicInfo.name;
-    this.erdpou = basicInfo.erdpou;
-    this.iban = basicInfo.iban;
+    let basicCooperationInfo: CooperationStateInterface['selectedCooperation'] = this.$store.state.cooperationStore;
+    this.name = basicCooperationInfo?.name;
+    this.erdpou = basicCooperationInfo?.erdpou;
+    this.iban = basicCooperationInfo?.iban;
   },
   methods: {
     openModal() {

@@ -1,4 +1,4 @@
-import { ActionContext } from 'vuex';
+import { ActionContext, CommitOptions, DispatchOptions, Store as VuexStore } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
 
 export enum AuthMutationEnum {
@@ -32,20 +32,48 @@ export interface AuthorizationStateInterface {
 }
 
 export type Mutations<S = AuthorizationStateInterface> = {
-  [AuthMutationEnum.SET_USER](state: S, payload: string): void;
-  [AuthMutationEnum.SET_TOKEN](state: S, payload: string): void;
+  [AuthMutationEnum.SET_USER](state: S, payload: UserInterface | null): void;
+  [AuthMutationEnum.SET_TOKEN](state: S, payload: UserLoginInterface): void;
 };
 
 export interface Actions {
-  [AuthActionEnum.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload<string>): void;
-  [AuthActionEnum.SIGN_OUT]({ commit }: AugmentedActionContext, payload: requestPayload<string>): void;
-  [AuthActionEnum.GET_DATA]({ commit }: AugmentedActionContext, payload: requestPayload<string>): void;
+  [AuthActionEnum.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload<UserLoginInterface>): void;
+  [AuthActionEnum.SIGN_OUT]({ commit }: AugmentedActionContext, payload: null): void;
+  [AuthActionEnum.GET_DATA]({ commit }: AugmentedActionContext, payload: string): void;
 }
 
 export type Getters<S = AuthorizationStateInterface> = {
-  getEmailAndPassword(state: S): string;
+  loggedIn(state: S): boolean;
+  userData(state: S): UserInterface | null;
 };
 
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
 } & Omit<ActionContext<AuthorizationStateInterface, RootStateInterface>, 'commit'>;
+
+export interface UserLoginInterface {
+  id: number;
+  email: string;
+  password: string;
+}
+
+export type AuthorizationStoreType<S = AuthorizationStateInterface> = Omit<
+  VuexStore<S>,
+  'getters' | 'commit' | 'dispatch'
+> & {
+  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
+    key: K,
+    payload: P,
+    options?: CommitOptions
+  ): ReturnType<Mutations[K]>;
+} & {
+  dispatch<K extends keyof Actions>(
+    key: K,
+    payload: Parameters<Actions[K]>[1],
+    options?: DispatchOptions
+  ): ReturnType<Actions[K]>;
+} & {
+  getters: {
+    [K in keyof Getters]: ReturnType<Getters[K]>;
+  };
+};

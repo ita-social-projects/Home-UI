@@ -4,18 +4,19 @@ import {
   AuthActionEnum,
   AuthMutationEnum,
   UserInterface,
+  Actions,
 } from '@/store/authorization/types';
 import { RootStateInterface } from '@/store/types';
 import { HTTP } from '@/core/api/http-common';
 import { AxiosResponse } from 'axios';
 
-export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface> = {
+export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface> & Actions = {
   [AuthActionEnum.SIGN_IN]: ({ commit }, payload) => {
-    HTTP.get('/users', { params: { email: payload.userData.email } })
+    HTTP.get('/users', { params: { email: payload.data.email } })
       .then((r: AxiosResponse<UserInterface[]>) => {
         if (r.data.length !== 0) {
           const user = r.data[0];
-          commit(AuthMutationEnum.SET_TOKEN, { ...payload.userData, id: user.id });
+          commit(AuthMutationEnum.SET_TOKEN, { ...payload.data, id: user.id });
           commit(AuthMutationEnum.SET_USER, user);
         }
         payload.successCallback(r);

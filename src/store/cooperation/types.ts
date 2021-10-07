@@ -1,5 +1,6 @@
-import { ActionContext } from 'vuex';
+import { ActionContext, CommitOptions, DispatchOptions, Store as VuexStore } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
+import { AuthorizationStateInterface } from '@/store/authorization/types';
 
 export enum CooperationMutationTypes {
   SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
@@ -42,7 +43,7 @@ export type Mutations<S = CooperationStateInterface> = {
 export interface Actions {
   [CooperationActionTypes.CREATE_COOPERATION](
     { commit }: AugmentedActionContext,
-    payload: requestPayload<string>
+    payload: requestPayload<CooperationRegistrationInterface>
   ): void;
   [CooperationActionTypes.SET_MODAL_DISPLAY]({ commit }: AugmentedActionContext, payload: boolean): void;
   [CooperationActionTypes.SET_USER_COOPERATIONS]({ commit }: AugmentedActionContext): void;
@@ -56,3 +57,29 @@ export type Getters<S = CooperationStateInterface> = {
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
 } & Omit<ActionContext<CooperationStateInterface, RootStateInterface>, 'commit'>;
+
+export interface CooperationRegistrationInterface {
+  edrpou: string;
+  email: string;
+}
+
+export type CooperationStoreType<S = AuthorizationStateInterface> = Omit<
+  VuexStore<S>,
+  'getters' | 'commit' | 'dispatch'
+> & {
+  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
+    key: K,
+    payload: P,
+    options?: CommitOptions
+  ): ReturnType<Mutations[K]>;
+} & {
+  dispatch<K extends keyof Actions>(
+    key: K,
+    payload: Parameters<Actions[K]>[1],
+    options?: DispatchOptions
+  ): ReturnType<Actions[K]>;
+} & {
+  getters: {
+    [K in keyof Getters]: ReturnType<Getters[K]>;
+  };
+};
