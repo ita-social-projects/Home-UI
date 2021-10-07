@@ -11,7 +11,6 @@
             type="text"
             placeholder="Email"
             v-model.trim="email"
-            @input="email = $event.target.value"
             @blur="emailBlur"
             maxlength="320"
             class="p-inputtext"
@@ -29,7 +28,6 @@
             type="password"
             placeholder="Пароль"
             v-model="password"
-            @input="password = $event.target.value"
             @blur="passwordBlur"
             :class="{ 'p-invalid': v$.password.$error }"
           />
@@ -60,7 +58,6 @@ import {
   emailLastCharsValidator,
   passwordMinLenght,
   passwordMaxLenght,
-  passwordValidator,
 } from '@/utils/validators';
 
 export default defineComponent({
@@ -108,13 +105,12 @@ export default defineComponent({
         requiredValidator,
         passwordMaxLenght,
         passwordMinLenght,
-        passwordValidator,
       },
     };
   },
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters['userStore/loggedIn'];
+      return this.$store.getters['authorizationStore/loggedIn'];
     },
   },
   methods: {
@@ -144,7 +140,7 @@ export default defineComponent({
         },
       };
       if (!this.v$.$error) {
-        this.$store.dispatch('userStore/SIGN_IN', payload);
+        this.$store.dispatch('authorizationStore/SIGN_IN', payload);
       }
     },
   },

@@ -3,7 +3,7 @@
     <section class="info">
       <div>
         <p class="name-hint">Ви зайшли як</p>
-        <h3 class="user-fullname">{{ userData.first_name }} {{ userData.last_name }}</h3>
+        <h3 class="user-fullname">{{ userData?.first_name }} {{ userData?.last_name }}</h3>
       </div>
     </section>
 
@@ -46,7 +46,7 @@ export default defineComponent({
   },
   computed: {
     userData() {
-      return this.$store.getters['userStore/userData'];
+      return this.$store.getters['authorizationStore/userData'];
     },
   },
 });
