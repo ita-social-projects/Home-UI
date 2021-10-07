@@ -1,49 +1,48 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 
-export enum UserMutationTypes {
+export enum UserMutationEnum {
   SET_ERROR = 'SET_ERROR',
   SET_SUCCESS = 'SET_SUCCESS',
 }
 
-export enum UserActionTypes {
+export enum UserActionEnum {
   SET_USER_INFO = 'SET_USER_INFO',
 }
 
-export type Error = {
+export type ErrorType = {
   message: string;
 };
 
-export interface UserData {
+export interface UserDataInterface {
   registrationToken: string;
   firstName: string;
   // middleName: string;
   lastName: string;
   email: string;
   password: string;
-  contacts: Contact[];
+  contacts: ContactInterface[];
 }
 
 export interface UserStateInterface {
-  data: UserData | null;
+  data: UserDataInterface | null;
   error: string;
   success: string;
 }
 
-export interface Contact {
+export interface ContactInterface {
   type: string;
   main: boolean;
-  id: number;
   email: string;
 }
 
 export type Mutations<S = UserStateInterface> = {
-  [UserMutationTypes.SET_ERROR](state: S, errorMessage: string): void;
-  [UserMutationTypes.SET_SUCCESS](state: S, successMessage: string): void;
+  [UserMutationEnum.SET_ERROR](state: S, errorMessage: string): void;
+  [UserMutationEnum.SET_SUCCESS](state: S, successMessage: string): void;
 };
 
 export interface Actions {
-  [UserActionTypes.SET_USER_INFO](context: AugmentedActionContext, data: UserStateInterface['data']): void;
+  [UserActionEnum.SET_USER_INFO](context: AugmentedActionContext, data: UserStateInterface['data']): void;
 }
 
 export type Getters<S = UserStateInterface> = {

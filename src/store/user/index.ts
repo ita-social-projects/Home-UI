@@ -26,5 +26,3 @@ export const userStore: Module<UserStateInterface, RootStateInterface> = {
   actions,
   getters,
 };
-
-export { UserStateInterface };

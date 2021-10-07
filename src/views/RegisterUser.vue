@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <form class="registration__component" @submit.prevent="showStatus">
+    <form class="registration__component" @submit.prevent="onSubmit">
       <h1>Рєєстрація користувача</h1>
       <div class="field">
         <input-text
@@ -96,7 +96,7 @@ import { sameAs } from '@vuelidate/validators';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import store from '@/store';
-import { UserStateInterface } from '@/store/user';
+import { UserStateInterface } from '@/store/user/types';
 import { useToast } from 'primevue/usetoast';
 
 export default defineComponent({
@@ -167,11 +167,11 @@ export default defineComponent({
         lastName: state.formData.lastName,
         email: state.formData.email,
         password: state.formData.password.confirm,
-        contacts: [{ id: Date.now(), type: 'email', main: false, email: state.formData.email }],
+        contacts: [{ type: 'email', main: false, email: state.formData.email }],
       };
       await store.dispatch('userStore/SET_USER_INFO', userData);
     }
-    const showInfo = (status: string, message: string) => {
+    const showStatus = (status: string, message: string) => {
       toast.add({ severity: status, summary: message, life: 6000 });
     };
     const resetFields = () => {
@@ -186,14 +186,14 @@ export default defineComponent({
       state.formData.registrationKey = '';
     };
 
-    async function showStatus() {
+    async function onSubmit() {
       await sendInfo();
       watch(
         () => store.getters['userStore/getErrorMessage'],
         function () {
           const errMessage = store.getters['userStore/getErrorMessage'];
           const severityStatus = 'error';
-          showInfo(severityStatus, errMessage);
+          showStatus(severityStatus, errMessage);
           resetFields();
         }
       );
@@ -202,7 +202,7 @@ export default defineComponent({
         function () {
           const severityStatus = 'success';
           const sucMessage = store.getters['userStore/getSuccessMessage'];
-          showInfo(severityStatus, sucMessage);
+          showStatus(severityStatus, sucMessage);
           resetFields();
         }
       );
@@ -210,7 +210,7 @@ export default defineComponent({
     return {
       state,
       v$,
-      showStatus,
+      onSubmit,
     };
   },
 });

@@ -1,11 +1,11 @@
 import { MutationTree } from 'vuex';
-import { UserStateInterface, UserMutationTypes, Mutations } from '@/store/user/types';
+import { UserStateInterface, UserMutationEnum, Mutations } from '@/store/user/types';
 
 export const mutations: MutationTree<UserStateInterface> & Mutations = {
-  [UserMutationTypes.SET_ERROR]: (state, errorMessage) => {
+  [UserMutationEnum.SET_ERROR]: (state, errorMessage) => {
     state.error = errorMessage;
   },
-  [UserMutationTypes.SET_SUCCESS]: (state, successMessage) => {
+  [UserMutationEnum.SET_SUCCESS]: (state, successMessage) => {
     state.success = successMessage;
   },
 };
