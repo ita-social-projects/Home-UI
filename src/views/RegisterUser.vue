@@ -162,9 +162,9 @@ export default defineComponent({
     const v$ = useVuelidate(rules, state.formData);
     async function sendInfo() {
       const userData: UserStateInterface['data'] = {
-        registration_token: state.formData.registrationKey,
-        first_name: state.formData.firstName,
-        last_name: state.formData.lastName,
+        registrationToken: state.formData.registrationKey,
+        firstName: state.formData.firstName,
+        lastName: state.formData.lastName,
         email: state.formData.email,
         password: state.formData.password.confirm,
         contacts: [{ id: Date.now(), type: 'email', main: false, email: state.formData.email }],

@@ -4,8 +4,16 @@ import { UserStateInterface, UserActionTypes, UserMutationTypes, Actions } from 
 import { HTTP } from '@/core/api/http-common';
 
 export const actions: ActionTree<UserStateInterface, RootStateInterface> & Actions = {
-  [UserActionTypes.SET_USER_INFO]: ({ commit }, userData) => {
-    HTTP.post('/users', userData)
+  [UserActionTypes.SET_USER_INFO]: async ({ commit }, userData) => {
+    const bodyData = {
+      registration_token: userData?.registrationToken,
+      first_name: userData?.firstName,
+      last_name: userData?.lastName,
+      email: userData?.email,
+      password: userData?.password,
+      contacts: userData?.contacts,
+    };
+    HTTP.post('/users', bodyData)
       .then(() => {
         commit(UserMutationTypes.SET_SUCCESS, 'Користувача зареєстровано!');
       })

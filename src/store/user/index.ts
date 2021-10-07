@@ -7,10 +7,10 @@ import { actions } from '@/store/user/actions';
 
 export const state: UserStateInterface = {
   data: {
-    registration_token: '',
-    first_name: '',
-    // midle_name: '',
-    last_name: '',
+    registrationToken: '',
+    firstName: '',
+    // midleName: '',
+    lastName: '',
     email: '',
     password: '',
     contacts: [],

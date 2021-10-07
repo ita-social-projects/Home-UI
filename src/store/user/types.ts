@@ -15,10 +15,10 @@ export type Error = {
 };
 
 export interface UserData {
-  registration_token: string;
-  first_name: string;
-  // midle_name: string;
-  last_name: string;
+  registrationToken: string;
+  firstName: string;
+  // midleName: string;
+  lastName: string;
   email: string;
   password: string;
   contacts: Contact[];
