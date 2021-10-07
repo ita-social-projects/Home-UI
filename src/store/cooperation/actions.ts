@@ -10,15 +10,6 @@ import {
 import { HTTP } from '@/core/api/http-common';
 
 export const actions: ActionTree<CooperationStateInterface, RootStateInterface> & Actions = {
-  // [CooperationActionTypes.IS_COOPERATION_REGISTERED]: ({ commit }, payload) => {
-  //   HTTP.get('/cooperations', { params: { usreo: payload.data.edrpou } })
-  //     .then((r: AxiosResponse) => {
-  //       payload.successCallback(r);
-  //     })
-  //     .catch(() => {
-  //       payload.errorCallback();
-  //     });
-  // },
   [CooperationActionTypes.CREATE_COOPERATION]: async ({ commit }, payload) => {
     try {
       const response = await HTTP.post('/cooperations', {

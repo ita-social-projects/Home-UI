@@ -6,7 +6,6 @@ export enum CooperationMutationTypes {
 }
 
 export enum CooperationActionTypes {
-  // IS_COOPERATION_REGISTERED = 'IS_COOPERATION_REGISTERED',
   CREATE_COOPERATION = 'CREATE_COOPERATION',
   SET_EDRPOU = 'SET_EDRPOU',
 }
@@ -21,8 +20,6 @@ export type Mutations<S = CooperationStateInterface> = {
 };
 
 export interface Actions {
-  // [CooperationActionTypes.IS_COOPERATION_REGISTERED]
-  // ({ commit }: AugmentedActionContext, payload: requestPayload): void;
   [CooperationActionTypes.CREATE_COOPERATION]({ commit }: AugmentedActionContext, payload: requestPayload): void;
   [CooperationActionTypes.SET_EDRPOU]({ commit }: AugmentedActionContext, payload: string): void;
 }
