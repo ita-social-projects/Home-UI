@@ -11,16 +11,17 @@ import { HTTP } from '@/core/api/http-common';
 import { AxiosError, AxiosResponse } from 'axios';
 
 export const actions: ActionTree<CooperationStateInterface, RootStateInterface> & Actions = {
-  [CooperationActionTypes.IS_COOPERATION_REGISTERED]: ({ commit }, payload) => {
-    HTTP.get('/cooperations', { params: { usreo: payload.params.edrpou } })
-      .then((r: AxiosResponse) => {
-        // console.log(r);
-        // console.log(r.config.headers.Authorization);
-        payload.successCallback(r);
-      })
-      .catch(() => {
-        payload.errorCallback();
+  [CooperationActionTypes.CREATE_COOPERATION]: async ({ commit }, payload) => {
+    try {
+      const response = await HTTP.post('/cooperations', {
+        usreo: payload.data.edrpou,
+        admin_email: payload.data.email,
       });
+      payload.successCallback(response);
+    } catch (e: any) {
+      console.log(e.response);
+      payload.errorCallback();
+    }
   },
   [CooperationActionTypes.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
     commit(CooperationMutationTypes.SET_MODAL_DISPLAY, payload);
@@ -37,19 +38,6 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
   },
 
   [CooperationActionTypes.SET_SELECTED_COOPERATION]: ({ commit }) => {
-    commit(CooperationMutationTypes.SET_SELECTED_COOPERATION);
+    // commit(CooperationMutationTypes.SET_SELECTED_COOPERATION);
   },
-
-  // [CooperationActionTypes.SET_COOPERATION_UPDATE_INFO]: ({ commit }, payload) => {
-  //   commit(CooperationMutationTypes.SET_COOPERATION_UPDATE_INFO, payload);
-
-  //   HTTP.put('/cooperations', payload.id)
-  //     .then((r: AxiosResponse) => {
-  //       console.log(r); // [{...}]
-  //       commit(CooperationMutationTypes.SET_COOPERATION_INFO, r.data);
-  //     })
-  //     .catch(() => {
-  //       console.log("error");
-  //     });
-  // },
 };

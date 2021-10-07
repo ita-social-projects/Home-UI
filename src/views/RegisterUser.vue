@@ -1,82 +1,76 @@
 <template>
   <div class="wrapper">
-    <form class="registration__component" @submit.prevent="getInfoFromForm">
-      <h1 class="title">Реєстрація користувача</h1>
+    <form class="registration__component" @submit.prevent="onSubmit">
+      <h1>Рєєстрація користувача</h1>
       <div class="field">
         <input-text
           type="text"
-          v-model="v$.firstName.$model"
+          v-model="state.formData.firstName"
           placeholder="Ім'я"
           :class="{ 'p-invalid': v$.firstName.$error }"
           @blur="v$.firstName.$touch"
         />
-        <small v-if="v$.firstName.$error" id="email-help" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
+        <small v-if="v$.firstName.$error" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
           type="text"
-          v-model="state.midleName"
+          v-model="state.formData.middleName"
           placeholder="По-батькові"
-          :class="{ 'p-invalid': v$.midleName.$error }"
-          @blur="v$.midleName.$touch"
+          :class="{ 'p-invalid': v$.middleName.$error }"
+          @blur="v$.middleName.$touch"
         />
-        <small v-if="v$.midleName.$error" id="email-help" class="p-error">{{ v$.midleName.$errors[0].$message }}</small>
+        <small v-if="v$.middleName.$error" class="p-error">{{ v$.middleName.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
           type="text"
-          v-model="state.lastName"
+          v-model="state.formData.lastName"
           placeholder="Прізвище"
           :class="{ 'p-invalid': v$.lastName.$error }"
           @blur="v$.lastName.$touch"
         />
-        <small v-if="v$.lastName.$error" id="email-help" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
+        <small v-if="v$.lastName.$error" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
           type="text"
-          v-model="state.email"
+          v-model="state.formData.email"
           placeholder="e-mail"
           :class="{ 'p-invalid': v$.email.$error }"
           @blur="v$.email.$touch"
         />
-        <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
+        <small v-if="v$.email.$error" class="p-error">{{ v$.email.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
           type="text"
-          v-model="state.password.password"
+          v-model="state.formData.password.password"
           placeholder="Пароль"
           :class="{ 'p-invalid': v$.password.password.$error }"
           @blur="v$.password.password.$touch"
         />
-        <small v-if="v$.password.password.$error" id="email-help" class="p-error">{{
-          v$.password.password.$errors[0].$message
-        }}</small>
+        <small v-if="v$.password.password.$error" class="p-error">{{ v$.password.password.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
           type="text"
-          v-model="state.password.confirm"
+          v-model="state.formData.password.confirm"
           placeholder="Підтвердження паролю"
           :class="{ 'p-invalid': v$.password.confirm.$error }"
           @blur="v$.password.confirm.$touch"
         />
-        <small v-if="v$.password.confirm.$error" id="email-help" class="p-error">{{
-          v$.password.confirm.$errors[0].$message
-        }}</small>
+        <small v-if="v$.password.confirm.$error" class="p-error">{{ v$.password.confirm.$errors[0].$message }}</small>
       </div>
       <div class="field">
         <input-text
           type="text"
-          v-model="state.registrationKey"
+          v-model="state.formData.registrationKey"
           placeholder="Ключ реєстраціїї"
           :class="{ 'p-invalid': v$.registrationKey.$error }"
           @blur="v$.registrationKey.$touch"
         />
-        <small v-if="v$.registrationKey.$error" id="email-help" class="p-error">{{
-          v$.registrationKey.$errors[0].$message
-        }}</small>
+        <small v-if="v$.registrationKey.$error" class="p-error">{{ v$.registrationKey.$errors[0].$message }}</small>
       </div>
       <Button class="p-button-info" type="submit" :disabled="v$.$invalid">Зареєструватися</Button>
     </form>
@@ -84,7 +78,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed } from 'vue';
+import { defineComponent, reactive, computed, watch } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
@@ -92,7 +86,6 @@ import {
   emailMinLength,
   emailMaxLength,
   emailLastCharsValidator,
-  keyValidator,
   passwordValidator,
   passwordMinLenght,
   passwordMaxLenght,
@@ -102,20 +95,27 @@ import {
 import { sameAs } from '@vuelidate/validators';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import store from '@/store';
+import { UserStateInterface } from '@/store/user/types';
+import { useToast } from 'primevue/usetoast';
+
 export default defineComponent({
   name: 'userRegistration',
   components: { InputText, Button },
   setup() {
+    const toast = useToast();
     const state = reactive({
-      firstName: '',
-      midleName: '',
-      lastName: '',
-      email: '',
-      password: {
-        password: '',
-        confirm: '',
+      formData: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        email: '',
+        password: {
+          password: '',
+          confirm: '',
+        },
+        registrationKey: '',
       },
-      registrationKey: '',
     });
 
     const rules = computed(() => {
@@ -125,7 +125,7 @@ export default defineComponent({
           nameValidator,
           nameLenghtValidator,
         },
-        midleName: {
+        middleName: {
           requiredValidator,
           nameValidator,
           nameLenghtValidator,
@@ -151,26 +151,67 @@ export default defineComponent({
           },
           confirm: {
             requiredValidator,
-
-            sameAs: sameAs(state.password.password),
+            sameAs: sameAs(state.formData.password.password),
           },
         },
         registrationKey: {
           requiredValidator,
-          keyValidator,
         },
       };
     });
-    const v$ = useVuelidate(rules, state);
+    const v$ = useVuelidate(rules, state.formData);
+    async function sendInfo() {
+      const userData: UserStateInterface['data'] = {
+        registrationToken: state.formData.registrationKey,
+        firstName: state.formData.firstName,
+        lastName: state.formData.lastName,
+        email: state.formData.email,
+        password: state.formData.password.confirm,
+        contacts: [{ type: 'email', main: false, email: state.formData.email }],
+      };
+      await store.dispatch('userStore/SET_USER_INFO', userData);
+    }
+    const showStatus = (status: string, message: string) => {
+      toast.add({ severity: status, summary: message, life: 6000 });
+    };
+    const resetFields = () => {
+      state.formData.firstName = '';
+      state.formData.middleName = '';
+      state.formData.lastName = '';
+      state.formData.email = '';
+      state.formData.password = {
+        password: '',
+        confirm: '',
+      };
+      state.formData.registrationKey = '';
+    };
+
+    async function onSubmit() {
+      await sendInfo();
+      watch(
+        () => store.getters['userStore/getErrorMessage'],
+        function () {
+          const errMessage = store.getters['userStore/getErrorMessage'];
+          const severityStatus = 'error';
+          showStatus(severityStatus, errMessage);
+          resetFields();
+        }
+      );
+      watch(
+        () => store.getters['userStore/getSuccessMessage'],
+        function () {
+          const severityStatus = 'success';
+          const sucMessage = store.getters['userStore/getSuccessMessage'];
+          showStatus(severityStatus, sucMessage);
+          resetFields();
+        }
+      );
+    }
     return {
       state,
       v$,
+      onSubmit,
     };
-  },
-  methods: {
-    getInfoFromForm() {
-      console.log(this.state);
-    },
   },
 });
 </script>
@@ -196,9 +237,6 @@ export default defineComponent({
         bottom: -23px;
         position: absolute;
       }
-    }
-    .title {
-      line-height: 120%;
     }
     .error__message {
       color: #f43c3c;

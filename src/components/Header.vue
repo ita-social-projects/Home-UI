@@ -40,7 +40,7 @@ export default defineComponent({
   },
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters['userStore/loggedIn'];
+      return this.$store.getters['authorizationStore/loggedIn'];
     },
   },
   methods: {
@@ -51,8 +51,8 @@ export default defineComponent({
       this.$router.push(Routes.UserLogin);
     },
     userLogout() {
+      this.$store.dispatch('authorizationStore/SIGN_OUT', null);
       this.$router.push(Routes.StartPage);
-      localStorage.removeItem('user');
     },
   },
 });

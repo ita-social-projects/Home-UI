@@ -1,12 +1,12 @@
 import { GetterTree } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { UserStateInterface, User } from '@/store/authorization/types';
+import { AuthorizationStateInterface, UserInterface } from '@/store/authorization/types';
 
-export const getters: GetterTree<UserStateInterface, RootStateInterface> = {
+export const getters: GetterTree<AuthorizationStateInterface, RootStateInterface> = {
   loggedIn(state): boolean {
     return !!state.user;
   },
-  userData(state): User | null {
+  userData(state): UserInterface | null {
     return state.user;
   },
 };

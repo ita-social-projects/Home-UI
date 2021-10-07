@@ -1,103 +1,76 @@
 <template>
   <div class="container">
-    <div class="coop_info"> 
-    <div>
-      <span><b>Назва ОСББ :  </b></span>
-      <span>{{cooperationInfo.name}}</span>
-      <!-- <span>{{cooperationData.name}}</span> -->
-    </div>
-    <div>
-      <span><b>Номер ОСББ :  </b></span>
-      <span>{{cooperationInfo.erdpou}}</span>
-      <!-- <span>{{cooperationData.erdpou}}</span> -->
-    </div>
-    <div>
-      <span><b>Адреса:  </b></span>
-      <span>{{cooperationInfo.erdpou}}</span>
-      <!-- <span>{{cooperationData.erdpou}}</span> -->
-    </div>
-    <div>
-      <span><b>IBAN номер :  </b></span>
-      <span>{{cooperationInfo.erdpou}}</span>
-      <!-- <span>{{cooperationData.erdpou}}</span> -->
-    </div>
-    <div>
-      <span><b>Електрона адреса :  </b></span>
-      <span>{{cooperationInfo.erdpou}}</span>
-      <!-- <span>{{cooperationData.erdpou}}</span> -->
-    </div>
-    <div>
-      <span><b>Номер телефону :  </b></span>
-      <span>{{cooperationInfo.erdpou}}</span>
-      <!-- <span>{{cooperationData.erdpou}}</span> -->
-    </div>
+    <div class="coop_info">
+      <div>
+        <span><b>Назва ОСББ : </b></span>
+        <span>{{ cooperationInfo.name }}</span>
+      </div>
+
+      <div>
+        <span><b>Номер ОСББ : </b></span>
+        <span>{{ cooperationInfo.erdpou }}</span>
+      </div>
+      <div>
+        <span><b>Адреса: </b></span>
+        <span>{{ cooperationInfo.erdpou }}</span>
+      </div>
+
+      <div>
+        <span><b>IBAN номер : </b></span>
+        <span>{{ cooperationInfo.erdpou }}</span>
+      </div>
+
+      <div>
+        <span><b>Електрона адреса : </b></span>
+        <span>{{ cooperationInfo.erdpou }}</span>
+      </div>
+
+      <div>
+        <span><b>Номер телефону : </b></span>
+        <span>{{ cooperationInfo.erdpou }}</span>
+      </div>
     </div>
 
-<!-- cooperation name, address, IBAN number, email, registration code, phone number. -->
-    <div class="edit_btn"> 
+    <div class="edit_btn">
       <Button label="Редагувати" icon="pi pi-pencil" @click="openModal" class="p-button-outlined p-button-info" />
-      <Dialog header="Редагувати ОСББ" 
-        v-model:visible="displayModal" 
-        :style="{width: '50vw'}" 
+      <Dialog
+        header="Редагувати ОСББ"
+        v-model:visible="displayModal"
+        :style="{ width: '50vw' }"
         :modal="true"
         :closable="false"
         :dismissableMask="true"
-        >
+      >
+        <form @submit.prevent="editCoopInfo">
+          <p class="p-m-0">
+            <label for="coopName">Назва :</label>
+            <InputText id="coopName" placeholder="Назва" v-model="name" maxlength="50" />
+          </p>
+          <p class="p-m-0">
+            <label for="edrpou">ОСББ номер :</label>
+            <InputText id="edrpou" placeholder="номер ОСББ" v-model="erdpou" maxlength="8" />
+          </p>
+          <p class="p-m-0">
+            <label for="iban">iban номер :</label>
+            <InputText id="iban" placeholder="iban" v-model="cooperationInfo.iban" maxlength="8" />
+          </p>
 
+          <p class="p-m-0">
+            <label for="edrpou">adress :</label>
+            <InputText id="edrpou" placeholder="номер ОСББ" v-model="cooperationInfo" maxlength="50" />
+          </p>
+          <div><b>...state.cooperationStore : </b>{{ this.$store.state.cooperationStore }}</div>
+          <div><b>coopInfo function: </b>{{ cooperationInfo }}</div>
 
-          <form @submit.prevent="editCoopInfo"  >
-              <p class="p-m-0">
-                
-                <label for="coopName">Назва :</label>
-                <InputText
-                  id="coopName"                  
-                  placeholder='Назва'                 
-                  v-model="name"
-                   maxlength="50"
-                />
-                </p> 
-                <p class="p-m-0">
-                <label for="edrpou">ОСББ номер :</label>
-                <InputText
-                  id="edrpou"
-                  placeholder="номер ОСББ"
-                  v-model="erdpou"                
-                  maxlength="8"
-                />
-                </p> 
-                <p class="p-m-0">
-                <label for="iban">iban номер :</label>
-                <InputText
-                  id="iban"
-                  placeholder="iban"
-                  v-model="cooperationInfo.iban"                
-                  maxlength="8"
-                />
-                </p>
+          {{ this.$data.name }}
+          <br />
+          <!-- {{editCoopInfo().name}} -->
 
-                <p class="p-m-0">
-                <label for="edrpou">adress :</label>
-                <InputText
-                  id="edrpou"
-                  placeholder="номер ОСББ"
-                  v-model="cooperationInfo"                
-                  maxlength="50"
-                />
-                </p> 
-<!-- ROW DATA CODE -->
-<div><b>...state.cooperationStore : </b>{{this.$store.state.cooperationStore}} </div>
-<div><b>coopInfo function:  </b>{{cooperationInfo}}</div>
+          <!-- end -->
+        </form>
 
-{{this.$data.name}}
-<br/>
-<!-- {{editCoopInfo().name}} -->
-
-
-<!-- end -->
-        </form>        
-              
         <template #footer>
-          <Button label="Редагувати" icon="pi pi-check" @click="editCoopInfo" autofocus  class=" p-button-info" />
+          <Button label="Редагувати" icon="pi pi-check" @click="editCoopInfo" autofocus class="p-button-info" />
           <Button label="Скасувати" icon="pi pi-times" @click="closeModal" class="p-button-outlined p-button-info" />
         </template>
       </Dialog>
@@ -107,11 +80,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import {CooperationStateInterface} from '@/store/cooperation/types';
+import { CooperationStateInterface } from '@/store/cooperation/types';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
-import { mapActions, mapState } from 'vuex';
 
 export default defineComponent({
   name: 'CooperationInfo',
@@ -126,23 +98,22 @@ export default defineComponent({
       erdpou: '',
       iban: '',
       houses: [],
-      contacts:[],
+      contacts: [],
       address: [],
-    }
+    };
   },
-    mounted() {
-      let basicInfo: CooperationStateInterface = this.$store.state.cooperationStore;
-     // console.log (basicInfo) // Proxy {name: 'Зірка смерті', erdpou: '', displayModal: false, id: 1, iban: '', …}
-      this.name= basicInfo.name;
-      this.erdpou = basicInfo.erdpou;
-      this.iban = basicInfo.iban;
-    },
+  mounted() {
+    let basicInfo: CooperationStateInterface = this.$store.state.cooperationStore;
+    this.name = basicInfo.name;
+    this.erdpou = basicInfo.erdpou;
+    this.iban = basicInfo.iban;
+  },
   methods: {
     openModal() {
-      this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', true);      
+      this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', true);
     },
     closeModal() {
-      this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', false); 
+      this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', false);
     },
     editCoopInfo() {
       const payload = {
@@ -150,24 +121,24 @@ export default defineComponent({
         erdpou: this.erdpou,
         iban: this.iban,
         houses: [],
-        contacts:[],
+        contacts: [],
         address: [],
       };
       this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE_INFO', payload);
       this.closeModal();
     },
   },
-  created(){
+  created() {
     this.$store.dispatch('cooperationStore/SET_COOPERATION_INFO');
   },
-  computed: {    
+  computed: {
     cooperationInfo(): CooperationStateInterface {
-       return this.$store.state.cooperationStore;      
+      return this.$store.state.cooperationStore;
     },
-    displayModal():boolean {
+    displayModal(): boolean {
       return this.$store.state.cooperationStore.displayModal;
     },
-  },  
+  },
 });
 </script>
 
@@ -181,17 +152,19 @@ export default defineComponent({
   background-color: #fafafa;
   justify-content: space-between;
 }
-.coop_info{
-margin: 15px;
+
+.coop_info {
+  margin: 15px;
 }
-.coop_info div{
+
+.coop_info div {
   padding: 5px;
 }
+
 .edit_btn {
   margin: 15px;
-  
 }
- 
+
 label {
   display: inline-block;
   width: 160px;

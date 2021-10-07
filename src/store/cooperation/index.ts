@@ -18,5 +18,3 @@ export const cooperationStore: Module<CooperationStateInterface, RootStateInterf
   actions,
   getters,
 };
-
-export { CooperationStateInterface };
