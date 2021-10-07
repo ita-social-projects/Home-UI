@@ -19,3 +19,4 @@ export const actions: ActionTree<UserStateInterface, RootStateInterface> = {
       });
   },
 };
+

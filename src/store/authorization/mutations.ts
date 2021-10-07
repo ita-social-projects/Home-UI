@@ -3,6 +3,7 @@ import { UserStateInterface, UserMutationTypes } from '@/store/authorization/typ
 
 export const mutations: MutationTree<UserStateInterface> = {
   [UserMutationTypes.SET_USER]: (state, payload) => {
+    // console.log(payload)
     state.user = payload;
   },
   [UserMutationTypes.SET_TOKEN]: (state, payload) => {
