@@ -9,7 +9,7 @@ export const state: UserStateInterface = {
   user: null,
 };
 
-export const userStore: Module<UserStateInterface, RootStateInterface> = {
+export const authorizationStore: Module<UserStateInterface, RootStateInterface> = {
   namespaced: true,
   state,
   getters,

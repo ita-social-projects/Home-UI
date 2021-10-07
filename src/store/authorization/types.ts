@@ -1,14 +1,13 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
 
-export enum UserMutationTypes {
+export enum AuthMutationTypes {
   SET_USER = 'SET_USER',
   SET_TOKEN = 'SET_TOKEN',
 }
 
-export enum UserActionTypes {
+export enum AuthActionTypes {
   SIGN_IN = 'SIGN_IN',
-  SIGN_OUT = 'SIGN_OUT',
   GET_DATA = 'GET_DATA',
 }
 
@@ -32,14 +31,13 @@ export interface UserStateInterface {
 }
 
 export type Mutations<S = UserStateInterface> = {
-  [UserMutationTypes.SET_USER](state: S, payload: string): void;
-  [UserMutationTypes.SET_TOKEN](state: S, payload: string): void;
+  [AuthMutationTypes.SET_USER](state: S, payload: string): void;
+  [AuthMutationTypes.SET_TOKEN](state: S, payload: string): void;
 };
 
 export interface Actions {
-  [UserActionTypes.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload): void;
-  [UserActionTypes.SIGN_OUT]({ commit }: AugmentedActionContext, payload: requestPayload): void;
-  [UserActionTypes.GET_DATA]({ commit }: AugmentedActionContext, payload: requestPayload): void;
+  [AuthActionTypes.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload): void;
+  [AuthActionTypes.GET_DATA]({ commit }: AugmentedActionContext, payload: requestPayload): void;
 }
 
 export type Getters<S = UserStateInterface> = {

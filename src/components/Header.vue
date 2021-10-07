@@ -17,7 +17,6 @@
           @click="redirectToLogin"
           class="p-button-info"
         />
-        <Button v-else label="Вийти" @click="userLogout" class="p-button-info" />
       </div>
     </div>
   </header>
@@ -49,11 +48,6 @@ export default defineComponent({
     },
     redirectToLogin() {
       this.$router.push(Routes.UserLogin);
-    },
-    userLogout() {
-      this.$router.push(Routes.StartPage);
-      this.$store.dispatch('userStore/SIGN_OUT', null);
-      localStorage.removeItem('user');
     },
   },
 });

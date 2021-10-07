@@ -14,6 +14,7 @@ export const HTTP = axios.create({
 
 HTTP.interceptors.request.use((req) => {
   const userData: any = localStorage.getItem('user');
+  console.log(req);
   if (req.url !== '/users') {
     if (userData !== null) {
       const user = JSON.parse(userData);

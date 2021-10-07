@@ -49,7 +49,7 @@ export default defineComponent({
   },
   computed: {
     userData() {
-      return this.$store.getters['userStore/userData'];
+      return this.$store.getters['authorizationStore/userData'];
     },
   },
 });

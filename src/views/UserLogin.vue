@@ -58,7 +58,6 @@ import {
   emailLastCharsValidator,
   passwordMinLenght,
   passwordMaxLenght,
-  passwordValidator,
 } from '@/utils/validators';
 
 export default defineComponent({
@@ -106,13 +105,12 @@ export default defineComponent({
         requiredValidator,
         passwordMaxLenght,
         passwordMinLenght,
-        // passwordValidator,
       },
     };
   },
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters['userStore/loggedIn'];
+      return this.$store.getters['authorizationStore/loggedIn'];
     },
   },
   methods: {
@@ -142,7 +140,7 @@ export default defineComponent({
         },
       };
       if (!this.v$.$error) {
-        this.$store.dispatch('userStore/SIGN_IN', payload);
+        this.$store.dispatch('authorizationStore/SIGN_IN', payload);
       }
     },
   },

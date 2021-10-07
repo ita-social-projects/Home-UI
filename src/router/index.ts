@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { Routes } from '@/router/types';
-import store from '@/store/index';
 import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
 import RegisterUser from '@/views/RegisterUser.vue';
