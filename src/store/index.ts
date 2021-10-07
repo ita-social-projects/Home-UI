@@ -10,6 +10,7 @@ const state: RootStateInterface = {
 
 export default createStore({
   strict: process.env.NODE_ENV !== 'production',
+  state,
   modules: {
     cooperationStore,
     userStore,
