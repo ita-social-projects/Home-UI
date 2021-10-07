@@ -5,9 +5,6 @@
         <p class="name-hint">Ви зайшли як</p>
         <h3 class="user-fullname">{{ userData.first_name }} {{ userData.last_name }}</h3>
       </div>
-      <div class="settings-btn-wrap">
-        <button><span class="pi pi-cog"></span></button>
-      </div>
     </section>
 
     <nav class="sidebar-navigation">
@@ -81,29 +78,6 @@ export default defineComponent({
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .settings-btn-wrap {
-    @include flex-custom(center);
-    margin: 0 0 0 1em;
-
-    button {
-      padding: 0.4em 1em;
-      border-radius: 10px;
-      border: 2px solid $thin-border-color;
-      transition: all 0.2s;
-
-      &:hover {
-        background-color: #d2d8ff;
-      }
-      &:active {
-        background-color: #b9c1ff;
-      }
-    }
-
-    span {
-      font-size: 2em;
-    }
   }
 }
 

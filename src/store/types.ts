@@ -29,7 +29,7 @@ export type CooperationStore<S = CooperationStateInterface> = Omit<VuexStore<S>,
 };
 
 export type requestPayload = {
-  params: { [key: string]: string | number | boolean };
-  successCallback(response: AxiosResponse): void;
+  data: { [key: string]: string | number | boolean };
+  successCallback(response?: AxiosResponse): void;
   errorCallback(error?: AxiosError): void;
 };
