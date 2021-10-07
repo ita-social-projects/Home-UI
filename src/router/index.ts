@@ -49,7 +49,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.path === Routes.MainPage && !store.getters['userStore/loggedIn']) {
+  if (to.path === Routes.MainPage && localStorage.getItem('user') == null) {
     next({ path: Routes.StartPage });
   } else {
     next();
