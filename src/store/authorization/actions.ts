@@ -29,4 +29,8 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
       commit(AuthMutationEnum.SET_USER, r.data);
     });
   },
+  [AuthActionEnum.SIGN_OUT]: ({ commit }, payload) => {
+    commit(AuthMutationEnum.SET_USER, payload);
+    localStorage.removeItem('user');
+  },
 };
