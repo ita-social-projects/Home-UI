@@ -169,7 +169,7 @@ export default defineComponent({
         password: state.formData.password.confirm,
         contacts: [{ id: Date.now(), type: 'email', main: false, email: state.formData.email }],
       };
-      store.dispatch('userStore/SET_USER_INFO', userData);
+      await store.dispatch('userStore/SET_USER_INFO', userData);
     }
     const showInfo = (status: string, message: string) => {
       toast.add({ severity: status, summary: message, life: 6000 });
