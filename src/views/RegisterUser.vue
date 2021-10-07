@@ -5,7 +5,7 @@
       <div class="field">
         <input-text
           type="text"
-          v-model="state.firstName"
+          v-model="state.formData.firstName"
           placeholder="Ім'я"
           :class="{ 'p-invalid': v$.firstName.$error }"
           @blur="v$.firstName.$touch"
@@ -15,7 +15,7 @@
       <div class="field">
         <input-text
           type="text"
-          v-model="state.midleName"
+          v-model="state.formData.midleName"
           placeholder="По-батькові"
           :class="{ 'p-invalid': v$.midleName.$error }"
           @blur="v$.midleName.$touch"
@@ -25,7 +25,7 @@
       <div class="field">
         <input-text
           type="text"
-          v-model="state.lastName"
+          v-model="state.formData.lastName"
           placeholder="Прізвище"
           :class="{ 'p-invalid': v$.lastName.$error }"
           @blur="v$.lastName.$touch"
@@ -35,7 +35,7 @@
       <div class="field">
         <input-text
           type="text"
-          v-model="state.email"
+          v-model="state.formData.email"
           placeholder="e-mail"
           :class="{ 'p-invalid': v$.email.$error }"
           @blur="v$.email.$touch"
@@ -45,7 +45,7 @@
       <div class="field">
         <input-text
           type="text"
-          v-model="state.password.password"
+          v-model="state.formData.password.password"
           placeholder="Пароль"
           :class="{ 'p-invalid': v$.password.password.$error }"
           @blur="v$.password.password.$touch"
@@ -55,7 +55,7 @@
       <div class="field">
         <input-text
           type="text"
-          v-model="state.password.confirm"
+          v-model="state.formData.password.confirm"
           placeholder="Підтвердження паролю"
           :class="{ 'p-invalid': v$.password.confirm.$error }"
           @blur="v$.password.confirm.$touch"
@@ -65,7 +65,7 @@
       <div class="field">
         <input-text
           type="text"
-          v-model="state.registrationKey"
+          v-model="state.formData.registrationKey"
           placeholder="Ключ реєстраціїї"
           :class="{ 'p-invalid': v$.registrationKey.$error }"
           @blur="v$.registrationKey.$touch"
@@ -105,15 +105,17 @@ export default defineComponent({
   setup() {
     const toast = useToast();
     const state = reactive({
-      firstName: '',
-      midleName: '',
-      lastName: '',
-      email: '',
-      password: {
-        password: '',
-        confirm: '',
+      formData: {
+        firstName: '',
+        midleName: '',
+        lastName: '',
+        email: '',
+        password: {
+          password: '',
+          confirm: '',
+        },
+        registrationKey: '',
       },
-      registrationKey: '',
     });
 
     const rules = computed(() => {
@@ -149,7 +151,7 @@ export default defineComponent({
           },
           confirm: {
             requiredValidator,
-            sameAs: sameAs(state.password.password),
+            sameAs: sameAs(state.formData.password.password),
           },
         },
         registrationKey: {
@@ -157,15 +159,15 @@ export default defineComponent({
         },
       };
     });
-    const v$ = useVuelidate(rules, state);
+    const v$ = useVuelidate(rules, state.formData);
     async function sendInfo() {
       const userData: UserStateInterface['Data'] = {
-        registration_token: state.registrationKey,
-        first_name: state.firstName,
-        last_name: state.lastName,
-        email: state.email,
-        password: state.password.confirm,
-        contacts: [{ id: Date.now(), type: 'email', main: false, email: state.email }],
+        registration_token: state.formData.registrationKey,
+        first_name: state.formData.firstName,
+        last_name: state.formData.lastName,
+        email: state.formData.email,
+        password: state.formData.password.confirm,
+        contacts: [{ id: Date.now(), type: 'email', main: false, email: state.formData.email }],
       };
       store.dispatch('userStore/SET_USER_INFO', userData);
     }
@@ -173,15 +175,15 @@ export default defineComponent({
       toast.add({ severity: status, summary: message, life: 6000 });
     };
     const resetFields = () => {
-      state.firstName = '';
-      state.midleName = '';
-      state.lastName = '';
-      state.email = '';
-      state.password = {
+      state.formData.firstName = '';
+      state.formData.midleName = '';
+      state.formData.lastName = '';
+      state.formData.email = '';
+      state.formData.password = {
         password: '',
         confirm: '',
       };
-      state.registrationKey = '';
+      state.formData.registrationKey = '';
     };
 
     async function showStatus() {
