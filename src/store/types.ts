@@ -1,16 +1,16 @@
 import { CommitOptions, DispatchOptions, Store as VuexStore } from 'vuex';
 import { AxiosError, AxiosResponse } from 'axios';
-import { CooperationStateInterface } from '@/store/cooperation';
-import { Actions, Getters, Mutations } from '@/store/cooperation/types';
+import { UserStateInterface } from '@/store/user/types';
+import { AuthorizationStateInterface } from '@/store/authorization/types';
+import { Actions, Getters, Mutations, CooperationStateInterface } from '@/store/cooperation/types';
 
 export interface RootStateInterface {
-  hello: string;
-  world: string;
+  cooperationStore: CooperationStateInterface;
+  userStore: UserStateInterface;
+  authorizationStore: AuthorizationStateInterface;
 }
 
-export type Store = CooperationStore<CooperationStateInterface>;
-
-export type CooperationStore<S = CooperationStateInterface> = Omit<VuexStore<S>, 'getters' | 'commit' | 'dispatch'> & {
+export type StoreType<S> = Omit<VuexStore<S>, 'getters' | 'commit' | 'dispatch'> & {
   commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
     key: K,
     payload: P,
@@ -28,8 +28,8 @@ export type CooperationStore<S = CooperationStateInterface> = Omit<VuexStore<S>,
   };
 };
 
-export type requestPayload = {
-  params: { [key: string]: string | number | boolean };
-  successCallback(response: AxiosResponse): void;
+export type requestPayload<T> = {
+  data: { [key: string]: T };
+  successCallback(response?: AxiosResponse): void;
   errorCallback(error?: AxiosError): void;
 };

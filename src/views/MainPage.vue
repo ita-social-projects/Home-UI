@@ -21,9 +21,16 @@ export default defineComponent({
   components: {
     Sidebar,
   },
+  mounted() {
+    let user: any = localStorage.getItem('user');
+    if (user !== null && !this.userData) {
+      user = JSON.parse(user);
+      this.$store.dispatch('authorizationStore/GET_DATA', user.id);
+    }
+  },
   computed: {
     userData() {
-      return this.$store.getters['userStore/userData'];
+      return this.$store.getters['authorizationStore/userData'];
     },
   },
 });
