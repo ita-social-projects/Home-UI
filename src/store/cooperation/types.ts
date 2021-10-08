@@ -1,13 +1,13 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
 
-export enum CooperationMutationTypes {
+export enum CooperationMutationEnum {
   SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
   SET_USER_COOPERATIONS = 'SET_USER_COOPERATIONS',
   SET_SELECTED_COOPERATION = 'SET_SELECTED_COOPERATION',
 }
 
-export enum CooperationActionTypes {
+export enum CooperationActionEnum {
   SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
   SET_USER_COOPERATIONS = 'SET_USER_COOPERATIONS',
   SET_SELECTED_COOPERATION = 'SET_SELECTED_COOPERATION',
@@ -31,22 +31,22 @@ export interface CooperationInterface {
 }
 
 export type Mutations<S = CooperationStateInterface> = {
-  [CooperationMutationTypes.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
-  [CooperationMutationTypes.SET_USER_COOPERATIONS](
+  [CooperationMutationEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
+  [CooperationMutationEnum.SET_USER_COOPERATIONS](
     state: S,
     payload: CooperationStateInterface['userCooperations']
   ): void;
-  [CooperationMutationTypes.SET_SELECTED_COOPERATION](state: S, payload: CooperationStateInterface): void;
+  [CooperationMutationEnum.SET_SELECTED_COOPERATION](state: S, payload: CooperationStateInterface): void;
 };
 
 export interface Actions {
-  [CooperationActionTypes.CREATE_COOPERATION](
+  [CooperationActionEnum.CREATE_COOPERATION](
     { commit }: AugmentedActionContext,
     payload: requestPayload<CooperationRegistrationInterface>
   ): void;
-  [CooperationActionTypes.SET_MODAL_DISPLAY]({ commit }: AugmentedActionContext, payload: boolean): void;
-  [CooperationActionTypes.SET_USER_COOPERATIONS]({ commit }: AugmentedActionContext): void;
-  [CooperationActionTypes.SET_SELECTED_COOPERATION]({ commit }: AugmentedActionContext): void;
+  [CooperationActionEnum.SET_MODAL_DISPLAY]({ commit }: AugmentedActionContext, payload: boolean): void;
+  [CooperationActionEnum.SET_USER_COOPERATIONS]({ commit }: AugmentedActionContext): void;
+  [CooperationActionEnum.SET_SELECTED_COOPERATION]({ commit }: AugmentedActionContext): void;
 }
 
 export type Getters<S = CooperationStateInterface> = {
