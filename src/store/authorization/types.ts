@@ -1,4 +1,4 @@
-import { ActionContext, CommitOptions, DispatchOptions, Store as VuexStore } from 'vuex';
+import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
 
 export enum AuthMutationEnum {
@@ -56,24 +56,3 @@ export interface UserLoginInterface {
   email: string;
   password: string;
 }
-
-export type AuthorizationStoreType<S = AuthorizationStateInterface> = Omit<
-  VuexStore<S>,
-  'getters' | 'commit' | 'dispatch'
-> & {
-  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
-    key: K,
-    payload: P,
-    options?: CommitOptions
-  ): ReturnType<Mutations[K]>;
-} & {
-  dispatch<K extends keyof Actions>(
-    key: K,
-    payload: Parameters<Actions[K]>[1],
-    options?: DispatchOptions
-  ): ReturnType<Actions[K]>;
-} & {
-  getters: {
-    [K in keyof Getters]: ReturnType<Getters[K]>;
-  };
-};

@@ -80,7 +80,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { CooperationStateInterface } from '@/store/cooperation/types';
+import { CooperationInterface, CooperationStateInterface } from '@/store/cooperation/types';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -103,10 +103,10 @@ export default defineComponent({
     };
   },
   mounted() {
-    let basicCooperationInfo: CooperationStateInterface['selectedCooperation'] = this.$store.state.cooperationStore;
-    // this.name = basicCooperationInfo?.name;
-    // this.erdpou = basicCooperationInfo?.erdpou;
-    // this.iban = basicCooperationInfo?.iban;
+    let basicCooperationInfo: CooperationInterface | null = this.$store.state.cooperationStore.selectedCooperation;
+    this.name = basicCooperationInfo?.name ?? '';
+    this.erdpou = basicCooperationInfo?.erdpou ?? '';
+    this.iban = basicCooperationInfo?.iban ?? '';
   },
   methods: {
     openModal() {

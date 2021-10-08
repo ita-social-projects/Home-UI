@@ -1,8 +1,8 @@
-import { RootStateInterface, StoreType } from '@/store/types';
+import { Store } from 'vuex';
+import { RootStateInterface } from '@/store/types';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $store: StoreType<RootStateInterface>;
-    //      required      ^^^^^^^^^
+    $store: Store<RootStateInterface>;
   }
 }
