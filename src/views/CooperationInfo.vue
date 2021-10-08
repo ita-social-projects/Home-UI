@@ -104,9 +104,9 @@ export default defineComponent({
   },
   mounted() {
     let basicCooperationInfo: CooperationStateInterface['selectedCooperation'] = this.$store.state.cooperationStore;
-    this.name = basicCooperationInfo?.name;
-    this.erdpou = basicCooperationInfo?.erdpou;
-    this.iban = basicCooperationInfo?.iban;
+    // this.name = basicCooperationInfo?.name;
+    // this.erdpou = basicCooperationInfo?.erdpou;
+    // this.iban = basicCooperationInfo?.iban;
   },
   methods: {
     openModal() {
@@ -116,15 +116,15 @@ export default defineComponent({
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', false);
     },
     editCoopInfo() {
-      const payload = {
-        name: this.name,
-        erdpou: this.erdpou,
-        iban: this.iban,
-        houses: [],
-        contacts: [],
-        address: [],
-      };
-      this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE_INFO', payload);
+      // const payload = {
+      //   name: this.name,
+      //   erdpou: this.erdpou,
+      //   iban: this.iban,
+      //   houses: [],
+      //   contacts: [],
+      //   address: [],
+      // };
+      // this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE_INFO', payload);
       this.closeModal();
     },
   },
