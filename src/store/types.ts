@@ -2,12 +2,14 @@ import { CommitOptions, DispatchOptions, Store as VuexStore } from 'vuex';
 import { AxiosError, AxiosResponse } from 'axios';
 import { UserStateInterface } from '@/store/user/types';
 import { AuthorizationStateInterface } from '@/store/authorization/types';
+import { LocalStorageStateInterface } from '@/store/localstorage/types';
 import { Actions, Getters, Mutations, CooperationStateInterface } from '@/store/cooperation/types';
 
 export interface RootStateInterface {
   cooperationStore: CooperationStateInterface;
   userStore: UserStateInterface;
   authorizationStore: AuthorizationStateInterface;
+  localStorageStore: LocalStorageStateInterface;
 }
 
 export type StoreType<S> = Omit<VuexStore<S>, 'getters' | 'commit' | 'dispatch'> & {
