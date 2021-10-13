@@ -1,4 +1,4 @@
-import { ActionContext } from 'vuex';
+import { ActionContext, DispatchOptions } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
 
 export enum AuthMutationEnum {
@@ -48,4 +48,9 @@ export type Getters<S = AuthorizationStateInterface> = {
 
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
-} & Omit<ActionContext<AuthorizationStateInterface, RootStateInterface>, 'commit'>;
+  dispatch<K extends keyof Actions>(
+    key: K,
+    payload?: Parameters<Actions[K]>[1],
+    options?: DispatchOptions
+  ): ReturnType<Actions[K]>;
+} & Omit<ActionContext<AuthorizationStateInterface, RootStateInterface>, 'commit' | 'dispatch'>;

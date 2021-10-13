@@ -10,13 +10,18 @@ import { HTTP } from '@/core/api/http-common';
 import { AxiosResponse } from 'axios';
 
 export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface> = {
-  [AuthActionEnum.SIGN_IN]: ({ commit }, payload) => {
+  [AuthActionEnum.SIGN_IN]: ({ commit, dispatch }, payload) => {
     HTTP.get('/users', { params: { email: payload.userData.email } })
       .then((r: AxiosResponse<UserInterface[]>) => {
         if (r.data.length !== 0) {
           const user = r.data[0];
-          commit(AuthMutationEnum.SET_TOKEN, { ...payload.userData, id: user.id });
           commit(AuthMutationEnum.SET_USER, user);
+          const currentUser = {
+            id: user.id,
+            email: user.email,
+            token: window.btoa(`${payload.email}:${payload.password}`),
+          };
+          dispatch('localStorageStore/SET', currentUser, { root: true });
         }
         payload.successCallback(r);
       })
@@ -29,8 +34,8 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
       commit(AuthMutationEnum.SET_USER, r.data);
     });
   },
-  [AuthActionEnum.SIGN_OUT]: ({ commit }, payload) => {
+  [AuthActionEnum.SIGN_OUT]: ({ commit, dispatch }, payload) => {
+    dispatch('localStorageStore/REMOVE', payload, { root: true });
     commit(AuthMutationEnum.SET_USER, payload);
-    localStorage.removeItem('user');
   },
 };
