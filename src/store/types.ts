@@ -9,7 +9,7 @@ export interface RootStateInterface {
   cooperationStore: CooperationStateInterface;
   userStore: UserStateInterface;
   authorizationStore: AuthorizationStateInterface;
-  localstorage: LocalStorageStateInterface;
+  localStorageStore: LocalStorageStateInterface;
 }
 
 export type StoreType<S> = Omit<VuexStore<S>, 'getters' | 'commit' | 'dispatch'> & {
