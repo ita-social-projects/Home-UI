@@ -29,6 +29,11 @@ export type Mutations<S = LocalStorageStateInterface> = {
   [LocalStorageMutationEnum.REMOVE_TOKEN](state: S, payload: string): void;
 };
 
+export type Getters<S = LocalStorageStateInterface> = {
+  isTokenExist(): boolean;
+  token(state: S): TokenInterface | null;
+};
+
 export interface Actions {
   [LocalStorageActionEnum.SET]({ commit }: AugmentedActionContext, payload: LocalStorageStateInterface): void;
   [LocalStorageActionEnum.GET]({ commit }: AugmentedActionContext, payload: string): void;
