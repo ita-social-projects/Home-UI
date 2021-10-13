@@ -6,7 +6,7 @@ export const getters: GetterTree<LocalStorageStateInterface, RootStateInterface>
   isTokenExist() {
     return localStorage.getItem('user') !== null;
   },
-  token(state) {
+  getToken(state) {
     return state.token;
   },
 };

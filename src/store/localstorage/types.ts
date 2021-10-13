@@ -31,7 +31,7 @@ export type Mutations<S = LocalStorageStateInterface> = {
 
 export type Getters<S = LocalStorageStateInterface> = {
   isTokenExist(): boolean;
-  token(state: S): TokenInterface | null;
+  getToken(state: S): TokenInterface | null;
 };
 
 export interface Actions {
