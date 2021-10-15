@@ -49,7 +49,7 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { AxiosResponse } from 'axios';
 import useVuelidate from '@vuelidate/core';
-import { Routes } from '@/router/types';
+import { RoutesEnum } from '@/router/types';
 import {
   requiredValidator,
   emailValidator,
@@ -132,7 +132,7 @@ export default defineComponent({
           this.errors.checkError = false;
           this.check.email.unregistered = r.data.length === 0;
           if (this.isLoggedIn) {
-            this.$router.push(Routes.MainPage);
+            this.$router.push(RoutesEnum.MainPage);
           }
         },
         errorCallback: (): void => {
