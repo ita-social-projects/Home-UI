@@ -2,31 +2,31 @@
   <div class="container">
     <div class="coop_info">
       <div>
-        <span><b>Назва ОСББ : </b></span>
+        <span>Назва ОСББ : </span>
         <span>{{ cooperationInfo.name }}</span>
       </div>
 
       <div>
-        <span><b>Номер ОСББ : </b></span>
+        <span>Номер ОСББ : </span>
         <span>{{ cooperationInfo.erdpou }}</span>
       </div>
       <div>
-        <span><b>Адреса: </b></span>
-        <span>{{ cooperationInfo.erdpou }}</span>
-      </div>
-
-      <div>
-        <span><b>IBAN номер : </b></span>
+        <span>Адреса: </span>
         <span>{{ cooperationInfo.erdpou }}</span>
       </div>
 
       <div>
-        <span><b>Електрона адреса : </b></span>
+        <span>IBAN номер : </span>
         <span>{{ cooperationInfo.erdpou }}</span>
       </div>
 
       <div>
-        <span><b>Номер телефону : </b></span>
+        <span>Електрона адреса : </span>
+        <span>{{ cooperationInfo.erdpou }}</span>
+      </div>
+
+      <div>
+        <span>Номер телефону : </span>
         <span>{{ cooperationInfo.erdpou }}</span>
       </div>
     </div>
@@ -59,8 +59,8 @@
             <label for="edrpou">adress :</label>
             <InputText id="edrpou" placeholder="номер ОСББ" v-model="cooperationInfo" maxlength="50" />
           </p>
-          <div><b>...state.cooperationStore : </b>{{ this.$store.state.cooperationStore }}</div>
-          <div><b>coopInfo function: </b>{{ cooperationInfo }}</div>
+          <div>...state.cooperationStore : {{ this.$store.state.cooperationStore }}</div>
+          <div>coopInfo function: {{ cooperationInfo }}</div>
 
           {{ this.$data.name }}
           <br />
