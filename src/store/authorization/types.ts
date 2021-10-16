@@ -3,7 +3,6 @@ import { requestPayload, RootStateInterface } from '@/store/types';
 
 export enum AuthMutationEnum {
   SET_USER = 'SET_USER',
-  SET_TOKEN = 'SET_TOKEN',
 }
 
 export enum AuthActionEnum {
@@ -33,7 +32,6 @@ export interface AuthorizationStateInterface {
 
 export type Mutations<S = AuthorizationStateInterface> = {
   [AuthMutationEnum.SET_USER](state: S, payload: UserInterface | null): void;
-  [AuthMutationEnum.SET_TOKEN](state: S, payload: UserLoginInterface): void;
 };
 
 export interface Actions {
