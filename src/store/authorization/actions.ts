@@ -4,14 +4,15 @@ import {
   AuthActionEnum,
   AuthMutationEnum,
   UserInterface,
+  Actions,
 } from '@/store/authorization/types';
 import { RootStateInterface } from '@/store/types';
 import { HTTP } from '@/core/api/http-common';
 import { AxiosResponse } from 'axios';
 
-export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface> = {
+export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface> & Actions = {
   [AuthActionEnum.SIGN_IN]: ({ commit, dispatch }, payload) => {
-    HTTP.get('/users', { params: { email: payload.userData.email } })
+    HTTP.get('/users', { params: { email: payload.data.email } })
       .then((r: AxiosResponse<UserInterface[]>) => {
         if (r.data.length !== 0) {
           const user = r.data[0];
@@ -19,7 +20,7 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
           const currentUser = {
             id: user.id,
             email: user.email,
-            token: window.btoa(`${payload.email}:${payload.password}`),
+            token: window.btoa(`${payload.data.email}:${payload.data.password}`),
           };
           dispatch('localStorageStore/SET', currentUser, { root: true });
         }
@@ -35,7 +36,7 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
     });
   },
   [AuthActionEnum.SIGN_OUT]: ({ commit, dispatch }, payload) => {
-    dispatch('localStorageStore/REMOVE', payload, { root: true });
+    dispatch('localStorageStore/REMOVE', 'user', { root: true });
     commit(AuthMutationEnum.SET_USER, payload);
   },
 };

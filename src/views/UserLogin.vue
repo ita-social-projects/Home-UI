@@ -124,7 +124,7 @@ export default defineComponent({
     },
     login() {
       const payload = {
-        userData: {
+        data: {
           email: this.email,
           password: this.password,
         },

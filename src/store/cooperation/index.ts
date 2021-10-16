@@ -6,8 +6,9 @@ import { mutations } from '@/store/cooperation/mutations';
 import { actions } from '@/store/cooperation/actions';
 
 export const state: CooperationStateInterface = {
-  erdpou: '',
-  name: '',
+  userCooperations: [],
+  selectedCooperation: null,
+  displayModal: false,
 };
 
 export const cooperationStore: Module<CooperationStateInterface, RootStateInterface> = {
