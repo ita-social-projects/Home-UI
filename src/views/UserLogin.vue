@@ -34,6 +34,9 @@
           <small v-if="v$.password.$error" id="password-help" class="p-error">{{
             v$.password.$errors[0].$message
           }}</small>
+          <small v-else-if="check.password.correct" id="password-correct" class="p-error">
+            Ви ввели невірний пароль
+          </small>
         </div>
         <section class="btn">
           <Button label="Увiйти" class="p-button-info" type="submit" />
@@ -82,6 +85,7 @@ export default defineComponent({
         },
         password: {
           valid: false,
+          correct: false,
         },
       },
       errors: {
@@ -136,7 +140,9 @@ export default defineComponent({
           }
         },
         errorCallback: (r: AxiosError): void => {
+          this.check.password.correct = true;
           this.errors.checkError = true;
+          this.isPasswordValid = true;
         },
       };
       if (!this.v$.$error) {
