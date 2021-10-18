@@ -254,9 +254,6 @@ export default defineComponent({
       }
       div {
         width: 100%;
-        // :nth-child(odd) {
-        //   min-width: 500px;
-        // }
       }
 
       small {
