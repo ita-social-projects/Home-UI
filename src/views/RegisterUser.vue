@@ -44,6 +44,7 @@
       </div>
       <div class="field">
         <Password
+          class="input-password-class"
           :feedback="false"
           v-model="state.formData.password.password"
           placeholder="Пароль"
@@ -55,6 +56,7 @@
       </div>
       <div class="field">
         <Password
+          class="input-password-class"
           :feedback="false"
           v-model="state.formData.password.confirm"
           placeholder="Підтвердження паролю"
@@ -243,11 +245,18 @@ export default defineComponent({
         width: 100%;
         min-width: 500px;
       }
+      .input-password-class {
+        ::v-deep {
+          .p-inputtext {
+            width: 100%;
+          }
+        }
+      }
       div {
         width: 100%;
-        :nth-child(odd) {
-          min-width: 500px;
-        }
+        // :nth-child(odd) {
+        //   min-width: 500px;
+        // }
       }
 
       small {
