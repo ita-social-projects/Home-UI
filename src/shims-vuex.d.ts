@@ -1,4 +1,5 @@
-import { RootStateInterface, Store } from '@/store/types';
+import { Store } from 'vuex';
+import { RootStateInterface } from '@/store/types';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {

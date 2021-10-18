@@ -7,20 +7,19 @@
         class="p-button-raised p-button-outlined p-button-secondary"
       />
     </div>
-    <div class="poll-list-wrap">
-      <h2>Список опитувань ОСББ</h2>
-      <div class="poll-list">
-        <BaseCooperationPoll></BaseCooperationPoll>
-        <BaseCooperationPoll></BaseCooperationPoll>
-        <BaseCooperationPoll></BaseCooperationPoll>
-        <BaseCooperationPoll></BaseCooperationPoll>
-        <BaseCooperationPoll></BaseCooperationPoll>
-        <BaseCooperationPoll></BaseCooperationPoll>
-        <BaseCooperationPoll></BaseCooperationPoll>
-        <BaseCooperationPoll></BaseCooperationPoll>
-        <BaseCooperationPoll></BaseCooperationPoll>
-        <BaseCooperationPoll></BaseCooperationPoll>
-      </div>
+    <h2>Список опитувань ОСББ</h2>
+    <div class="poll-list">
+      <BaseCooperationPoll></BaseCooperationPoll>
+      <BaseCooperationPoll></BaseCooperationPoll>
+      <BaseCooperationPoll></BaseCooperationPoll>
+      <BaseCooperationPoll></BaseCooperationPoll>
+      <BaseCooperationPoll></BaseCooperationPoll>
+      <BaseCooperationPoll></BaseCooperationPoll>
+      <BaseCooperationPoll></BaseCooperationPoll>
+      <BaseCooperationPoll></BaseCooperationPoll>
+      <BaseCooperationPoll></BaseCooperationPoll>
+      <BaseCooperationPoll></BaseCooperationPoll>
+      <BaseCooperationPoll></BaseCooperationPoll>
     </div>
   </div>
 </template>
@@ -36,30 +35,31 @@ export default defineComponent({
     Button,
     BaseCooperationPoll,
   },
+  created() {
+    this.$store.dispatch('polls');
+  },
 });
 </script>
 
 <style scoped lang="scss">
 .polls {
-  //@include flex-custom(flex-start, flex-start, column);
-  display: grid;
-  grid-template-rows: 1fr min-content;
-  height: 100vh;
+  @include flex-custom(flex-start, flex-start, column);
+  height: calc(100vh - 80px - 4em);
+  box-sizing: border-box;
 }
 
 .add-poll-btn-wrap {
   padding: 2em 0;
 }
 
-.poll-list-wrap {
-  //height: 50%;
-  //flex: 0 1 auto;
-
-  .poll-list {
-    @include flex-custom(space-between, center, row wrap);
-    //height: 50vh;
-    overflow: hidden scroll;
-  }
-  //margin: 0 0 2em 0;
+.poll-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4em 2.5em;
+  width: 100%;
+  flex: 2;
+  padding: 0 1em 1em 0.4em;
+  box-sizing: border-box;
+  overflow: hidden scroll;
 }
 </style>

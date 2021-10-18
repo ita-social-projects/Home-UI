@@ -1,4 +1,4 @@
-import { ActionContext, DispatchOptions } from 'vuex';
+import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 
 export enum LocalStorageMutationEnum {
@@ -42,9 +42,4 @@ export interface Actions {
 
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
-  dispatch<K extends keyof Actions>(
-    key: K,
-    payload?: Parameters<Actions[K]>[1],
-    options?: DispatchOptions
-  ): ReturnType<Actions[K]>;
-} & Omit<ActionContext<LocalStorageStateInterface, RootStateInterface>, 'commit' | 'dispatch'>;
+} & Omit<ActionContext<LocalStorageStateInterface, RootStateInterface>, 'commit'>;

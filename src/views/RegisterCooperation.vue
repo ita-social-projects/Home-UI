@@ -1,5 +1,5 @@
 <template>
-  <div class="cooperation-wrap">
+  <div class="page-wrap">
     <div class="form-wrap">
       <h1>ЗАРЕЄСТРУВАТИ ОБ'ЄДНАННЯ</h1>
       <form @submit.prevent="registerCooperation" class="coop-reg">
@@ -138,7 +138,7 @@ export default defineComponent({
           this.showErrorToast();
         },
       };
-      this.$store.dispatch('cooperationStore/CREATE_COOPERATION', payload);
+      this.$store.dispatch('cooperationStore/CREATE_POLL', payload);
     },
   },
   validations() {
@@ -168,7 +168,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.cooperation-wrap {
+.page-wrap {
   @include flex-custom(center);
   height: 100%;
   padding: 0 2em;

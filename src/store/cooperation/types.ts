@@ -1,30 +1,52 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
 
-export enum CooperationMutationTypes {
-  SET_EDRPOU = 'SET_EDRPOU',
+export enum CooperationMutationEnum {
+  SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
+  SET_USER_COOPERATIONS = 'SET_USER_COOPERATIONS',
+  SET_SELECTED_COOPERATION = 'SET_SELECTED_COOPERATION',
 }
 
-export enum CooperationActionTypes {
+export enum CooperationActionEnum {
+  SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
+  SET_USER_COOPERATIONS = 'SET_USER_COOPERATIONS',
+  SET_SELECTED_COOPERATION = 'SET_SELECTED_COOPERATION',
   CREATE_COOPERATION = 'CREATE_COOPERATION',
-  SET_EDRPOU = 'SET_EDRPOU',
 }
 
 export interface CooperationStateInterface {
-  erdpou: string;
+  userCooperations: Array<CooperationInterface>;
+  selectedCooperation: null | CooperationInterface;
+  displayModal: boolean;
+}
+
+export interface CooperationInterface {
+  id: number;
   name: string;
+  erdpou: string;
+  iban: string;
+  houses: string[]; // create new Interface
+  contacts: string[]; // create new Interface
+  address: string[]; // create new Interface
 }
 
 export type Mutations<S = CooperationStateInterface> = {
-  [CooperationMutationTypes.SET_EDRPOU](state: S, payload: string): void;
+  [CooperationMutationEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
+  [CooperationMutationEnum.SET_USER_COOPERATIONS](
+    state: S,
+    payload: CooperationStateInterface['userCooperations']
+  ): void;
+  [CooperationMutationEnum.SET_SELECTED_COOPERATION](state: S, payload: CooperationStateInterface): void;
 };
 
 export interface Actions {
-  [CooperationActionTypes.CREATE_COOPERATION](
+  [CooperationActionEnum.CREATE_COOPERATION](
     { commit }: AugmentedActionContext,
-    payload: requestPayload<string>
+    payload: requestPayload<CooperationRegistrationInterface>
   ): void;
-  [CooperationActionTypes.SET_EDRPOU]({ commit }: AugmentedActionContext, payload: string): void;
+  [CooperationActionEnum.SET_MODAL_DISPLAY]({ commit }: AugmentedActionContext, payload: boolean): void;
+  [CooperationActionEnum.SET_USER_COOPERATIONS]({ commit }: AugmentedActionContext): void;
+  [CooperationActionEnum.SET_SELECTED_COOPERATION]({ commit }: AugmentedActionContext): void;
 }
 
 export type Getters<S = CooperationStateInterface> = {
@@ -34,3 +56,8 @@ export type Getters<S = CooperationStateInterface> = {
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
 } & Omit<ActionContext<CooperationStateInterface, RootStateInterface>, 'commit'>;
+
+export interface CooperationRegistrationInterface {
+  edrpou: string;
+  email: string;
+}

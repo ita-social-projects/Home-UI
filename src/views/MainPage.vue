@@ -10,6 +10,7 @@
 <script lang="ts">
 import Sidebar from '@/components/Sidebar.vue';
 import { defineComponent } from 'vue';
+import { UserInterface } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'MainPage',
@@ -22,10 +23,10 @@ export default defineComponent({
     Sidebar,
   },
   mounted() {
-    let user: any = localStorage.getItem('user');
+    const user: string | null = localStorage.getItem('user');
     if (user !== null && !this.userData) {
-      user = JSON.parse(user);
-      this.$store.dispatch('authorizationStore/GET_DATA', user.id);
+      const userData: UserInterface = JSON.parse(user);
+      this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
     }
   },
   computed: {
