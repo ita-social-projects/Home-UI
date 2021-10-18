@@ -47,7 +47,7 @@
 import { defineComponent } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import useVuelidate from '@vuelidate/core';
 import { Routes } from '@/router/types';
 import {
@@ -109,8 +109,8 @@ export default defineComponent({
     };
   },
   computed: {
-    isLoggedIn(): boolean {
-      return this.$store.getters['authorizationStore/loggedIn'];
+    isTokenExist(): boolean {
+      return this.$store.getters['localStorageStore/isTokenExist'];
     },
   },
   methods: {
@@ -131,11 +131,11 @@ export default defineComponent({
         successCallback: (r: AxiosResponse): void => {
           this.errors.checkError = false;
           this.check.email.unregistered = r.data.length === 0;
-          if (this.isLoggedIn) {
+          if (this.isTokenExist) {
             this.$router.push(Routes.MainPage);
           }
         },
-        errorCallback: (): void => {
+        errorCallback: (r: AxiosError): void => {
           this.errors.checkError = true;
         },
       };
