@@ -45,22 +45,3 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
     commit(AuthMutationEnum.SET_USER, payload);
   },
 };
-
-// [AuthActionEnum.SIGN_IN]: ({ commit, dispatch }, payload) => {
-//   HTTP.get('/users', { params: { email: payload.data.email } })
-//     .then((r: AxiosResponse<UserInterface[]>) => {
-//       if (r.data.length !== 0) {
-//         const user = r.data[0];
-//         commit(AuthMutationEnum.SET_USER, user);
-//         const currentUser = {
-//           id: user.id,
-//           email: user.email,
-//           token: window.btoa(`${payload.data.email}:${payload.data.password}`),
-//         };
-//         dispatch('localStorageStore/SET', currentUser, { root: true });
-//       }
-//       payload.successCallback(r);
-//     })
-//     .catch(() => {
-//       payload.errorCallback();
-//     });

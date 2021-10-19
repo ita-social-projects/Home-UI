@@ -1,4 +1,6 @@
-export const Interceptor = interceptors.request.use((req) => {
+import { AxiosRequestConfig } from 'axios';
+
+export const authToken = (req: AxiosRequestConfig) => {
   const userData: any = localStorage.getItem('user');
   if (userData !== null) {
     const user = JSON.parse(userData);
@@ -7,4 +9,4 @@ export const Interceptor = interceptors.request.use((req) => {
     delete req.headers.Authorization;
   }
   return req;
-});
+};
