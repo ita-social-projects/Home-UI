@@ -8,11 +8,13 @@ export const mutations: MutationTree<CooperationStateInterface> & Mutations = {
   [CooperationMutationEnum.SET_MODAL_DISPLAY]: (state, payload) => {
     state.displayModal = payload;
   },
-  [CooperationMutationEnum.SET_SELECTED_COOPERATION]: (state) => {
-    state.selectedCooperation = state.userCooperations[0];
+  [CooperationMutationEnum.SET_SELECTED_COOPERATION]: (state, payload) => {
+    state.selectedCooperation = {
+      ...state.userCooperations[payload],
+      edrpou: state.userCooperations[payload].usreo,
+    };
   },
-  // [CooperationMutationEnum.SET_COOPERATION_UPDATE_INFO]: (state, payload) => {
-  //   console.log(payload);
-  //   state = payload;
-  // },
+  [CooperationMutationEnum.SET_IS_COOPERATIONS_LOADED]: (state, payload) => {
+    state.isCooperationsLoaded = payload;
+  },
 };

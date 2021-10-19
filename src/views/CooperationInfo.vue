@@ -3,31 +3,30 @@
     <div class="coop_info">
       <div>
         <span>Назва ОСББ : </span>
-        <span>{{ cooperationInfo.name }}</span>
-      </div>
-
-      <div>
-        <span>Номер ОСББ : </span>
-        <span>{{ cooperationInfo.erdpou }}</span>
+        <span>{{ name }}</span>
       </div>
       <div>
-        <span>Адреса: </span>
-        <span>{{ cooperationInfo.erdpou }}</span>
+        <span>Адреса : </span>
+        <span
+          >{{ address?.city }}, {{ address?.district }}, {{ address?.street }}, {{ address?.house_block }},
+          {{ address?.house_number }}
+        </span>
       </div>
-
       <div>
         <span>IBAN номер : </span>
-        <span>{{ cooperationInfo.erdpou }}</span>
+        <span>{{ iban }}</span>
       </div>
-
       <div>
         <span>Електрона адреса : </span>
-        <span>{{ cooperationInfo.erdpou }}</span>
+        <span>{{ email }}</span>
       </div>
-
+      <div>
+        <span>Код реєстрации : </span>
+        <span>{{ edrpou }}</span>
+      </div>
       <div>
         <span>Номер телефону : </span>
-        <span>{{ cooperationInfo.erdpou }}</span>
+        <span>{{ phone }}</span>
       </div>
     </div>
 
@@ -43,30 +42,29 @@
       >
         <form @submit.prevent="editCoopInfo">
           <p class="p-m-0">
-            <label for="coopName">Назва :</label>
+            <label for="coopName">Назва : </label>
             <InputText id="coopName" placeholder="Назва" v-model="name" maxlength="50" />
           </p>
           <p class="p-m-0">
-            <label for="edrpou">ОСББ номер :</label>
-            <InputText id="edrpou" placeholder="номер ОСББ" v-model="erdpou" maxlength="8" />
+            <label for="coopAddress">Адреса : </label>
+            <InputText id="coopAddress" placeholder="Адреса" v-model="address.city" maxlength="250" />
           </p>
           <p class="p-m-0">
-            <label for="iban">iban номер :</label>
-            <InputText id="iban" placeholder="iban" v-model="cooperationInfo.iban" maxlength="8" />
+            <label for="iban">Iban номер : </label>
+            <InputText id="coopIban" placeholder="iban номер" v-model="iban" maxlength="29" />
           </p>
-
           <p class="p-m-0">
-            <label for="edrpou">adress :</label>
-            <InputText id="edrpou" placeholder="номер ОСББ" v-model="cooperationInfo" maxlength="50" />
+            <label for="coopEmail">Електронна адреса : </label>
+            <InputText id="coopEmail" placeholder="Електрона адреса" v-model="email" maxlength="320" />
           </p>
-          <div>...state.cooperationStore : {{ this.$store.state.cooperationStore }}</div>
-          <div>coopInfo function: {{ cooperationInfo }}</div>
-
-          {{ this.$data.name }}
-          <br />
-          <!-- {{editCoopInfo().name}} -->
-
-          <!-- end -->
+          <p class="p-m-0">
+            <label for="edrpou">Код реєстрації : </label>
+            <InputText id="edrpou" placeholder="ОСББ номер" v-model="edrpou" maxlength="8" />
+          </p>
+          <p class="p-m-0">
+            <label for="coopPhone">Номер телефону : </label>
+            <InputText id="coopPhone" placeholder="Назва" v-model="phone" maxlength="13" />
+          </p>
         </form>
 
         <template #footer>
@@ -80,7 +78,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { CooperationInterface, CooperationStateInterface } from '@/store/cooperation/types';
+import {
+  CooperationInterface,
+  CooperationStateInterface,
+  CooperationContactsInterface,
+} from '@/store/cooperation/types';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -94,21 +96,40 @@ export default defineComponent({
   },
   data() {
     return {
+      id: 0,
       name: '',
-      erdpou: '',
+      edrpou: '',
       iban: '',
-      houses: [],
-      contacts: [],
-      address: [],
+      phone: '',
+      email: '',
+      address: {},
     };
   },
   mounted() {
-    let basicCooperationInfo: CooperationInterface | null = this.$store.state.cooperationStore.selectedCooperation;
-    this.name = basicCooperationInfo?.name ?? '';
-    this.erdpou = basicCooperationInfo?.erdpou ?? '';
-    this.iban = basicCooperationInfo?.iban ?? '';
+    this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS').then(() => {
+      this.initData();
+    });
   },
   methods: {
+    initData() {
+      let cooperationInfo: CooperationInterface | null = this.$store.state.cooperationStore.selectedCooperation;
+      this.id = cooperationInfo?.id ?? 0;
+      this.name = cooperationInfo?.name ?? '';
+      this.edrpou = cooperationInfo?.edrpou ?? '';
+      this.iban = cooperationInfo?.iban ?? '';
+      this.address = cooperationInfo?.address ?? {};
+      cooperationInfo?.contacts.forEach((el) => this.mapContact(el));
+    },
+    mapContact(el: CooperationContactsInterface) {
+      for (let key in el) {
+        if (key == 'email') {
+          this.email = el[key];
+        }
+        if (key == 'phone') {
+          this.phone = el[key];
+        }
+      }
+    },
     openModal() {
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', true);
     },
@@ -116,20 +137,16 @@ export default defineComponent({
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', false);
     },
     editCoopInfo() {
-      // const payload = {
-      //   name: this.name,
-      //   erdpou: this.erdpou,
-      //   iban: this.iban,
-      //   houses: [],
-      //   contacts: [],
-      //   address: [],
-      // };
-      // this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE_INFO', payload);
+      const payload = {
+        id: this.id,
+        name: this.name,
+        edrpou: this.edrpou,
+        iban: this.iban,
+        address: {},
+      };
+      this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
       this.closeModal();
     },
-  },
-  created() {
-    this.$store.dispatch('cooperationStore/SET_COOPERATION_INFO');
   },
   computed: {
     cooperationInfo(): CooperationStateInterface {
@@ -158,7 +175,10 @@ export default defineComponent({
 }
 
 .coop_info div {
-  padding: 5px;
+  padding: 10px;
+  & :nth-child(1) {
+    font-weight: bold;
+  }
 }
 
 .edit_btn {
@@ -170,3 +190,5 @@ label {
   width: 160px;
 }
 </style>
+
+function getContacts() { throw new Error('Function not implemented.'); }
