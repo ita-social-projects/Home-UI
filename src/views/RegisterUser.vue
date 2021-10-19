@@ -43,22 +43,26 @@
         <small v-if="v$.email.$error" class="p-error">{{ v$.email.$errors[0].$message }}</small>
       </div>
       <div class="field">
-        <input-text
-          type="text"
+        <Password
+          class="input-password-class"
+          :feedback="false"
           v-model="state.formData.password.password"
           placeholder="Пароль"
           :class="{ 'p-invalid': v$.password.password.$error }"
           @blur="v$.password.password.$touch"
+          toggleMask
         />
         <small v-if="v$.password.password.$error" class="p-error">{{ v$.password.password.$errors[0].$message }}</small>
       </div>
       <div class="field">
-        <input-text
-          type="text"
+        <Password
+          class="input-password-class"
+          :feedback="false"
           v-model="state.formData.password.confirm"
           placeholder="Підтвердження паролю"
           :class="{ 'p-invalid': v$.password.confirm.$error }"
           @blur="v$.password.confirm.$touch"
+          toggleMask
         />
         <small v-if="v$.password.confirm.$error" class="p-error">{{ v$.password.confirm.$errors[0].$message }}</small>
       </div>
@@ -93,6 +97,8 @@ import {
   nameLenghtValidator,
 } from '@/utils/validators';
 import { sameAs } from '@vuelidate/validators';
+import Password from 'primevue/password';
+
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import store from '@/store';
@@ -101,7 +107,7 @@ import { useToast } from 'primevue/usetoast';
 
 export default defineComponent({
   name: 'userRegistration',
-  components: { InputText, Button },
+  components: { InputText, Button, Password },
   setup() {
     const toast = useToast();
     const state = reactive({
@@ -175,6 +181,7 @@ export default defineComponent({
       toast.add({ severity: status, summary: message, life: 6000 });
     };
     const resetFields = () => {
+      v$.value.$reset();
       state.formData.firstName = '';
       state.formData.middleName = '';
       state.formData.lastName = '';
@@ -191,10 +198,12 @@ export default defineComponent({
       watch(
         () => store.getters['userStore/getErrorMessage'],
         function () {
-          const errMessage = store.getters['userStore/getErrorMessage'];
-          const severityStatus = 'error';
-          showStatus(severityStatus, errMessage);
-          resetFields();
+          if (store.getters['userStore/getErrorMessage']) {
+            const errMessage = store.getters['userStore/getErrorMessage'];
+            const severityStatus = 'error';
+            showStatus(severityStatus, errMessage);
+            store.dispatch('userStore/RESET_ERROR_ACTION');
+          }
         }
       );
       watch(
@@ -230,9 +239,23 @@ export default defineComponent({
       @include flex-custom(flex-start, center, column nowrap);
       position: relative;
       margin: 15px;
+      min-width: 500px;
+
       .p-inputtext {
+        width: 100%;
         min-width: 500px;
       }
+      .input-password-class {
+        ::v-deep {
+          .p-inputtext {
+            width: 100%;
+          }
+        }
+      }
+      div {
+        width: 100%;
+      }
+
       small {
         bottom: -23px;
         position: absolute;
