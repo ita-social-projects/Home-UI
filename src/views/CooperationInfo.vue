@@ -7,7 +7,10 @@
       </div>
       <div>
         <span>Адреса : </span>
-        <span>{{ address.city }}</span>
+        <span
+          >{{ address?.city }}, {{ address?.district }}, {{ address?.street }}, {{ address?.house_block }},
+          {{ address?.house_number }}
+        </span>
       </div>
       <div>
         <span>IBAN номер : </span>
@@ -100,15 +103,7 @@ export default defineComponent({
       iban: '',
       phone: '',
       email: '',
-      // contacts: [
-      //   {
-      //     type: '',
-      //     contact: '',
-      //     main: false,
-      //   },
-      // ],
       address: {},
-      shortAddress: '',
     };
   },
   mounted() {
@@ -121,7 +116,6 @@ export default defineComponent({
       this.address = cooperationInfo?.address ?? {};
 
       cooperationInfo?.contacts.map((el) => this.mapContact(el)) ?? [];
-      // this.contacts = cooperationInfo?.contacts.map((el) => this.mapContact(el)) ?? this.contacts;
     });
   },
   methods: {
@@ -135,17 +129,6 @@ export default defineComponent({
         }
       }
     },
-
-    // mapContact(el: CooperationContactsInterface) {
-    //   let contact = '';
-    //   if (el.phone) {
-    //     contact = el.phone;
-    //   }
-    //   if (el.email) {
-    //     contact = el.email;
-    //   }
-    //   return { type: el.type, contact, main: el.main };
-    // },
     openModal() {
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', true);
     },
@@ -158,7 +141,6 @@ export default defineComponent({
         name: this.name,
         edrpou: this.edrpou,
         iban: this.iban,
-        // contacts: this.contacts,
         address: {},
       };
       this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
@@ -166,6 +148,16 @@ export default defineComponent({
     },
   },
   computed: {
+    setShortAddress(): string {
+      let addressString = '';
+      let obj = this.address;
+      if (Object.keys(obj).length !== 0) {
+        console.log(obj, '!! !! data ');
+      }
+      console.log(obj, 'No  data ');
+      return addressString;
+    },
+
     cooperationInfo(): CooperationStateInterface {
       return this.$store.state.cooperationStore;
     },
@@ -192,7 +184,10 @@ export default defineComponent({
 }
 
 .coop_info div {
-  padding: 5px;
+  padding: 10px;
+  & :nth-child(1) {
+    font-weight: bold;
+  }
 }
 
 .edit_btn {
