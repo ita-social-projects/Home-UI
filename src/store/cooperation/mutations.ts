@@ -14,4 +14,7 @@ export const mutations: MutationTree<CooperationStateInterface> & Mutations = {
       edrpou: state.userCooperations[payload].usreo,
     };
   },
+  [CooperationMutationEnum.SET_IS_COOPERATIONS_LOADED]: (state, payload) => {
+    state.isCooperationsLoaded = payload;
+  },
 };

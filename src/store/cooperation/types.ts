@@ -6,6 +6,7 @@ export enum CooperationMutationEnum {
   SET_USER_COOPERATIONS = 'SET_USER_COOPERATIONS',
   SET_SELECTED_COOPERATION = 'SET_SELECTED_COOPERATION',
   SET_COOPERATION_UPDATE = 'SET_COOPERATION_UPDATE',
+  SET_IS_COOPERATIONS_LOADED = 'SET_IS_COOPERATIONS_LOADED',
 }
 
 export enum CooperationActionEnum {
@@ -19,6 +20,7 @@ export enum CooperationActionEnum {
 export interface CooperationStateInterface {
   userCooperations: Array<CooperationInterface>;
   selectedCooperation: null | CooperationInterface;
+  isCooperationsLoaded: boolean;
   displayModal: boolean;
 }
 
@@ -26,6 +28,7 @@ export type Mutations<S = CooperationStateInterface> = {
   [CooperationMutationEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
   [CooperationMutationEnum.SET_USER_COOPERATIONS](state: S, payload: Array<CooperationInterface>): void;
   [CooperationMutationEnum.SET_SELECTED_COOPERATION](state: S, payload: number): void;
+  [CooperationMutationEnum.SET_IS_COOPERATIONS_LOADED](state: S, payload: boolean): void;
 };
 
 export interface Actions {

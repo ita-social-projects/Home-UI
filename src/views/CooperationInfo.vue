@@ -28,6 +28,7 @@
         <span>Номер телефону : </span>
         <span>{{ phone }}</span>
       </div>
+      {{ setShortAddress }}
     </div>
 
     <div class="edit_btn">
@@ -108,17 +109,19 @@ export default defineComponent({
   },
   mounted() {
     this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS').then(() => {
+      this.initData();
+    });
+  },
+  methods: {
+    initData() {
       let cooperationInfo: CooperationInterface | null = this.$store.state.cooperationStore.selectedCooperation;
       this.id = cooperationInfo?.id ?? 0;
       this.name = cooperationInfo?.name ?? '';
       this.edrpou = cooperationInfo?.edrpou ?? '';
       this.iban = cooperationInfo?.iban ?? '';
       this.address = cooperationInfo?.address ?? {};
-
-      cooperationInfo?.contacts.map((el) => this.mapContact(el)) ?? [];
-    });
-  },
-  methods: {
+      cooperationInfo?.contacts.forEach((el) => this.mapContact(el)) ?? [];
+    },
     mapContact(el: CooperationContactsInterface) {
       for (let key in el) {
         if (key == 'email') {
@@ -149,8 +152,8 @@ export default defineComponent({
   },
   computed: {
     setShortAddress(): string {
-      let addressString = '';
-      let obj = this.address;
+      const obj = this.address;
+      let addressString = `${obj}`;
       if (Object.keys(obj).length !== 0) {
         console.log(obj, '!! !! data ');
       }
@@ -199,3 +202,5 @@ label {
   width: 160px;
 }
 </style>
+
+function getContacts() { throw new Error('Function not implemented.'); }

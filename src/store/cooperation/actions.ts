@@ -37,6 +37,7 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
       .then((r: AxiosResponse) => {
         // console.log(r.data);
         commit(CooperationMutationEnum.SET_USER_COOPERATIONS, r.data);
+        commit(CooperationMutationEnum.SET_IS_COOPERATIONS_LOADED, true);
       })
       .then(() => {
         commit(CooperationMutationEnum.SET_SELECTED_COOPERATION, 0);
