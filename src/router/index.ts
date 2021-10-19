@@ -53,7 +53,7 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   if (to.path === RoutesEnum.MainPage && localStorage.getItem('user') == null) {
     next({ path: RoutesEnum.StartPage });
   } else {

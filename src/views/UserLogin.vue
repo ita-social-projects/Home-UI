@@ -17,9 +17,6 @@
             :class="{ 'p-invalid': v$.email.$error || check.email.unregistered }"
           />
           <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
-          <small v-else-if="check.email.unregistered" id="email-unregistered" class="p-error">
-            Такого користувача немає в системі
-          </small>
         </div>
         <div class="form-login__item">
           <label for="password">Пароль</label>
@@ -29,11 +26,14 @@
             placeholder="Пароль"
             v-model="password"
             @blur="passwordBlur"
-            :class="{ 'p-invalid': v$.password.$error }"
+            :class="{ 'p-invalid': v$.password.$error || check.password.correct }"
           />
           <small v-if="v$.password.$error" id="password-help" class="p-error">{{
             v$.password.$errors[0].$message
           }}</small>
+          <small v-else-if="check.password.correct" id="password-correct" class="p-error">
+            Ви ввели невірний пароль
+          </small>
         </div>
         <section class="btn">
           <Button label="Увiйти" class="p-button-info" type="submit" />
@@ -47,7 +47,7 @@
 import { defineComponent } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import useVuelidate from '@vuelidate/core';
 import { RoutesEnum } from '@/router/types';
 import {
@@ -58,6 +58,7 @@ import {
   emailLastCharsValidator,
   passwordMinLenght,
   passwordMaxLenght,
+  passwordValidator,
 } from '@/utils/validators';
 
 export default defineComponent({
@@ -82,6 +83,7 @@ export default defineComponent({
         },
         password: {
           valid: false,
+          correct: false,
         },
       },
       errors: {
@@ -105,12 +107,13 @@ export default defineComponent({
         requiredValidator,
         passwordMaxLenght,
         passwordMinLenght,
+        passwordValidator,
       },
     };
   },
   computed: {
-    isLoggedIn(): boolean {
-      return this.$store.getters['authorizationStore/loggedIn'];
+    isTokenExist(): boolean {
+      return this.$store.getters['localStorageStore/isTokenExist'];
     },
   },
   methods: {
@@ -131,12 +134,14 @@ export default defineComponent({
         successCallback: (r: AxiosResponse): void => {
           this.errors.checkError = false;
           this.check.email.unregistered = r.data.length === 0;
-          if (this.isLoggedIn) {
+          if (this.isTokenExist) {
             this.$router.push(RoutesEnum.MainPage);
           }
         },
-        errorCallback: (): void => {
+        errorCallback: (r: AxiosError): void => {
+          this.check.password.correct = true;
           this.errors.checkError = true;
+          this.isPasswordValid = true;
         },
       };
       if (!this.v$.$error) {

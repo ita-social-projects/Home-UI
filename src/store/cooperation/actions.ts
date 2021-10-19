@@ -27,17 +27,41 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
     commit(CooperationMutationEnum.SET_MODAL_DISPLAY, payload);
   },
 
-  [CooperationActionEnum.SET_USER_COOPERATIONS]: ({ commit }) => {
-    HTTP.get('/cooperations')
+  [CooperationActionEnum.SET_USER_COOPERATIONS]: async ({ commit }) => {
+    return HTTP.get('/cooperations', {
+      params: {
+        page_size: 10,
+        sort: 'id,asc',
+      },
+    })
       .then((r: AxiosResponse) => {
         commit(CooperationMutationEnum.SET_USER_COOPERATIONS, r.data);
+        commit(CooperationMutationEnum.SET_IS_COOPERATIONS_LOADED, true);
+      })
+      .then(() => {
+        commit(CooperationMutationEnum.SET_SELECTED_COOPERATION, 0);
       })
       .catch((err: AxiosError) => {
-        console.log('error SET_COOPERATION_POLLS', err.response);
+        console.log('error SET_USER_COOPERATIONS', err.response);
       });
   },
 
-  [CooperationActionEnum.SET_SELECTED_COOPERATION]: ({ commit }) => {
-    // commit(CooperationMutationEnum.SET_SELECTED_POLL);
+  [CooperationActionEnum.SET_SELECTED_COOPERATION]: ({ commit }, payload) => {
+    commit(CooperationMutationEnum.SET_SELECTED_COOPERATION, payload);
+  },
+
+  [CooperationActionEnum.SET_COOPERATION_UPDATE]: async ({ commit }, payload) => {
+    try {
+      const response = await HTTP.put(`/cooperations/${payload.id}`, {
+        name: payload.name,
+        usreo: payload.edrpou,
+        iban: payload.iban,
+        address: payload.address,
+        contacts: payload.contacts,
+      });
+      console.log(response);
+    } catch (err: any) {
+      console.log('error SET_COOPERATION_UPDATE', err.response);
+    }
   },
 };
