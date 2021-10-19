@@ -2,32 +2,28 @@
   <div class="container">
     <div class="coop_info">
       <div>
-        <span><b>Назва ОСББ : </b></span>
-        <span>{{ cooperationInfo.name }}</span>
-      </div>
-
-      <div>
-        <span><b>Номер ОСББ : </b></span>
-        <span>{{ cooperationInfo.erdpou }}</span>
+        <span>Назва ОСББ : </span>
+        <span>{{ name }}</span>
       </div>
       <div>
-        <span><b>Адреса: </b></span>
-        <span>{{ cooperationInfo.erdpou }}</span>
+        <span>Адреса : </span>
+        <span>{{ address.city }}</span>
       </div>
-
       <div>
-        <span><b>IBAN номер : </b></span>
-        <span>{{ cooperationInfo.erdpou }}</span>
+        <span>IBAN номер : </span>
+        <span>{{ iban }}</span>
       </div>
-
       <div>
-        <span><b>Електрона адреса : </b></span>
-        <span>{{ cooperationInfo.erdpou }}</span>
+        <span>Електрона адреса : </span>
+        <span>{{ email }}</span>
       </div>
-
       <div>
-        <span><b>Номер телефону : </b></span>
-        <span>{{ cooperationInfo.erdpou }}</span>
+        <span>Код реєстрации : </span>
+        <span>{{ edrpou }}</span>
+      </div>
+      <div>
+        <span>Номер телефону : </span>
+        <span>{{ phone }}</span>
       </div>
     </div>
 
@@ -43,30 +39,29 @@
       >
         <form @submit.prevent="editCoopInfo">
           <p class="p-m-0">
-            <label for="coopName">Назва :</label>
+            <label for="coopName">Назва : </label>
             <InputText id="coopName" placeholder="Назва" v-model="name" maxlength="50" />
           </p>
           <p class="p-m-0">
-            <label for="edrpou">ОСББ номер :</label>
-            <InputText id="edrpou" placeholder="номер ОСББ" v-model="erdpou" maxlength="8" />
+            <label for="coopAddress">Адреса : </label>
+            <InputText id="coopAddress" placeholder="Адреса" v-model="address.city" maxlength="250" />
           </p>
           <p class="p-m-0">
-            <label for="iban">iban номер :</label>
-            <InputText id="iban" placeholder="iban" v-model="cooperationInfo.iban" maxlength="8" />
+            <label for="iban">Iban номер : </label>
+            <InputText id="coopIban" placeholder="iban номер" v-model="iban" maxlength="29" />
           </p>
-
           <p class="p-m-0">
-            <label for="edrpou">adress :</label>
-            <InputText id="edrpou" placeholder="номер ОСББ" v-model="cooperationInfo" maxlength="50" />
+            <label for="coopEmail">Електронна адреса : </label>
+            <InputText id="coopEmail" placeholder="Електрона адреса" v-model="email" maxlength="320" />
           </p>
-          <div><b>...state.cooperationStore : </b>{{ this.$store.state.cooperationStore }}</div>
-          <div><b>coopInfo function: </b>{{ cooperationInfo }}</div>
-
-          {{ this.$data.name }}
-          <br />
-          <!-- {{editCoopInfo().name}} -->
-
-          <!-- end -->
+          <p class="p-m-0">
+            <label for="edrpou">Код реєстрації : </label>
+            <InputText id="edrpou" placeholder="ОСББ номер" v-model="edrpou" maxlength="8" />
+          </p>
+          <p class="p-m-0">
+            <label for="coopPhone">Номер телефону : </label>
+            <InputText id="coopPhone" placeholder="Назва" v-model="phone" maxlength="13" />
+          </p>
         </form>
 
         <template #footer>
@@ -80,7 +75,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { CooperationInterface, CooperationStateInterface } from '@/store/cooperation/types';
+import {
+  CooperationInterface,
+  CooperationStateInterface,
+  CooperationContactsInterface,
+  CooperationAddressInterface,
+} from '@/store/cooperation/types';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -94,21 +94,58 @@ export default defineComponent({
   },
   data() {
     return {
+      id: 0,
       name: '',
-      erdpou: '',
+      edrpou: '',
       iban: '',
-      houses: [],
-      contacts: [],
-      address: [],
+      phone: '',
+      email: '',
+      // contacts: [
+      //   {
+      //     type: '',
+      //     contact: '',
+      //     main: false,
+      //   },
+      // ],
+      address: {},
+      shortAddress: '',
     };
   },
   mounted() {
-    let basicCooperationInfo: CooperationInterface | null = this.$store.state.cooperationStore.selectedCooperation;
-    this.name = basicCooperationInfo?.name ?? '';
-    this.erdpou = basicCooperationInfo?.erdpou ?? '';
-    this.iban = basicCooperationInfo?.iban ?? '';
+    this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS').then(() => {
+      let cooperationInfo: CooperationInterface | null = this.$store.state.cooperationStore.selectedCooperation;
+      this.id = cooperationInfo?.id ?? 0;
+      this.name = cooperationInfo?.name ?? '';
+      this.edrpou = cooperationInfo?.edrpou ?? '';
+      this.iban = cooperationInfo?.iban ?? '';
+      this.address = cooperationInfo?.address ?? {};
+
+      cooperationInfo?.contacts.map((el) => this.mapContact(el)) ?? [];
+      // this.contacts = cooperationInfo?.contacts.map((el) => this.mapContact(el)) ?? this.contacts;
+    });
   },
   methods: {
+    mapContact(el: CooperationContactsInterface) {
+      for (let key in el) {
+        if (key == 'email') {
+          this.email = el[key];
+        }
+        if (key == 'phone') {
+          this.phone = el[key];
+        }
+      }
+    },
+
+    // mapContact(el: CooperationContactsInterface) {
+    //   let contact = '';
+    //   if (el.phone) {
+    //     contact = el.phone;
+    //   }
+    //   if (el.email) {
+    //     contact = el.email;
+    //   }
+    //   return { type: el.type, contact, main: el.main };
+    // },
     openModal() {
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', true);
     },
@@ -116,20 +153,17 @@ export default defineComponent({
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', false);
     },
     editCoopInfo() {
-      // const payload = {
-      //   name: this.name,
-      //   erdpou: this.erdpou,
-      //   iban: this.iban,
-      //   houses: [],
-      //   contacts: [],
-      //   address: [],
-      // };
-      // this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE_INFO', payload);
+      const payload = {
+        id: this.id,
+        name: this.name,
+        edrpou: this.edrpou,
+        iban: this.iban,
+        // contacts: this.contacts,
+        address: {},
+      };
+      this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
       this.closeModal();
     },
-  },
-  created() {
-    this.$store.dispatch('cooperationStore/SET_COOPERATION_INFO');
   },
   computed: {
     cooperationInfo(): CooperationStateInterface {

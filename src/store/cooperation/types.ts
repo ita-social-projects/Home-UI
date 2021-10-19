@@ -5,6 +5,7 @@ export enum CooperationMutationEnum {
   SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
   SET_USER_COOPERATIONS = 'SET_USER_COOPERATIONS',
   SET_SELECTED_COOPERATION = 'SET_SELECTED_COOPERATION',
+  SET_COOPERATION_UPDATE = 'SET_COOPERATION_UPDATE',
 }
 
 export enum CooperationActionEnum {
@@ -12,6 +13,7 @@ export enum CooperationActionEnum {
   SET_USER_COOPERATIONS = 'SET_USER_COOPERATIONS',
   SET_SELECTED_COOPERATION = 'SET_SELECTED_COOPERATION',
   CREATE_COOPERATION = 'CREATE_COOPERATION',
+  SET_COOPERATION_UPDATE = 'SET_COOPERATION_UPDATE',
 }
 
 export interface CooperationStateInterface {
@@ -20,23 +22,10 @@ export interface CooperationStateInterface {
   displayModal: boolean;
 }
 
-export interface CooperationInterface {
-  id: number;
-  name: string;
-  erdpou: string;
-  iban: string;
-  houses: string[]; // create new Interface
-  contacts: string[]; // create new Interface
-  address: string[]; // create new Interface
-}
-
 export type Mutations<S = CooperationStateInterface> = {
   [CooperationMutationEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
-  [CooperationMutationEnum.SET_USER_COOPERATIONS](
-    state: S,
-    payload: CooperationStateInterface['userCooperations']
-  ): void;
-  [CooperationMutationEnum.SET_SELECTED_COOPERATION](state: S, payload: CooperationStateInterface): void;
+  [CooperationMutationEnum.SET_USER_COOPERATIONS](state: S, payload: Array<CooperationInterface>): void;
+  [CooperationMutationEnum.SET_SELECTED_COOPERATION](state: S, payload: number): void;
 };
 
 export interface Actions {
@@ -45,8 +34,12 @@ export interface Actions {
     payload: requestPayload<CooperationRegistrationInterface>
   ): void;
   [CooperationActionEnum.SET_MODAL_DISPLAY]({ commit }: AugmentedActionContext, payload: boolean): void;
-  [CooperationActionEnum.SET_USER_COOPERATIONS]({ commit }: AugmentedActionContext): void;
-  [CooperationActionEnum.SET_SELECTED_COOPERATION]({ commit }: AugmentedActionContext): void;
+  [CooperationActionEnum.SET_USER_COOPERATIONS]({ commit }: AugmentedActionContext): Promise<void>;
+  [CooperationActionEnum.SET_SELECTED_COOPERATION]({ commit }: AugmentedActionContext, payload: number): void;
+  [CooperationActionEnum.SET_COOPERATION_UPDATE](
+    { commit }: AugmentedActionContext,
+    payload: CooperationInterface
+  ): void;
 }
 
 export type Getters<S = CooperationStateInterface> = {
@@ -59,5 +52,41 @@ export type AugmentedActionContext = {
 
 export interface CooperationRegistrationInterface {
   edrpou: string;
+  email: string;
+}
+
+export interface CooperationInterface {
+  id: number;
+  name: string;
+  edrpou: string;
+  usreo: string;
+  iban: string;
+  houses: CooperationHousesInterface[];
+  contacts: CooperationContactsInterface[];
+  address: CooperationAddressInterface;
+}
+
+export interface CooperationAddressInterface {
+  region: string;
+  city: string;
+  district: string;
+  street: string;
+  houseBlock: string;
+  houseNumber: string;
+  zipCode: string;
+}
+
+export interface CooperationHousesInterface {
+  id: number;
+  quantityFlat: number;
+  houseArea: number;
+  adjoiningArea: number;
+  address: CooperationAddressInterface;
+}
+
+export interface CooperationContactsInterface {
+  type: string;
+  main: boolean;
+  phone: string;
   email: string;
 }
