@@ -28,7 +28,6 @@
         <span>Номер телефону : </span>
         <span>{{ phone }}</span>
       </div>
-      {{ setShortAddress }}
     </div>
 
     <div class="edit_btn">
@@ -83,7 +82,6 @@ import {
   CooperationInterface,
   CooperationStateInterface,
   CooperationContactsInterface,
-  CooperationAddressInterface,
 } from '@/store/cooperation/types';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -120,7 +118,7 @@ export default defineComponent({
       this.edrpou = cooperationInfo?.edrpou ?? '';
       this.iban = cooperationInfo?.iban ?? '';
       this.address = cooperationInfo?.address ?? {};
-      cooperationInfo?.contacts.forEach((el) => this.mapContact(el)) ?? [];
+      cooperationInfo?.contacts.forEach((el) => this.mapContact(el));
     },
     mapContact(el: CooperationContactsInterface) {
       for (let key in el) {
@@ -151,16 +149,6 @@ export default defineComponent({
     },
   },
   computed: {
-    setShortAddress(): string {
-      const obj = this.address;
-      let addressString = `${obj}`;
-      if (Object.keys(obj).length !== 0) {
-        console.log(obj, '!! !! data ');
-      }
-      console.log(obj, 'No  data ');
-      return addressString;
-    },
-
     cooperationInfo(): CooperationStateInterface {
       return this.$store.state.cooperationStore;
     },
