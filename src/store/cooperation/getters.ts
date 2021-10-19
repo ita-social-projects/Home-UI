@@ -8,6 +8,7 @@ export const getters: GetterTree<CooperationStateInterface, RootStateInterface> 
     return `Кооперацію ${state.selectedCooperation?.name} зареєстровано з кодом ${state.selectedCooperation?.edrpou}`;
   },
   getCooperationInfo: (state) => {
+    console.log(state);
     return state;
   },
 };

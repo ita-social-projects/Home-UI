@@ -28,6 +28,7 @@
         <span>Номер телефону : </span>
         <span>{{ phone }}</span>
       </div>
+      {{ fillAddress }}
     </div>
 
     <div class="edit_btn">
@@ -45,26 +46,54 @@
             <label for="coopName">Назва : </label>
             <InputText id="coopName" placeholder="Назва" v-model="name" maxlength="50" />
           </p>
-          <p class="p-m-0">
-            <label for="coopAddress">Адреса : </label>
-            <InputText id="coopAddress" placeholder="Адреса" v-model="address.city" maxlength="250" />
-          </p>
+
           <p class="p-m-0">
             <label for="iban">Iban номер : </label>
             <InputText id="coopIban" placeholder="iban номер" v-model="iban" maxlength="29" />
           </p>
-          <p class="p-m-0">
+          <!-- <p class="p-m-0">
             <label for="coopEmail">Електронна адреса : </label>
             <InputText id="coopEmail" placeholder="Електрона адреса" v-model="email" maxlength="320" />
-          </p>
+          </p> -->
           <p class="p-m-0">
             <label for="edrpou">Код реєстрації : </label>
             <InputText id="edrpou" placeholder="ОСББ номер" v-model="edrpou" maxlength="8" />
           </p>
-          <p class="p-m-0">
+          <!-- <p class="p-m-0">
             <label for="coopPhone">Номер телефону : </label>
             <InputText id="coopPhone" placeholder="Назва" v-model="phone" maxlength="13" />
-          </p>
+          </p> -->
+          <div>
+            Адреса
+            <p class="p-m-0">
+              <label for="coopAddress">region:</label>
+              <InputText id="coopAddress" placeholder="region" v-model="address.region" maxlength="50" />
+            </p>
+            <p class="p-m-0">
+              <label for="coopAddress">city:</label>
+              <InputText id="coopAddress" placeholder="city" v-model="address.city" maxlength="50" />
+            </p>
+            <p class="p-m-0">
+              <label for="coopAddress">district:</label>
+              <InputText id="coopAddress" placeholder="district" v-model="address.district" maxlength="250" />
+            </p>
+            <p class="p-m-0">
+              <label for="coopAddress">street:</label>
+              <InputText id="coopAddress" placeholder="street" v-model="address.street" maxlength="250" />
+            </p>
+            <p class="p-m-0">
+              <label for="coopAddress">house_block:</label>
+              <InputText id="coopAddress" placeholder="house_block" v-model="address.house_block" maxlength="250" />
+            </p>
+            <p class="p-m-0">
+              <label for="coopAddress">house_number:</label>
+              <InputText id="coopAddress" placeholder="house_number" v-model="address.house_number" maxlength="250" />
+            </p>
+            <p class="p-m-0">
+              <label for="coopAddress">zip_code:</label>
+              <InputText id="coopAddress" placeholder="zip_code" v-model="address.zip_code" maxlength="250" />
+            </p>
+          </div>
         </form>
 
         <template #footer>
@@ -82,6 +111,7 @@ import {
   CooperationInterface,
   CooperationStateInterface,
   CooperationContactsInterface,
+  CooperationAddressInterface,
 } from '@/store/cooperation/types';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -119,6 +149,9 @@ export default defineComponent({
       this.iban = cooperationInfo?.iban ?? '';
       this.address = cooperationInfo?.address ?? {};
       cooperationInfo?.contacts.forEach((el) => this.mapContact(el));
+      if (this.$store.state.cooperationStore.isCooperationsLoaded) {
+        this.fillAddress;
+      }
     },
     mapContact(el: CooperationContactsInterface) {
       for (let key in el) {
@@ -132,6 +165,7 @@ export default defineComponent({
     },
     openModal() {
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', true);
+      console.log();
     },
     closeModal() {
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', false);
@@ -149,6 +183,13 @@ export default defineComponent({
     },
   },
   computed: {
+    fillAddress(): any {
+      console.log(this.address);
+      // return `${this.address.city}, ${ this.address.district },
+      // ${ this.address?.street }, ${ this.address.house_number },
+      // ${ this.address.house_block }`;
+      return `${JSON.stringify(this.address)}`;
+    },
     cooperationInfo(): CooperationStateInterface {
       return this.$store.state.cooperationStore;
     },
@@ -171,11 +212,11 @@ export default defineComponent({
 }
 
 .coop_info {
-  margin: 15px;
+  margin: 10px;
 }
 
 .coop_info div {
-  padding: 10px;
+  padding: 8px;
   & :nth-child(1) {
     font-weight: bold;
   }
@@ -190,5 +231,3 @@ label {
   width: 160px;
 }
 </style>
-
-function getContacts() { throw new Error('Function not implemented.'); }
