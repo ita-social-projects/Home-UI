@@ -14,7 +14,7 @@
             @blur="emailBlur"
             maxlength="320"
             class="p-inputtext"
-            :class="{ 'p-invalid': v$.email.$error || check.email.unregistered }"
+            :class="{ 'p-invalid': v$.email.$error }"
           />
           <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
         </div>

@@ -3,12 +3,14 @@ import { UserStateInterface } from '@/store/user/types';
 import { AuthorizationStateInterface } from '@/store/authorization/types';
 import { CooperationStateInterface } from '@/store/cooperation/types';
 import { LocalStorageStateInterface } from '@/store/localstorage/types';
+import { HousesStateInterface } from '@/store/houses/types';
 
 export interface RootStateInterface {
   cooperationStore: CooperationStateInterface;
   userStore: UserStateInterface;
   authorizationStore: AuthorizationStateInterface;
   localStorageStore: LocalStorageStateInterface;
+  housesStore: HousesStateInterface;
 }
 
 export type requestPayload<T> = {

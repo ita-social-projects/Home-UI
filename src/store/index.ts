@@ -4,6 +4,7 @@ import { authorizationStore } from '@/store/authorization';
 import { userStore } from '@/store/user';
 import { RootStateInterface } from '@/store/types';
 import { localStorageStore } from '@/store/localstorage';
+import { housesStore } from '@/store/houses';
 
 export default createStore<RootStateInterface>({
   strict: process.env.NODE_ENV !== 'production',
@@ -12,5 +13,6 @@ export default createStore<RootStateInterface>({
     authorizationStore,
     userStore,
     localStorageStore,
+    housesStore,
   },
 });
