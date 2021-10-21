@@ -47,6 +47,7 @@ export interface Actions {
 
 export type Getters<S = CooperationStateInterface> = {
   getCooperationNameAndEdrpou(state: S): string;
+  getSelectedCooperationId(state: S): number;
 };
 
 export type AugmentedActionContext = {
