@@ -1,4 +1,7 @@
 <template>
+  <div class="breadcrumb">
+    <Breadcrumb />
+  </div>
   <div class="container">
     <div class="coop_info">
       <div>
@@ -83,6 +86,7 @@ import {
   CooperationStateInterface,
   CooperationContactsInterface,
 } from '@/store/cooperation/types';
+import Breadcrumb from '@/components/Breadcrumb.vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -93,6 +97,7 @@ export default defineComponent({
     Dialog,
     Button,
     InputText,
+    Breadcrumb,
   },
   data() {
     return {

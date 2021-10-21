@@ -2,7 +2,11 @@
   <div class="breadcrumb">
     <Breadcrumb :home="home" :model="items">
       <template #item="{ item }">
-        <a :href="item.to">{{ item.label }}</a>
+        <router-link :to="item.to" custom v-slot="{ href, navigate, isActive, isExactActive }">
+          <a :href="href" @click="navigate" :class="{ 'active-link': isActive, 'active-link-exact': isExactActive }">{{
+            item.label
+          }}</a>
+        </router-link>
       </template>
     </Breadcrumb>
   </div>
@@ -10,6 +14,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { Routes } from '@/router/types';
 import Breadcrumb from 'primevue/breadcrumb';
 
 export default defineComponent({
@@ -18,10 +23,10 @@ export default defineComponent({
   },
   data() {
     return {
-      home: { label: 'Будинки', to: '/main/cooperation' },
+      home: { label: 'ОСББ', to: Routes.Cooperation },
       items: [
-        { label: 'Квартири', to: '/apartments-mock' },
-        { label: 'Інформація про квартиру', to: '/apartments-info-mock' },
+        { label: 'Квартири', to: Routes.ApartmentsMock },
+        { label: 'Інформація про квартиру', to: Routes.ApartmentsInfoMock },
       ],
     };
   },

@@ -2,6 +2,7 @@
   <div class="ApartmentsInfoMock">
     <Breadcrumb />
     <h1>Apartments Info</h1>
+    <router-view></router-view>
   </div>
 </template>
 

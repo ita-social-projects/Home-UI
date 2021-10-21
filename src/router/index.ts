@@ -17,14 +17,6 @@ const routes: RouteRecordRaw[] = [
     component: StartPage,
   },
   {
-    path: Routes.ApartmentsMock,
-    component: ApartmentsMock,
-  },
-  {
-    path: Routes.ApartmentsInfoMock,
-    component: ApartmentsInfoMock,
-  },
-  {
     name: Routes.UserLogin,
     path: Routes.UserLogin,
     component: UserLogin,
@@ -44,6 +36,14 @@ const routes: RouteRecordRaw[] = [
       {
         path: Routes.Cooperation,
         component: CooperationInfo,
+      },
+      {
+        path: Routes.ApartmentsMock,
+        component: ApartmentsMock,
+      },
+      {
+        path: Routes.ApartmentsInfoMock,
+        component: ApartmentsInfoMock,
       },
     ],
   },

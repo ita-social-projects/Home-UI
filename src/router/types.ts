@@ -1,13 +1,12 @@
 export enum Routes {
-  StartPage = '/start-page',
+  StartPage = '/',
   UserLogin = '/login',
   RegisterCooperation = '/register-cooperation',
   RegisterUser = '/register-user',
   MainPage = '/main',
   Cooperation = '/main/cooperation',
+  ApartmentsMock = '/cooperation/apartments-mock',
+  ApartmentsInfoMock = '/cooperation/apartments-info-mock',
 
   NotFound = '/:catchAll(.*)',
-
-  ApartmentsMock = '/apartments-mock',
-  ApartmentsInfoMock = '/apartments-info-mock',
 }
