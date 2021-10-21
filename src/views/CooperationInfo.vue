@@ -40,7 +40,7 @@
         <form @submit.prevent="editCoopInfo">
           <p class="p-m-0">
             <label for="coopName">Назва : </label>
-            <InputText id="coopName" placeholder="Назва" v-model="cooperationData.name" maxlength="50" />
+            <InputText id="coopName" placeholder="Назва" v-model.trim="cooperationData.name" />
           </p>
 
           <p class="p-m-0">
@@ -66,7 +66,7 @@
           </p>
           <p class="p-m-0">
             <label for="coopPhone">Номер телефону : </label>
-            <InputText id="coopPhone" placeholder="Назва" v-model="cooperationData.phone" maxlength="13" />
+            <InputText id="coopPhone" placeholder="+38 011 222 33 00" v-model="cooperationData.phone" maxlength="13" />
           </p>
           <div>
             Адреса
@@ -147,7 +147,7 @@ import {
   CooperationContactsInterface,
   CooperationAddressInterface,
 } from '@/store/cooperation/types';
-import useVuelidate from '@vuelidate/core';
+// import useVuelidate from '@vuelidate/core';
 // import {
 //   edrpouValidator,
 //   emailLastCharsValidator,
@@ -288,7 +288,6 @@ export default defineComponent({
   border-radius: 10px;
   background-color: #fafafa;
   justify-content: space-between;
-  // box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   box-shadow: rgba(0, 0, 0, 0.1) -1px 4px 5px 1px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
 

@@ -35,3 +35,27 @@ export const keyValidator = helpers.withMessage('Ключ з E-mail, 36 симв
 const validName = helpers.regex(/^[a-zA-Z0-9!#$%&'*+\-/=?^_`{|(),:;<>@[\]]*$/);
 export const nameValidator = helpers.withMessage('Латинські літери, цифри та спец.символи', validName);
 export const nameLenghtValidator = helpers.withMessage('Максимальна кількість символів - 50', maxLength(50));
+
+// const validCooperationName = helpers.regex(/^[а-яА-Я]+$/gi);
+// /^[аАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ]+$/;
+// export const сooperationNameValidator = helpers.withMessage(' літери ...', validCooperationName);
+// export const nameLenghtValidator = helpers.withMessage('Максимальна кількість символів - 50', maxLength(50));
+
+// const validIban = helpers.regex(/^UA\d{27}$/gi);
+
+// const validAddress = helpers.regex(/^[а-яА-Я]{1,50}$/);
+
+// const validHouseBlock = helpers.regex(/^[а-яА-Я0-9]{1,10}$/);
+
+// const validZipCpde = helpers.regex(/^[0-9]{5}$/);
+
+// const validPhoneNumber = helpers.regex(/^\+?3?8?(0[0-9]\d{8})$/);
+
+// =Cooperation name: length 1 to 50 Symbols are uppercase and lowercase letters (A-Z, a-z)
+// =IBAN: Length 29 symbols Pattern: ^UA\d{27}$
+// =Email: 5 to 320 chars. Pattern: ^([\w!#$%&'*+\/=?{|}~^-]|.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+.)+[a-zA-Z]{2,6}$
+// =Address: region, city, district, street - Symbols are uppercase and lowercase letters (A-Z, a-z) 1 to 50 chars;
+// =house block - digits from 0 to 9, symbols uppercase and lowercase letters (A-Z, a-z) length 1 to 10 chars
+// =zip code: 5 digits symbols, from 0 to 9
+// =Phone number: Length – 13 symbols. Symbols are ‘+’ sign and digits from 0 to 9, a special character ‘+’
+//appears only as the first character and only once.
