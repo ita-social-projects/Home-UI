@@ -6,6 +6,7 @@ export enum AuthMutationEnum {
 }
 
 export enum AuthActionEnum {
+  TEST = 'TEST',
   SIGN_IN = 'SIGN_IN',
   SIGN_OUT = 'SIGN_OUT',
   GET_DATA = 'GET_DATA',
@@ -13,6 +14,7 @@ export enum AuthActionEnum {
 
 export interface UserInterface {
   first_name: string;
+  middle_name: string;
   last_name: string;
   email: string;
   id: number;
@@ -36,6 +38,7 @@ export type Mutations<S = AuthorizationStateInterface> = {
 
 export interface Actions {
   [AuthActionEnum.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload<UserLoginInterface>): void;
+  [AuthActionEnum.TEST]({ commit }: AugmentedActionContext, payload: requestPayload<UserLoginInterface>): void;
   [AuthActionEnum.SIGN_OUT]({ commit }: AugmentedActionContext, payload: null): void;
   [AuthActionEnum.GET_DATA]({ commit }: AugmentedActionContext, payload: string): void;
 }

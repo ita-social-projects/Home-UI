@@ -10,4 +10,7 @@ export const getters: GetterTree<UserStateInterface, RootStateInterface> & Gette
   getSuccessMessage: (state) => {
     return state.success;
   },
+  getUserInfo: (state) => {
+    return state.data;
+  },
 };

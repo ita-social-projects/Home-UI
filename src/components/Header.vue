@@ -17,7 +17,17 @@
           @click="redirectToLogin"
           class="p-button-info"
         />
-        <Button v-else label="Вийти" @click="userLogout" class="p-button-info" />
+        <!-- <Button v-else label="Вийти" @click="userLogout" class="p-button-info" /> -->
+        <Button
+          v-else
+          type="button"
+          @click="toggle"
+          aria-haspopup="true"
+          aria-controls="overlay_tmenu"
+          class="p-button-info"
+          >sdasda</Button
+        >
+        <Menu id="overlay_tmenu" ref="menu" :model="items" :popup="true" />
       </div>
     </div>
   </header>
@@ -27,19 +37,47 @@
 import { defineComponent } from 'vue';
 import { Routes } from '@/router/types';
 import Button from 'primevue/button';
+import Menu from 'primevue/menu';
+// import menu from 'primevue/menu'; //D:\front\1\Home-UI\node_modules\primevue\menu\menu.js
 
 export default defineComponent({
   name: 'baseHeader',
   data() {
     return {
       headerInfo: 'Додаток для керування ОСББ.',
+      items: [
+        {
+          label: 'Редагувати',
+          icon: 'pi pi-fw pi-pencil',
+          command: () => {
+            this.$router.push(Routes.ManageUser);
+          },
+        },
+
+        {
+          separator: true,
+        },
+        {
+          label: 'Вийти',
+          icon: 'pi pi-fw pi-power-off',
+          command: () => {
+            this.$store.dispatch('authorizationStore/SIGN_OUT', null);
+            this.$router.push(Routes.StartPage);
+          },
+        },
+      ],
     };
   },
   components: {
     Button,
+    Menu,
   },
   computed: {
     isLoggedIn(): boolean {
+      // console.log(this.$store.getters['authorizationStore/loggedIn'], 'is logged');
+      // console.log(this.$store.getters['authorizationStore/userData'], '!!!!!');
+      // this.$store.getters[]
+
       return this.$store.getters['authorizationStore/loggedIn'];
     },
   },
@@ -53,6 +91,14 @@ export default defineComponent({
     userLogout() {
       this.$store.dispatch('authorizationStore/SIGN_OUT', null);
       this.$router.push(Routes.StartPage);
+    },
+    toggle(event: any) {
+      console.log('works');
+      (this.$refs.menu as Menu).toggle(event);
+
+      // (this.$refs['menu'] as Menu).toggle(event);
+      // console.log('works');
+      // (this.$refs['menu'] as typeof Menu).toggle(event);
     },
   },
 });

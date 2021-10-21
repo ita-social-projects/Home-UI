@@ -170,6 +170,7 @@ export default defineComponent({
       const userData: UserStateInterface['data'] = {
         registrationToken: state.formData.registrationKey,
         firstName: state.formData.firstName,
+        middleName: state.formData.middleName,
         lastName: state.formData.lastName,
         email: state.formData.email,
         password: state.formData.password.confirm,

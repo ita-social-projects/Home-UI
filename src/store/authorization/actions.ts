@@ -40,6 +40,25 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
       commit(AuthMutationEnum.SET_USER, r.data);
     });
   },
+  [AuthActionEnum.TEST]: ({ commit }, payload) => {
+    const a = {
+      first_name: 'XXX',
+      middle_name: 'XXX',
+      last_name: 'XXX',
+      email: 'admin@example.com',
+      contacts: [
+        {
+          type: 'email',
+          main: false,
+          id: 4,
+          email: 'admin@example.com',
+        },
+      ],
+      id: 3,
+    };
+
+    commit(AuthMutationEnum.SET_USER, a);
+  },
   [AuthActionEnum.SIGN_OUT]: ({ commit, dispatch }, payload) => {
     dispatch('localStorageStore/REMOVE', 'user', { root: true });
     commit(AuthMutationEnum.SET_USER, payload);
