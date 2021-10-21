@@ -18,8 +18,6 @@ describe('RegisterCooperation.vue', () => {
     const wrapper = mount(RegisterCooperation);
     const input = wrapper.find('#email');
     await input.setValue('email@email.com');
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     expect(input.element._value).toBe('email@email.com');
   });
 
@@ -27,13 +25,8 @@ describe('RegisterCooperation.vue', () => {
     const wrapper = mount(RegisterCooperation);
     const input = wrapper.find('#edrpou');
     await input.setValue('12345678');
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     expect(input.element._value).toBe('12345678');
   });
-
-  // validation passes
-  /// email
 
   it('should pass the validation - email field', async () => {
     const wrapper = mount(RegisterCooperation);
@@ -47,8 +40,6 @@ describe('RegisterCooperation.vue', () => {
     expect(wrapper.find('small#email-help').exists()).toBe(false);
   });
 
-  /// edrpou
-
   it('should pass the validation - edrpou field', async () => {
     const wrapper = mount(RegisterCooperation);
     const input = wrapper.find('#edrpou');
@@ -61,9 +52,6 @@ describe('RegisterCooperation.vue', () => {
     const wrapper = mount(RegisterCooperation);
     expect(wrapper.find('small#edrpou-help').exists()).toBe(false);
   });
-
-  // validation fails with messages
-  /// email
 
   it('should fail the validation - email field [is required]', async () => {
     const wrapper = mount(RegisterCooperation);
@@ -129,8 +117,6 @@ describe('RegisterCooperation.vue', () => {
       'Електронна пошта містить латинські букви, цифри, та спеціальні символи'
     );
   });
-
-  /// edrpou
 
   it('should fail the validation - edrpou field [is required]', async () => {
     const wrapper = mount(RegisterCooperation);

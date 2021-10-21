@@ -10,9 +10,10 @@ import {
   Actions,
 } from '@/store/cooperation/types';
 import { HTTP } from '@/core/api/http-common';
-import { CooperationUpdateModel } from '@/store/cooperation/models/update-cooperation.model';
+import { CooperationDTOModel } from '@/store/cooperation/models/update-cooperation.model';
 
 import { AxiosError, AxiosResponse } from 'axios';
+import { CooperationModel } from './models/request-cooperation.model';
 
 export const actions: ActionTree<CooperationStateInterface, RootStateInterface> & Actions = {
   [CooperationActionEnum.CREATE_COOPERATION]: async ({ commit }, payload) => {
@@ -39,11 +40,18 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
           sort: 'id,asc',
         },
       });
+      console.log(data);
+      // const cooperationData: Array<CooperationModel> = data.map((el: CooperationDTOModel) => {
+      //   const map = new CooperationModel(el);
+      //   console.log(el, map);
+      //   return map;
+      // });
+      // console.log(data, cooperationData);
       commit(CooperationMutationEnum.SET_USER_COOPERATIONS, data);
       commit(CooperationMutationEnum.SET_SELECTED_COOPERATION, 0);
     } catch (err) {
-      const { responce } = err;
-      console.log('error SET_USER_COOPERATIONS', responce);
+      const { response } = err;
+      console.log('error SET_USER_COOPERATIONS', err);
     }
   },
 
@@ -51,22 +59,13 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
     commit(CooperationMutationEnum.SET_SELECTED_COOPERATION, payload);
   },
 
-  [CooperationActionEnum.SET_COOPERATION_UPDATE]: async ({ commit }, payload: CooperationInterface) => {
+  [CooperationActionEnum.SET_COOPERATION_UPDATE]: async ({ commit }, payload: CooperationModel) => {
     try {
-      const payloadData = new CooperationUpdateModel(payload);
-      const response = await HTTP.put(
-        `/cooperations/${payloadData.id}`,
-        // {
-        //   name: payload.name,
-        //   usreo: payload.usreo,
-        //   iban: payload.iban,
-        //   address: payload.address,
-        //   contacts: payload.contacts,
-        // }
-        payloadData
-      );
+      const payloadData = new CooperationDTOModel(payload);
+      console.log('try SET_COOPERATION_UPDATE', payload, payloadData);
+      const response = await HTTP.put(`/cooperations/${payloadData.id}`, payloadData);
 
-      console.log(response);
+      // console.log(response);
     } catch (err: any) {
       console.log('error SET_COOPERATION_UPDATE', err.response);
     }

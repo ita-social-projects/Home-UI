@@ -1,32 +1,29 @@
-import {
-  CooperationInterface,
-  CooperationHousesInterface,
-  CooperationContactsInterface,
-  CooperationDTOInterface,
-} from '@/store/cooperation/types';
-import { AddressRequestModel } from '@/share/request-address.model';
-import { ContactsUpdateModel } from '@/share/update-contacts.modal';
+import { CooperationContactsInterface } from '@/store/cooperation/types';
+import { AddressDTOModel } from '@/shared/models/addressDTO.model';
+import { CooperationModel } from './request-cooperation.model';
+import { PolledHouseDTOModel } from '@/store/polls/models/polled-houseDTO.model';
+import { PolledHouseModel } from '@/store/polls/models/polled-house.model';
 
-export class CooperationUpdateModel {
+export class CooperationDTOModel {
   public id: number;
   public name: string;
   public usreo: string;
   public iban: string;
-  public address: AddressRequestModel;
-  public houses: Array<CooperationHousesInterface>;
-  public contacts: Array<ContactsUpdateModel>;
+  public address: AddressDTOModel;
+  public houses: Array<PolledHouseDTOModel>;
+  public contacts: Array<CooperationContactsInterface>;
 
   // --> public zip_code: string;
 
-  constructor(data: CooperationInterface) {
+  constructor(data: CooperationModel) {
     this.id = data.id;
     this.name = data.name;
     this.usreo = data.edrpou;
     this.iban = data.iban;
-    this.address = data.address;
-    this.houses = data.houses;
+    this.address = new AddressDTOModel(data.address);
+    this.houses = data.houses.map((el: PolledHouseModel) => new PolledHouseDTOModel(el));
     // this.contacts = data.contacts;
-    this.contacts = data.contacts.map((el) => new ContactsUpdateModel(el));
+    this.contacts = data.contacts;
 
     // --> this.zip_code = address.zipCode;
   }

@@ -43,4 +43,10 @@ export default defineComponent({
   grid-template-columns: 1fr 4fr;
   height: 100%;
 }
+
+.content {
+  padding: 2em;
+  //height: 100%;
+  //overflow: hidden scroll;
+}
 </style>

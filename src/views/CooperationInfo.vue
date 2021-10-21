@@ -53,11 +53,12 @@
               id="coopEmail"
               placeholder="Електрона адреса"
               v-model.trim="cooperationData.email"
-              @blur="v$.email.$touch()"
-              :class="{ 'p-invalid': v$.email.$error }"
               maxlength="320"
             />
-            <small v-if="v$.email.$erroe" class="p-error"></small>
+
+            <!-- @blur="v$.email.$touch()"
+              :class="{ 'p-invalid': v$.email.$error }" -->
+            <!-- <small v-if="v$.email.$error" class="p-error"></small> -->
           </p>
           <p class="p-m-0">
             <label for="edrpou">Код реєстрації : </label>
@@ -142,26 +143,25 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import {
-  CooperationInterface,
-  CooperationDTOInterface,
   CooperationStateInterface,
   CooperationContactsInterface,
   CooperationAddressInterface,
 } from '@/store/cooperation/types';
 import useVuelidate from '@vuelidate/core';
-import {
-  edrpouValidator,
-  emailLastCharsValidator,
-  emailMaxLength,
-  emailMinLength,
-  emailValidator,
-  requiredValidator,
-  nameValidator,
-  nameLenghtValidator,
-} from '@/utils/validators';
+// import {
+//   edrpouValidator,
+//   emailLastCharsValidator,
+//   emailMaxLength,
+//   emailMinLength,
+//   emailValidator,
+//   requiredValidator,
+//   nameValidator,
+//   nameLenghtValidator,
+// } from '@/utils/validators';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
+import { CooperationModel } from '@/store/cooperation/models/request-cooperation.model';
 
 export default defineComponent({
   name: 'CooperationInfo',
@@ -184,27 +184,27 @@ export default defineComponent({
         // contacts: [] as Array<CooperationContactsInterface>,
       },
       isLoaded: false,
-      v$: useVuelidate(),
+      // v$: useVuelidate(),
     };
   },
-  validations() {
-    return {
-      isLoaded: false,
-      id: 0,
-      name: { requiredValidator, nameValidator, nameLenghtValidator },
-      edrpou: { requiredValidator, edrpouValidator },
-      iban: { requiredValidator },
-      phone: {},
-      email: {
-        requiredValidator,
-        emailMinLength,
-        emailLastCharsValidator,
-        emailValidator,
-        emailMaxLength,
-      },
-      address: {} as CooperationAddressInterface,
-    };
-  },
+  // validations() {
+  //   return {
+  //     isLoaded: false,
+  //     id: 0,
+  //     name: { requiredValidator, nameValidator, nameLenghtValidator },
+  //     edrpou: { requiredValidator, edrpouValidator },
+  //     iban: { requiredValidator },
+  //     phone: {},
+  //     email: {
+  //       requiredValidator,
+  //       emailMinLength,
+  //       emailLastCharsValidator,
+  //       emailValidator,
+  //       emailMaxLength,
+  //     },
+  //     address: {} as CooperationAddressInterface,
+  //   };
+  // },
   async mounted() {
     await Promise.all([this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS')]).then(() => {
       this.initData();
@@ -214,7 +214,7 @@ export default defineComponent({
 
   methods: {
     initData() {
-      let cooperationInfo: CooperationInterface | null = this.$store.state.cooperationStore.selectedCooperation;
+      let cooperationInfo: CooperationModel | null = this.$store.state.cooperationStore.selectedCooperation;
       this.cooperationData.id = cooperationInfo?.id ?? 0;
       this.cooperationData.name = cooperationInfo?.name ?? '';
       this.cooperationData.edrpou = cooperationInfo?.edrpou ?? '';
@@ -225,12 +225,12 @@ export default defineComponent({
       // this.cooperationData.contacts.forEach((el) => this.mapContact(el));
     },
     mapContact(el: CooperationContactsInterface) {
-      if (el.main !== true) {
+      if (el.main === true) {
         for (let key in el) {
-          if (key == 'email') {
+          if (key === 'email') {
             this.cooperationData.email = el[key];
           }
-          if (key == 'phone') {
+          if (key === 'phone') {
             this.cooperationData.phone = el[key];
           }
         }
@@ -250,20 +250,26 @@ export default defineComponent({
         edrpou: this.cooperationData.edrpou,
         iban: this.cooperationData.iban,
         address: this.cooperationData.address,
+        // houses:
         contacts: [
           { type: 'email', main: true, email: this.cooperationData.email },
           { type: 'phone', main: true, phone: this.cooperationData.phone },
         ],
       };
+      console.log(payload);
       this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
       this.closeModal();
-      console.log(payload);
     },
   },
   computed: {
     fillAddress(): string {
-      return `${this.cooperationData.address.city}, ${this.cooperationData.address.district},
-      ${this.cooperationData.address.street}`;
+      return `${this.cooperationData.address.street}, 
+      ${this.cooperationData.address.houseNumber},
+      ${this.cooperationData.address.houseBlock}, 
+      ${this.cooperationData.address.district},
+      ${this.cooperationData.address.city},
+      ${this.cooperationData.address.region},       
+      ${this.cooperationData.address.zipCode} `;
     },
     cooperationInfo(): CooperationStateInterface {
       return this.$store.state.cooperationStore;
@@ -280,10 +286,10 @@ export default defineComponent({
   display: flex;
   padding: 10px;
   border-radius: 10px;
-  height: 40%;
-  margin: 20px 40px;
   background-color: #fafafa;
   justify-content: space-between;
+  // box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  box-shadow: rgba(0, 0, 0, 0.1) -1px 4px 5px 1px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
 
 .coop_info {

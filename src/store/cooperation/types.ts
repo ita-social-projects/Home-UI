@@ -1,7 +1,7 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
-import { CooperationRequestModel } from '@/store/cooperation/models/request-cooperation.model';
-import { CooperationUpdateModel } from '@/store/cooperation/models/update-cooperation.model';
+import { CooperationModel } from '@/store/cooperation/models/request-cooperation.model';
+import { CooperationDTOModel } from '@/store/cooperation/models/update-cooperation.model';
 import { AddressUpdateModel } from '@/share/update-address.model';
 
 export enum CooperationMutationEnum {
@@ -21,15 +21,15 @@ export enum CooperationActionEnum {
 }
 
 export interface CooperationStateInterface {
-  userCooperations: Array<CooperationInterface>;
-  selectedCooperation: null | CooperationInterface;
+  userCooperations: Array<CooperationModel>;
+  selectedCooperation: null | CooperationModel;
   displayModal: boolean;
 }
 
 export type Mutations<S = CooperationStateInterface> = {
   [CooperationMutationEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
 
-  [CooperationMutationEnum.SET_USER_COOPERATIONS](state: S, payload: Array<CooperationRequestModel>): void;
+  [CooperationMutationEnum.SET_USER_COOPERATIONS](state: S, payload: Array<CooperationModel>): void;
   // [CooperationMutationEnum.SET_USER_COOPERATIONS](state: S, payload: Array<CooperationInterface>): void;
   [CooperationMutationEnum.SET_SELECTED_COOPERATION](state: S, payload: number): void;
 };
@@ -42,14 +42,12 @@ export interface Actions {
   [CooperationActionEnum.SET_MODAL_DISPLAY]({ commit }: AugmentedActionContext, payload: boolean): void;
   [CooperationActionEnum.SET_USER_COOPERATIONS]({ commit }: AugmentedActionContext): void;
   [CooperationActionEnum.SET_SELECTED_COOPERATION]({ commit }: AugmentedActionContext, payload: number): void;
-  [CooperationActionEnum.SET_COOPERATION_UPDATE](
-    { commit }: AugmentedActionContext,
-    payload: CooperationUpdateModel
-  ): void;
+  [CooperationActionEnum.SET_COOPERATION_UPDATE]({ commit }: AugmentedActionContext, payload: CooperationModel): void;
 }
 
 export type Getters<S = CooperationStateInterface> = {
   getCooperationNameAndEdrpou(state: S): string;
+  getSelectedCooperationId(state: S): number;
 };
 
 export type AugmentedActionContext = {
@@ -65,7 +63,6 @@ export interface CooperationInterface {
   id: number;
   name: string;
   edrpou: string;
-  // usreo: string;
   iban: string;
   houses: CooperationHousesInterface[];
   contacts: CooperationContactsInterface[];
