@@ -1,16 +1,12 @@
-import { HTTP } from '@/core/api/http-common';
+import { AxiosRequestConfig } from 'axios';
 
-HTTP.interceptors.request.use((req) => {
+export const authToken = (req: AxiosRequestConfig) => {
   const userData: any = localStorage.getItem('user');
-  console.log(req);
-  if (req.url !== '/users') {
-    if (userData !== null) {
-      const user = JSON.parse(userData);
-      req.headers.Authorization = `Basic ${user.token}`;
-      console.log(req);
-    } else {
-      delete req.headers.Authorization;
-    }
+  if (userData !== null) {
+    const user = JSON.parse(userData);
+    req.headers.Authorization = `Basic ${user.token}`;
+  } else {
+    delete req.headers.Authorization;
   }
   return req;
-});
+};

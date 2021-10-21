@@ -58,7 +58,7 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   if (to.path === Routes.MainPage && localStorage.getItem('user') == null) {
     next({ path: Routes.StartPage });
   } else {
