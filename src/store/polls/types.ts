@@ -1,5 +1,6 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
+import { PollModel } from '@/store/polls/models/poll.model';
 
 export enum PollsMutationEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',
@@ -15,13 +16,13 @@ export enum PollsActionEnum {
 }
 
 export interface PollsStateInterface {
-  cooperationPolls: Array<PollInterface>;
-  selectedPoll: null | PollInterface;
+  cooperationPolls: Array<PollModel>;
+  selectedPoll: null | PollModel;
   displayModal: boolean;
 }
 
 export type Mutations<S = PollsStateInterface> = {
-  [PollsMutationEnum.SET_COOPERATION_POLLS](state: S, payload: Array<PollInterface>): void;
+  [PollsMutationEnum.SET_COOPERATION_POLLS](state: S, payload: Array<PollModel>): void;
   [PollsMutationEnum.SET_SELECTED_POLL](state: S, payload: number): void;
   [PollsMutationEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
 };
@@ -36,43 +37,6 @@ export interface Actions {
 export type Getters<S = PollsStateInterface> = {
   getPolls(state: S): string;
 };
-
-export interface PollInterface {
-  id: number;
-  header: string;
-  creationDate: string;
-  completionDate: string;
-  status: PollStatusType;
-  type: string;
-  polledHouses: Array<PolledHouseInterface>;
-}
-
-export interface PolledHouseInterface {
-  flatQuantity: number;
-  houseArea: number;
-  adjoiningArea: number;
-  address: PolledHouseAddressInterface;
-}
-
-export interface PolledHouseAddressInterface {
-  region: string;
-  city: string;
-  district: string;
-  street: string;
-  houseBlock: string;
-  houseNumber: string;
-  zipCode: string;
-}
-
-export interface GetPolledHouseAddressInterface {
-  region: string;
-  city: string;
-  district: string;
-  street: string;
-  house_block: string;
-  house_number: string;
-  zip_code: string;
-}
 
 export type PollStatusType = 'draft' | 'active' | 'completed' | 'suspended';
 

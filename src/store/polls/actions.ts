@@ -3,15 +3,22 @@ import { ActionTree } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { PollsStateInterface, PollsActionEnum, PollsMutationEnum, Actions } from '@/store/polls/types';
 import { HTTP } from '@/core/api/http-common';
+import { PollModel } from '@/store/polls/models/poll.model';
+import { PollDTOModel } from '@/store/polls/models/pollDTO.model';
+
 // import { AxiosError, AxiosResponse } from 'axios';
 
 export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Actions = {
-  [PollsActionEnum.SET_COOPERATION_POLLS]: async ({ commit }) => {
+  [PollsActionEnum.SET_COOPERATION_POLLS]: async ({ commit, rootGetters }) => {
     try {
-      const response = await HTTP.get('/cooperations/52/polls');
-      console.log(response);
+      const cooperationId = rootGetters['cooperationStore/getSelectedCooperationId'];
+      const url = `/cooperations/${cooperationId}/polls`;
+
+      const { data } = await HTTP.get(url, { params: { page_size: 10, sort: 'id,asc' } });
+      const cooperationPolls: Array<PollModel> = data.map((el: PollDTOModel) => new PollModel(el));
+      commit(PollsMutationEnum.SET_COOPERATION_POLLS, cooperationPolls);
     } catch (e) {
-      console.log(e);
+      console.log(e.response);
     }
   },
   [PollsActionEnum.SET_SELECTED_POLL]: ({ commit }, payload) => {

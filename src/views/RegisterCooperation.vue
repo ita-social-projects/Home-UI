@@ -53,7 +53,6 @@ import {
 
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import { AxiosResponse } from 'axios';
 
 export default defineComponent({
   name: 'RegisterCooperation',
@@ -128,17 +127,14 @@ export default defineComponent({
           email: this.email,
           edrpou: this.edrpou,
         },
-        successCallback: (r: AxiosResponse) => {
-          console.log('suc', r);
-          // if (r.status === 202) {
-          // }
+        successCallback: () => {
           this.showSuccessToast();
         },
         errorCallback: () => {
           this.showErrorToast();
         },
       };
-      this.$store.dispatch('cooperationStore/CREATE_POLL', payload);
+      await this.$store.dispatch('cooperationStore/CREATE_COOPERATION', payload);
     },
   },
   validations() {
@@ -176,7 +172,6 @@ export default defineComponent({
 
 .form-wrap {
   @include flex-custom(center, center, column nowrap);
-  background-color: rgba(242, 251, 255, 0.4);
   border-radius: 1em;
   padding: 2em;
   margin: 6em;

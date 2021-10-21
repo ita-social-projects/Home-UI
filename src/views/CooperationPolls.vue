@@ -9,17 +9,12 @@
     </div>
     <h2>Список опитувань ОСББ</h2>
     <div class="poll-list">
-      <BaseCooperationPoll></BaseCooperationPoll>
-      <BaseCooperationPoll></BaseCooperationPoll>
-      <BaseCooperationPoll></BaseCooperationPoll>
-      <BaseCooperationPoll></BaseCooperationPoll>
-      <BaseCooperationPoll></BaseCooperationPoll>
-      <BaseCooperationPoll></BaseCooperationPoll>
-      <BaseCooperationPoll></BaseCooperationPoll>
-      <BaseCooperationPoll></BaseCooperationPoll>
-      <BaseCooperationPoll></BaseCooperationPoll>
-      <BaseCooperationPoll></BaseCooperationPoll>
-      <BaseCooperationPoll></BaseCooperationPoll>
+      <BaseCooperationPoll
+        v-for="poll in cooperationPolls"
+        :key="poll.id"
+        :poll="poll"
+        @click="setSelectedPoll(poll.id)"
+      />
     </div>
   </div>
 </template>
@@ -28,6 +23,7 @@
 import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import BaseCooperationPoll from '@/components/base/BaseCooperationPoll.vue';
+import { PollModel } from '@/store/polls/models/poll.model';
 
 export default defineComponent({
   name: 'CooperationPolls',
@@ -35,8 +31,18 @@ export default defineComponent({
     Button,
     BaseCooperationPoll,
   },
-  created() {
-    this.$store.dispatch('polls');
+  mounted() {
+    this.$store.dispatch('pollsStore/SET_COOPERATION_POLLS');
+  },
+  methods: {
+    setSelectedPoll(id: number) {
+      this.$store.dispatch('pollsStore/SET_SELECTED_POLL', id);
+    },
+  },
+  computed: {
+    cooperationPolls(): Array<PollModel> {
+      return this.$store.state.pollsStore.cooperationPolls;
+    },
   },
 });
 </script>
