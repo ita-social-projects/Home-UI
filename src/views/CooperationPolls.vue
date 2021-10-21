@@ -40,9 +40,9 @@ export default defineComponent({
     },
   },
   computed: {
-    cooperationPolls(): Array<PollModel> {
-      return this.$store.state.pollsStore.cooperationPolls;
-    },
+    // cooperationPolls(): Array<PollModel> {
+    //   return this.$store.state.pollsStore.cooperationPolls;
+    // },
   },
 });
 </script>
