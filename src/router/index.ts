@@ -8,10 +8,21 @@ import MainPage from '@/views/MainPage.vue';
 import CooperationInfo from '@/views/CooperationInfo.vue';
 import PageNotFound from '@/components/PageNotFound.vue';
 
+import ApartmentsMock from '@/views/ApartmentsMock.vue';
+import ApartmentsInfoMock from '@/views/ApartmentsInfoMock.vue';
+
 const routes: RouteRecordRaw[] = [
   {
     path: Routes.StartPage,
     component: StartPage,
+  },
+  {
+    path: Routes.ApartmentsMock,
+    component: ApartmentsMock,
+  },
+  {
+    path: Routes.ApartmentsInfoMock,
+    component: ApartmentsInfoMock,
   },
   {
     name: Routes.UserLogin,
