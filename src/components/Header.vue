@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Routes } from '@/router/types';
+import { RoutesEnum } from '@/router/types';
 import Button from 'primevue/button';
 
 export default defineComponent({
@@ -45,14 +45,14 @@ export default defineComponent({
   },
   methods: {
     redirectToMain() {
-      this.isLoggedIn ? this.$router.push(Routes.MainPage) : this.$router.push(Routes.StartPage);
+      this.isLoggedIn ? this.$router.push(RoutesEnum.MainPage) : this.$router.push(RoutesEnum.StartPage);
     },
     redirectToLogin() {
-      this.$router.push(Routes.UserLogin);
+      this.$router.push(RoutesEnum.UserLogin);
     },
     userLogout() {
       this.$store.dispatch('authorizationStore/SIGN_OUT', null);
-      this.$router.push(Routes.StartPage);
+      this.$router.push(RoutesEnum.StartPage);
     },
   },
 });
@@ -63,7 +63,7 @@ export default defineComponent({
   height: 80px;
   width: 100%;
   background-color: $main-background-color;
-  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px, rgba(0, 0, 0, 0.06) 0 1px 2px;
   display: flex;
   padding: 20px;
   color: #495057;
@@ -80,7 +80,7 @@ export default defineComponent({
 
   .logo {
     height: 100%;
-    width: 30%;
+    width: 10em;
     background-image: url('../assets/logo.svg');
     background-repeat: no-repeat;
     background-position: 0 center;

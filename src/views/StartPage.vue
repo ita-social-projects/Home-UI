@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Routes } from '@/router/types';
+import { RoutesEnum } from '@/router/types';
 import Button from 'primevue/button';
 
 export default defineComponent({
@@ -71,7 +71,7 @@ export default defineComponent({
   },
   methods: {
     registrationOSBB() {
-      this.$router.push(Routes.RegisterCooperation);
+      this.$router.push(RoutesEnum.RegisterCooperation);
     },
   },
 });

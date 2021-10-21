@@ -8,11 +8,22 @@
     </section>
 
     <nav class="sidebar-navigation">
-      <BaseSidebarNavButton btn-text="Повідомлення" icon="pi-comments" :badge-counter="notifications" />
-      <BaseSidebarNavButton btn-text="Управління ОСББ" icon="pi-inbox" @click="openCooperation" />
-      <BaseSidebarNavButton btn-text="Вибір ОСББ" icon="pi-bookmark" />
-      <BaseSidebarNavButton btn-text="Запрошення" icon="pi-globe" />
-      <BaseSidebarNavButton btn-text="Опитування" icon="pi-users" />
+      <BaseSidebarNavButton
+        link="notifications"
+        btn-text="Повідомлення"
+        icon="pi-comments"
+        :badge-counter="notifications"
+      />
+      <BaseSidebarNavButton :link="cooperationInfoPath" btn-text="Управління ОСББ" icon="pi-inbox" />
+      <BaseSidebarNavButton :link="cooperationInfoPath + 'select'" btn-text="Вибір ОСББ" icon="pi-bookmark" />
+      <BaseSidebarNavButton link="invitation" btn-text="Запрошення" icon="pi-globe" />
+      <BaseSidebarNavButton
+        :link="pollsPath"
+        btn-text="Опитування"
+        icon="pi-users"
+        :badge-counter="polls"
+        badge-type="secondary"
+      />
     </nav>
 
     <div class="create-btn-wrap">
@@ -25,7 +36,8 @@
 import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import BaseSidebarNavButton from '@/components/base/BaseSidebarNavButton.vue';
-import { Routes } from '@/router/types';
+import { RoutesEnum } from '@/router/types';
+import { UserInterface } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'Sidebar',
@@ -33,19 +45,21 @@ export default defineComponent({
     return {
       userName: '',
       notifications: 2,
+      polls: 1,
     };
   },
   components: {
     Button,
     BaseSidebarNavButton,
   },
-  methods: {
-    openCooperation() {
-      this.$router.push(Routes.Cooperation);
-    },
-  },
   computed: {
-    userData() {
+    cooperationInfoPath(): string {
+      return RoutesEnum.Cooperation;
+    },
+    pollsPath(): string {
+      return RoutesEnum.Polls;
+    },
+    userData(): UserInterface | null {
       return this.$store.getters['authorizationStore/userData'];
     },
   },
@@ -57,12 +71,13 @@ export default defineComponent({
   display: grid;
   grid-template-rows: 1fr 6fr 1fr;
   background: #fafafa;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 3px 3px, rgba(0, 0, 0, 0.06) 1px 2px 2px;
   padding: 1em 0;
 }
 
 .info {
-  @include flex-custom(space-between, center);
-  padding: 0 1.5em;
+  @include flex-custom(flex-end, center);
+  padding: 0 2.8em;
 
   .name-hint {
     @include flex-custom(flex-end);
