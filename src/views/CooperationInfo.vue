@@ -1,34 +1,30 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="isLoaded">
     <div class="coop_info">
       <div>
         <span>Назва ОСББ : </span>
-        <span>{{ name }}</span>
+        <span>{{ cooperationData.name }}</span>
       </div>
       <div>
         <span>Адреса : </span>
-        <span
-          >{{ address?.city }}, {{ address?.district }}, {{ address?.street }}, {{ address?.house_block }},
-          {{ address?.house_number }}
-        </span>
+        <span>{{ this.fillAddress }}</span>
       </div>
       <div>
         <span>IBAN номер : </span>
-        <span>{{ iban }}</span>
+        <span>{{ cooperationData.iban }}</span>
       </div>
-      <div>
+      <div v-if="cooperationData.email">
         <span>Електрона адреса : </span>
-        <span>{{ email }}</span>
+        <span>{{ cooperationData.email }}</span>
       </div>
       <div>
         <span>Код реєстрации : </span>
-        <span>{{ edrpou }}</span>
+        <span>{{ cooperationData.edrpou }}</span>
       </div>
-      <div>
+      <div v-if="cooperationData.phone">
         <span>Номер телефону : </span>
-        <span>{{ phone }}</span>
+        <span>{{ cooperationData.phone }}</span>
       </div>
-      {{ fillAddress }}
     </div>
 
     <div class="edit_btn">
@@ -44,54 +40,92 @@
         <form @submit.prevent="editCoopInfo">
           <p class="p-m-0">
             <label for="coopName">Назва : </label>
-            <InputText id="coopName" placeholder="Назва" v-model="name" maxlength="50" />
+            <InputText id="coopName" placeholder="Назва" v-model="cooperationData.name" maxlength="50" />
           </p>
 
           <p class="p-m-0">
             <label for="iban">Iban номер : </label>
-            <InputText id="coopIban" placeholder="iban номер" v-model="iban" maxlength="29" />
+            <InputText id="coopIban" placeholder="iban номер" v-model="cooperationData.iban" maxlength="29" />
           </p>
-          <!-- <p class="p-m-0">
+          <p class="p-m-0">
             <label for="coopEmail">Електронна адреса : </label>
-            <InputText id="coopEmail" placeholder="Електрона адреса" v-model="email" maxlength="320" />
-          </p> -->
+            <InputText
+              id="coopEmail"
+              placeholder="Електрона адреса"
+              v-model.trim="cooperationData.email"
+              @blur="v$.email.$touch()"
+              :class="{ 'p-invalid': v$.email.$error }"
+              maxlength="320"
+            />
+            <small v-if="v$.email.$erroe" class="p-error"></small>
+          </p>
           <p class="p-m-0">
             <label for="edrpou">Код реєстрації : </label>
-            <InputText id="edrpou" placeholder="ОСББ номер" v-model="edrpou" maxlength="8" />
+            <InputText id="edrpou" placeholder="ОСББ номер" v-model="cooperationData.edrpou" maxlength="8" />
           </p>
-          <!-- <p class="p-m-0">
+          <p class="p-m-0">
             <label for="coopPhone">Номер телефону : </label>
-            <InputText id="coopPhone" placeholder="Назва" v-model="phone" maxlength="13" />
-          </p> -->
+            <InputText id="coopPhone" placeholder="Назва" v-model="cooperationData.phone" maxlength="13" />
+          </p>
           <div>
             Адреса
             <p class="p-m-0">
-              <label for="coopAddress">region:</label>
-              <InputText id="coopAddress" placeholder="region" v-model="address.region" maxlength="50" />
+              <label for="coopAddress">регіон : </label>
+              <InputText
+                id="coopAddress"
+                placeholder="регіон"
+                v-model="cooperationData.address.region"
+                maxlength="50"
+              />
             </p>
             <p class="p-m-0">
-              <label for="coopAddress">city:</label>
-              <InputText id="coopAddress" placeholder="city" v-model="address.city" maxlength="50" />
+              <label for="coopAddress">місто : </label>
+              <InputText id="coopAddress" placeholder="місто" v-model="cooperationData.address.city" maxlength="50" />
             </p>
             <p class="p-m-0">
-              <label for="coopAddress">district:</label>
-              <InputText id="coopAddress" placeholder="district" v-model="address.district" maxlength="250" />
+              <label for="coopAddress">район : </label>
+              <InputText
+                id="coopAddress"
+                placeholder="район"
+                v-model="cooperationData.address.district"
+                maxlength="250"
+              />
             </p>
             <p class="p-m-0">
-              <label for="coopAddress">street:</label>
-              <InputText id="coopAddress" placeholder="street" v-model="address.street" maxlength="250" />
+              <label for="coopAddress">вулиця : </label>
+              <InputText
+                id="coopAddress"
+                placeholder="вулиця"
+                v-model="cooperationData.address.street"
+                maxlength="250"
+              />
             </p>
             <p class="p-m-0">
-              <label for="coopAddress">house_block:</label>
-              <InputText id="coopAddress" placeholder="house_block" v-model="address.house_block" maxlength="250" />
+              <label for="coopAddress">номер будинку : </label>
+              <InputText
+                id="coopAddress"
+                placeholder="номер будинку"
+                v-model="cooperationData.address.houseNumber"
+                maxlength="250"
+              />
             </p>
             <p class="p-m-0">
-              <label for="coopAddress">house_number:</label>
-              <InputText id="coopAddress" placeholder="house_number" v-model="address.house_number" maxlength="250" />
+              <label for="coopAddress">блок : </label>
+              <InputText
+                id="coopAddress"
+                placeholder="блок"
+                v-model="cooperationData.address.houseBlock"
+                maxlength="250"
+              />
             </p>
             <p class="p-m-0">
-              <label for="coopAddress">zip_code:</label>
-              <InputText id="coopAddress" placeholder="zip_code" v-model="address.zip_code" maxlength="250" />
+              <label for="coopAddress">індекс : </label>
+              <InputText
+                id="coopAddress"
+                placeholder="індекс"
+                v-model="cooperationData.address.zipCode"
+                maxlength="250"
+              />
             </p>
           </div>
         </form>
@@ -109,10 +143,22 @@
 import { defineComponent } from 'vue';
 import {
   CooperationInterface,
+  CooperationDTOInterface,
   CooperationStateInterface,
   CooperationContactsInterface,
   CooperationAddressInterface,
 } from '@/store/cooperation/types';
+import useVuelidate from '@vuelidate/core';
+import {
+  edrpouValidator,
+  emailLastCharsValidator,
+  emailMaxLength,
+  emailMinLength,
+  emailValidator,
+  requiredValidator,
+  nameValidator,
+  nameLenghtValidator,
+} from '@/utils/validators';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -126,69 +172,98 @@ export default defineComponent({
   },
   data() {
     return {
-      id: 0,
-      name: '',
-      edrpou: '',
-      iban: '',
-      phone: '',
-      email: '',
-      address: {},
+      cooperationData: {
+        isLoaded: false,
+        id: 0,
+        name: '',
+        edrpou: '',
+        iban: '',
+        phone: '',
+        email: '',
+        address: {} as CooperationAddressInterface,
+        // contacts: [] as Array<CooperationContactsInterface>,
+      },
+      isLoaded: false,
+      v$: useVuelidate(),
     };
   },
-  mounted() {
-    this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS').then(() => {
+  validations() {
+    return {
+      isLoaded: false,
+      id: 0,
+      name: { requiredValidator, nameValidator, nameLenghtValidator },
+      edrpou: { requiredValidator, edrpouValidator },
+      iban: { requiredValidator },
+      phone: {},
+      email: {
+        requiredValidator,
+        emailMinLength,
+        emailLastCharsValidator,
+        emailValidator,
+        emailMaxLength,
+      },
+      address: {} as CooperationAddressInterface,
+    };
+  },
+  async mounted() {
+    await Promise.all([this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS')]).then(() => {
       this.initData();
+      this.isLoaded = true;
     });
   },
+
   methods: {
     initData() {
       let cooperationInfo: CooperationInterface | null = this.$store.state.cooperationStore.selectedCooperation;
-      this.id = cooperationInfo?.id ?? 0;
-      this.name = cooperationInfo?.name ?? '';
-      this.edrpou = cooperationInfo?.edrpou ?? '';
-      this.iban = cooperationInfo?.iban ?? '';
-      this.address = cooperationInfo?.address ?? {};
+      this.cooperationData.id = cooperationInfo?.id ?? 0;
+      this.cooperationData.name = cooperationInfo?.name ?? '';
+      this.cooperationData.edrpou = cooperationInfo?.edrpou ?? '';
+      this.cooperationData.iban = cooperationInfo?.iban ?? '';
+      this.cooperationData.address = cooperationInfo?.address ?? ({} as CooperationAddressInterface);
+      // this.cooperationData.contacts = cooperationInfo?.contacts ?? ([] as Array<CooperationContactsInterface>);
       cooperationInfo?.contacts.forEach((el) => this.mapContact(el));
-      if (this.$store.state.cooperationStore.isCooperationsLoaded) {
-        this.fillAddress;
-      }
+      // this.cooperationData.contacts.forEach((el) => this.mapContact(el));
     },
     mapContact(el: CooperationContactsInterface) {
-      for (let key in el) {
-        if (key == 'email') {
-          this.email = el[key];
-        }
-        if (key == 'phone') {
-          this.phone = el[key];
+      if (el.main !== true) {
+        for (let key in el) {
+          if (key == 'email') {
+            this.cooperationData.email = el[key];
+          }
+          if (key == 'phone') {
+            this.cooperationData.phone = el[key];
+          }
         }
       }
     },
     openModal() {
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', true);
-      console.log();
     },
     closeModal() {
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', false);
     },
     editCoopInfo() {
+      // : CooperationInterface
       const payload = {
-        id: this.id,
-        name: this.name,
-        edrpou: this.edrpou,
-        iban: this.iban,
-        address: {},
+        id: this.cooperationData.id,
+        name: this.cooperationData.name,
+        edrpou: this.cooperationData.edrpou,
+        iban: this.cooperationData.iban,
+        address: this.cooperationData.address,
+        contacts: [
+          { type: 'email', main: true, email: this.cooperationData.email },
+          { type: 'phone', main: true, phone: this.cooperationData.phone },
+        ],
       };
       this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
       this.closeModal();
+      console.log(payload);
     },
   },
   computed: {
-    fillAddress(): any {
-      console.log(this.address);
-      // return `${this.address.city}, ${ this.address.district },
-      // ${ this.address?.street }, ${ this.address.house_number },
-      // ${ this.address.house_block }`;
-      return `${JSON.stringify(this.address)}`;
+    fillAddress(): string {
+      return `${this.cooperationData.address.city}, ${this.cooperationData.address.district},
+      ${this.cooperationData.address.street}`;
     },
     cooperationInfo(): CooperationStateInterface {
       return this.$store.state.cooperationStore;
