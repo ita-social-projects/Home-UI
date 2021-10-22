@@ -40,22 +40,10 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
       commit(AuthMutationEnum.SET_USER, r.data);
     });
   },
-  [AuthActionEnum.TEST]: ({ commit }, payload) => {
-    const a = {
-      first_name: 'XXX',
-      middle_name: 'XXX',
-      last_name: 'XXX',
-      email: 'admin@example.com',
-      contacts: [
-        {
-          type: 'email',
-          main: false,
-          id: 4,
-          email: 'admin@example.com',
-        },
-      ],
-      id: 3,
-    };
+  [AuthActionEnum.UPDATE_USER]: ({ commit }, payload) => {
+    HTTP.get(`/users/${payload}`).then((r: AxiosResponse<UserInterface>) => {
+      commit(AuthMutationEnum.SET_USER, r.data);
+    });
 
     commit(AuthMutationEnum.SET_USER, a);
   },
