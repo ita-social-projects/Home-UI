@@ -1,7 +1,7 @@
 import { CooperationContactsInterface } from '@/store/cooperation/types';
 import { CooperationDTOModel } from '@/store/cooperation/models/cooperationDTO.model';
 import { AddressModel } from '@/shared/models/address.model';
-import { PolledHouseModel } from '@/store/polls/models/polled-house.model';
+import { HouseModel } from '@/shared/models/house.model';
 
 export class CooperationModel {
   public id: number;
@@ -9,7 +9,7 @@ export class CooperationModel {
   public edrpou: string;
   public iban: string;
   public address: AddressModel;
-  public houses: Array<PolledHouseModel>;
+  public houses: Array<HouseModel>;
   public contacts: Array<CooperationContactsInterface>;
 
   constructor(data: CooperationDTOModel) {
@@ -18,7 +18,7 @@ export class CooperationModel {
     this.edrpou = data.usreo;
     this.iban = data.iban;
     this.address = new AddressModel(data.address);
-    this.houses = data.houses.map((el) => new PolledHouseModel(el));
+    this.houses = data.houses.map((el) => new HouseModel(el));
     this.contacts = data.contacts;
   }
 }

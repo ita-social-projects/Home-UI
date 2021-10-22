@@ -2,11 +2,11 @@ import { ActionTree } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { UserStateInterface, UserActionEnum, UserMutationEnum, Actions, UserDataInterface } from '@/store/user/types';
 import { HTTP } from '@/core/api/http-common';
-import { UpdateUserModel } from '@/store/models/update-user.model';
+import { PostUserModel } from '@/store/models/post-user.model';
 
 export const actions: ActionTree<UserStateInterface, RootStateInterface> & Actions = {
   [UserActionEnum.SET_USER_INFO]: async ({ commit }, userData: UserDataInterface) => {
-    const payloadData = new UpdateUserModel(userData);
+    const payloadData = new PostUserModel(userData);
     HTTP.post('/users', payloadData)
       .then(() => {
         commit(UserMutationEnum.SET_SUCCESS, 'Користувача зареєстровано!');

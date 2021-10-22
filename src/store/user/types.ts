@@ -15,7 +15,7 @@ export enum UserActionEnum {
 export interface UserDataInterface {
   registrationToken: string;
   firstName: string;
-  // middleName: string;
+  middleName: string;
   lastName: string;
   email: string;
   password: string;
@@ -48,6 +48,7 @@ export interface Actions {
 export type Getters<S = UserStateInterface> = {
   getErrorMessage(state: S): string | null;
   getSuccessMessage(state: S): string;
+  getUserInfo(state: S): UserDataInterface | null;
 };
 
 export type AugmentedActionContext = {

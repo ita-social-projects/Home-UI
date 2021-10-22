@@ -4,6 +4,7 @@ import { RoutesEnum } from '@/router/types';
 import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
 import RegisterUser from '@/views/RegisterUser.vue';
+import ManageUser from '@/views/ManageUser.vue';
 import UserLogin from '@/views/UserLogin.vue';
 import MainPage from '@/views/MainPage.vue';
 import CooperationInfo from '@/views/CooperationInfo.vue';
@@ -51,6 +52,7 @@ const routes: RouteRecordRaw[] = [
         path: RoutesEnum.Polls,
         component: CooperationPolls,
       },
+      { path: RoutesEnum.ManageUser, component: ManageUser },
     ],
   },
   {
