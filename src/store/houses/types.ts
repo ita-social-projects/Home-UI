@@ -34,20 +34,20 @@ export interface HouseInterface {
 }
 
 export interface HousesStateInterface {
-  houses: HouseInterface | null;
+  houses: Array<HouseInterface> | null;
   displayModal: boolean;
 }
 
 export type Mutations<S = HousesStateInterface> = {
-  [HousesMutationsEnum.SET_HOUSES](state: S, payload: HouseInterface): void;
+  [HousesMutationsEnum.SET_HOUSES](state: S, payload: Array<HouseInterface>): void;
 };
 
 export interface Actions {
-  [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
+  [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext, payload: Array<HouseInterface>): void;
 }
 
 export type Getters<S = HousesStateInterface> = {
-  getHousesData(state: S): HouseInterface | null;
+  getHousesData(state: S): Array<HouseInterface> | null;
 };
 
 export type AugmentedActionContext = {
