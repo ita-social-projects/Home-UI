@@ -399,6 +399,10 @@ export default defineComponent({
 .wrapper {
   display: flex;
   flex-direction: column;
+
+  .breadcrumb {
+    margin: 0 0 1em 0;
+  }
 }
 
 .container {
