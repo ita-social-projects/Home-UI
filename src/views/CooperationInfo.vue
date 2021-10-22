@@ -149,11 +149,11 @@
     </div>
 
     <div class="add_btn">
-      <Button label="Додати будинок" icon="pi pi-pencil" @click="addHouse" class="p-button-outlined p-button-info" />
+      <Button label="Додати будинок" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
     </div>
 
     <div class="container container-houses">
-      <DataTable ref="dt" :value="houses" dataKey="houses.id" v-model:selection="selectedHouse">
+      <DataTable ref="dt" :value="isLoaded ? houses : []" dataKey="houses.id" v-model:selection="selectedHouse">
         <template #header>
           <h4>Будинки в цьому ОСББ</h4>
         </template>
@@ -273,7 +273,7 @@ export default defineComponent({
         },
       ],
       selectedHouse: null,
-      houses: {},
+      houses: [] as Array<HouseInterface>,
       id: 0,
       name: '',
       edrpou: '',
@@ -294,11 +294,13 @@ export default defineComponent({
     };
   },
   async mounted() {
-    await Promise.all([this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS')]).then(() => {
+    await Promise.all([
+      this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS'),
+      this.$store.dispatch('housesStore/SET_HOUSES'),
+    ]).then(() => {
       this.initData();
       this.isLoaded = true;
     });
-    this.$store.dispatch('housesStore/SET_HOUSES');
   },
 
   methods: {
@@ -388,7 +390,7 @@ export default defineComponent({
     displayHouseModal(): boolean {
       return this.$store.state.housesStore.displayModal;
     },
-    housesInfo(): HouseInterface {
+    housesInfo(): Array<HouseInterface> {
       return this.$store.getters['housesStore/getHousesData'];
     },
   },
