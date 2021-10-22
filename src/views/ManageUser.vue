@@ -123,6 +123,7 @@ export default defineComponent({
     };
     const showData = () => {
       console.log('edit data', myState.firstName);
+      console.error(store.getters['authorizationStore/userData']);
 
       // store.dispatch('localStorageStore/GET_TOKEN'),
     };

@@ -17,16 +17,18 @@
           @click="redirectToLogin"
           class="p-button-info"
         />
-        <!-- <Button v-else label="Вийти" @click="userLogout" class="p-button-info" /> -->
         <Button
+          label="Info"
           v-else
           type="button"
           @click="toggle"
           aria-haspopup="true"
           aria-controls="overlay_tmenu"
-          class="p-button-info"
-          >Деталі</Button
+          class="p-button-rounded p-button-info p-button-sm"
         >
+          <Avatar icon="pi pi-user" class="p-mr-2" style="background-color: #ffffff; color: #609af8" shape="circle" />
+          <span class="p-ml-2 p-text-bold">{{ getNameFromStore }}</span>
+        </Button>
         <Menu id="overlay_tmenu" ref="menu" :model="items" :popup="true" />
       </div>
     </div>
@@ -36,9 +38,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { RoutesEnum } from '@/router/types';
+import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
-// import menu from 'primevue/menu'; //D:\front\1\Home-UI\node_modules\primevue\menu\menu.js
 
 export default defineComponent({
   name: 'baseHeader',
@@ -69,12 +71,17 @@ export default defineComponent({
     };
   },
   components: {
+    Avatar,
     Button,
     Menu,
   },
   computed: {
     isLoggedIn(): boolean {
       return this.$store.getters['authorizationStore/loggedIn'];
+    },
+    getNameFromStore(): any {
+      const dataFromStore = this.$store.getters['authorizationStore/userData'];
+      return `${dataFromStore['first_name']} ${dataFromStore['last_name']}`;
     },
   },
   methods: {
@@ -89,7 +96,6 @@ export default defineComponent({
       this.$router.push(RoutesEnum.StartPage);
     },
     toggle(event: any) {
-      console.log('works');
       (this.$refs.menu as Menu).toggle(event);
     },
   },
@@ -136,5 +142,11 @@ export default defineComponent({
   padding-right: 65px;
   width: 100%;
   flex: 1 1 auto;
+  .p-avatar {
+    margin-right: 10px;
+  }
+  button {
+    margin-top: -5px;
+  }
 }
 </style>
