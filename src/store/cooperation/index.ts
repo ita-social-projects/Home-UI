@@ -8,7 +8,6 @@ import { actions } from '@/store/cooperation/actions';
 export const state: CooperationStateInterface = {
   userCooperations: [],
   selectedCooperation: null,
-  isCooperationsLoaded: false,
   displayModal: false,
 };
 

@@ -1,13 +1,13 @@
 import { AddressDTOModel } from '@/shared/models/addressDTO.model';
-import { PolledHouseModel } from '@/store/polls/models/polled-house.model';
+import { HouseModel } from '@/shared/models/house.model';
 
-export class PolledHouseDTOModel {
+export class HouseDTOModel {
   public quantity_flat: number;
   public house_area: number;
   public adjoining_area: number;
   public address: AddressDTOModel;
 
-  constructor(polledHouse: PolledHouseModel) {
+  constructor(polledHouse: HouseModel) {
     this.quantity_flat = polledHouse.flatQuantity;
     this.house_area = polledHouse.houseArea;
     this.adjoining_area = polledHouse.adjoiningArea;
