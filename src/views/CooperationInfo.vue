@@ -317,7 +317,7 @@ export default defineComponent({
       this.houses = this.housesInfo;
     },
     mapContact(el: CooperationContactsInterface) {
-      if (el.main === true) {
+      if (el.main) {
         for (let key in el) {
           if (key === 'email') {
             this.cooperationData.email = el[key];
