@@ -32,7 +32,7 @@
       <Dialog
         header="Редагувати ОСББ"
         v-model:visible="displayModal"
-        :style="{ width: '50vw' }"
+        :style="{ width: '550px' }"
         :modal="true"
         :closable="false"
         :dismissableMask="true"
@@ -40,41 +40,15 @@
         <form @submit.prevent="editCoopInfo">
           <p>
             <label for="coopName">Назва : </label>
-            <InputText
-              id="coopName"
-              placeholder="Назва"
-              v-model.trim="cooperationData.name"
-              :class="{ 'p-invalid': v$.cooperationData.name.$error }"
-              @blur="v$.cooperationData.name.$touch()"
-            />
-
-            <small v-if="v$.cooperationData.name.$error" class="p-error">{{
-              v$.cooperationData.name.$errors[0].$message
-            }}</small>
+            <InputText id="coopName" placeholder="Назва" v-model="cooperationData.name" />
           </p>
-
           <p>
             <label for="iban">Iban номер : </label>
-            <InputText
-              id="coopIban"
-              placeholder="iban номер"
-              v-model="cooperationData.iban"
-              :class="{ 'p-invalid': v$.cooperationData.iban.$error }"
-              @blur="v$.cooperationData.iban.$touch()"
-            />
-            <small v-if="v$.cooperationData.iban.$error" class="p-error">{{
-              v$.cooperationData.iban.$errors[0].$message
-            }}</small>
+            <InputText id="coopIban" placeholder="iban номер" v-model="cooperationData.iban" />
           </p>
           <p>
             <label for="coopEmail">Електронна адреса : </label>
             <InputText id="coopEmail" placeholder="Електрона адреса" v-model.trim="cooperationData.email" />
-            <!-- <small v-if="v$.cooperationData.email.$error" 
-            class="p-error">{{ v$.email.$errors[0].$message }}</small> -->
-            <!--maxlength="320"
-              -->
-            <!-- @blur="v$.cooperationData.email.$touch()"
-              :class="{ 'p-invalid': v$.cooperationData.email.$error }" -->
           </p>
           <p>
             <label for="edrpou">Код реєстрації : </label>
@@ -82,7 +56,7 @@
           </p>
           <p>
             <label for="coopPhone">Номер телефону : </label>
-            <InputText id="coopPhone" placeholder="+38 011 222 33 00" v-model="cooperationData.phone" maxlength="13" />
+            <InputText id="coopPhone" placeholder="+38 000 000 00 00" v-model="cooperationData.phone" maxlength="13" />
           </p>
           <div>
             Адреса
@@ -163,18 +137,6 @@ import {
   CooperationContactsInterface,
   CooperationAddressInterface,
 } from '@/store/cooperation/types';
-import useVuelidate from '@vuelidate/core';
-import {
-  edrpouValidator,
-  emailLastCharsValidator,
-  emailMaxLength,
-  emailMinLength,
-  emailValidator,
-  requiredValidator,
-  nameLenghtValidator,
-  сooperationNameValidator,
-  ibanValidator,
-} from '@/utils/validators';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -197,34 +159,8 @@ export default defineComponent({
         phone: '',
         email: '',
         address: {} as CooperationAddressInterface,
-        // contacts: [] as Array<CooperationContactsInterface>,
       },
       isLoaded: false,
-      v$: useVuelidate(),
-    };
-  },
-  validations() {
-    return {
-      cooperationData: {
-        name: {
-          requiredValidator,
-          сooperationNameValidator,
-          nameLenghtValidator,
-        },
-        edrpou: { requiredValidator, edrpouValidator },
-        iban: { requiredValidator, ibanValidator },
-        phone: {},
-        email: {
-          requiredValidator,
-          emailMinLength,
-          emailLastCharsValidator,
-          emailValidator,
-          emailMaxLength,
-        },
-        address: {
-          city: {},
-        },
-      },
     };
   },
   async mounted() {
@@ -241,10 +177,10 @@ export default defineComponent({
       this.cooperationData.name = cooperationInfo?.name ?? '';
       this.cooperationData.edrpou = cooperationInfo?.edrpou ?? '';
       this.cooperationData.iban = cooperationInfo?.iban ?? '';
-      this.cooperationData.address = cooperationInfo?.address ?? ({} as CooperationAddressInterface);
-      // this.cooperationData.contacts = cooperationInfo?.contacts ?? ([] as Array<CooperationContactsInterface>);
+      this.cooperationData.address = JSON.parse(
+        JSON.stringify(cooperationInfo?.address ?? ({} as CooperationAddressInterface))
+      );
       cooperationInfo?.contacts.forEach((el) => this.mapContact(el));
-      // this.cooperationData.contacts.forEach((el) => this.mapContact(el));
     },
     mapContact(el: CooperationContactsInterface) {
       if (el.main === true) {
@@ -266,12 +202,9 @@ export default defineComponent({
     },
     cancel() {
       this.initData();
-      this.cooperationData.email = '';
-      this.cooperationData.phone = '';
       this.closeModal();
     },
     editCoopInfo() {
-      // : CooperationInterface
       const payload = {
         id: this.cooperationData.id,
         name: this.cooperationData.name,
@@ -290,12 +223,12 @@ export default defineComponent({
   },
   computed: {
     fillAddress(): string {
-      return `${this.cooperationData.address.street}, 
+      return `${this.cooperationData.address.street},
       ${this.cooperationData.address.houseNumber},
-      ${this.cooperationData.address.houseBlock}, 
+      ${this.cooperationData.address.houseBlock},
       ${this.cooperationData.address.district},
       ${this.cooperationData.address.city},
-      ${this.cooperationData.address.region},       
+      ${this.cooperationData.address.region},
       ${this.cooperationData.address.zipCode} `;
     },
     cooperationInfo(): CooperationStateInterface {

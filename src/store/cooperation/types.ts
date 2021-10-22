@@ -1,6 +1,7 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
+import { PolledHouseModel } from '../polls/models/polled-house.model';
 
 export enum CooperationMutationEnum {
   SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
@@ -61,7 +62,7 @@ export interface CooperationInterface {
   name: string;
   edrpou: string;
   iban: string;
-  houses: CooperationHousesInterface[];
+  houses: PolledHouseModel[];
   contacts: CooperationContactsInterface[];
   address: CooperationAddressInterface;
 }
@@ -74,14 +75,6 @@ export interface CooperationAddressInterface {
   houseBlock: string;
   houseNumber: string;
   zipCode: string;
-}
-
-export interface CooperationHousesInterface {
-  id: number;
-  quantityFlat: number;
-  houseArea: number;
-  adjoiningArea: number;
-  address: CooperationAddressInterface;
 }
 
 export interface CooperationContactsInterface {

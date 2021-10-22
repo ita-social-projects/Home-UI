@@ -9,6 +9,7 @@ import {
 import { HTTP } from '@/core/api/http-common';
 import { CooperationDTOModel } from '@/store/cooperation/models/cooperationDTO.model';
 import { CooperationModel } from './models/cooperation.model';
+import { CooperationPutDTOModel } from './models/put-cooperationDTO.model';
 
 export const actions: ActionTree<CooperationStateInterface, RootStateInterface> & Actions = {
   [CooperationActionEnum.CREATE_COOPERATION]: async ({ commit }, payload) => {
@@ -35,7 +36,6 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
           sort: 'id,asc',
         },
       });
-      console.log(data); /// < ----------
       const cooperationData: Array<CooperationModel> = data.map((el: CooperationDTOModel) => new CooperationModel(el));
 
       commit(CooperationMutationEnum.SET_USER_COOPERATIONS, cooperationData);
@@ -51,15 +51,11 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
   },
 
   [CooperationActionEnum.SET_COOPERATION_UPDATE]: async ({ commit }, payload: CooperationModel) => {
-    console.log(payload, 'payload action');
     try {
-      const payloadData = new CooperationDTOModel(payload);
-      console.log('try SET_COOPERATION_UPDATE', payload, payloadData);
+      const payloadData = new CooperationPutDTOModel(payload);
       const response = await HTTP.put(`/cooperations/${payloadData.id}`, payloadData);
-
-      console.log(response); /// < ----------
     } catch (err: any) {
-      console.log('error SET_COOPERATION_UPDATE', err.response);
+      console.log('error SET_COOPERATION_UPDATE', err);
     }
   },
 };
