@@ -1,19 +1,14 @@
 import { ActionTree } from 'vuex';
-
 import { RootStateInterface } from '@/store/types';
 import {
   CooperationStateInterface,
-  CooperationInterface,
-  CooperationDTOInterface,
   CooperationActionEnum,
   CooperationMutationEnum,
   Actions,
 } from '@/store/cooperation/types';
 import { HTTP } from '@/core/api/http-common';
-import { CooperationDTOModel } from '@/store/cooperation/models/update-cooperation.model';
-
-import { AxiosError, AxiosResponse } from 'axios';
-import { CooperationModel } from './models/request-cooperation.model';
+import { CooperationDTOModel } from '@/store/cooperation/models/cooperationDTO.model';
+import { CooperationModel } from './models/cooperation.model';
 
 export const actions: ActionTree<CooperationStateInterface, RootStateInterface> & Actions = {
   [CooperationActionEnum.CREATE_COOPERATION]: async ({ commit }, payload) => {
@@ -40,18 +35,14 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
           sort: 'id,asc',
         },
       });
-      console.log(data);
-      // const cooperationData: Array<CooperationModel> = data.map((el: CooperationDTOModel) => {
-      //   const map = new CooperationModel(el);
-      //   console.log(el, map);
-      //   return map;
-      // });
-      // console.log(data, cooperationData);
-      commit(CooperationMutationEnum.SET_USER_COOPERATIONS, data);
+      console.log(data); /// < ----------
+      const cooperationData: Array<CooperationModel> = data.map((el: CooperationDTOModel) => new CooperationModel(el));
+
+      commit(CooperationMutationEnum.SET_USER_COOPERATIONS, cooperationData);
       commit(CooperationMutationEnum.SET_SELECTED_COOPERATION, 0);
     } catch (err) {
       const { response } = err;
-      console.log('error SET_USER_COOPERATIONS', err);
+      console.log('error SET_USER_COOPERATIONS', response.err);
     }
   },
 
@@ -60,12 +51,13 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
   },
 
   [CooperationActionEnum.SET_COOPERATION_UPDATE]: async ({ commit }, payload: CooperationModel) => {
+    console.log(payload, 'payload action');
     try {
       const payloadData = new CooperationDTOModel(payload);
       console.log('try SET_COOPERATION_UPDATE', payload, payloadData);
       const response = await HTTP.put(`/cooperations/${payloadData.id}`, payloadData);
 
-      // console.log(response);
+      console.log(response); /// < ----------
     } catch (err: any) {
       console.log('error SET_COOPERATION_UPDATE', err.response);
     }

@@ -1,6 +1,6 @@
 import { AddressDTOModel } from '@/shared/models/addressDTO.model';
 
-export class addressModel {
+export class AddressModel {
   public region: string;
   public city: string;
   public district: string;

@@ -1,8 +1,6 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
-import { CooperationModel } from '@/store/cooperation/models/request-cooperation.model';
-import { CooperationDTOModel } from '@/store/cooperation/models/update-cooperation.model';
-import { AddressUpdateModel } from '@/share/update-address.model';
+import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 
 export enum CooperationMutationEnum {
   SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
@@ -30,7 +28,6 @@ export type Mutations<S = CooperationStateInterface> = {
   [CooperationMutationEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
 
   [CooperationMutationEnum.SET_USER_COOPERATIONS](state: S, payload: Array<CooperationModel>): void;
-  // [CooperationMutationEnum.SET_USER_COOPERATIONS](state: S, payload: Array<CooperationInterface>): void;
   [CooperationMutationEnum.SET_SELECTED_COOPERATION](state: S, payload: number): void;
 };
 
@@ -69,16 +66,6 @@ export interface CooperationInterface {
   address: CooperationAddressInterface;
 }
 
-export interface CooperationDTOInterface {
-  id: number;
-  name: string;
-  usreo: string;
-  iban: string;
-  // houses: CooperationHousesInterface[];
-  contacts: CooperationContactsInterface[];
-  address: CooperationAddressDTOInterface;
-}
-
 export interface CooperationAddressInterface {
   region: string;
   city: string;
@@ -87,16 +74,6 @@ export interface CooperationAddressInterface {
   houseBlock: string;
   houseNumber: string;
   zipCode: string;
-}
-
-export interface CooperationAddressDTOInterface {
-  region: string;
-  city: string;
-  district: string;
-  street: string;
-  house_block: string;
-  house_number: string;
-  zip_code: string;
 }
 
 export interface CooperationHousesInterface {
