@@ -11,6 +11,9 @@ import CooperationInfo from '@/views/CooperationInfo.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
 import CooperationPolls from '@/views/CooperationPolls.vue';
 
+import ApartmentsMock from '@/views/ApartmentsMock.vue';
+import ApartmentsInfoMock from '@/views/ApartmentsInfoMock.vue';
+
 const routes: RouteRecordRaw[] = [
   {
     path: RoutesEnum.StartPage,
@@ -36,6 +39,14 @@ const routes: RouteRecordRaw[] = [
       {
         path: RoutesEnum.Cooperation,
         component: CooperationInfo,
+      },
+      {
+        path: RoutesEnum.ApartmentsMock,
+        component: ApartmentsMock,
+      },
+      {
+        path: RoutesEnum.ApartmentsInfoMock,
+        component: ApartmentsInfoMock,
       },
       {
         path: RoutesEnum.Polls,

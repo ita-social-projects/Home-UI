@@ -51,8 +51,8 @@ export const addressValidator = helpers.withMessage('В назві мають б
 const validHouseBlock = helpers.regex(/^[а-яА-Я0-9]{1,10}$/);
 export const houseBlockValidator = helpers.withMessage('Цифри від 0 до 9', validHouseBlock);
 
-const validZipCpde = helpers.regex(/^[0-9]{5}$/);
+const validZipCpde = helpers.regex(/^\d{5}$/);
 export const zipCpdeValidator = helpers.withMessage('Цифри від 0 до 9', validZipCpde);
 
-const validPhoneNumber = helpers.regex(/^\+?3?8?(0[0-9]\d{8})$/);
+const validPhoneNumber = helpers.regex(/^\+?3?8?(0\d{8})$/);
 export const phoneNumberValidator = helpers.withMessage('Цифри від 0 до 9', validPhoneNumber);

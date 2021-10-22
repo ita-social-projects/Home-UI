@@ -40,7 +40,6 @@ export interface HousesStateInterface {
 
 export type Mutations<S = HousesStateInterface> = {
   [HousesMutationsEnum.SET_HOUSES](state: S, payload: HouseInterface): void;
-  // [HousesMutationsEnum.EDIT_HOUSE](state: S, payload: HouseInterface): void;
 };
 
 export interface Actions {

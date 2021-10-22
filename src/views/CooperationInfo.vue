@@ -1,5 +1,8 @@
 <template>
   <div class="wrapper">
+    <div class="breadcrumb">
+      <Breadcrumb />
+    </div>
     <div class="container" v-if="isLoaded">
       <div class="coop_info">
         <div>
@@ -199,7 +202,7 @@
                 </p>
                 <p>
                   <label class="dialog-item" for="coopEmail">Адреса : </label>
-                  <InputText id="coopEmail" placeholder="Адреса" v-model="address" />
+                  <InputText id="coopEmail" placeholder="Адреса" v-model="address.city" />
                 </p>
               </form>
 
@@ -228,15 +231,17 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
-import { HouseInterface } from '@/store/houses/types';
+
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
+import Breadcrumb from '@/components/Breadcrumb.vue';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
+import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
+import { HouseInterface } from '@/store/houses/types';
 
 export default defineComponent({
   name: 'CooperationInfo',
@@ -244,6 +249,7 @@ export default defineComponent({
     Dialog,
     Button,
     InputText,
+    Breadcrumb,
     DataTable,
     Column,
     Menu,
@@ -393,6 +399,10 @@ export default defineComponent({
 .wrapper {
   display: flex;
   flex-direction: column;
+
+  .breadcrumb {
+    margin: 0 0 1em 0;
+  }
 }
 
 .container {
