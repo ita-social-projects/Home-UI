@@ -1,13 +1,37 @@
 <template>
   <div class="wrapper">
-    <Card style="width: 25em">
-      <template #header>
-        <H1>SDAD</H1>
-      </template>
-      <template #title> П.І.Б </template>
-      <template #subtitle> {{ newData }}</template>
-      <template #content>
+    <div class="card">
+      <div class="card__header">
+        <div class="card__header__title"><h1>П.І.Б.</h1></div>
+        <div class="card__header__btn">
+          <div>
+            <Button v-if="myState.isDisabled" @click="editData" icon="pi pi-pencil" label="Редагувати" />
+            <Button
+              v-if="!myState.isDisabled"
+              @click="showData"
+              icon="pi pi-check"
+              label="Підтвердити"
+              type="submit"
+              :disabled="v$.$invalid"
+            />
+
+            <Button
+              v-if="!myState.isDisabled"
+              @click="resetFields"
+              icon="pi pi-times"
+              label="Cancel"
+              class="p-button-secondary"
+              style="margin-left: 0.5em"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="firstName">І'мя</label>
         <input-text
+          id="firstName"
+          type="text"
           v-model="myState.firstName"
           :placeholder="[[storeFirstName]]"
           :class="{ 'p-invalid': v$.firstName.$error }"
@@ -15,48 +39,49 @@
           :disabled="myState.isDisabled"
         />
         <small v-if="v$.firstName.$error" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
+      </div>
+      <div class="field">
+        <label for="middleName">По-батькові</label>
         <input-text
+          id="middleName"
+          type="text"
           v-model="myState.middleName"
           :placeholder="[[storeMiddleName]]"
-          :class="{ 'p-invalid': v$.firstName.$error }"
-          @blur="v$.firstName.$touch"
+          :class="{ 'p-invalid': v$.middleName.$error }"
+          @blur="v$.middleName.$touch"
           :disabled="myState.isDisabled"
         />
-        <input-text v-model="lastName" disabled />
-      </template>
-      <template #footer>
-        <Button @click="editData" icon="pi pi-check" label="Редагувати" />
-        <Button
-          @click="setFields"
-          icon="pi pi-times"
-          label="Cancel"
-          class="p-button-secondary"
-          style="margin-left: 0.5em"
+        <small v-if="v$.middleName.$error" class="p-error">{{ v$.middleName.$errors[0].$message }}</small>
+      </div>
+      <div class="field">
+        <label for="lastName">Прізвище</label>
+        <input-text
+          id="lastName"
+          type="text"
+          v-model="myState.lastName"
+          :placeholder="[[storeLastName]]"
+          :class="{ 'p-invalid': v$.lastName.$error }"
+          @blur="v$.lastName.$touch"
+          :disabled="myState.isDisabled"
         />
-      </template>
-    </Card>
+        <small v-if="v$.lastName.$error" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, onMounted, reactive, ref } from 'vue';
-import { mapGetters, mapState } from 'vuex';
-
-import Card from 'primevue/card';
+import { computed, defineComponent, onMounted, reactive, ref } from 'vue';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-import useStore from '@/store';
-import { state } from '@/store/authorization';
-import { authorizationStore } from '@/store/authorization';
-import { AuthorizationStateInterface } from '@/store/authorization/types';
-import { RootStateInterface } from '@/store/types';
 import store from '@/store';
 import useVuelidate from '@vuelidate/core';
 import { nameLenghtValidator, nameValidator, requiredValidator } from '@/utils/validators';
+import { state } from '@/store/authorization';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
-  components: { Card, Button, InputText },
+  components: { Button, InputText },
 
   setup() {
     const myState = reactive({
@@ -88,43 +113,88 @@ export default defineComponent({
     const v$ = useVuelidate(rules, myState);
     let storeFirstName = ref();
     let storeMiddleName = ref();
-    let newValue = ref('rrrrrrrr');
+    let storeLastName = ref();
     onMounted(() => {
       //
     });
-    const setFields = () => {
-      const newUserDataFromStore = store.getters['authorizationStore/userData'];
-      console.log(newUserDataFromStore);
-    };
-    setFields();
-
     const editData = () => {
       myState.isDisabled = false;
       console.log('edit data', myState.isDisabled);
     };
+    const showData = () => {
+      console.log('edit data', myState.firstName);
+
+      // store.dispatch('localStorageStore/GET_TOKEN'),
+    };
+    const resetFields = () => {
+      v$.value.$reset();
+      myState.firstName = '';
+      myState.middleName = '';
+      myState.lastName = '';
+      myState.email = '';
+      myState.isDisabled = true;
+    };
 
     storeFirstName = computed(() => store.state.authorizationStore.user?.first_name);
     storeMiddleName = computed(() => store.state.authorizationStore.user?.middle_name);
+    storeLastName = computed(() => store.state.authorizationStore.user?.last_name);
 
     console.log(myState.firstName, 'sdsaadsdaaa');
 
     return {
       storeFirstName,
       storeMiddleName,
+      storeLastName,
       myState,
-      newValue,
 
       v$,
       editData,
+      showData,
+      resetFields,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
+h1 {
+  margin: 0;
+}
 .wrapper {
   width: 100%;
-  height: 100%;
   display: flex;
+  .card {
+    width: 100%;
+    padding: 20px;
+    height: auto;
+
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08), 0 0 6px rgba(0, 0, 0, 0.05);
+  }
+  .field {
+    width: 100%;
+    padding-top: 20px;
+
+    background-color: rgb(255, 255, 255);
+    .p-inputtext {
+      width: 100%;
+      min-width: 500px;
+    }
+  }
+  .card__header {
+    display: flex;
+    justify-content: space-between;
+    height: 46px;
+    width: 100%;
+    .card__header__title {
+      vertical-align: middle;
+      line-height: normal;
+      // text-align: center;
+    }
+    .card__header__btn {
+      margin-left: auto;
+    }
+  }
 }
 </style>

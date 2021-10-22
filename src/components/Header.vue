@@ -25,7 +25,7 @@
           aria-haspopup="true"
           aria-controls="overlay_tmenu"
           class="p-button-info"
-          >sdasda</Button
+          >Деталі</Button
         >
         <Menu id="overlay_tmenu" ref="menu" :model="items" :popup="true" />
       </div>
