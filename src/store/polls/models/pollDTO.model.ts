@@ -1,5 +1,5 @@
 import { PollStatusType } from '@/store/polls/types';
-import { PolledHouseDTOModel } from '@/store/polls/models/polled-houseDTO.model';
+import { HouseDTOModel } from '@/shared/models/houseDTO.model';
 import { PollModel } from '@/store/polls/models/poll.model';
 
 export class PollDTOModel {
@@ -7,7 +7,7 @@ export class PollDTOModel {
   public header: string;
   public creation_date: string;
   public completion_date: string;
-  public polled_houses: PolledHouseDTOModel[];
+  public polled_houses: HouseDTOModel[];
   public status: PollStatusType;
   public type: string;
 
@@ -18,6 +18,6 @@ export class PollDTOModel {
     this.completion_date = poll.completionDate;
     this.status = poll.status;
     this.type = poll.type;
-    this.polled_houses = poll.polledHouses.map((el) => new PolledHouseDTOModel(el));
+    this.polled_houses = poll.polledHouses.map((el) => new HouseDTOModel(el));
   }
 }

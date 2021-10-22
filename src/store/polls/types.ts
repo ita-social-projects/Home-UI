@@ -12,7 +12,6 @@ export enum PollsActionEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',
   SET_SELECTED_POLL = 'SET_SELECTED_POLL',
   SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
-  CREATE_POLL = 'CREATE_POLL',
 }
 
 export interface PollsStateInterface {
@@ -31,7 +30,6 @@ export interface Actions {
   [PollsActionEnum.SET_COOPERATION_POLLS]({ commit }: AugmentedActionContext): void;
   [PollsActionEnum.SET_SELECTED_POLL]({ commit }: AugmentedActionContext, payload: number): void;
   [PollsActionEnum.SET_MODAL_DISPLAY]({ commit }: AugmentedActionContext, payload: boolean): void;
-  [PollsActionEnum.CREATE_POLL]({ commit }: AugmentedActionContext, payload: string): void;
 }
 
 export type Getters<S = PollsStateInterface> = {

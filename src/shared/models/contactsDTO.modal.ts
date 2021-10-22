@@ -1,6 +1,6 @@
 import { CooperationContactsInterface } from '@/store/cooperation/types';
 
-export class ContactsUpdateModel {
+export class ContactsDTOModel {
   public type: string;
   public main: boolean;
   public phone: string;

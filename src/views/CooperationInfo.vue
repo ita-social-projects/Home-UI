@@ -228,11 +228,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import {
-  CooperationStateInterface,
-  CooperationContactsInterface,
-  CooperationAddressInterface,
-} from '@/store/cooperation/types';
+import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { HouseInterface } from '@/store/houses/types';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -380,9 +376,6 @@ export default defineComponent({
       ${this.cooperationData.address.region},
       ${this.cooperationData.address.zipCode} `;
     },
-    cooperationInfo(): CooperationStateInterface {
-      return this.$store.state.cooperationStore;
-    },
     displayCooperationModal(): boolean {
       return this.$store.state.cooperationStore.displayModal;
     },
@@ -400,7 +393,6 @@ export default defineComponent({
 .wrapper {
   display: flex;
   flex-direction: column;
-  margin: 20px 40px;
 }
 
 .container {
@@ -413,8 +405,6 @@ export default defineComponent({
     padding: 1px;
     margin-bottom: 150px;
   }
-  background-color: #fafafa;
-  justify-content: space-between;
   box-shadow: rgba(0, 0, 0, 0.1) -1px 4px 5px 1px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
 
