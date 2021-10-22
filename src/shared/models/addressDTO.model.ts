@@ -1,4 +1,4 @@
-import { addressModel } from '@/shared/models/address.model';
+import { AddressModel } from '@/shared/models/address.model';
 
 export class AddressDTOModel {
   public region: string;
@@ -9,7 +9,7 @@ export class AddressDTOModel {
   public house_number: string;
   public zip_code: string;
 
-  constructor(address: addressModel) {
+  constructor(address: AddressModel) {
     this.region = address.region;
     this.city = address.city;
     this.district = address.district;
