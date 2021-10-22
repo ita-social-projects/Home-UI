@@ -8,8 +8,8 @@
         <h4>Будь ласка, скористайтеся посиланнями для навігації</h4>
       </div>
       <nav>
-        <router-link to="/">Головна <span class="pi pi-arrow-right" /></router-link>
-        <router-link to="/login">Увійти <span class="pi pi-arrow-right" /></router-link>
+        <router-link to="/main">Головна <span class="pi pi-arrow-right" /></router-link>
+        <router-link v-if="!isLoggedIn" to="/login">Увійти <span class="pi pi-arrow-right" /></router-link>
         <router-link to="/register-cooperation"
           >Зареєструвати об'єднання <span class="pi pi-arrow-right"
         /></router-link>
@@ -23,6 +23,11 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'PageNotFound',
+  computed: {
+    isLoggedIn(): boolean {
+      return this.$store.getters['authorizationStore/loggedIn'];
+    },
+  },
 });
 </script>
 

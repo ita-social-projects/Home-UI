@@ -1,54 +1,60 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import { Routes } from '@/router/types';
+import { RoutesEnum } from '@/router/types';
+
 import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
 import RegisterUser from '@/views/RegisterUser.vue';
 import UserLogin from '@/views/UserLogin.vue';
 import MainPage from '@/views/MainPage.vue';
 import CooperationInfo from '@/views/CooperationInfo.vue';
-import PageNotFound from '@/components/PageNotFound.vue';
+import PageNotFound from '@/views/PageNotFound.vue';
+import CooperationPolls from '@/views/CooperationPolls.vue';
 
 import ApartmentsMock from '@/views/ApartmentsMock.vue';
 import ApartmentsInfoMock from '@/views/ApartmentsInfoMock.vue';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: Routes.StartPage,
+    path: RoutesEnum.StartPage,
     component: StartPage,
   },
   {
-    name: Routes.UserLogin,
-    path: Routes.UserLogin,
+    name: RoutesEnum.UserLogin,
+    path: RoutesEnum.UserLogin,
     component: UserLogin,
   },
   {
-    path: Routes.RegisterCooperation,
+    path: RoutesEnum.RegisterCooperation,
     component: RegisterCooperation,
   },
   {
-    path: Routes.RegisterUser,
+    path: RoutesEnum.RegisterUser,
     component: RegisterUser,
   },
   {
-    path: Routes.MainPage,
+    path: RoutesEnum.MainPage,
     component: MainPage,
     children: [
       {
-        path: Routes.Cooperation,
+        path: RoutesEnum.Cooperation,
         component: CooperationInfo,
       },
       {
-        path: Routes.ApartmentsMock,
+        path: RoutesEnum.ApartmentsMock,
         component: ApartmentsMock,
       },
       {
-        path: Routes.ApartmentsInfoMock,
+        path: RoutesEnum.ApartmentsInfoMock,
         component: ApartmentsInfoMock,
+      },
+      {
+        path: RoutesEnum.Polls,
+        component: CooperationPolls,
       },
     ],
   },
   {
-    path: Routes.NotFound,
+    path: RoutesEnum.NotFound,
     component: PageNotFound,
   },
 ];
@@ -59,8 +65,8 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _from, next) => {
-  if (to.path === Routes.MainPage && localStorage.getItem('user') == null) {
-    next({ path: Routes.StartPage });
+  if (to.path === RoutesEnum.MainPage && localStorage.getItem('user') == null) {
+    next({ path: RoutesEnum.StartPage });
   } else {
     next();
   }
