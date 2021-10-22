@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Routes } from '@/router/types';
+import { RoutesEnum } from '@/router/types';
 import Breadcrumb from 'primevue/breadcrumb';
 
 export default defineComponent({
@@ -23,10 +23,10 @@ export default defineComponent({
   },
   data() {
     return {
-      home: { label: 'ОСББ', to: Routes.Cooperation },
+      home: { label: 'ОСББ', to: RoutesEnum.Cooperation },
       items: [
-        { label: 'Квартири', to: Routes.ApartmentsMock },
-        { label: 'Інформація про квартиру', to: Routes.ApartmentsInfoMock },
+        { label: 'Квартири', to: RoutesEnum.ApartmentsMock },
+        { label: 'Інформація про квартиру', to: RoutesEnum.ApartmentsInfoMock },
       ],
     };
   },
