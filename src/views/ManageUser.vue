@@ -8,7 +8,6 @@
             <Button v-if="myState.isDisabled" @click="editData" icon="pi pi-pencil" label="Редагувати" />
             <Button
               v-if="!myState.isDisabled"
-              @click="showData"
               icon="pi pi-check"
               label="Підтвердити"
               type="submit"
@@ -115,11 +114,6 @@ export default defineComponent({
     let storeLastName = ref();
     const editData = () => {
       myState.isDisabled = false;
-      console.log('edit data', myState.isDisabled);
-    };
-    const showData = () => {
-      console.log('edit data', myState.firstName);
-      console.error(store.getters['authorizationStore/userData']);
     };
     const resetFields = () => {
       v$.value.$reset();
@@ -134,8 +128,6 @@ export default defineComponent({
     storeMiddleName = computed(() => store.state.authorizationStore.user?.middle_name);
     storeLastName = computed(() => store.state.authorizationStore.user?.last_name);
 
-    console.log(myState.firstName, 'sdsaadsdaaa');
-
     return {
       storeFirstName,
       storeMiddleName,
@@ -144,7 +136,6 @@ export default defineComponent({
 
       v$,
       editData,
-      showData,
       resetFields,
     };
   },
