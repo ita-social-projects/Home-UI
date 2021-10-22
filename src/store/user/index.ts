@@ -9,7 +9,7 @@ export const state: UserStateInterface = {
   data: {
     registrationToken: '',
     firstName: '',
-    // midleName: '',
+    middleName: '',
     lastName: '',
     email: '',
     password: '',
