@@ -1,0 +1,97 @@
+// Generic styles and CSS resets
+* {
+  font-family: 'Open Sans', 'Montserrat', 'Helvetica', sans-serif;
+  outline: none;
+}
+
+body,
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  color: $main-text-color;
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 700;
+  color: $headline-color;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+img {
+  max-width: 100%;
+}
+
+label {
+  user-select: none;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+// General styles and classes
+.bold {
+  font-weight: 700;
+}
+
+// Transition classes
+.router-enter-from {
+  opacity: 0;
+  //transform: translateX(50px);
+}
+
+.router-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.router-leave-to {
+  opacity: 0;
+  //transform: translateX(-50px);
+}
+
+.router-leave-active {
+  transition: all 0.3s ease-in;
+}
+
+/* SCROLLBAR STYLES */
+
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #d5d5d5;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #0031c24c;
+  box-shadow: inset 0 0 2px 0 rgba(0, 55, 194, 0.85);
+  border-radius: 18px;
+}
+
+*::-webkit-scrollbar-corner {
+  box-shadow: inset 0 0 2px 0 rgba(159, 194, 0, 0.85);
+  background: black;
+}
