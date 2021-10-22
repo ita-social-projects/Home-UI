@@ -46,7 +46,7 @@ export default defineComponent({
 
 .content {
   padding: 2em;
-  //height: 100%;
-  //overflow: hidden scroll;
+  height: 100%;
+  overflow: scroll;
 }
 </style>
