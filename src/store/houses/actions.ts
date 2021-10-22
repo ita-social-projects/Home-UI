@@ -10,4 +10,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
       commit(HousesMutationsEnum.SET_HOUSES, r.data);
     });
   },
+  [HousesActionsEnum.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
+    commit(HousesMutationsEnum.SET_MODAL_DISPLAY, payload);
+  },
 };

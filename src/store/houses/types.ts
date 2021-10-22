@@ -35,7 +35,7 @@ export interface HouseInterface {
 
 export interface HousesStateInterface {
   houses: HouseInterface | null;
-  // displayModal: boolean;
+  displayModal: boolean;
 }
 
 export type Mutations<S = HousesStateInterface> = {

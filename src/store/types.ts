@@ -4,11 +4,13 @@ import { AuthorizationStateInterface } from '@/store/authorization/types';
 import { CooperationStateInterface } from '@/store/cooperation/types';
 import { LocalStorageStateInterface } from '@/store/localstorage/types';
 import { HousesStateInterface } from '@/store/houses/types';
+import { PollsStateInterface } from '@/store/polls/types';
 
 export interface RootStateInterface {
+  authorizationStore: AuthorizationStateInterface;
   cooperationStore: CooperationStateInterface;
   userStore: UserStateInterface;
-  authorizationStore: AuthorizationStateInterface;
+  pollsStore: PollsStateInterface;
   localStorageStore: LocalStorageStateInterface;
   housesStore: HousesStateInterface;
 }
