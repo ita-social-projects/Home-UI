@@ -2,8 +2,8 @@
   <div class="breadcrumb">
     <Breadcrumb :home="home" :model="items">
       <template #item="{ item }">
-        <router-link :to="item.to" custom v-slot="{ href, navigate, isActive, isExactActive }">
-          <a :href="href" @click="navigate" :class="{ 'active-link': isActive, 'active-link-exact': isExactActive }">{{
+        <router-link :to="item.to" custom v-slot="{ navigate, isActive, isExactActive }">
+          <a @click="navigate" :class="{ 'active-link': isActive, 'active-link-exact': isExactActive }">{{
             item.label
           }}</a>
         </router-link>
