@@ -71,13 +71,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref } from 'vue';
+import { computed, defineComponent, reactive, ref } from 'vue';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import store from '@/store';
 import useVuelidate from '@vuelidate/core';
 import { nameLenghtValidator, nameValidator, requiredValidator } from '@/utils/validators';
-import { state } from '@/store/authorization';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
@@ -114,9 +113,6 @@ export default defineComponent({
     let storeFirstName = ref();
     let storeMiddleName = ref();
     let storeLastName = ref();
-    onMounted(() => {
-      //
-    });
     const editData = () => {
       myState.isDisabled = false;
       console.log('edit data', myState.isDisabled);
@@ -124,8 +120,6 @@ export default defineComponent({
     const showData = () => {
       console.log('edit data', myState.firstName);
       console.error(store.getters['authorizationStore/userData']);
-
-      // store.dispatch('localStorageStore/GET_TOKEN'),
     };
     const resetFields = () => {
       v$.value.$reset();
@@ -191,7 +185,6 @@ h1 {
     .card__header__title {
       vertical-align: middle;
       line-height: normal;
-      // text-align: center;
     }
     .card__header__btn {
       margin-left: auto;
