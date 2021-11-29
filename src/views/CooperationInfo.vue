@@ -153,7 +153,14 @@
     </div>
 
     <div class="container container-houses">
-      <DataTable ref="dt" :value="isLoaded ? houses : []" dataKey="houses.id" v-model:selection="selectedHouse">
+      <DataTable
+        ref="dt"
+        :value="isLoaded ? houses : []"
+        dataKey="houses.id"
+        selectionMode="single"
+        v-model:selection="selectedHouse"
+        @click="choosenHouse(selectedHouse)"
+      >
         <template #header>
           <h4>Будинки в цьому ОСББ</h4>
         </template>
@@ -242,6 +249,7 @@ import Breadcrumb from '@/components/Breadcrumb.vue';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { HouseInterface } from '@/store/houses/types';
+import { RoutesEnum } from '@/router/types';
 
 export default defineComponent({
   name: 'CooperationInfo',
@@ -272,7 +280,6 @@ export default defineComponent({
           },
         },
       ],
-      selectedHouse: null,
       houses: [] as Array<HouseInterface>,
       id: 0,
       name: '',
@@ -372,6 +379,10 @@ export default defineComponent({
     },
     toggle(event: Event) {
       (this.$refs.menu as any).toggle(event);
+    },
+    choosenHouse(selectedHouse: any) {
+      this.$store.dispatch('housesStore/SET_SELECTED_HOUSE_ID', selectedHouse.id);
+      this.$router.push(RoutesEnum.ManageApartments);
     },
   },
   computed: {

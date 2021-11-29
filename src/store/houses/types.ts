@@ -6,6 +6,7 @@ export enum HousesMutationsEnum {
   SET_HOUSES = 'SET_HOUSES',
   EDIT_HOUSE = 'EDIT_HOUSE',
   DELETE_HOUSE = 'DELETE_HOUSE',
+  SET_SELECTED_HOUSE_ID = 'SET_SELECTED_HOUSE_ID',
 }
 
 export enum HousesActionsEnum {
@@ -13,6 +14,7 @@ export enum HousesActionsEnum {
   SET_HOUSES = 'SET_HOUSES',
   EDIT_HOUSE = 'EDIT_HOUSE',
   DELETE_HOUSE = 'DELETE_HOUSE',
+  SET_SELECTED_HOUSE_ID = 'SET_SELECTED_HOUSE_ID',
 }
 
 export interface AddressInterface {
@@ -36,6 +38,7 @@ export interface HouseInterface {
 export interface HousesStateInterface {
   houses: Array<HouseInterface> | null;
   displayModal: boolean;
+  selected_house_id: number | null;
 }
 
 export type Mutations<S = HousesStateInterface> = {

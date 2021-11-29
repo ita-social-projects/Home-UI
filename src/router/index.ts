@@ -11,7 +11,7 @@ import CooperationInfo from '@/views/CooperationInfo.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
 import CooperationPolls from '@/views/CooperationPolls.vue';
 
-import ApartmentsMock from '@/views/ApartmentsMock.vue';
+import ManageApartments from '@/views/ManageApartments.vue';
 import ApartmentsInfoMock from '@/views/ApartmentsInfoMock.vue';
 
 const routes: RouteRecordRaw[] = [
@@ -41,8 +41,8 @@ const routes: RouteRecordRaw[] = [
         component: CooperationInfo,
       },
       {
-        path: RoutesEnum.ApartmentsMock,
-        component: ApartmentsMock,
+        path: RoutesEnum.ManageApartments,
+        component: ManageApartments,
       },
       {
         path: RoutesEnum.ApartmentsInfoMock,

@@ -5,6 +5,7 @@ import { CooperationStateInterface } from '@/store/cooperation/types';
 import { LocalStorageStateInterface } from '@/store/localstorage/types';
 import { HousesStateInterface } from '@/store/houses/types';
 import { PollsStateInterface } from '@/store/polls/types';
+import { ApartmentsStateInterface } from '@/store/apartments/types';
 
 export interface RootStateInterface {
   authorizationStore: AuthorizationStateInterface;
@@ -13,6 +14,7 @@ export interface RootStateInterface {
   pollsStore: PollsStateInterface;
   localStorageStore: LocalStorageStateInterface;
   housesStore: HousesStateInterface;
+  apartments: ApartmentsStateInterface;
 }
 
 export type requestPayload<T> = {
