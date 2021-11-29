@@ -336,10 +336,10 @@ export default defineComponent({
       this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
     },
     openEditHouseModal() {
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, true);
     },
     closeEditHouseModal() {
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, false);
     },
     cancelCooperationEdit() {
       this.initData();
@@ -392,7 +392,7 @@ export default defineComponent({
       return this.$store.state.housesStore.displayModal;
     },
     housesInfo(): Array<HouseInterface> {
-      return this.$store.getters[`${StoreModuleEnum.cooperationStore}/getHousesData`];
+      return this.$store.getters[`${StoreModuleEnum.housesStore}/getHousesData`];
     },
   },
 });
