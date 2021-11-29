@@ -60,6 +60,7 @@ import {
   passwordMaxLenght,
   passwordValidator,
 } from '@/utils/validators';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'login',
@@ -113,7 +114,7 @@ export default defineComponent({
   },
   computed: {
     isTokenExist(): boolean {
-      return this.$store.getters['localStorageStore/isTokenExist'];
+      return this.$store.getters[`${StoreModuleEnum.localStorageStore}/isTokenExist`];
     },
   },
   methods: {
@@ -145,7 +146,7 @@ export default defineComponent({
         },
       };
       if (!this.v$.$error) {
-        this.$store.dispatch('authorizationStore/SIGN_IN', payload);
+        this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/SIGN_IN`, payload);
       }
     },
   },
