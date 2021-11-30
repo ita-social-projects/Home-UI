@@ -4,10 +4,13 @@ import { UpdateUserModel } from '../models/update-user.model';
 
 export enum AuthMutationEnum {
   SET_USER = 'SET_USER',
+  // UPDATE_NAME_USER = 'UPDATE_NAME_USER',
+  // UPDATE_MIDDLE_NAME_USER = 'UPDATE_MIDDLE_NAME_USER',
+  // UPDATE_LAST_NAME_USER = 'UPDATE_LAST_NAME_USER',
+  SET_FORM = 'SET_FORM'
 }
 
 export enum AuthActionEnum {
-  TEST = 'TEST',
   SIGN_IN = 'SIGN_IN',
   SIGN_OUT = 'SIGN_OUT',
   GET_DATA = 'GET_DATA',
@@ -48,7 +51,7 @@ export type Mutations<S = AuthorizationStateInterface> = {
 
 export interface Actions {
   [AuthActionEnum.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload<UserLoginInterface>): void;
-  [AuthActionEnum.UPDATE_USER]({ commit }: AugmentedActionContext, payload: requestPayload<UpdateUserModel>): void;
+  [AuthActionEnum.UPDATE_USER]({ commit }: AugmentedActionContext, payload: UpdateUserInterface): void;
   [AuthActionEnum.SIGN_OUT]({ commit }: AugmentedActionContext, payload: null): void;
   [AuthActionEnum.GET_DATA]({ commit }: AugmentedActionContext, payload: string): void;
 }

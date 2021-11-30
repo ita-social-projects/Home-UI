@@ -1,4 +1,5 @@
 import { UpdateUserInterface } from '../authorization/types';
+
 export class UpdateUserModel {
   public first_name: string;
   public middle_name: string;
@@ -10,6 +11,6 @@ export class UpdateUserModel {
     this.middle_name = userData.middle_name;
     this.last_name = userData.last_name;
     this.email = userData.email;
-    this.password = userData.password;
+    this.password = 'passworD123';
   }
 }
