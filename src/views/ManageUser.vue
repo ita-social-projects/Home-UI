@@ -3,8 +3,8 @@
     <div class="card">
       <div class="cards__wrap">
         <div class="card card__name">
-          <div class="card__header__title"><h1>П.І.Б.</h1></div>
-          <hr />
+          <h2 class="card__header__title">П.І.Б.</h2>
+
           <form class="user__form" @submit.prevent>
             <div class="field">
               <label for="firstName">І'мя</label>
@@ -40,11 +40,9 @@
         </div>
 
         <div class="card card__contacts">
-          <div class="card__header__title"><h1>Контакти</h1></div>
-          <hr />
-
+          <h2 class="card__header__title">Контакти</h2>
+          <span>Додайте ваш новий контакт</span>
           <form @submit.prevent class="add__contact">
-            <input-text v-model="phone" class="phone-input" placeholder="+38..." />
             <div class="selections">
               <Dropdown
                 class="drop__menu"
@@ -61,52 +59,37 @@
                 placeholder="Приоритет"
               />
             </div>
+            <input-text
+              type="text"
+              v-model="email"
+              class="phone-input"
+              :placeholder="typeContact.code === 'email' ? 'email' : 'phone'"
+            />
           </form>
-
-          <Button @click="contactTest" type="submit" class="btn__add p-button-success p-button-sm p-button-outlined"
+          <Button @click="addContact" type="submit" class="btn__add p-button-success p-button-sm p-button-outlined"
             >Додати контакт</Button
           >
           <table>
-            <tr>
-              <td>Email</td>
-              <td>Priority</td>
+            <tr style="color: #9a9898">
+              <td>Пошта</td>
+              <td>Основний</td>
               <td class="td__phone">{{ userInfo.email }}</td>
-              <td class="td__del">
-                <Button
-                  @click="contactTest"
-                  type="submit"
-                  class="td__btn p-button-success p-button-sm p-button-outlined"
-                  disabled
-                  >Видалити</Button
-                >
-              </td>
             </tr>
-            <tr v-if="showContact">
-              <td>{{ typeContact.name }}</td>
-              <td>{{ priorityContact.name }}</td>
-              <td class="td__phone">+38063 777 77 77</td>
-              <td class="td__del">
-                <Button
-                  @click="contactTest"
-                  type="submit"
-                  class="td__btn p-button-success p-button-sm p-button-outlined"
-                >Видалити</Button
-                >
-              </td>
-            </tr>
-            <tr>
-              <td>Телефон</td>
-              <td>Додатковий</td>
-              <td class="td__phone">+38063 777 77 77</td>
-              <td class="td__del">
-                <Button
-                  @click="contactTest"
-                  type="submit"
-                  class="td__btn p-button-success p-button-sm p-button-outlined"
-                >Видалити</Button
-                >
-              </td>
-            </tr>
+            <template v-if="userInfo.contacts.length">
+              <tr v-for="contact in userInfo.contacts" :key="contact.id">
+                <td>{{ contact.type === 'email' ? 'Пошта' : 'Телефон' }}</td>
+                <td>{{ contact.main === false ? 'Додатковий' : 'Основний' }}</td>
+                <td>{{ contact.email }}</td>
+                <td class="td__del">
+                  <Button
+                    @click="deleteContact(contact.id)"
+                    label="Видалити"
+                    type="submit"
+                    class="td__btn p-button-danger p-button-sm p-button-outlined"
+                  />
+                </td>
+              </tr>
+            </template>
           </table>
         </div>
       </div>
@@ -118,7 +101,13 @@
           icon="pi pi-times"
           class="btn p-button-secondary p-button-outlined p-button-sm"
         />
-        <Button @click="onSubmit" type="submit" class="p-button-success p-button-sm p-button-outlined">Зберегти</Button>
+        <Button
+          @click="onSubmit"
+          label="Зберегти"
+          icon="pi pi-check"
+          type="submit"
+          class="p-button-success p-button-sm"
+        />
       </div>
     </div>
   </div>
@@ -127,11 +116,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
+import { UserInterface } from '@/store/authorization/types';
+import { RoutesEnum } from '@/router/types';
+// primevue
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
-import { UserInterface } from '@/store/authorization/types';
-import { RoutesEnum } from '@/router/types';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
@@ -141,17 +131,24 @@ export default defineComponent({
       newUpdateData: {},
       dataReady: false,
       showContact: false,
-      typeContact: null,
-      priorityContact: null,
-      phone: null,
+      email: '',
+      typeContact: {
+        name: String,
+        code: Boolean,
+      },
+      priorityContact: {
+        name: String,
+        code: Boolean,
+      },
       contactsType: [
         { name: 'Пошта', code: 'email' },
         { name: 'Телефон', code: 'phone' },
       ],
       contactsPriority: [
-        { name: 'Основний', code: 'email' },
-        { name: 'Додатковий', code: 'phone' },
+        { name: 'Основний', code: true },
+        { name: 'Додатковий', code: false },
       ],
+      userContacts: [] as any,
     };
   },
   async mounted() {
@@ -159,6 +156,7 @@ export default defineComponent({
     if (user !== null) {
       const userData: UserInterface = JSON.parse(user);
       await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
+      await this.$store.dispatch('authorizationStore/SET_CONTACT');
       this.dataReady = true;
     }
   },
@@ -172,6 +170,7 @@ export default defineComponent({
     updateLastName(e: any) {
       this.newUpdateData = { ...this.newUpdateData, last_name: e.target.value };
     },
+
     onSubmit() {
       this.$store.commit('authorizationStore/SET_FORM', this.newUpdateData);
       this.$store.dispatch('authorizationStore/UPDATE_USER', this.userInfo);
@@ -182,8 +181,16 @@ export default defineComponent({
       this.$router.push(RoutesEnum.MainPage);
     },
 
-    contactTest() {
-      this.showContact = true;
+    addContact() {
+      this.userContacts.push({ type: this.typeContact.code, main: this.priorityContact.code, email: this.email });
+      this.$store.dispatch('authorizationStore/ADD_CONTACT', this.userContacts);
+      this.email = '';
+      this.userContacts = [];
+      this.$store.dispatch('authorizationStore/SET_CONTACT');
+    },
+
+    deleteContact(idx: number) {
+      this.$store.dispatch('authorizationStore/DELETE_CONTACT', idx);
     },
   },
   computed: {
@@ -234,9 +241,9 @@ h1 {
           .field {
             flex-basis: 100%;
             margin-bottom: 20px;
-
             background-color: rgb(255, 255, 255);
             .p-inputtext {
+              margin-top: 5px;
               width: 100%;
             }
           }
@@ -245,11 +252,10 @@ h1 {
 
       .card__contacts {
         width: 62%;
-
         .add__contact {
           display: flex;
           justify-content: space-between;
-          margin-top: 28px;
+          margin-top: 5px;
           .phone-input {
             width: 50%;
           }

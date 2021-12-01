@@ -6,11 +6,14 @@ import {
   UserInterface,
   Actions,
   UpdateUserInterface,
+  ContactInterface,
 } from '@/store/authorization/types';
 import { RootStateInterface } from '@/store/types';
 import { HTTP } from '@/core/api/http-common';
 import { AxiosError, AxiosResponse } from 'axios';
 import { UpdateUserModel } from '@/store/models/update-user.model';
+import { PostContactModel } from '@/store/models/post-contact.model';
+import { UserMutationEnum } from '@/store/user/types';
 
 export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface> & Actions = {
   [AuthActionEnum.SIGN_IN]: ({ commit, dispatch }, payload) => {
@@ -47,13 +50,37 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
     dispatch('localStorageStore/REMOVE', 'user', { root: true });
     commit(AuthMutationEnum.SET_USER, payload);
   },
-
-  //////
-
+  /////////// MY ACTIONS
   [AuthActionEnum.UPDATE_USER]: async ({ state, commit }, payload: UpdateUserInterface) => {
     const payloadData = new UpdateUserModel(payload);
-    const userId = state.user!.id
-    await HTTP.put(`/users/${userId}`, payloadData)
+    const userId = state.user!.id;
+    await HTTP.put(`/users/${userId}`, payloadData);
   },
 
+  //// TEST
+  [AuthActionEnum.DELETE_CONTACT]: async ({ state, commit, dispatch }, payload) => {
+    const userId = state.user!.id;
+    await HTTP.delete(`/users/${userId}/contacts/${payload}`);
+    dispatch(AuthActionEnum.SET_CONTACT);
+  },
+
+  [AuthActionEnum.SET_CONTACT]: async ({ state, commit }) => {
+    const userId = state.user!.id;
+    await HTTP.get(`/users/${userId}/contacts`).then((r: AxiosResponse<ContactInterface>) => {
+      commit(AuthMutationEnum.UPDATE_CONTACT, r.data);
+    });
+  },
+
+  ////
+  [AuthActionEnum.ADD_CONTACT]: async ({ state, commit, dispatch }, payload) => {
+    console.log(payload);
+
+    const userId = state.user!.id;
+    const payloadData = new PostContactModel(payload[0]);
+
+    await HTTP.post(`/users/${userId}/contacts`, payloadData).catch((e) => {
+      alert(e.response.data.error_message);
+      dispatch(AuthActionEnum.SET_CONTACT);
+    });
+  },
 };

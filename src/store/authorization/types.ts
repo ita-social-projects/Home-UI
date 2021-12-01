@@ -4,10 +4,8 @@ import { UpdateUserModel } from '../models/update-user.model';
 
 export enum AuthMutationEnum {
   SET_USER = 'SET_USER',
-  // UPDATE_NAME_USER = 'UPDATE_NAME_USER',
-  // UPDATE_MIDDLE_NAME_USER = 'UPDATE_MIDDLE_NAME_USER',
-  // UPDATE_LAST_NAME_USER = 'UPDATE_LAST_NAME_USER',
-  SET_FORM = 'SET_FORM'
+  SET_FORM = 'SET_FORM',
+  UPDATE_CONTACT='UPDATE_CONTACT',
 }
 
 export enum AuthActionEnum {
@@ -15,6 +13,9 @@ export enum AuthActionEnum {
   SIGN_OUT = 'SIGN_OUT',
   GET_DATA = 'GET_DATA',
   UPDATE_USER = 'UPDATE_USER',
+  DELETE_CONTACT = 'DELETE_CONTACT',
+  ADD_CONTACT = 'ADD_CONTACT',
+  SET_CONTACT = 'SET_CONTACT'
 }
 
 export interface UserInterface {
@@ -32,12 +33,13 @@ export interface UpdateUserInterface {
   last_name: string;
   email: string;
   password: string;
+  contacts: ContactInterface[];
 }
 
 export interface ContactInterface {
   type: string;
   main: boolean;
-  id: number;
+  id?: number;
   email: string;
 }
 
