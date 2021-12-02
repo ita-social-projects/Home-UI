@@ -36,7 +36,7 @@ const validName = helpers.regex(/^[a-zA-Z0-9!#$%&'*+\-/=?^_`{|(),:;<>@[\]]*$/);
 export const nameValidator = helpers.withMessage('Латинські літери, цифри та спец.символи', validName);
 export const nameLenghtValidator = helpers.withMessage('Максимальна кількість символів - 50', maxLength(50));
 
-const validCooperationName = helpers.regex(/^[а-яА-Я]+$/gi);
+const validCooperationName = helpers.regex(/^[а-яієїґ\']/i);
 export const сooperationNameValidator = helpers.withMessage(
   'В назві мають бути кириличні літери',
   validCooperationName
@@ -45,14 +45,15 @@ export const сooperationNameValidator = helpers.withMessage(
 const validIban = helpers.regex(/^UA\d{27}$/gi);
 export const ibanValidator = helpers.withMessage('Складається з літр UA та 27 цифр', validIban);
 
-const validAddress = helpers.regex(/^[а-яА-Я]{1,50}$/);
+// (/((?=[а-яієїґ\'])[^ыэъ]+){1,50}/i);
+const validAddress = helpers.regex(/^[абвгґдеєжзиіїйклмнопрстуфхцчшщьюя\']/i);
 export const addressValidator = helpers.withMessage('В назві мають бути кириличні літери', validAddress);
 
-const validHouseBlock = helpers.regex(/^[а-яА-Я0-9]{1,10}$/);
-export const houseBlockValidator = helpers.withMessage('Цифри від 0 до 9', validHouseBlock);
+const validBlock = helpers.regex(/^[а-яієїґ0-9]{1,10}/i);
+export const houseValidator = helpers.withMessage('Цифри від 0 до 9, також можуть бути літери.', validBlock);
 
 const validZipCpde = helpers.regex(/^\d{5}$/);
-export const zipCpdeValidator = helpers.withMessage('Цифри від 0 до 9', validZipCpde);
+export const zipCpdeValidator = helpers.withMessage('5 цифр від 0 до 9', validZipCpde);
 
-const validPhoneNumber = helpers.regex(/^\+?3?8?(0\d{8})$/);
-export const phoneNumberValidator = helpers.withMessage('Цифри від 0 до 9', validPhoneNumber);
+const validPhoneNumber = helpers.regex(/^\+38(0\d{9})$/);
+export const phoneNumberValidator = helpers.withMessage('Введіть номер корректно.', validPhoneNumber);
