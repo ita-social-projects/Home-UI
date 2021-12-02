@@ -13,7 +13,6 @@ import { HTTP } from '@/core/api/http-common';
 import { AxiosError, AxiosResponse } from 'axios';
 import { UpdateUserModel } from '@/store/models/update-user.model';
 import { PostContactModel } from '@/store/models/post-contact.model';
-import { UserMutationEnum } from '@/store/user/types';
 
 export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface> & Actions = {
   [AuthActionEnum.SIGN_IN]: ({ commit, dispatch }, payload) => {
@@ -57,7 +56,6 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
     await HTTP.put(`/users/${userId}`, payloadData);
   },
 
-  //// TEST
   [AuthActionEnum.DELETE_CONTACT]: async ({ state, commit, dispatch }, payload) => {
     const userId = state.user!.id;
     await HTTP.delete(`/users/${userId}/contacts/${payload}`);
@@ -71,13 +69,9 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
     });
   },
 
-  ////
   [AuthActionEnum.ADD_CONTACT]: async ({ state, commit, dispatch }, payload) => {
-    console.log(payload);
-
     const userId = state.user!.id;
     const payloadData = new PostContactModel(payload[0]);
-
     await HTTP.post(`/users/${userId}/contacts`, payloadData).catch((e) => {
       alert(e.response.data.error_message);
       dispatch(AuthActionEnum.SET_CONTACT);

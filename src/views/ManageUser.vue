@@ -59,12 +59,7 @@
                 placeholder="Приоритет"
               />
             </div>
-            <input-text
-              type="text"
-              v-model="email"
-              class="phone-input"
-              :placeholder="typeContact.code === 'email' ? 'email' : 'phone'"
-            />
+            <input-text type="text" v-model="inputValue" class="phone-input" :placeholder="placeholderValue" />
           </form>
           <Button @click="addContact" type="submit" class="btn__add p-button-success p-button-sm p-button-outlined"
             >Додати контакт</Button
@@ -79,7 +74,7 @@
               <tr v-for="contact in userInfo.contacts" :key="contact.id">
                 <td>{{ contact.type === 'email' ? 'Пошта' : 'Телефон' }}</td>
                 <td>{{ contact.main === false ? 'Додатковий' : 'Основний' }}</td>
-                <td>{{ contact.email }}</td>
+                <td>{{ contact.type === 'email' ? contact.email : contact.phone }}</td>
                 <td class="td__del">
                   <Button
                     @click="deleteContact(contact.id)"
@@ -118,6 +113,8 @@ import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 import { UserInterface } from '@/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
+import { requiredValidator, nameValidator, nameLenghtValidator, } from '@/utils/validators';
+
 // primevue
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -131,10 +128,11 @@ export default defineComponent({
       newUpdateData: {},
       dataReady: false,
       showContact: false,
-      email: '',
+      placeholderValue: 'Оберіть тип та введіть контакт...',
+      inputValue: '',
       typeContact: {
         name: String,
-        code: Boolean,
+        code: String,
       },
       priorityContact: {
         name: String,
@@ -180,13 +178,17 @@ export default defineComponent({
     closeEditPage() {
       this.$router.push(RoutesEnum.MainPage);
     },
-
     addContact() {
-      this.userContacts.push({ type: this.typeContact.code, main: this.priorityContact.code, email: this.email });
+      const contactsType: any = {
+        type: this.typeContact.code,
+        main: this.priorityContact.code,
+      };
+      contactsType.type === 'email' ? (contactsType.email = this.inputValue) : (contactsType.phone = this.inputValue);
+      this.userContacts.push(contactsType);
       this.$store.dispatch('authorizationStore/ADD_CONTACT', this.userContacts);
-      this.email = '';
-      this.userContacts = [];
       this.$store.dispatch('authorizationStore/SET_CONTACT');
+      this.inputValue = '';
+      this.userContacts = [];
     },
 
     deleteContact(idx: number) {

@@ -18,6 +18,11 @@ export enum AuthActionEnum {
   SET_CONTACT = 'SET_CONTACT'
 }
 
+export enum ContactTypeEnum {
+  EMAIL = 'EMAIL',
+  PHONE = 'PHONE'
+}
+
 export interface UserInterface {
   first_name: string;
   middle_name: string;
@@ -37,10 +42,10 @@ export interface UpdateUserInterface {
 }
 
 export interface ContactInterface {
-  type: string;
+  type: ContactTypeEnum;
   main: boolean;
-  id?: number;
-  email: string;
+  email?: string;
+  phone?: number;
 }
 
 export interface AuthorizationStateInterface {
