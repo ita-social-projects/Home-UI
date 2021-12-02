@@ -50,6 +50,16 @@ import Button from 'primevue/button';
 import { AxiosError, AxiosResponse } from 'axios';
 import useVuelidate from '@vuelidate/core';
 import { RoutesEnum } from '@/router/types';
+import {
+  requiredValidator,
+  emailValidator,
+  emailMinLength,
+  emailMaxLength,
+  emailLastCharsValidator,
+  passwordMinLenght,
+  passwordMaxLenght,
+  passwordValidator,
+} from '@/utils/validators';
 
 export default defineComponent({
   name: 'login',
