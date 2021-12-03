@@ -10,7 +10,6 @@ export const state: ApartmentsStateInterface = {
   displayModal: false,
   house_id: 257,
   quantity_flat: 45,
-  selected_apartment_id: null,
 };
 
 export const apartmentsStore: Module<ApartmentsStateInterface, RootStateInterface> = {

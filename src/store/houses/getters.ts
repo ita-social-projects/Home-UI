@@ -6,7 +6,7 @@ export const getters: GetterTree<HousesStateInterface, RootStateInterface> & Get
   getHousesData: (state) => {
     return state.houses;
   },
-  getSelectedHouse: (state) => {
-    return state.selected_house_id;
-  },
+  getHouseInfo: (state) => {
+    return state.houseInfo;
+  }
 };

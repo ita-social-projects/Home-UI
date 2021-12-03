@@ -14,10 +14,12 @@ export const actions: ActionTree<ApartmentsStateInterface, RootStateInterface> &
       commit(ApartmentsMutationsEnum.SET_APARTMENTS, r.data);
     });
   },
+  [ApartmentsActionsEnum.DELETE_APARTMENT]: ({ commit }, payload) => {
+    HTTP.delete(`/houses/${payload.house_id}/apartments/${payload.apartment_id}`).then(() => {
+      commit(ApartmentsMutationsEnum.SET_APARTMENTS);
+    });
+  },
   [ApartmentsActionsEnum.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
     commit(ApartmentsMutationsEnum.SET_MODAL_DISPLAY, payload);
-  },
-  [ApartmentsActionsEnum.SET_SELECTED_APARTMENT_ID]: ({ commit }, payload) => {
-    commit(ApartmentsMutationsEnum.SET_SELECTED_APARTMENT_ID, payload);
   },
 };

@@ -35,7 +35,6 @@ export interface ApartmentsStateInterface {
   displayModal: boolean;
   house_id: number;
   quantity_flat: number;
-  selected_apartment_id: number | null;
 }
 
 export enum ApartmentsMutationsEnum {
@@ -43,7 +42,6 @@ export enum ApartmentsMutationsEnum {
   SET_APARTMENTS = 'SET_APARTMENTS',
   EDIT_APARTMENT = 'EDIT_APARTMENT',
   DELETE_APARTMENT = 'DELETE_APARTMENT',
-  SET_SELECTED_APARTMENT_ID = 'SET_SELECTED_APARTMENT_ID',
 }
 
 export enum ApartmentsActionsEnum {
@@ -51,7 +49,6 @@ export enum ApartmentsActionsEnum {
   SET_APARTMENTS = 'SET_APARTMENTS',
   EDIT_APARTMENT = 'EDIT_APARTMENT',
   DELETE_APARTMENT = 'DELETE_APARTMENT',
-  SET_SELECTED_APARTMENT_ID = 'SET_SELECTED_APARTMENT_ID',
 }
 
 export type Mutations<S = ApartmentsStateInterface> = {

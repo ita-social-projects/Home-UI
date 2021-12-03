@@ -12,7 +12,7 @@ import PageNotFound from '@/views/PageNotFound.vue';
 import CooperationPolls from '@/views/CooperationPolls.vue';
 
 import ManageApartments from '@/views/ManageApartments.vue';
-import ApartmentsInfoMock from '@/views/ApartmentsInfoMock.vue';
+import ApartmentInfo from '@/views/ApartmentInfo.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -42,11 +42,15 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: RoutesEnum.ManageApartments,
+        name: 'manage-apartment',
         component: ManageApartments,
+        props: true,
       },
       {
-        path: RoutesEnum.ApartmentsInfoMock,
-        component: ApartmentsInfoMock,
+        path: RoutesEnum.ApartmentInfo,
+        name: 'apartment-info',
+        component: ApartmentInfo,
+        props: true,
       },
       {
         path: RoutesEnum.Polls,

@@ -249,7 +249,7 @@ import Breadcrumb from '@/components/Breadcrumb.vue';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { HouseInterface } from '@/store/houses/types';
-import { RoutesEnum } from '@/router/types';
+import { ref } from 'vue';
 
 export default defineComponent({
   name: 'CooperationInfo',
@@ -288,6 +288,7 @@ export default defineComponent({
       phone: '',
       email: '',
       address: {},
+      selectedHouse: ref(),
       cooperationData: {
         id: 0,
         name: '',
@@ -380,9 +381,11 @@ export default defineComponent({
     toggle(event: Event) {
       (this.$refs.menu as any).toggle(event);
     },
-    choosenHouse(selectedHouse: any) {
-      this.$store.dispatch('housesStore/SET_SELECTED_HOUSE_ID', selectedHouse.id);
-      this.$router.push(RoutesEnum.ManageApartments);
+    choosenHouse(selectedHouse: HouseInterface) {
+      this.$router.push({
+        name: 'manage-apartment',
+        params: { id: selectedHouse.id },
+      });
     },
   },
   computed: {

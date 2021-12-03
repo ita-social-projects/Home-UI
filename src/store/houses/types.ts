@@ -6,7 +6,7 @@ export enum HousesMutationsEnum {
   SET_HOUSES = 'SET_HOUSES',
   EDIT_HOUSE = 'EDIT_HOUSE',
   DELETE_HOUSE = 'DELETE_HOUSE',
-  SET_SELECTED_HOUSE_ID = 'SET_SELECTED_HOUSE_ID',
+  GET_HOUSE_BY_DI = 'GET_HOUSE_BY_DI',
 }
 
 export enum HousesActionsEnum {
@@ -14,7 +14,7 @@ export enum HousesActionsEnum {
   SET_HOUSES = 'SET_HOUSES',
   EDIT_HOUSE = 'EDIT_HOUSE',
   DELETE_HOUSE = 'DELETE_HOUSE',
-  SET_SELECTED_HOUSE_ID = 'SET_SELECTED_HOUSE_ID',
+  GET_HOUSE_BY_DI = 'GET_HOUSE_BY_ID',
 }
 
 export interface AddressInterface {
@@ -38,19 +38,22 @@ export interface HouseInterface {
 export interface HousesStateInterface {
   houses: Array<HouseInterface> | null;
   displayModal: boolean;
-  selected_house_id: number | null;
+  houseInfo: HouseInterface | null;
 }
 
 export type Mutations<S = HousesStateInterface> = {
   [HousesMutationsEnum.SET_HOUSES](state: S, payload: Array<HouseInterface>): void;
+  [HousesMutationsEnum.GET_HOUSE_BY_DI](state: S, payload: HouseInterface): void;
 };
 
 export interface Actions {
   [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext, payload: Array<HouseInterface>): void;
+  [HousesActionsEnum.GET_HOUSE_BY_DI]({ commit }: AugmentedActionContext, payload: number): void;
 }
 
 export type Getters<S = HousesStateInterface> = {
   getHousesData(state: S): Array<HouseInterface> | null;
+  getHouseInfo(state: S): HouseInterface | null;
 };
 
 export type AugmentedActionContext = {

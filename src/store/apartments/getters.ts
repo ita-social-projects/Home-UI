@@ -6,7 +6,4 @@ export const getters: GetterTree<ApartmentsStateInterface, RootStateInterface> &
   getApartmentsData: (state) => {
     return state.apartments;
   },
-  getApartmentId: (state) => {
-    return state.selected_apartment_id;
-  },
 };

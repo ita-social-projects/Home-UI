@@ -8,7 +8,7 @@ export const mutations: MutationTree<HousesStateInterface> & Mutations = {
   [HousesMutationsEnum.SET_MODAL_DISPLAY]: (state, payload) => {
     state.displayModal = payload;
   },
-  [HousesMutationsEnum.SET_SELECTED_HOUSE_ID]: (state, payload) => {
-    state.selected_house_id = payload;
+  [HousesMutationsEnum.GET_HOUSE_BY_DI]: (state, payload) => {
+    state.houseInfo = payload;
   },
 };
