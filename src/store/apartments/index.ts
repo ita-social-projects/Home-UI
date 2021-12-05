@@ -8,8 +8,6 @@ import { mutations } from '@/store/apartments/mutations';
 export const state: ApartmentsStateInterface = {
   apartments: null,
   displayModal: false,
-  house_id: 257,
-  quantity_flat: 45,
 };
 
 export const apartmentsStore: Module<ApartmentsStateInterface, RootStateInterface> = {

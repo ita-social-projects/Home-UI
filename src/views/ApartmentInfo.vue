@@ -23,7 +23,7 @@
             dataKey="id"
           >
             <template #header>
-              <h4>Список проживаючих у квартирі</h4>
+              <h4>Інформація про власників та мешканців квартири</h4>
             </template>
             <Column field="fullName" header="Прізвище та ім'я" style="width: 25em" showGridlines></Column>
             <Column field="contact" header="Email" style="width: 20em" showGridlines></Column>
@@ -134,9 +134,6 @@ export default defineComponent({
   height: 100%;
 }
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   height: 100%;
 
   .breadcrumb {
@@ -147,7 +144,6 @@ export default defineComponent({
 .wrapper-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 100%;
 }
 
@@ -162,6 +158,7 @@ export default defineComponent({
     margin-bottom: 150px;
   }
   box-shadow: rgba(0, 0, 0, 0.1) -1px 4px 5px 1px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  margin-bottom: 50px;
 }
 
 .apartment_info {

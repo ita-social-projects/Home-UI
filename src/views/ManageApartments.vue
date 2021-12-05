@@ -48,7 +48,7 @@
               <h4>Список квартир в будинку</h4>
             </template>
             <Column
-              field="apartment_number"
+              field="apartmentNumber"
               header="Номер квартири"
               :sortable="true"
               style="width: 40em"
@@ -78,7 +78,8 @@
 <script lang="ts">
 import { toRefs, ref, computed, defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { ApartmentInterface } from '@/store/apartments/types';
+// import { ApartmentInterface } from '@/store/apartments/types';
+import { ApartmentModel } from '@/store/apartments/models/apartment.model';
 import { HouseInterface } from '@/store/houses/types';
 import { useStore } from 'vuex';
 import Button from 'primevue/button';
@@ -134,7 +135,7 @@ export default defineComponent({
       loading.value = false;
     };
 
-    const apartmentsData = computed((): Array<ApartmentInterface> => {
+    const apartmentsData = computed((): Array<ApartmentModel> => {
       return store.getters['apartmentsStore/getApartmentsData'];
     });
 

@@ -1,40 +1,10 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-
-export interface ApartmentOwnerContacts {
-  id: number;
-  type: string;
-  main: boolean;
-  email?: string;
-  phone?: string;
-}
-
-export interface ApartmentOwnerInterface {
-  id: number;
-  first_name: string;
-  middle_name: string;
-  last_name: string;
-  contacts: Array<ApartmentOwnerContacts>;
-}
-
-export interface ApartmentOwnershipsInterface {
-  id: number;
-  owner: ApartmentOwnerInterface;
-  ownership_part: number;
-}
-
-export interface ApartmentInterface {
-  id: number;
-  apartment_number: string;
-  apartment_area: number;
-  ownerships: Array<ApartmentOwnershipsInterface>;
-}
+import { ApartmentModel } from '@/store/apartments/models/apartment.model';
 
 export interface ApartmentsStateInterface {
-  apartments: Array<ApartmentInterface> | null;
+  apartments: Array<ApartmentModel> | null;
   displayModal: boolean;
-  house_id: number;
-  quantity_flat: number;
 }
 
 export enum ApartmentsMutationsEnum {
@@ -52,18 +22,15 @@ export enum ApartmentsActionsEnum {
 }
 
 export type Mutations<S = ApartmentsStateInterface> = {
-  [ApartmentsMutationsEnum.SET_APARTMENTS](state: S, payload: Array<ApartmentInterface>): void;
+  [ApartmentsMutationsEnum.SET_APARTMENTS](state: S, payload: Array<ApartmentModel>): void;
 };
 
 export interface Actions {
-  [ApartmentsMutationsEnum.SET_APARTMENTS](
-    { commit }: AugmentedActionContext,
-    payload: Array<ApartmentInterface>
-  ): void;
+  [ApartmentsActionsEnum.SET_APARTMENTS]({ commit }: AugmentedActionContext, payload: number): void;
 }
 
 export type Getters<S = ApartmentsStateInterface> = {
-  getApartmentsData(state: S): Array<ApartmentInterface> | null;
+  getApartmentsData(state: S): Array<ApartmentModel> | null;
 };
 
 export type AugmentedActionContext = {
