@@ -4,6 +4,7 @@ const email = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-\/=?^_`{|().,:;<>@[\]]+@[a-
 const emailLastChars = helpers.regex(/^[a-z\d].*[a-z]$/i);
 const edrpou = helpers.regex(/^\d{8}$/);
 const password = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
+const ukranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ]{1,50}$/);
 
 export const emailValidator = helpers.withMessage(
   'Електронна пошта містить латинські букви, цифри, та спеціальні символи',
@@ -56,3 +57,34 @@ export const zipCpdeValidator = helpers.withMessage('Цифри від 0 до 9'
 
 const validPhoneNumber = helpers.regex(/^\+?3?8?(0\d{8})$/);
 export const phoneNumberValidator = helpers.withMessage('Цифри від 0 до 9', validPhoneNumber);
+
+
+// add house
+const validQuantity_flat = helpers.regex(/^\d+$/);
+export const quantity_flatValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validQuantity_flat);
+
+const validHouse_area = helpers.regex(/^\d+$/);
+export const   houseAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validHouse_area);
+
+const validAdjoining_area = helpers.regex(/^\d+$/);
+export const adjoiningAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validAdjoining_area);
+
+export const regionValidator = helpers.withMessage('В назві мають бути українські літери', ukranianLan);
+
+export const cityValidator = helpers.withMessage('В назві мають бути українські літери', ukranianLan);
+
+export const districtValidator = helpers.withMessage('В назві мають бути українські літери', ukranianLan);
+
+export const streetValidator = helpers.withMessage('В назві мають бути українські літери', ukranianLan);
+
+const validHouseBlockNumber = helpers.regex(/^[0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ/]{1,10}$/);
+export const houseBlockNumberValidator = helpers.withMessage(
+  'В назві мають бути  українські літери або цифри від 0 до 9',
+  validHouseBlockNumber
+);
+
+const validHouseNumber = helpers.regex(/^[0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ-]{1,10}$/);
+export const houseNumberValidator = helpers.withMessage('В назві мають бути українські літери', validHouseNumber);
+
+const validZipCode = helpers.regex(/^\d{5}$/);
+export const zipCodeValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validZipCode);

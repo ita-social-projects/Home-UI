@@ -149,7 +149,7 @@
     </div>
 
     <div class="add_btn">
-      <Button label="Додати будинок" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
+      <AddHouseButton :id="cooperationData.id"></AddHouseButton>
     </div>
 
     <div class="container container-houses">
@@ -239,6 +239,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import AddHouseButton from '@/components/AddHouseButton.vue';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { HouseInterface } from '@/store/houses/types';
@@ -254,6 +255,7 @@ export default defineComponent({
     DataTable,
     Column,
     Menu,
+    AddHouseButton,
   },
   data() {
     return {
@@ -307,7 +309,7 @@ export default defineComponent({
   methods: {
     initData() {
       let cooperationInfo: CooperationModel | null = this.$store.state.cooperationStore.selectedCooperation;
-      this.cooperationData.id = cooperationInfo?.id ?? 0;
+      this.cooperationData.id = cooperationInfo?.id ?? 1;
       this.cooperationData.name = cooperationInfo?.name ?? '';
       this.cooperationData.edrpou = cooperationInfo?.edrpou ?? '';
       this.cooperationData.iban = cooperationInfo?.iban ?? '';
@@ -328,6 +330,9 @@ export default defineComponent({
           }
         }
       }
+    },
+    setHouse() {
+      this.houses = this.$store.state.housesStore.houses as HouseInterface[];
     },
     openCooperationModal() {
       this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
