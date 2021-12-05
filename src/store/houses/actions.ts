@@ -5,8 +5,8 @@ import { HTTP } from '@/core/api/http-common';
 
 
 export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Actions = {
-  [HousesActionsEnum.SET_HOUSES]:  ({ commit }) => {
-     HTTP.get(`/cooperations/1/houses`).then((r) => {
+  [HousesActionsEnum.SET_HOUSES]: ({ commit }) => {
+    HTTP.get(`/cooperations/1/houses`).then((r) => {
       commit(HousesMutationsEnum.SET_HOUSES, r.data);
     });
   },
