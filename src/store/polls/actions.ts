@@ -14,7 +14,7 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
       const { data } = await HTTP.get(url, { params: { page_size: 10, sort: 'id,asc' } });
       const cooperationPolls: Array<PollModel> = data.map((el: PollDTOModel) => new PollModel(el));
       commit(PollsMutationEnum.SET_COOPERATION_POLLS, cooperationPolls);
-    } catch (e) {
+    } catch (e : any) {
       console.log(e.response);
     }
   },

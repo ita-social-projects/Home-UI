@@ -5,12 +5,14 @@ export class HouseDTOModel {
   public quantity_flat: number;
   public house_area: number;
   public adjoining_area: number;
+  public id?: number;
   public address: AddressDTOModel;
 
-  constructor(polledHouse: HouseModel) {
-    this.quantity_flat = polledHouse.flatQuantity;
-    this.house_area = polledHouse.houseArea;
-    this.adjoining_area = polledHouse.adjoiningArea;
-    this.address = new AddressDTOModel(polledHouse.address);
+  constructor(house: HouseModel) {
+    this.quantity_flat = house.flatQuantity;
+    this.house_area = house.houseArea;
+    this.adjoining_area = house.adjoiningArea;
+    this.id = house.id;
+    this.address = new AddressDTOModel(house.address);
   }
 }

@@ -157,15 +157,15 @@
         <template #header>
           <h4>Будинки в цьому ОСББ</h4>
         </template>
-        <Column field="quantity_flat" style="min-width: 20rem" header="Кількість квартир в будинку" :sortable="true" />
-        <Column field="house_area" style="min-width: 20rem" header="Площа будинку" :sortable="true" />
-        <Column field="adjoining_area" style="min-width: 20rem" header="Прибудинкової теріторії" :sortable="true" />
+        <Column field="flatQuantity" style="min-width: 20rem" header="Кількість квартир в будинку" :sortable="true" />
+        <Column field="houseArea" style="min-width: 20rem" header="Площа будинку" :sortable="true" />
+        <Column field="adjoiningArea" style="min-width: 20rem" header="Прибудинкової теріторії" :sortable="true" />
         <Column field="address" style="min-width: 20rem" header="Адреса" :sortable="true">
           <template #body="slotProps">
-            {{ slotProps.data.address.region }}, {{ slotProps.data.address.city }}, {{ slotProps.data.address.city }},
+            {{ slotProps.data.address.region }}, {{ slotProps.data.address.city }},
             {{ slotProps.data.address.district }}, {{ slotProps.data.address.street }},
-            {{ slotProps.data.address.house_block }}, {{ slotProps.data.address.house_number }},
-            {{ slotProps.data.address.zip_code }}
+            {{ slotProps.data.address.houseBlock }}, {{ slotProps.data.address.houseNumber }},
+            {{ slotProps.data.address.zipCode }}
           </template>
         </Column>
         <Column>
@@ -190,15 +190,15 @@
               <form @submit.prevent="editHouseInfo">
                 <p>
                   <label class="dialog-item" for="coopName">Кількість квартир в будинку : </label>
-                  <InputText id="quantityFlat" placeholder="Кількість квартир в будинку" v-model="quantity_flat" />
+                  <InputText id="quantityFlat" placeholder="Кількість квартир в будинку" v-model="flatQuantity" />
                 </p>
                 <p>
                   <label class="dialog-item" for="coopAddress">Площа будинку : </label>
-                  <InputText id="houseArea" placeholder="Площа будинку" v-model="house_area" />
+                  <InputText id="houseArea" placeholder="Площа будинку" v-model="houseArea" />
                 </p>
                 <p>
                   <label class="dialog-item" for="iban">Прибудинкової теріторії : </label>
-                  <InputText id="adjoiningArea" placeholder="Прибудинкової теріторії" v-model="adjoining_area" />
+                  <InputText id="adjoiningArea" placeholder="Прибудинкової теріторії" v-model="adjoiningArea" />
                 </p>
                 <p>
                   <label class="dialog-item" for="coopEmail">Адреса : </label>
@@ -242,8 +242,8 @@ import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddHouseButton from '@/components/AddHouseButton.vue';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
-import { HouseInterface } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
+import { HouseModel } from '@/shared/models/house.model';
 
 export default defineComponent({
   name: 'CooperationInfo',
@@ -276,7 +276,7 @@ export default defineComponent({
         },
       ],
       selectedHouse: null,
-      houses: [] as Array<HouseInterface>,
+      houses: [] as Array<HouseModel>,
       id: 0,
       name: '',
       edrpou: '',
@@ -332,7 +332,7 @@ export default defineComponent({
       }
     },
     setHouse() {
-      this.houses = this.$store.state.housesStore.houses as HouseInterface[];
+      this.houses = this.$store.state.housesStore.houses as HouseModel[];
     },
     openCooperationModal() {
       this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
@@ -365,12 +365,12 @@ export default defineComponent({
       this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_COOPERATION_UPDATE`, payload);
       this.closeCooperationModal();
     },
-    editHouseInfo(house: HouseInterface) {
+    editHouseInfo(house: HouseModel) {
       const payload = {
         id: house.id,
-        quantity_flat: house.quantity_flat,
-        house_area: house.house_area,
-        adjoining_area: house.adjoining_area,
+        flatQuantity: house.flatQuantity,
+        houseArea: house.houseArea,
+        adjoiningArea: house.adjoiningArea,
         address: house.address,
       };
       this.$store.dispatch(`${StoreModuleEnum.housesStore}/EDIT_HOUSE`, payload);
@@ -396,7 +396,7 @@ export default defineComponent({
     displayHouseModal(): boolean {
       return this.$store.state.housesStore.displayModal;
     },
-    housesInfo(): Array<HouseInterface> {
+    housesInfo(): Array<HouseModel> {
       return this.$store.getters[`${StoreModuleEnum.housesStore}/getHousesData`];
     },
   },

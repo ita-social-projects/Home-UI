@@ -4,7 +4,7 @@ const email = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-\/=?^_`{|().,:;<>@[\]]+@[a-
 const emailLastChars = helpers.regex(/^[a-z\d].*[a-z]$/i);
 const edrpou = helpers.regex(/^\d{8}$/);
 const password = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
-const ukranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ]{1,50}$/);
+const ukranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]{1,50}$/);
 
 export const emailValidator = helpers.withMessage(
   'Електронна пошта містить латинські букви, цифри, та спеціальні символи',
@@ -58,13 +58,11 @@ export const zipCpdeValidator = helpers.withMessage('Цифри від 0 до 9'
 const validPhoneNumber = helpers.regex(/^\+?3?8?(0\d{8})$/);
 export const phoneNumberValidator = helpers.withMessage('Цифри від 0 до 9', validPhoneNumber);
 
-
-// add house
-const validQuantity_flat = helpers.regex(/^\d+$/);
-export const quantity_flatValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validQuantity_flat);
+const validFlatQuantity = helpers.regex(/^\d+$/);
+export const flatQuantityValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validFlatQuantity);
 
 const validHouse_area = helpers.regex(/^\d+$/);
-export const   houseAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validHouse_area);
+export const houseAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validHouse_area);
 
 const validAdjoining_area = helpers.regex(/^\d+$/);
 export const adjoiningAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validAdjoining_area);
