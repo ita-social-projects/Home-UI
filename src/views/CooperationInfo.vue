@@ -151,9 +151,9 @@
     <div class="add_btn">
       <Button label="Додати будинок" icon="pi pi-pencil" @click="addHouse" class="p-button-outlined p-button-info" />
     </div>
-
+    <!-- МОЙ КОНТЕЙНЕР -->
     <div class="container container-houses">
-      <DataTable ref="dt" :value="houses" dataKey="houses.id" v-model:selection="selectedHouse">
+      <DataTable ref="dt" :value="houses" dataKey="houses" v-model:selection="selectedHouse">
         <template #header>
           <h4>Будинки в цьому ОСББ</h4>
         </template>
@@ -162,12 +162,13 @@
         <Column field="adjoining_area" style="min-width: 20rem" header="Прибудинкової теріторії" :sortable="true" />
         <Column field="address" style="min-width: 20rem" header="Адреса" :sortable="true">
           <template #body="slotProps">
-            {{ slotProps.data.address.region }}, {{ slotProps.data.address.city }}, {{ slotProps.data.address.city }},
+            {{ slotProps.data.address.region }}, {{ slotProps.data.address.city }},
             {{ slotProps.data.address.district }}, {{ slotProps.data.address.street }},
             {{ slotProps.data.address.house_block }}, {{ slotProps.data.address.house_number }},
             {{ slotProps.data.address.zip_code }}
           </template>
         </Column>
+        <Column field="id" style="min-width: 20rem" header="id" :sortable="true" />
         <Column>
           <template #body="slotProps">
             <Button
@@ -177,8 +178,10 @@
               @click="toggle"
               aria-haspopup="true"
               aria-controls="overlay_menu"
+              ref="button"
+              :item="slotProps.data"
             />
-            <Menu :model="houseActions" id="overlay_menu" ref="menu" :popup="true" />
+            <Menu :model="houseActions(this.item)" id="overlay_menu" ref="menu" :popup="true" />
             <Dialog
               header="Редагувати будинок"
               v-model:visible="displayHouseModal"
@@ -186,31 +189,75 @@
               :modal="true"
               :closable="false"
               :dismissableMask="true"
+              :itemid="this.item.id"
             >
-              <form @submit.prevent="editHouseInfo">
+              <form submit.prevent="editHouseInfo">
                 <p>
                   <label class="dialog-item" for="coopName">Кількість квартир в будинку : </label>
-                  <InputText id="quantityFlat" placeholder="Кількість квартир в будинку" v-model="quantity_flat" />
+                  <InputText
+                    id="quantityFlat"
+                    placeholder="Кількість квартир в будинку"
+                    v-model="this.item.quantity_flat"
+                  />
                 </p>
                 <p>
                   <label class="dialog-item" for="coopAddress">Площа будинку : </label>
-                  <InputText id="houseArea" placeholder="Площа будинку" v-model="house_area" />
+                  <InputText id="houseArea" placeholder="Площа будинку" v-model="this.item.house_area" />
                 </p>
                 <p>
                   <label class="dialog-item" for="iban">Прибудинкової теріторії : </label>
-                  <InputText id="adjoiningArea" placeholder="Прибудинкової теріторії" v-model="adjoining_area" />
+                  <InputText id="adjoiningArea" v-model="this.item.adjoining_area" />
                 </p>
                 <p>
-                  <label class="dialog-item" for="coopEmail">Адреса : </label>
-                  <InputText id="coopEmail" placeholder="Адреса" v-model="address.city" />
+                  <label class="dialog-item" for="coopEmail">
+                    <pre>Адреса:</pre>
+                    <pre>     Регіон :</pre>
+                  </label>
+                  <InputText id="address-region" placeholder="Регіон" v-model="this.item.address.region" />
+                </p>
+                <p>
+                  <label class="dialog-item" for="coopEmail">
+                    <pre>     Місто :</pre>
+                  </label>
+                  <InputText id="address-city" placeholder="Регіон" v-model="this.item.address.city" />
+                </p>
+                <p>
+                  <label class="dialog-item" for="coopEmail">
+                    <pre>     Район :</pre>
+                  </label>
+                  <InputText id="address-region" placeholder="Регіон" v-model="this.item.address.district" />
+                </p>
+                <p>
+                  <label class="dialog-item" for="coopEmail">
+                    <pre>     Вулиця :</pre>
+                  </label>
+                  <InputText id="address-street" placeholder="Регіон" v-model="this.item.address.street" />
+                </p>
+                <p>
+                  <label class="dialog-item" for="coopEmail">
+                    <pre>     Блок :</pre>
+                  </label>
+                  <InputText id="address-block" placeholder="Регіон" v-model="this.item.address.house_block" />
+                </p>
+                <p>
+                  <label class="dialog-item" for="coopEmail">
+                    <pre>     Номер будинку :</pre>
+                  </label>
+                  <InputText id="address-housenumber" placeholder="Регіон" v-model="this.item.address.house_number" />
+                </p>
+                <p>
+                  <label class="dialog-item" for="coopEmail">
+                    <pre>     Код :</pre>
+                  </label>
+                  <InputText id="address-zipcode" placeholder="Регіон" v-model="this.item.address.zip_code" />
                 </p>
               </form>
 
               <template #footer>
                 <Button
-                  label="Редагувати"
+                  label="Зберегти зміни"
                   icon="pi pi-check"
-                  @click="editHouseInfo(slotProps.data)"
+                  @click="editHouseInfo(this.item)"
                   autofocus
                   class="p-button-info"
                 />
@@ -230,8 +277,9 @@
 </template>
 
 <script lang="ts">
+import { requiredValidator } from '@/utils/validators';
+import useVuelidate from '@vuelidate/core';
 import { defineComponent } from 'vue';
-
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -254,24 +302,34 @@ export default defineComponent({
     Column,
     Menu,
   },
+  setup() {
+    return {
+      v$: useVuelidate(),
+    };
+  },
   data() {
     return {
-      houseActions: [
-        {
-          label: 'Видалити',
-          icon: 'pi pi-times',
-          command: () => {
-            this.confirmDeleteHouse();
+      houseActions: (house: any) => {
+        return [
+          {
+            label: 'Видалити',
+            icon: 'pi pi-times',
+            command: () => {
+              this.confirmDeleteHouse(); // 'house' props deleted
+              this.showSuccessDelete(house);
+              this.initData();
+            },
           },
-        },
-        {
-          label: 'Редагувати',
-          icon: 'pi pi-user-edit',
-          command: () => {
-            this.openEditHouseModal();
+
+          {
+            label: 'Редагувати',
+            icon: 'pi pi-user-edit',
+            command: () => {
+              this.openEditHouseModal(house);
+            },
           },
-        },
-      ],
+        ];
+      },
       selectedHouse: null,
       houses: {},
       id: 0,
@@ -291,6 +349,17 @@ export default defineComponent({
         address: {} as CooperationAddressInterface,
       },
       isLoaded: false,
+      item: {} as HouseInterface,
+    };
+  },
+  validations() {
+    return {
+      houses: {
+        requiredValidator,
+      },
+      password: {
+        requiredValidator,
+      },
     };
   },
   async mounted() {
@@ -326,6 +395,10 @@ export default defineComponent({
         }
       }
     },
+    confirmDeleteHouse(house: HouseInterface) {
+      // house: HouseInterface not used because it gives wrong id (always last)
+      this.$store.dispatch('housesStore/DELETE_HOUSE', this.item.id);
+    },
     openCooperationModal() {
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', true);
     },
@@ -335,8 +408,8 @@ export default defineComponent({
     openEditHouseModal() {
       this.$store.dispatch('housesStore/SET_MODAL_DISPLAY', true);
     },
-    closeEditHouseModal() {
-      this.$store.dispatch('housesStore/SET_MODAL_DISPLAY', false);
+    async closeEditHouseModal() {
+      await this.$store.dispatch('housesStore/SET_MODAL_DISPLAY', false);
     },
     cancelCooperationEdit() {
       this.initData();
@@ -355,23 +428,48 @@ export default defineComponent({
         ],
       };
       this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
+      console.log('edit payload');
       this.closeCooperationModal();
     },
     editHouseInfo(house: HouseInterface) {
+      // house: HouseInterface not used because it gives wrong id (always last)
       const payload = {
-        id: house.id,
-        quantity_flat: house.quantity_flat,
-        house_area: house.house_area,
-        adjoining_area: house.adjoining_area,
-        address: house.address,
+        id: this.item.id,
+        quantity_flat: this.item.quantity_flat,
+        house_area: this.item.house_area,
+        adjoining_area: this.item.adjoining_area,
+        address: this.item.address,
       };
       this.$store.dispatch('housesStore/EDIT_HOUSE', payload);
       this.closeEditHouseModal();
     },
-    toggle(event: Event) {
+    toggle(event: any) {
+      this.item = event.target.__vueParentComponent.attrs.item;
+      (this.$refs.menu as any).toggle(event);
+      console.log(this.$refs.button);
+      console.log(this.item);
+    },
+    toggleConfirm(event: Event) {
       (this.$refs.menu as any).toggle(event);
     },
+    showSuccessDelete(house: HouseInterface) {
+      this.$toast.add({
+        severity: 'success',
+        summary: 'Успішно',
+        detail: `Будинок з ID ${house.id} успішно видалено`,
+        life: 3000,
+      });
+    },
+    showSuccessEdit(house: HouseInterface) {
+      this.$toast.add({
+        severity: 'success',
+        summary: 'Успішно',
+        detail: `Дані про будинок з ID ${house.id} змінено`,
+        life: 3000,
+      });
+    },
   },
+
   computed: {
     fillAddress(): string {
       return `${this.cooperationData.address.street},
