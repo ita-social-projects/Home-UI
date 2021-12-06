@@ -4,37 +4,45 @@
       <div class="cards__wrap">
         <div class="card card__name">
           <h2 class="card__header__title">П.І.Б.</h2>
-
           <form class="user__form" @submit.prevent>
             <div class="field">
               <label for="firstName">І'мя</label>
               <input-text
                 class="form__input"
                 id="firstName"
-                :value="userInfo.first_name"
+                v-model.trim="firstName"
                 type="text"
                 @change="updateName"
+                :class="{ 'p-invalid': v$.firstName.$error }"
+                @blur="v$.firstName.$touch"
               />
+              <small v-if="v$.firstName.$error" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
             </div>
             <div class="field">
               <label for="middleName">По-батькові</label>
               <input-text
                 class="form__input"
                 id="middleName"
-                :value="userInfo.middle_name"
+                v-model.trim="middleName"
                 type="text"
                 @change="updateMiddleName"
+                :class="{ 'p-invalid': v$.middleName.$error }"
+                @blur="v$.middleName.$touch"
               />
+              <small v-if="v$.middleName.$error" class="p-error">{{ v$.middleName.$errors[0].$message }}</small>
             </div>
             <div class="field">
               <label for="lastname">Прізвище</label>
               <input-text
                 class="form__input"
                 id="lastname"
-                :value="userInfo.last_name"
+                v-model.trim="lastName"
                 type="text"
                 @change="updateLastName"
+                :class="{ 'p-invalid': v$.lastName.$error }"
+                @blur="v$.lastName.$touch"
               />
+              <small v-if="v$.lastName.$error" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
             </div>
           </form>
         </div>
@@ -43,6 +51,23 @@
           <h2 class="card__header__title">Контакти</h2>
           <span>Додайте ваш новий контакт</span>
           <form @submit.prevent class="add__contact">
+            <input-text class="phone-input" disabled v-if="typeContact === String" :placeholder="placeholderValue" />
+            <input-text
+              class="phone-input"
+              v-else-if="typeContact.name === 'Телефон'"
+              placeholder="Телефон"
+              v-model.trim="inputValue.phone"
+              :class="{ 'p-invalid': v$.inputValue.phone.$error }"
+              @blur="v$.inputValue.phone.$touch"
+            />
+            <input-text
+              class="phone-input"
+              v-else-if="typeContact.name === 'Пошта'"
+              placeholder="Пошта"
+              v-model.trim="inputValue.email"
+              :class="{ 'p-invalid': v$.inputValue.email.$error }"
+              @blur="v$.inputValue.email.$touch"
+            />
             <div class="selections">
               <Dropdown
                 class="drop__menu"
@@ -59,10 +84,24 @@
                 placeholder="Приоритет"
               />
             </div>
-            <input-text type="text" v-model="inputValue" class="phone-input" :placeholder="placeholderValue" />
           </form>
-          <Button @click="addContact" type="submit" class="btn__add p-button-success p-button-sm p-button-outlined"
-            >Додати контакт</Button
+          <div>
+            <small v-if="v$.inputValue.email.$error" class="p-error">{{
+                v$.inputValue.email.$errors[0].$message
+              }}</small>
+          </div>
+          <div>
+            <small v-if="v$.inputValue.phone.$error" class="p-error">{{
+                v$.inputValue.phone.$errors[0].$message
+              }}</small>
+          </div>
+
+          <Button
+            @click="addContact"
+            :disabled="v$.$invalid || typeContact === String"
+            type="submit"
+            class="btn__add p-button-success p-button-sm p-button-outlined"
+          >Додати контакт</Button
           >
           <table>
             <tr style="color: #9a9898">
@@ -97,6 +136,7 @@
           class="btn p-button-secondary p-button-outlined p-button-sm"
         />
         <Button
+          :disabled="v$.$invalid"
           @click="onSubmit"
           label="Зберегти"
           icon="pi pi-check"
@@ -113,27 +153,41 @@ import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 import { UserInterface } from '@/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
-import { requiredValidator, nameValidator, nameLenghtValidator, } from '@/utils/validators';
+import {
+  requiredValidator,
+  nameValidator,
+  nameLenghtValidator,
+  emailValidator,
+  emailMinLength,
+  emailMaxLength,
+  phoneNumberValidator,
+} from '@/utils/validators';
+import useVuelidate from '@vuelidate/core';
 
 // primevue
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
+import { requiredIf } from '@vuelidate/validators';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
   components: { Button, InputText, Dropdown },
+  setup() {
+    return {
+      v$: useVuelidate(),
+    };
+  },
   data() {
     return {
       newUpdateData: {},
       dataReady: false,
-      showContact: false,
-      placeholderValue: 'Оберіть тип та введіть контакт...',
-      inputValue: '',
-      typeContact: {
-        name: String,
-        code: String,
+      placeholderValue: 'Спочатку оберіть тип контакту...',
+      inputValue: {
+        email: '',
+        phone: '',
       },
+      typeContact: String,
       priorityContact: {
         name: String,
         code: Boolean,
@@ -147,6 +201,9 @@ export default defineComponent({
         { name: 'Додатковий', code: false },
       ],
       userContacts: [] as any,
+      firstName: '',
+      middleName: '',
+      lastName: '',
     };
   },
   async mounted() {
@@ -155,8 +212,46 @@ export default defineComponent({
       const userData: UserInterface = JSON.parse(user);
       await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
       await this.$store.dispatch('authorizationStore/SET_CONTACT');
+      this.firstName = this.userInfo.first_name;
+      this.middleName = this.userInfo.middle_name;
+      this.lastName = this.userInfo.last_name;
       this.dataReady = true;
     }
+  },
+  validations() {
+    return {
+      firstName: {
+        requiredValidator,
+        nameValidator,
+        nameLenghtValidator,
+      },
+      middleName: {
+        requiredValidator,
+        nameValidator,
+        nameLenghtValidator,
+      },
+      lastName: {
+        requiredValidator,
+        nameValidator,
+        nameLenghtValidator,
+      },
+      inputValue: {
+        email: {
+          requiredValidator: requiredIf((): any => {
+            return this.typeContact.name === 'Пошта';
+          }),
+          emailValidator,
+          emailMinLength,
+          emailMaxLength,
+        },
+        phone: {
+          requiredValidator: requiredIf((): any => {
+            return this.typeContact.name === 'Телефон';
+          }),
+          phoneNumberValidator,
+        },
+      },
+    };
   },
   methods: {
     updateName(e: any) {
@@ -178,17 +273,21 @@ export default defineComponent({
     closeEditPage() {
       this.$router.push(RoutesEnum.MainPage);
     },
+
     addContact() {
       const contactsType: any = {
-        type: this.typeContact.code,
+        type: this.typeContact.name,
         main: this.priorityContact.code,
       };
-      contactsType.type === 'email' ? (contactsType.email = this.inputValue) : (contactsType.phone = this.inputValue);
+      contactsType.type === 'Пошта'
+        ? ((contactsType.email = this.inputValue.email), (contactsType.type = 'email'))
+        : ((contactsType.phone = this.inputValue.phone), (contactsType.type = 'phone'));
       this.userContacts.push(contactsType);
       this.$store.dispatch('authorizationStore/ADD_CONTACT', this.userContacts);
       this.$store.dispatch('authorizationStore/SET_CONTACT');
-      this.inputValue = '';
+      this.inputValue.email = this.inputValue.phone = '';
       this.userContacts = [];
+      this.typeContact = String;
     },
 
     deleteContact(idx: number) {

@@ -12,6 +12,5 @@ export const mutations: MutationTree<AuthorizationStateInterface> & Mutations = 
 
   [AuthMutationEnum.UPDATE_CONTACT]: (state, payload) => {
     state.user!.contacts = payload;
-    console.log(state.user);
   },
 };
