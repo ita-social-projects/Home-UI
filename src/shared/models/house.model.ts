@@ -8,11 +8,11 @@ export class HouseModel {
   public id?: number;
   public address: AddressModel;
 
-  constructor(house: HouseDTOModel) {
-    this.flatQuantity = house.quantity_flat;
-    this.houseArea = house.house_area;
-    this.adjoiningArea = house.adjoining_area;
-    this.id = house.id;
-    this.address = new AddressModel(house.address);
+  constructor(polledHouse: HouseDTOModel) {
+    this.flatQuantity = polledHouse.quantity_flat;
+    this.houseArea = polledHouse.house_area;
+    this.adjoiningArea = polledHouse.adjoining_area;
+    this.id = polledHouse.id;
+    this.address = new AddressModel(polledHouse.address);
   }
 }

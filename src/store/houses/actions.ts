@@ -5,8 +5,9 @@ import { HTTP } from '@/core/api/http-common';
 
 export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Actions = {
   [HousesActionsEnum.SET_HOUSES]: async ({ commit }) => {
-    const { data } = await HTTP.get(`/cooperations/1/houses`);
-    commit(HousesMutationsEnum.SET_HOUSES, data);
+    HTTP.get(`/cooperations/1/houses`).then((r) => {
+      commit(HousesMutationsEnum.SET_HOUSES, r.data);
+    });
   },
   [HousesActionsEnum.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
     commit(HousesMutationsEnum.SET_MODAL_DISPLAY, payload);
