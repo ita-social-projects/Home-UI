@@ -157,6 +157,7 @@
         <template #header>
           <h4>Будинки в цьому ОСББ</h4>
         </template>
+
         <Column field="quantity_flat" style="min-width: 20rem" header="Кількість квартир в будинку" :sortable="true" />
         <Column field="house_area" style="min-width: 20rem" header="Площа будинку" :sortable="true" />
         <Column field="adjoining_area" style="min-width: 20rem" header="Прибудинкової теріторії" :sortable="true" />
@@ -182,6 +183,9 @@
               :item="slotProps.data"
             />
             <Menu :model="houseActions(this.item)" id="overlay_menu" ref="menu" :popup="true" />
+
+            <ConfirmPopup></ConfirmPopup>
+
             <Dialog
               header="Редагувати будинок"
               v-model:visible="displayHouseModal"
@@ -290,6 +294,7 @@ import Breadcrumb from '@/components/Breadcrumb.vue';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { HouseInterface } from '@/store/houses/types';
+import ConfirmPopup from 'primevue/confirmpopup';
 
 export default defineComponent({
   name: 'CooperationInfo',
@@ -301,12 +306,13 @@ export default defineComponent({
     DataTable,
     Column,
     Menu,
+    ConfirmPopup,
   },
-  setup() {
-    return {
-      v$: useVuelidate(),
-    };
-  },
+  // setup() {
+  //   return {
+  //     v$: useVuelidate(),
+  //   };
+  // },
   data() {
     return {
       houseActions: (house: any) => {
@@ -315,17 +321,15 @@ export default defineComponent({
             label: 'Видалити',
             icon: 'pi pi-times',
             command: () => {
-              this.confirmDeleteHouse(); // 'house' props deleted
-              this.showSuccessDelete(house);
-              this.initData();
+              this.confirmDeleteHouse(event);
             },
           },
-
           {
             label: 'Редагувати',
             icon: 'pi pi-user-edit',
             command: () => {
-              this.openEditHouseModal(house);
+              this.openEditHouseModal();
+              this.showSuccessEdit(house);
             },
           },
         ];
@@ -350,6 +354,7 @@ export default defineComponent({
       },
       isLoaded: false,
       item: {} as HouseInterface,
+      v$: useVuelidate(),
     };
   },
   validations() {
@@ -395,9 +400,24 @@ export default defineComponent({
         }
       }
     },
-    confirmDeleteHouse(house: HouseInterface) {
-      // house: HouseInterface not used because it gives wrong id (always last)
-      this.$store.dispatch('housesStore/DELETE_HOUSE', this.item.id);
+    confirmDeleteHouse(event: any) {
+      this.$confirm.require({
+        target: event.currentTarget,
+        message: 'Are you sure you want to proceed?',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.$store.dispatch('housesStore/DELETE_HOUSE', this.item.id);
+          this.showSuccessDelete();
+          this.initData();
+          console.log('accepted delete');
+          //callback to execute when user confirms the action
+        },
+        reject: () => {
+          console.log('rejected delete');
+          console.log(event);
+          //callback to execute when user rejects the action
+        },
+      });
     },
     openCooperationModal() {
       this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', true);
@@ -452,11 +472,11 @@ export default defineComponent({
     toggleConfirm(event: Event) {
       (this.$refs.menu as any).toggle(event);
     },
-    showSuccessDelete(house: HouseInterface) {
+    showSuccessDelete() {
       this.$toast.add({
         severity: 'success',
         summary: 'Успішно',
-        detail: `Будинок з ID ${house.id} успішно видалено`,
+        detail: `Будинок з ID ${this.item.id} успішно видалено`,
         life: 3000,
       });
     },
