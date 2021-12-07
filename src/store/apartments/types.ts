@@ -4,18 +4,15 @@ import { ApartmentModel } from '@/store/apartments/models/apartment.model';
 
 export interface ApartmentsStateInterface {
   apartments: Array<ApartmentModel> | null;
-  displayModal: boolean;
 }
 
 export enum ApartmentsMutationsEnum {
-  SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
   SET_APARTMENTS = 'SET_APARTMENTS',
   EDIT_APARTMENT = 'EDIT_APARTMENT',
   DELETE_APARTMENT = 'DELETE_APARTMENT',
 }
 
 export enum ApartmentsActionsEnum {
-  SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
   SET_APARTMENTS = 'SET_APARTMENTS',
   EDIT_APARTMENT = 'EDIT_APARTMENT',
   DELETE_APARTMENT = 'DELETE_APARTMENT',

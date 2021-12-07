@@ -10,17 +10,17 @@
             <div class="detailed_info">
               <div>
                 <span>Номер будинку: </span>
-                <span>{{ houseInfo.address.house_number }}</span>
+                <span>{{ houseInfo?.address.house_number }}</span>
               </div>
               <div>
                 <span>Кількість квартир: </span>
-                <span>{{ houseInfo.quantity_flat }}</span>
+                <span>{{ houseInfo?.quantity_flat }}</span>
               </div>
               <div>
                 <span>Адреса: </span>
                 <span>
-                  місто {{ houseInfo.address.city }}, вулиця {{ houseInfo.address.street }}, будинок
-                  {{ houseInfo.address.house_number }}, {{ houseInfo.address.house_block }} блок.
+                  місто {{ houseInfo?.address.city }}, вулиця {{ houseInfo?.address.street }}, будинок
+                  {{ houseInfo.address?.house_number }}, {{ houseInfo?.address.house_block }} блок.
                 </span>
               </div>
             </div>
@@ -64,12 +64,68 @@
                   @click="toggle"
                   aria-haspopup="true"
                   aria-controls="overlay_menu"
+                  :item="slotProps.data"
                 />
-                <Menu id="overlay_menu" ref="menu" :model="menuActions(slotProps)" :popup="true" />
+                <Menu id="overlay_menu" ref="menu" :model="menuActions(slotProps.data)" :popup="true" />
               </template>
             </Column>
           </DataTable>
         </div>
+        <Dialog v-model:visible="deleteApartmentDialog" :style="{ width: '450px' }" header="Попередження" :modal="true">
+          <div class="confirmation-content">
+            <span v-if="deleteData">
+              Видалити квартиру № <b>{{ deleteData.apartmentNumber }}</b
+              >?</span
+            >
+          </div>
+          <template #footer>
+            <Button
+              label="Скасувати"
+              icon="pi pi-times"
+              class="p-button-outlined p-button-info"
+              @click="deleteApartmentDialog = false"
+            />
+            <Button label="Видалити" icon="pi pi-check" class="p-button-info" @click="deleteApartment" />
+          </template>
+        </Dialog>
+        <Dialog
+          v-model:visible="editApartmentDialog"
+          :style="{ width: '450px' }"
+          header="Редагувати квартиру"
+          :modal="true"
+        >
+          <div class="p-field">
+            <label for="name" class="dialog_item-label">Номер квартири: </label>
+            <InputText
+              id="name"
+              v-model.trim="editData.apartmentNumber"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': submitted && !editData.apartmentNumber }"
+            />
+            <small class="p-error" v-if="submitted && !editData.apartmentNumber">Введіть номер квартири</small>
+          </div>
+          <div class="p-field dialog_item">
+            <label for="name" class="dialog_item-label">Площа квартири: </label>
+            <InputText
+              id="name"
+              v-model.trim="editData.apartmentArea"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': submitted && !editData.apartmentArea }"
+            />
+            <small class="p-error" v-if="submitted && !editData.apartmentArea">Введіть площу квартири</small>
+          </div>
+          <template #footer>
+            <Button
+              label="Скасувати"
+              icon="pi pi-times"
+              class="p-button-outlined p-button-info"
+              @click="editApartmentDialog = false"
+            />
+            <Button label="Зберегти" icon="pi pi-check" class="p-button-info" @click="editApartment" />
+          </template>
+        </Dialog>
       </div>
     </div>
   </div>
@@ -78,14 +134,15 @@
 <script lang="ts">
 import { toRefs, ref, computed, defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-// import { ApartmentInterface } from '@/store/apartments/types';
 import { ApartmentModel } from '@/store/apartments/models/apartment.model';
 import { HouseInterface } from '@/store/houses/types';
 import { useStore } from 'vuex';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
+import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 
 export default defineComponent({
@@ -96,6 +153,8 @@ export default defineComponent({
     DataTable,
     Column,
     Menu,
+    Dialog,
+    InputText,
   },
   props: {
     id: {
@@ -110,24 +169,48 @@ export default defineComponent({
     const loading = ref(true);
     const { id } = toRefs(props);
     const menu = ref();
+    const deleteApartmentDialog = ref(false);
+    const deleteData = ref({});
+    const editApartmentDialog = ref(false);
+    const editData = ref({});
+    const item = ref({});
+    const submitted = ref(false);
+
+    const toggle = (event: any) => {
+      menu.value.toggle(event);
+      item.value = event.target.__vueParentComponent.attrs.item;
+      submitted.value = false;
+    };
 
     const menuActions = () => {
       return [
         {
           label: 'Видалити',
           icon: 'pi pi-times',
-          command: () => {},
+          command: () => {
+            deleteData.value = item.value;
+            deleteApartmentDialog.value = true;
+          },
         },
         {
           label: 'Редагувати',
           icon: 'pi pi-refresh',
-          command: () => {},
+          command: () => {
+            editApartmentDialog.value = true;
+            editData.value = item.value;
+          },
         },
       ];
     };
 
-    const toggle = (event: any) => {
-      menu.value.toggle(event);
+    const deleteApartment = () => {
+      submitted.value = true;
+      deleteApartmentDialog.value = false;
+    };
+
+    const editApartment = () => {
+      submitted.value = true;
+      editApartmentDialog.value = false;
     };
 
     const setApartments = async () => {
@@ -173,6 +256,14 @@ export default defineComponent({
       selectedApartment,
       moveToApartment,
       onRowSelect,
+      deleteApartmentDialog,
+      deleteData,
+      deleteApartment,
+      editApartmentDialog,
+      editData,
+      editApartment,
+      submitted,
+      item,
     };
   },
 });
@@ -248,5 +339,17 @@ label {
 
 .edit_btn {
   margin: 15px;
+}
+
+.dialog_item {
+  margin-bottom: 20px;
+}
+
+.dialog_item-label {
+  margin-right: 15px;
+}
+
+.p-field {
+  margin-bottom: 20px;
 }
 </style>

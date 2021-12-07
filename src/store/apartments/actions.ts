@@ -22,7 +22,4 @@ export const actions: ActionTree<ApartmentsStateInterface, RootStateInterface> &
       console.log(e.response);
     }
   },
-  [ApartmentsActionsEnum.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
-    commit(ApartmentsMutationsEnum.SET_MODAL_DISPLAY, payload);
-  },
 };
