@@ -6,7 +6,6 @@ import { actions } from '@/store/houses/actions';
 import { mutations } from '@/store/houses/mutations';
 
 export const state: HousesStateInterface = {
-  // null to []
   houses: null,
   displayModal: false,
   displayAddHouseModal: false,

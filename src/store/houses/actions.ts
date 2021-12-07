@@ -3,8 +3,7 @@ import { RootStateInterface } from '@/store/types';
 import { HousesStateInterface, HousesMutationsEnum, HousesActionsEnum, Actions } from '@/store/houses/types';
 import { HTTP } from '@/core/api/http-common';
 import { HouseModel } from '@/shared/models/house.model';
-import { HouseDTOModel } from './../../shared/models/houseDTO.model';
-import { StoreModuleEnum } from '@/store/types';
+import { HouseDTOModel } from '@/shared/models/houseDTO.model';
 
 export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Actions = {
   [HousesActionsEnum.SET_HOUSES]: async ({ commit }) => {
@@ -15,16 +14,13 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   [HousesActionsEnum.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
     commit(HousesMutationsEnum.SET_MODAL_DISPLAY, payload);
   },
-  [HousesActionsEnum.ADD_HOUSE]: async ({ commit, dispatch }, payload) => {
+  [HousesActionsEnum.ADD_HOUSE]: async ({ commit }, payload) => {
     try {
       const payloadData = new HouseDTOModel(payload);
       await HTTP.post(`/cooperations/${payload.id}/houses`, payloadData).then((r) => {
-        console.log('resonse', r.data);
         const houseData = new HouseModel(r.data);
-        console.log('houseData', houseData);
         commit(HousesMutationsEnum.ADD_HOUSE, houseData);
       });
-      // await dispatch(`${HousesActionsEnum.SET_HOUSES}`);
     } catch (e: any) {
       console.log(e.response);
       console.log(e);
