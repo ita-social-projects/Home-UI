@@ -46,7 +46,7 @@
           :closable="false"
           :dismissableMask="true"
         >
-          <form @submit.prevent="editCoopInfo">
+          <form @submit.prevent="editCooperationInfo">
             <div>
               <label for="coopName">Назва : </label>
               <div class="input-block">
@@ -244,7 +244,13 @@
           </form>
 
           <template #footer>
-            <Button label="Редагувати" icon="pi pi-check" @click="editCoopInfo" autofocus class="p-button-info" />
+            <Button
+              label="Редагувати"
+              icon="pi pi-check"
+              @click="editCooperationInfo"
+              autofocus
+              class="p-button-info"
+            />
             <Button
               label="Скасувати"
               icon="pi pi-times"
@@ -351,20 +357,18 @@ import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { HouseInterface } from '@/store/houses/types';
 import {
+  requiredValidator,
   edrpouValidator,
   emailLastCharsValidator,
   emailMaxLength,
   emailMinLength,
   emailValidator,
-  requiredValidator,
-  nameValidator,
   nameLenghtValidator,
-  сooperationNameValidator,
+  ukrLangTitleValidator,
   ibanValidator,
   phoneNumberValidator,
-  addressValidator,
-  houseValidator,
-  zipCpdeValidator,
+  houseNumAndHouseBlockValidator,
+  zipCodeValidator,
 } from '@/utils/validators';
 import useVuelidate from '@vuelidate/core';
 
@@ -399,13 +403,6 @@ export default defineComponent({
       ],
       selectedHouse: null,
       houses: [] as Array<HouseInterface>,
-      id: 0,
-      name: '',
-      edrpou: '',
-      iban: '',
-      phone: '',
-      email: '',
-      address: {},
       cooperationData: {
         id: 0,
         name: '',
@@ -424,7 +421,7 @@ export default defineComponent({
       cooperationData: {
         name: {
           requiredValidator,
-          сooperationNameValidator,
+          ukrLangTitleValidator,
           nameLenghtValidator,
         },
         edrpou: { requiredValidator, edrpouValidator },
@@ -438,13 +435,13 @@ export default defineComponent({
           emailMaxLength,
         },
         address: {
-          region: { requiredValidator, сooperationNameValidator },
-          city: { requiredValidator, сooperationNameValidator },
-          district: { requiredValidator, addressValidator },
-          street: { requiredValidator, addressValidator },
-          houseBlock: { requiredValidator, houseValidator },
-          houseNumber: { requiredValidator, houseValidator },
-          zipCode: { requiredValidator, zipCpdeValidator },
+          region: { requiredValidator, ukrLangTitleValidator },
+          city: { requiredValidator, ukrLangTitleValidator },
+          district: { requiredValidator, ukrLangTitleValidator },
+          street: { requiredValidator, ukrLangTitleValidator },
+          houseBlock: { requiredValidator, houseNumAndHouseBlockValidator },
+          houseNumber: { requiredValidator, houseNumAndHouseBlockValidator },
+          zipCode: { requiredValidator, zipCodeValidator },
         },
       },
     };
@@ -501,7 +498,7 @@ export default defineComponent({
       this.initData();
       this.closeCooperationModal();
     },
-    editCoopInfo() {
+    editCooperationInfo() {
       const payload = {
         id: this.cooperationData.id,
         name: this.cooperationData.name,
