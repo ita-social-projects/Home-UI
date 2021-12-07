@@ -499,20 +499,22 @@ export default defineComponent({
       this.closeCooperationModal();
     },
     editCooperationInfo() {
-      const payload = {
-        id: this.cooperationData.id,
-        name: this.cooperationData.name,
-        edrpou: this.cooperationData.edrpou,
-        iban: this.cooperationData.iban,
-        address: this.cooperationData.address,
-        contacts: [
-          { type: 'email', main: true, email: this.cooperationData.email },
-          { type: 'phone', main: true, phone: this.cooperationData.phone },
-        ],
-      };
+      if (!this.v$.$invalid) {
+        const payload = {
+          id: this.cooperationData.id,
+          name: this.cooperationData.name,
+          edrpou: this.cooperationData.edrpou,
+          iban: this.cooperationData.iban,
+          address: this.cooperationData.address,
+          contacts: [
+            { type: 'email', main: true, email: this.cooperationData.email },
+            { type: 'phone', main: true, phone: this.cooperationData.phone },
+          ],
+        };
 
-      this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
-      this.closeCooperationModal();
+        this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
+        this.closeCooperationModal();
+      }
     },
     editHouseInfo(house: HouseInterface) {
       const payload = {
