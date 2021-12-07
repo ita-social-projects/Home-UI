@@ -20,7 +20,7 @@
                 <span>Адреса: </span>
                 <span>
                   місто {{ houseInfo?.address.city }}, вулиця {{ houseInfo?.address.street }}, будинок
-                  {{ houseInfo.address?.house_number }}, {{ houseInfo?.address.house_block }} блок.
+                  {{ houseInfo?.address.house_number }}, {{ houseInfo?.address.house_block }} блок.
                 </span>
               </div>
             </div>
@@ -61,12 +61,11 @@
                   icon="pi pi-pencil"
                   class="p-button p-button-info p-button-text"
                   type="button"
-                  @click="toggle"
+                  @click="toggle($event, slotProps.data)"
                   aria-haspopup="true"
                   aria-controls="overlay_menu"
-                  :item="slotProps.data"
                 />
-                <Menu id="overlay_menu" ref="menu" :model="menuActions(slotProps.data)" :popup="true" />
+                <Menu id="overlay_menu" ref="menu" :model="menuActions()" :popup="true" />
               </template>
             </Column>
           </DataTable>
@@ -176,9 +175,9 @@ export default defineComponent({
     const item = ref({});
     const submitted = ref(false);
 
-    const toggle = (event: any) => {
+    const toggle = (event: any, data: ApartmentModel) => {
       menu.value.toggle(event);
-      item.value = event.target.__vueParentComponent.attrs.item;
+      item.value = data;
       submitted.value = false;
     };
 

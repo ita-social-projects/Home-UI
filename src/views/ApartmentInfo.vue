@@ -98,19 +98,18 @@ export default defineComponent({
         voutsPart: 0.24,
       },
     ]);
-
+    const selectedOwner = ref();
+    const loading = ref(false);
     const menu = ref();
     const menuActions = () => {
       return [
         {
           label: 'Видалити',
           icon: 'pi pi-times',
-          command: () => {},
         },
         {
           label: 'Редагувати',
           icon: 'pi pi-refresh',
-          command: () => {},
         },
       ];
     };
@@ -124,6 +123,8 @@ export default defineComponent({
       menu,
       menuActions,
       toggle,
+      selectedOwner,
+      loading,
     };
   },
 });
