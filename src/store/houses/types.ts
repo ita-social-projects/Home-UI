@@ -1,6 +1,5 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { HouseModel } from '@/shared/models/house.model';
 
 export enum HousesMutationsEnum {
   SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
@@ -25,41 +24,42 @@ export interface AddressInterface {
   city: string;
   district: string;
   street: string;
-  houseBlock: string;
-  houseNumber: string;
-  zipCode: string;
+  house_block: string;
+  house_number: string;
+  zip_code: string;
 }
 
 export interface HouseInterface {
-  flatQuantity: number;
-  houseArea: number;
-  adjoiningArea: number;
+  quantity_flat: number;
+  house_area: number;
+  adjoining_area: number;
   id: number;
+  cooperationId: number;
   address: AddressInterface;
 }
 
 export interface HousesStateInterface {
-  houses: Array<HouseModel> | null;
+  houses: Array<HouseInterface> | null;
   displayModal: boolean;
   displayAddHouseModal: boolean;
 }
 
 export type Mutations<S = HousesStateInterface> = {
-  [HousesMutationsEnum.SET_HOUSES](state: S, payload: Array<HouseModel>): void;
+  [HousesMutationsEnum.SET_HOUSES](state: S, payload: Array<HouseInterface>): void;
   [HousesMutationsEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
   [HousesMutationsEnum.SET_ADD_HOUSE_MODAL](state: S, payload: boolean): void;
-  [HousesMutationsEnum.ADD_HOUSE](state: S, payload: HouseModel): void;
+  [HousesMutationsEnum.ADD_HOUSE](state: S, payload: HouseInterface): void;
 };
 
 export interface Actions {
   [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext): void;
   [HousesActionsEnum.SET_MODAL_DISPLAY]({ commit }: AugmentedActionContext, payload: boolean): void;
-  [HousesActionsEnum.ADD_HOUSE]({ commit }: AugmentedActionContext, payload: HouseModel): void;
+  [HousesActionsEnum.ADD_HOUSE]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
   [HousesActionsEnum.SET_ADD_HOUSE_MODAL]({ commit }: AugmentedActionContext, payload: boolean): void;
 }
 
 export type Getters<S = HousesStateInterface> = {
-  getHousesData(state: S): Array<HouseModel> | null;
+  getHousesData(state: S): Array<HouseInterface> | null;
 };
 
 export type AugmentedActionContext = {
