@@ -11,6 +11,7 @@
 import Sidebar from '@/components/Sidebar.vue';
 import { defineComponent } from 'vue';
 import { UserInterface } from '@/store/authorization/types';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'MainPage',
@@ -26,12 +27,12 @@ export default defineComponent({
     const user: string | null = localStorage.getItem('user');
     if (user !== null && !this.userData) {
       const userData: UserInterface = JSON.parse(user);
-      this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
+      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/GET_DATA`, userData.id);
     }
   },
   computed: {
     userData() {
-      return this.$store.getters['authorizationStore/userData'];
+      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/userData`];
     },
   },
 });

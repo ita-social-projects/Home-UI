@@ -104,6 +104,7 @@ import Button from 'primevue/button';
 import store from '@/store';
 import { UserStateInterface } from '@/store/user/types';
 import { useToast } from 'primevue/usetoast';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'userRegistration',
@@ -176,7 +177,7 @@ export default defineComponent({
         password: state.formData.password.confirm,
         contacts: [{ type: 'email', main: false, email: state.formData.email }],
       };
-      await store.dispatch('userStore/SET_USER_INFO', userData);
+      await store.dispatch(`${StoreModuleEnum.userStore}/SET_USER_INFO`, userData);
     }
     const showStatus = (status: string, message: string) => {
       toast.add({ severity: status, summary: message, life: 6000 });
@@ -197,21 +198,21 @@ export default defineComponent({
     async function onSubmit() {
       await sendInfo();
       watch(
-        () => store.getters['userStore/getErrorMessage'],
+        () => store.getters[`${StoreModuleEnum.userStore}/getErrorMessage`],
         function () {
-          if (store.getters['userStore/getErrorMessage']) {
-            const errMessage = store.getters['userStore/getErrorMessage'];
+          if (store.getters[`${StoreModuleEnum.userStore}/getErrorMessage`]) {
+            const errMessage = store.getters[`${StoreModuleEnum.userStore}/getErrorMessage`];
             const severityStatus = 'error';
             showStatus(severityStatus, errMessage);
-            store.dispatch('userStore/RESET_ERROR_ACTION');
+            store.dispatch(`${StoreModuleEnum.userStore}/RESET_ERROR_ACTION`);
           }
         }
       );
       watch(
-        () => store.getters['userStore/getSuccessMessage'],
+        () => store.getters[`${StoreModuleEnum.userStore}/getSuccessMessage`],
         function () {
           const severityStatus = 'success';
-          const sucMessage = store.getters['userStore/getSuccessMessage'];
+          const sucMessage = store.getters[`${StoreModuleEnum.userStore}/getSuccessMessage`];
           showStatus(severityStatus, sucMessage);
           resetFields();
         }

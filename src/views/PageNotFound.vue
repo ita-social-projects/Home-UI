@@ -20,12 +20,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'PageNotFound',
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters['authorizationStore/loggedIn'];
+      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/loggedIn`];
     },
   },
 });
