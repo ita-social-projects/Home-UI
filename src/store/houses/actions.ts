@@ -13,9 +13,8 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   },
   [HousesActionsEnum.ADD_HOUSE]: async ({ commit }, payload) => {
     try {
-      await HTTP.post(`/cooperations/${payload.cooperationId}/houses`, payload).then((res) => {
-        commit(HousesMutationsEnum.ADD_HOUSE, res.data);
-      });
+      const { data } = await HTTP.post(`/cooperations/${payload.cooperationId}/houses`, payload);
+      commit(HousesMutationsEnum.ADD_HOUSE, data);
     } catch (e: any) {
       console.log(e.response);
     }
