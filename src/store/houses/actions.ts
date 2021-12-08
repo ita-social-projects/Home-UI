@@ -12,9 +12,9 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   [HousesActionsEnum.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
     commit(HousesMutationsEnum.SET_MODAL_DISPLAY, payload);
   },
-  [HousesActionsEnum.GET_HOUSE_BY_DI]: ({ commit }, payload) => {
+  [HousesActionsEnum.GET_HOUSE_BY_ID]: ({ commit }, payload) => {
     HTTP.get(`/cooperations/553/houses/${payload}`).then((r) => {
-      commit(HousesMutationsEnum.GET_HOUSE_BY_DI, r.data);
+      commit(HousesMutationsEnum.GET_HOUSE_BY_ID, r.data);
     });
   },
 };

@@ -233,7 +233,7 @@ export default defineComponent({
     }
 
     const setHouseInfo = async () => {
-      await store.dispatch('housesStore/GET_HOUSE_BY_ID', id.value);
+      await store.dispatch('housesStore/GET_HOUSE_BY_', id.value);
     };
 
     const houseInfo = computed((): HouseInterface => {
