@@ -274,7 +274,7 @@ export default defineComponent({
       if (this.inputValue.email.length > 0 || this.inputValue.phone.length > 0) {
         this.addContact();
       }
-      this.$store.dispatch('authorizationStore/SET_FORM', this.newUpdateData);
+      this.$store.commit('authorizationStore/SET_FORM', this.newUpdateData);
       this.$store.dispatch('authorizationStore/UPDATE_USER', this.userInfo);
       this.$router.push(RoutesEnum.MainPage);
     },

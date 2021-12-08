@@ -49,10 +49,6 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
     dispatch('localStorageStore/REMOVE', 'user', { root: true });
     commit(AuthMutationEnum.SET_USER, payload);
   },
-  /////////// MY ACTIONS
-  [AuthActionEnum.SET_FORM]: ({ commit }, payload) => {
-    commit(AuthMutationEnum.SET_FORM, payload);
-  },
 
   [AuthActionEnum.UPDATE_USER]: async ({ state, commit }, payload: UpdateUserInterface) => {
     const payloadData = new UpdateUserModel(payload);
