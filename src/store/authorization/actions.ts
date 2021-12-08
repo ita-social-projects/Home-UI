@@ -59,11 +59,13 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
   },
 
   [AuthActionEnum.DELETE_CONTACT]: async ({ state, commit, dispatch }, payload) => {
-    const userId = state.user!.id;
-    await HTTP.delete(`/users/${userId}/contacts/${payload}`);
-    await HTTP.get(`/users/${userId}/contacts`).then((r: AxiosResponse<ContactInterface>) => {
-      commit(AuthMutationEnum.UPDATE_CONTACT, r.data);
-    });
+    try {
+      const userId = state.user!.id;
+      await HTTP.delete(`/users/${userId}/contacts/${payload}`);
+      commit(AuthMutationEnum.UPDATE_CONTACT, payload);
+    } catch (e) {
+      console.log(e);
+    }
   },
 
   [AuthActionEnum.ADD_CONTACT]: async ({ state, commit, dispatch }, payload) => {

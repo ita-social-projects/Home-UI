@@ -15,7 +15,6 @@ export enum AuthActionEnum {
   UPDATE_USER = 'UPDATE_USER',
   DELETE_CONTACT = 'DELETE_CONTACT',
   ADD_CONTACT = 'ADD_CONTACT',
-  SET_FORM = 'SET_FORM',
 }
 
 export enum ContactTypeEnum {
@@ -46,6 +45,7 @@ export interface ContactInterface {
   main: boolean;
   email?: string;
   phone?: number;
+  id?: number
 }
 
 export interface AuthorizationStateInterface {
