@@ -39,18 +39,6 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   },
 };
 
-//PUT payload example
-
-// {
-//   "quantity_flat": 777,
-//   "house_area": 777,
-//   "adjoining_area": 777,
-//   "address": {
-//     "region": "Dnipropetrovsk region",
-//     "city": "London",
-//     "district": "Zavodskoy",
-//     "street": "Kirova",
-//     "house_block": "2/B",
-//     "house_number": "23-B",
-//     "zip_code": "52956"
-//   }
+// нужно НЕ делать диспатч в экшене, а в then  передавать response в мутацию DELETE_HOUSE,
+// а там посмотреть что приходит и в этой мутации вызвать SET_HOUSES
+// попробовать слушать изменение в сторе через watch

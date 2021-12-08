@@ -5,9 +5,9 @@ import store from './store';
 import { HTTP } from '@/core/api/http-common';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
 import App from './App.vue';
 import '@/styles/style.scss';
-import ConfirmationService from 'primevue/confirmationservice';
 
 const app = createApp(App);
 
