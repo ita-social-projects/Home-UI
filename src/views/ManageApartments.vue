@@ -7,7 +7,7 @@
       <div class="wrapper-container">
         <div class="container" v-if="!loading">
           <div class="detailed">
-            <div class="detailed_info">
+            <div class="detailed-info">
               <div>
                 <span>Номер будинку: </span>
                 <span>{{ houseInfo?.address.house_number }}</span>
@@ -25,11 +25,11 @@
               </div>
             </div>
           </div>
-          <div class="edit_btn">
+          <div class="edit-btn">
             <Button label="Редагувати" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
           </div>
         </div>
-        <div class="add_btn">
+        <div class="add-btn">
           <Button label="Додати квартиру" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
         </div>
 
@@ -93,7 +93,7 @@
           header="Редагувати квартиру"
           :modal="true"
         >
-          <div class="p-field">
+          <div class="p-field dialog">
             <label for="name" class="dialog_item-label">Номер квартири: </label>
             <InputText
               id="name"
@@ -233,7 +233,7 @@ export default defineComponent({
     }
 
     const setHouseInfo = async () => {
-      await store.dispatch('housesStore/GET_HOUSE_BY_', id.value);
+      await store.dispatch('housesStore/GET_HOUSE_BY_ID', id.value);
     };
 
     const houseInfo = computed((): HouseInterface => {
@@ -272,6 +272,7 @@ export default defineComponent({
 .manage-apartments {
   height: 100%;
 }
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -285,6 +286,16 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  .edit-btn,
+  .add-btn {
+    margin: 15px;
+  }
+
+  .add-btn {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 
 .container {
@@ -296,52 +307,29 @@ export default defineComponent({
   box-shadow: rgba(0, 0, 0, 0.1) -1px 4px 5px 1px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
 
-.apartment_info {
+.detailed-info {
   min-height: 150px;
   height: 100%;
   margin: 10px;
-}
 
-.apartment_info div {
-  padding: 8px;
-  & :nth-child(1) {
-    font-weight: bold;
+  & div {
+    padding: 8px;
+
+    & :nth-child(1) {
+      font-weight: bold;
+    }
   }
 }
 
-.edit_btn {
-  margin: 15px;
-}
+.dialog {
+  &_item {
+    margin-bottom: 20px;
 
-.add_btn {
-  display: flex;
-  margin: 15px;
-  justify-content: flex-end;
-}
-
-label {
-  display: inline-block;
-}
-
-.detailed_info {
-  min-height: 150px;
-  height: 100%;
-  margin: 10px;
-}
-
-.detailed_info div {
-  padding: 8px;
-  & :nth-child(1) {
-    font-weight: bold;
+    &-label {
+      display: inline-block;
+      margin-right: 15px;
+    }
   }
-}
-
-.dialog_item {
-  margin-bottom: 20px;
-}
-
-.dialog_item-label {
-  margin-right: 15px;
 }
 
 .p-field {

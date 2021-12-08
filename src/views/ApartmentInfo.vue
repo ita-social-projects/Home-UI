@@ -6,8 +6,8 @@
       </div>
       <div class="wrapper-container">
         <div class="container">
-          <div class="apartment_info"></div>
-          <div class="edit_btn">
+          <div class="detailed-info"></div>
+          <div class="edit-btn">
             <Button label="Редагувати" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
           </div>
         </div>
@@ -134,6 +134,7 @@ export default defineComponent({
 .apartment-info {
   height: 100%;
 }
+
 .wrapper {
   height: 100%;
 
@@ -146,6 +147,10 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  .edit-btn {
+    margin: 15px;
+  }
 }
 
 .container {
@@ -154,32 +159,21 @@ export default defineComponent({
   display: flex;
   background-color: #fafafa;
   justify-content: space-between;
-  &.container-houses {
-    padding: 1px;
-    margin-bottom: 150px;
-  }
   box-shadow: rgba(0, 0, 0, 0.1) -1px 4px 5px 1px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   margin-bottom: 50px;
 }
 
-.apartment_info {
+.detailed-info {
   min-height: 150px;
   height: 100%;
   margin: 10px;
-}
 
-.apartment_info div {
-  padding: 8px;
-  & :nth-child(1) {
-    font-weight: bold;
+  & div {
+    padding: 8px;
+
+    & :nth-child(1) {
+      font-weight: bold;
+    }
   }
-}
-
-.edit_btn {
-  margin: 15px;
-}
-
-label {
-  display: inline-block;
 }
 </style>
