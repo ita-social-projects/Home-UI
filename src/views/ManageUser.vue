@@ -150,7 +150,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { createLogger, mapGetters } from "vuex";
+import { createLogger, mapGetters } from 'vuex';
 import { UserInterface } from '@/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
 import {
@@ -271,7 +271,7 @@ export default defineComponent({
     },
 
     onSubmit() {
-      if(this.inputValue.email.length > 0 || this.inputValue.phone.length > 0){
+      if (this.inputValue.email.length > 0 || this.inputValue.phone.length > 0) {
         this.addContact();
       }
       this.$store.dispatch('authorizationStore/SET_FORM', this.newUpdateData);
@@ -288,9 +288,16 @@ export default defineComponent({
         type: this.typeContact.name,
         main: this.priorityContact.code,
       };
-      contactsType.type === 'Пошта'
-        ? ((contactsType.email = this.inputValue.email), (contactsType.type = 'email'))
-        : ((contactsType.phone = this.inputValue.phone), (contactsType.type = 'phone'));
+      // contactsType.type === 'Пошта'
+      //   ? ((contactsType.email = this.inputValue.email), (contactsType.type = 'email'))
+      //   : ((contactsType.phone = this.inputValue.phone), (contactsType.type = 'phone'));
+      if (contactsType.type === 'Пошта') {
+        contactsType.email = this.inputValue.email;
+        contactsType.type = 'email';
+      } else {
+        contactsType.phone = this.inputValue.phone;
+        contactsType.type = 'phone';
+      }
       this.userContacts.push(contactsType);
       this.$store.dispatch('authorizationStore/ADD_CONTACT', this.userContacts);
       this.inputValue.email = this.inputValue.phone = '';
