@@ -10,6 +10,7 @@ import MainPage from '@/views/MainPage.vue';
 import CooperationInfo from '@/views/CooperationInfo.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
 import CooperationPolls from '@/views/CooperationPolls.vue';
+import InvitationSection from '@/views/InvitationSection.vue';
 
 import ApartmentsMock from '@/views/ApartmentsMock.vue';
 import ApartmentsInfoMock from '@/views/ApartmentsInfoMock.vue';
@@ -51,6 +52,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: RoutesEnum.Polls,
         component: CooperationPolls,
+      },
+      {
+        path: RoutesEnum.InvitationSection,
+        component: InvitationSection,
       },
       { path: RoutesEnum.ManageUser, component: ManageUser },
     ],

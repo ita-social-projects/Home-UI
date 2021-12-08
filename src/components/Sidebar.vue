@@ -16,7 +16,7 @@
       />
       <BaseSidebarNavButton :link="cooperationInfoPath" btn-text="Управління ОСББ" icon="pi-inbox" />
       <BaseSidebarNavButton :link="cooperationInfoPath + 'select'" btn-text="Вибір ОСББ" icon="pi-bookmark" />
-      <BaseSidebarNavButton link="invitation" btn-text="Запрошення" icon="pi-globe" />
+      <BaseSidebarNavButton :link="invitationsPath" btn-text="Запрошення" icon="pi-globe" />
       <BaseSidebarNavButton
         :link="pollsPath"
         btn-text="Опитування"
@@ -58,6 +58,9 @@ export default defineComponent({
     },
     pollsPath(): string {
       return RoutesEnum.Polls;
+    },
+    invitationsPath(): string {
+      return RoutesEnum.InvitationSection;
     },
     userData(): UserInterface | null {
       return this.$store.getters['authorizationStore/userData'];

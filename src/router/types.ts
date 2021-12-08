@@ -9,6 +9,7 @@ export enum RoutesEnum {
   ApartmentsMock = '/cooperation/apartments-mock',
   ApartmentsInfoMock = '/cooperation/apartments-info-mock',
   Polls = '/main/polls',
+  InvitationSection = '/main/invitations',
 
   NotFound = '/:catchAll(.*)',
 }
