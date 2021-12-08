@@ -3,7 +3,7 @@
     label="Додати будинок"
     icon="pi pi-pencil"
     class="p-button-outlined p-button-info"
-    @click="openAddHouseModal"
+    @click="changeAddHouseModal(true)"
   />
   <Dialog
     header="Додати будинок"
@@ -60,10 +60,10 @@
         }}</small>
       </p>
 
-      <label class="dialog-item" for="adrress-details-id">Адреса : </label>
-      <div class="adrress-details" id="adrress-details-id">
+      <label class="dialog-item" for="address-details-id">Адреса : </label>
+      <div class="address-details" id="address-details-id">
         <p>
-          <label class="dialog-item dialog-item-adress" for="region">Регіон : </label>
+          <label class="dialog-item dialog-item-address" for="region">Регіон : </label>
           <InputText
             id="region"
             placeholder="Регіон"
@@ -78,7 +78,7 @@
           }}</small>
         </p>
         <p>
-          <label class="dialog-item dialog-item-adress" for="city">Місто : </label>
+          <label class="dialog-item dialog-item-address" for="city">Місто : </label>
           <InputText
             id="city"
             placeholder="Місто"
@@ -93,7 +93,7 @@
           }}</small>
         </p>
         <p>
-          <label class="dialog-item dialog-item-adress" for="district">Район : </label>
+          <label class="dialog-item dialog-item-address" for="district">Район : </label>
           <InputText
             id="district"
             placeholder="Район"
@@ -108,7 +108,7 @@
           }}</small>
         </p>
         <p>
-          <label class="dialog-item dialog-item-adress" for="street">Вулиця : </label>
+          <label class="dialog-item dialog-item-address" for="street">Вулиця : </label>
           <InputText
             id="street"
             placeholder="Вулиця"
@@ -123,7 +123,7 @@
           }}</small>
         </p>
         <p>
-          <label class="dialog-item dialog-item-adress" for="house_block">Блок : </label>
+          <label class="dialog-item dialog-item-address" for="house_block">Блок : </label>
           <InputText
             id="house_block"
             placeholder="Блок"
@@ -138,7 +138,7 @@
           }}</small>
         </p>
         <p>
-          <label class="dialog-item dialog-item-adress" for="house_number">Номер будинку: </label>
+          <label class="dialog-item dialog-item-address" for="house_number">Номер будинку: </label>
           <InputText
             id="house_number"
             placeholder="Номер"
@@ -153,7 +153,7 @@
           }}</small>
         </p>
         <p>
-          <label class="dialog-item dialog-item-adress" for="zip_code">Код : </label>
+          <label class="dialog-item dialog-item-address" for="zip_code">Код : </label>
           <InputText
             id="zip_code"
             placeholder="Код"
@@ -182,7 +182,7 @@
       <Button
         label="Скасувати зміни"
         icon="pi pi-times"
-        @click="closeAddHouseModal"
+        @click="changeAddHouseModal(false)"
         class="p-button-outlined p-button-info"
       />
     </template>
@@ -194,15 +194,9 @@ import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
-  flatQuantityValidator,
-  houseAreaValidator,
-  adjoiningAreaValidator,
-  regionValidator,
-  cityValidator,
-  districtValidator,
-  streetValidator,
-  houseBlockNumberValidator,
-  houseNumberValidator,
+  mainHouseInfoValidator,
+  addressValidator,
+  houseNumAndHouseBlockValidator,
   zipCodeValidator,
 } from '@/utils/validators';
 import Button from 'primevue/button';
@@ -240,35 +234,37 @@ export default defineComponent({
           zip_code: '',
         },
       },
+      displayAddHouseModal: false,
       v$: useVuelidate(),
     };
   },
   validations() {
     return {
       houseData: {
-        quantity_flat: { requiredValidator, flatQuantityValidator },
-        house_area: { requiredValidator, houseAreaValidator },
-        adjoining_area: { requiredValidator, adjoiningAreaValidator },
+        quantity_flat: { requiredValidator, mainHouseInfoValidator },
+        house_area: { requiredValidator, mainHouseInfoValidator },
+        adjoining_area: { requiredValidator, mainHouseInfoValidator },
         address: {
-          region: { requiredValidator, regionValidator },
-          city: { requiredValidator, cityValidator },
-          district: { requiredValidator, districtValidator },
-          street: { requiredValidator, streetValidator },
-          house_block: { requiredValidator, houseBlockNumberValidator },
-          house_number: { requiredValidator, houseNumberValidator },
+          region: { requiredValidator, addressValidator },
+          city: { requiredValidator, addressValidator },
+          district: { requiredValidator, addressValidator },
+          street: { requiredValidator, addressValidator },
+          house_block: { requiredValidator, houseNumAndHouseBlockValidator },
+          house_number: { requiredValidator, houseNumAndHouseBlockValidator },
           zip_code: { requiredValidator, zipCodeValidator },
         },
       },
     };
   },
   methods: {
-    openAddHouseModal() {
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_ADD_HOUSE_MODAL}`, true);
-    },
-    closeAddHouseModal() {
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_ADD_HOUSE_MODAL}`, false);
-      this.v$.$reset();
-      this.resetHouseDataFields(this.houseData);
+    changeAddHouseModal(condition: boolean) {
+      if (condition) {
+        this.displayAddHouseModal = condition;
+      } else {
+        this.displayAddHouseModal = condition;
+        this.v$.$reset();
+        this.resetHouseDataFields(this.houseData);
+      }
     },
     async addNewHouse() {
       const isValid = await this.v$.$validate();
@@ -277,25 +273,14 @@ export default defineComponent({
         return;
       }
 
-      const ADDRESS = this.houseData.address;
       const payload = {
         cooperationId: this.$props.id,
-        quantity_flat: this.houseData.quantity_flat,
-        house_area: this.houseData.house_area,
-        adjoining_area: this.houseData.adjoining_area,
-        address: {
-          region: ADDRESS.region,
-          city: ADDRESS.city,
-          district: ADDRESS.district,
-          street: ADDRESS.street,
-          house_block: ADDRESS.house_block,
-          house_number: ADDRESS.house_number,
-          zip_code: ADDRESS.zip_code,
-        },
+        ...this.houseData,
       };
+
       await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.ADD_HOUSE}`, payload);
       this.resetHouseDataFields(this.houseData);
-      this.closeAddHouseModal();
+      this.changeAddHouseModal(false);
     },
     resetHouseDataFields(houseData: any) {
       for (let field in houseData) {
@@ -309,7 +294,7 @@ export default defineComponent({
   },
   computed: {
     displayAddHouseModal(): boolean {
-      return this.$store.state.housesStore.displayAddHouseModal;
+      return this.displayAddHouseModal;
     },
   },
 });
@@ -321,10 +306,10 @@ export default defineComponent({
   width: 80%;
 }
 
-.adrress-details {
+.address-details {
   margin-left: 2rem;
 }
-.dialog-item-adress {
+.dialog-item-address {
   margin-right: -2rem;
 }
 label {

@@ -7,7 +7,6 @@ export enum HousesMutationsEnum {
   EDIT_HOUSE = 'EDIT_HOUSE',
   DELETE_HOUSE = 'DELETE_HOUSE',
   ADD_HOUSE = 'ADD_HOUSE',
-  SET_ADD_HOUSE_MODAL = 'SET_ADD_HOUSE_MODAL',
 }
 
 export enum HousesActionsEnum {
@@ -16,7 +15,6 @@ export enum HousesActionsEnum {
   EDIT_HOUSE = 'EDIT_HOUSE',
   DELETE_HOUSE = 'DELETE_HOUSE',
   ADD_HOUSE = 'ADD_HOUSE',
-  SET_ADD_HOUSE_MODAL = 'SET_ADD_HOUSE_MODAL',
 }
 
 export interface AddressInterface {
@@ -47,7 +45,6 @@ export interface HousesStateInterface {
 export type Mutations<S = HousesStateInterface> = {
   [HousesMutationsEnum.SET_HOUSES](state: S, payload: Array<HouseInterface>): void;
   [HousesMutationsEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
-  [HousesMutationsEnum.SET_ADD_HOUSE_MODAL](state: S, payload: boolean): void;
   [HousesMutationsEnum.ADD_HOUSE](state: S, payload: HouseInterface): void;
 };
 
@@ -55,7 +52,6 @@ export interface Actions {
   [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext): void;
   [HousesActionsEnum.SET_MODAL_DISPLAY]({ commit }: AugmentedActionContext, payload: boolean): void;
   [HousesActionsEnum.ADD_HOUSE]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
-  [HousesActionsEnum.SET_ADD_HOUSE_MODAL]({ commit }: AugmentedActionContext, payload: boolean): void;
 }
 
 export type Getters<S = HousesStateInterface> = {
