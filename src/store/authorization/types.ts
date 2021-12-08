@@ -6,6 +6,7 @@ export enum AuthMutationEnum {
   SET_USER = 'SET_USER',
   SET_FORM = 'SET_FORM',
   UPDATE_CONTACT='UPDATE_CONTACT',
+  ADD_CONTACT = 'ADD_CONTACT'
 }
 
 export enum AuthActionEnum {
@@ -15,7 +16,7 @@ export enum AuthActionEnum {
   UPDATE_USER = 'UPDATE_USER',
   DELETE_CONTACT = 'DELETE_CONTACT',
   ADD_CONTACT = 'ADD_CONTACT',
-  SET_CONTACT = 'SET_CONTACT'
+  SET_FORM = 'SET_FORM',
 }
 
 export enum ContactTypeEnum {

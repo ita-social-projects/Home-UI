@@ -50,20 +50,21 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
     commit(AuthMutationEnum.SET_USER, payload);
   },
   /////////// MY ACTIONS
+  [AuthActionEnum.SET_FORM]: ({ commit }, payload) => {
+    commit(AuthMutationEnum.SET_FORM, payload);
+  },
+
   [AuthActionEnum.UPDATE_USER]: async ({ state, commit }, payload: UpdateUserInterface) => {
     const payloadData = new UpdateUserModel(payload);
     const userId = state.user!.id;
-    await HTTP.put(`/users/${userId}`, payloadData);
+    await HTTP.put(`/users/${userId}`, payloadData).then((r: AxiosResponse<UserInterface>) => {
+      commit(AuthMutationEnum.SET_USER, r.data);
+    });
   },
 
   [AuthActionEnum.DELETE_CONTACT]: async ({ state, commit, dispatch }, payload) => {
     const userId = state.user!.id;
     await HTTP.delete(`/users/${userId}/contacts/${payload}`);
-    dispatch(AuthActionEnum.SET_CONTACT);
-  },
-
-  [AuthActionEnum.SET_CONTACT]: async ({ state, commit }) => {
-    const userId = state.user!.id;
     await HTTP.get(`/users/${userId}/contacts`).then((r: AxiosResponse<ContactInterface>) => {
       commit(AuthMutationEnum.UPDATE_CONTACT, r.data);
     });
@@ -72,9 +73,12 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
   [AuthActionEnum.ADD_CONTACT]: async ({ state, commit, dispatch }, payload) => {
     const userId = state.user!.id;
     const payloadData = new PostContactModel(payload[0]);
-    await HTTP.post(`/users/${userId}/contacts`, payloadData).catch((e) => {
-      alert(e.response.data.error_message);
-      dispatch(AuthActionEnum.SET_CONTACT);
-    });
+    await HTTP.post(`/users/${userId}/contacts`, payloadData)
+      .then((r) => {
+        commit(AuthMutationEnum.ADD_CONTACT, r.data);
+      })
+      .catch((e) => {
+        console.log(e.response.data.error_message);
+      });
   },
 };

@@ -81,19 +81,19 @@
                 v-model="priorityContact"
                 :options="contactsPriority"
                 optionLabel="name"
-                placeholder="Приоритет"
+                placeholder="Пріоритет"
               />
             </div>
           </form>
           <div>
             <small v-if="v$.inputValue.email.$error" class="p-error">{{
-                v$.inputValue.email.$errors[0].$message
-              }}</small>
+              v$.inputValue.email.$errors[0].$message
+            }}</small>
           </div>
           <div>
             <small v-if="v$.inputValue.phone.$error" class="p-error">{{
-                v$.inputValue.phone.$errors[0].$message
-              }}</small>
+              v$.inputValue.phone.$errors[0].$message
+            }}</small>
           </div>
 
           <Button
@@ -101,7 +101,7 @@
             :disabled="v$.$invalid || typeContact === String"
             type="submit"
             class="btn__add p-button-success p-button-sm p-button-outlined"
-          >Додати контакт</Button
+            >Додати контакт</Button
           >
           <table>
             <tr style="color: #9a9898">
@@ -150,7 +150,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
+import { createLogger, mapGetters } from "vuex";
 import { UserInterface } from '@/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
 import {
@@ -168,7 +168,7 @@ import useVuelidate from '@vuelidate/core';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
-import { requiredIf } from '@vuelidate/validators';
+import { helpers, requiredIf } from '@vuelidate/validators';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
@@ -180,6 +180,9 @@ export default defineComponent({
   },
   data() {
     return {
+      firstName: '',
+      middleName: '',
+      lastName: '',
       newUpdateData: {},
       dataReady: false,
       placeholderValue: 'Спочатку оберіть тип контакту...',
@@ -201,9 +204,6 @@ export default defineComponent({
         { name: 'Додатковий', code: false },
       ],
       userContacts: [] as any,
-      firstName: '',
-      middleName: '',
-      lastName: '',
     };
   },
   async mounted() {
@@ -211,7 +211,7 @@ export default defineComponent({
     if (user !== null) {
       const userData: UserInterface = JSON.parse(user);
       await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
-      await this.$store.dispatch('authorizationStore/SET_CONTACT');
+      // await this.$store.dispatch('authorizationStore/SET_CONTACT');
       this.firstName = this.userInfo.first_name;
       this.middleName = this.userInfo.middle_name;
       this.lastName = this.userInfo.last_name;
@@ -237,17 +237,23 @@ export default defineComponent({
       },
       inputValue: {
         email: {
-          requiredValidator: requiredIf((): any => {
-            return this.typeContact.name === 'Пошта';
-          }),
+          required: helpers.withMessage(
+            "Це обов'язкове поле",
+            requiredIf((): any => {
+              return this.typeContact.name === 'Пошта';
+            })
+          ),
           emailValidator,
           emailMinLength,
           emailMaxLength,
         },
         phone: {
-          requiredValidator: requiredIf((): any => {
-            return this.typeContact.name === 'Телефон';
-          }),
+          required: helpers.withMessage(
+            "Це обов'язкове поле",
+            requiredIf((): any => {
+              return this.typeContact.name === 'Телефон';
+            })
+          ),
           phoneNumberValidator,
         },
       },
@@ -265,7 +271,10 @@ export default defineComponent({
     },
 
     onSubmit() {
-      this.$store.commit('authorizationStore/SET_FORM', this.newUpdateData);
+      if(this.inputValue.email.length > 0 || this.inputValue.phone.length > 0){
+        this.addContact();
+      }
+      this.$store.dispatch('authorizationStore/SET_FORM', this.newUpdateData);
       this.$store.dispatch('authorizationStore/UPDATE_USER', this.userInfo);
       this.$router.push(RoutesEnum.MainPage);
     },
@@ -284,7 +293,6 @@ export default defineComponent({
         : ((contactsType.phone = this.inputValue.phone), (contactsType.type = 'phone'));
       this.userContacts.push(contactsType);
       this.$store.dispatch('authorizationStore/ADD_CONTACT', this.userContacts);
-      this.$store.dispatch('authorizationStore/SET_CONTACT');
       this.inputValue.email = this.inputValue.phone = '';
       this.userContacts = [];
       this.typeContact = String;

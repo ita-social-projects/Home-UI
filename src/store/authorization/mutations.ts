@@ -10,7 +10,11 @@ export const mutations: MutationTree<AuthorizationStateInterface> & Mutations = 
     state.user = { ...state.user, ...payload };
   },
 
+  [AuthMutationEnum.ADD_CONTACT]: (state, payload) => {
+    state.user!.contacts.push(payload)
+  },
+
   [AuthMutationEnum.UPDATE_CONTACT]: (state, payload) => {
-    state.user!.contacts = payload;
+    state.user!.contacts = payload
   },
 };
