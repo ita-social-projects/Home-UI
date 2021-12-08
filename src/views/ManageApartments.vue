@@ -73,7 +73,7 @@
         <Dialog v-model:visible="deleteApartmentDialog" :style="{ width: '450px' }" header="Попередження" :modal="true">
           <div class="confirmation-content">
             <span v-if="deleteData">
-              Видалити квартиру № <b>{{ deleteData.apartmentNumber }}</b
+              Видалити квартиру № <strong>{{ deleteData.apartmentNumber }}</strong
               >?</span
             >
           </div>
