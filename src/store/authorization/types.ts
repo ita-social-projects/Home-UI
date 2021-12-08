@@ -1,6 +1,5 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
-import { UpdateUserModel } from '../models/update-user.model';
 
 export enum AuthMutationEnum {
   SET_USER = 'SET_USER',

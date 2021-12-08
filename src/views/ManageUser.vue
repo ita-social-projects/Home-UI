@@ -150,7 +150,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { createLogger, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import { UserInterface } from '@/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
 import {
@@ -211,7 +211,6 @@ export default defineComponent({
     if (user !== null) {
       const userData: UserInterface = JSON.parse(user);
       await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
-      // await this.$store.dispatch('authorizationStore/SET_CONTACT');
       this.firstName = this.userInfo.first_name;
       this.middleName = this.userInfo.middle_name;
       this.lastName = this.userInfo.last_name;
@@ -288,9 +287,6 @@ export default defineComponent({
         type: this.typeContact.name,
         main: this.priorityContact.code,
       };
-      // contactsType.type === 'Пошта'
-      //   ? ((contactsType.email = this.inputValue.email), (contactsType.type = 'email'))
-      //   : ((contactsType.phone = this.inputValue.phone), (contactsType.type = 'phone'));
       if (contactsType.type === 'Пошта') {
         contactsType.email = this.inputValue.email;
         contactsType.type = 'email';

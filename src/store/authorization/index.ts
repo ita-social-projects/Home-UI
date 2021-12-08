@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { AuthorizationStateInterface, ContactInterface, UserInterface } from "@/store/authorization/types";
+import { AuthorizationStateInterface, UserInterface } from "@/store/authorization/types";
 import { getters } from '@/store/authorization/getters';
 import { mutations } from '@/store/authorization/mutations';
 import { actions } from '@/store/authorization/actions';
