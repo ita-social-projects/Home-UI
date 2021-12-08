@@ -103,7 +103,8 @@
             class="btn__add p-button-success p-button-sm p-button-outlined"
             >Додати контакт</Button
           >
-          <table>
+          <table name="contactTable">
+            <th name="table-header"></th>
             <tr style="color: #9a9898">
               <td>Пошта</td>
               <td>Основний</td>
