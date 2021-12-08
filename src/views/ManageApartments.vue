@@ -336,10 +336,6 @@ label {
   }
 }
 
-.edit_btn {
-  margin: 15px;
-}
-
 .dialog_item {
   margin-bottom: 20px;
 }
