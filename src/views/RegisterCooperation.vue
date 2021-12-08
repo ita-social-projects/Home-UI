@@ -53,6 +53,7 @@ import {
 
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'RegisterCooperation',
@@ -134,7 +135,7 @@ export default defineComponent({
           this.showErrorToast();
         },
       };
-      await this.$store.dispatch('cooperationStore/CREATE_COOPERATION', payload);
+      await this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/CREATE_COOPERATION`, payload);
     },
   },
   validations() {

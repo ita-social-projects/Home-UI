@@ -250,6 +250,7 @@ import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { HouseInterface } from '@/store/houses/types';
 import { ref } from 'vue';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'CooperationInfo',
@@ -337,16 +338,16 @@ export default defineComponent({
       }
     },
     openCooperationModal() {
-      this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', true);
+      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
     },
     closeCooperationModal() {
-      this.$store.dispatch('cooperationStore/SET_MODAL_DISPLAY', false);
+      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
     },
     openEditHouseModal() {
-      this.$store.dispatch('housesStore/SET_MODAL_DISPLAY', true);
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, true);
     },
     closeEditHouseModal() {
-      this.$store.dispatch('housesStore/SET_MODAL_DISPLAY', false);
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, false);
     },
     cancelCooperationEdit() {
       this.initData();
@@ -364,7 +365,7 @@ export default defineComponent({
           { type: 'phone', main: true, phone: this.cooperationData.phone },
         ],
       };
-      this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
+      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_COOPERATION_UPDATE`, payload);
       this.closeCooperationModal();
     },
     editHouseInfo(house: HouseInterface) {
@@ -375,7 +376,7 @@ export default defineComponent({
         adjoining_area: house.adjoining_area,
         address: house.address,
       };
-      this.$store.dispatch('housesStore/EDIT_HOUSE', payload);
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/EDIT_HOUSE`, payload);
       this.closeEditHouseModal();
     },
     toggle(event: Event) {
@@ -405,7 +406,7 @@ export default defineComponent({
       return this.$store.state.housesStore.displayModal;
     },
     housesInfo(): Array<HouseInterface> {
-      return this.$store.getters['housesStore/getHousesData'];
+      return this.$store.getters[`${StoreModuleEnum.housesStore}/getHousesData`];
     },
   },
 });

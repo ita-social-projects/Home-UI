@@ -1,5 +1,5 @@
 <template>
-  <div class="manageApartments">
+  <div class="manage-apartments">
     <div class="wrapper">
       <div class="breadcrumb">
         <Breadcrumb />
@@ -269,7 +269,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.manageApartments {
+.manage-apartments {
   height: 100%;
 }
 .wrapper {

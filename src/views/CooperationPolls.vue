@@ -24,6 +24,7 @@ import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import BaseCooperationPoll from '@/components/base/BaseCooperationPoll.vue';
 import { PollModel } from '@/store/polls/models/poll.model';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'CooperationPolls',
@@ -32,11 +33,11 @@ export default defineComponent({
     BaseCooperationPoll,
   },
   mounted() {
-    this.$store.dispatch('pollsStore/SET_COOPERATION_POLLS');
+    this.$store.dispatch(`${StoreModuleEnum.pollsStore}/SET_COOPERATION_POLLS`);
   },
   methods: {
     setSelectedPoll(id: number) {
-      this.$store.dispatch('pollsStore/SET_SELECTED_POLL', id);
+      this.$store.dispatch(`${StoreModuleEnum.pollsStore}/SET_SELECTED_POLL`, id);
     },
   },
   computed: {

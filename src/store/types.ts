@@ -17,6 +17,15 @@ export interface RootStateInterface {
   apartments: ApartmentsStateInterface;
 }
 
+export enum StoreModuleEnum {
+  authorizationStore = 'authorizationStore',
+  cooperationStore = 'cooperationStore',
+  userStore = 'userStore',
+  pollsStore = 'pollsStore',
+  localStorageStore = 'localStorageStore',
+  housesStore = 'housesStore',
+}
+
 export type requestPayload<T> = {
   data: T;
   successCallback(response?: AxiosResponse): void;

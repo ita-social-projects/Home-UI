@@ -1,5 +1,5 @@
 <template>
-  <div class="apartmentInfo">
+  <div class="apartment-info">
     <div class="wrapper">
       <div class="breadcrumb">
         <Breadcrumb />
@@ -131,7 +131,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.apartmentInfo {
+.apartment-info {
   height: 100%;
 }
 .wrapper {
