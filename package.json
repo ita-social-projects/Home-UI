@@ -8,15 +8,19 @@
     "test:unit": "vue-cli-service test:unit",
     "test:watch": "vue-cli-service test:unit --watch",
     "test:coverage": "vue-cli-service test:unit --collectCoverage",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "postinstall": "npm run build",
+    "start": "node server.js"
   },
   "dependencies": {
     "@vuelidate/core": "^2.0.0-alpha.25",
     "@vuelidate/validators": "^2.0.0-alpha.21",
     "axios": "0.21.4",
     "core-js": "^3.6.5",
+    "express": "^4.17.1",
     "primeicons": "4.1.0",
     "primevue": "^3.7.1",
+    "serve-static": "^1.14.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuelidate": "^0.7.6",

@@ -392,6 +392,7 @@ import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { AddressInterface, HouseInterface } from '@/store/houses/types';
 import ConfirmPopup from 'primevue/confirmpopup';
+
 import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
