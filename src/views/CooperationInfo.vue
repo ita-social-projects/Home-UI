@@ -152,7 +152,14 @@
       <AddHouseButton :id="cooperationData.id"></AddHouseButton>
     </div>
     <div class="container container-houses">
-      <DataTable ref="dt" :value="houses" dataKey="houses" v-model:selection="selectedHouse">
+      <DataTable
+        ref="dt"
+        :value="isLoaded ? houses : []"
+        dataKey="houses.id"
+        selectionMode="single"
+        v-model:selection="selectedHouse"
+        @click="choosenHouse(selectedHouse)"
+      >
         <template #header>
           <h4>Будинки в цьому ОСББ</h4>
         </template>
@@ -364,21 +371,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
   flatQuantityValidator,
   houseAreaValidator,
   adjoiningAreaValidator,
-  regionValidator,
-  cityValidator,
-  districtValidator,
-  streetValidator,
+  mainHouseInfoValidator,
   houseBlockNumberValidator,
   houseNumberValidator,
   zipCodeValidator,
 } from '@/utils/validators';
+import { defineComponent, ref } from 'vue';
+
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -386,12 +391,11 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-//import AddHouseButton from '@/components/AddHouseButton.vue';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { AddressInterface, HouseInterface } from '@/store/houses/types';
 import ConfirmPopup from 'primevue/confirmpopup';
-
+import AddHouseButton from '@/components/AddHouseButton.vue';
 import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
@@ -405,7 +409,7 @@ export default defineComponent({
     Column,
     Menu,
     ConfirmPopup,
-    // AddHouseButton,
+    AddHouseButton,
   },
   data() {
     return {
@@ -428,7 +432,7 @@ export default defineComponent({
           },
         ];
       },
-      selectedHouse: null,
+      selectedHouse: ref(),
       houses: [] as Array<HouseInterface>,
       id: 0,
       name: '',
@@ -471,10 +475,10 @@ export default defineComponent({
         house_area: { requiredValidator, houseAreaValidator },
         adjoining_area: { requiredValidator, adjoiningAreaValidator },
         address: {
-          region: { requiredValidator, regionValidator },
-          city: { requiredValidator, cityValidator },
-          district: { requiredValidator, districtValidator },
-          street: { requiredValidator, streetValidator },
+          region: { requiredValidator, mainHouseInfoValidator },
+          city: { requiredValidator, mainHouseInfoValidator },
+          district: { requiredValidator, mainHouseInfoValidator },
+          street: { requiredValidator, mainHouseInfoValidator },
           house_block: { requiredValidator, houseBlockNumberValidator },
           house_number: { requiredValidator, houseNumberValidator },
           zip_code: { requiredValidator, zipCodeValidator },
@@ -587,6 +591,7 @@ export default defineComponent({
       this.house = slotProps;
       (this.$refs.menu as any).toggle(event);
     },
+
     toggleConfirm(event: Event) {
       (this.$refs.menu as any).toggle(event);
     },
@@ -604,6 +609,13 @@ export default defineComponent({
         summary: 'Успішно',
         detail: `Дані про будинок з ID ${house.id} змінено`,
         life: 3000,
+      });
+    },
+
+    choosenHouse(selectedHouse: HouseInterface) {
+      this.$router.push({
+        name: 'manage-apartment',
+        params: { id: selectedHouse.id },
       });
     },
   },
