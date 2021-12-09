@@ -61,8 +61,9 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
   [AuthActionEnum.DELETE_CONTACT]: async ({ state, commit, dispatch }, payload) => {
     try {
       const userId = state.user!.id;
-      await HTTP.delete(`/users/${userId}/contacts/${payload}`);
-      commit(AuthMutationEnum.UPDATE_CONTACT, payload);
+      await HTTP.delete(`/users/${userId}/contacts/${payload}`).then(() => {
+        commit(AuthMutationEnum.UPDATE_CONTACT, payload);
+      });
     } catch (e) {
       console.log(e);
     }
