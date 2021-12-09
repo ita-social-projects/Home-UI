@@ -202,6 +202,10 @@ export default defineComponent({
       ];
     };
 
+    const cooperationID = computed(() => {
+      return store.getters['cooperationStore/getSelectedCooperationId'];
+    });
+
     const deleteApartment = () => {
       submitted.value = true;
       deleteApartmentDialog.value = false;
@@ -233,7 +237,11 @@ export default defineComponent({
     }
 
     const setHouseInfo = async () => {
-      await store.dispatch('housesStore/GET_HOUSE_BY_ID', id.value);
+      const payload = {
+        cooperationID: cooperationID.value,
+        houseID: id.value,
+      };
+      await store.dispatch('housesStore/GET_HOUSE_BY_ID', payload);
     };
 
     const houseInfo = computed((): HouseInterface => {
@@ -246,6 +254,7 @@ export default defineComponent({
     });
 
     return {
+      cooperationID,
       menu,
       menuActions,
       houseInfo,

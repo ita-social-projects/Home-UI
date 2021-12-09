@@ -48,7 +48,7 @@ export type Mutations<S = HousesStateInterface> = {
 
 export interface Actions {
   [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext, payload: Array<HouseInterface>): void;
-  [HousesActionsEnum.GET_HOUSE_BY_ID]({ commit }: AugmentedActionContext, payload: number): void;
+  [HousesActionsEnum.GET_HOUSE_BY_ID]({ commit }: AugmentedActionContext, payload: any): void;
 }
 
 export type Getters<S = HousesStateInterface> = {
