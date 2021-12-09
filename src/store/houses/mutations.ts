@@ -9,7 +9,14 @@ export const mutations: MutationTree<HousesStateInterface> & Mutations = {
     state.displayModal = payload;
   },
   [HousesMutationsEnum.EDIT_HOUSE]: (state, payload) => {
-    state.houses = payload;
+    state.houses?.forEach((el: HouseInterface) => {
+      if (el.id === payload.id) {
+        el.quantity_flat = payload.quantity_flat;
+        el.house_area = payload.house_area;
+        el.adjoining_area = payload.adjoining_area;
+        el.address = payload.address;
+      }
+    });
   },
   [HousesMutationsEnum.DELETE_HOUSE]: (state, payload) => {
     const updateCont = state.houses?.filter((el: HouseInterface) => el.id !== payload.id);

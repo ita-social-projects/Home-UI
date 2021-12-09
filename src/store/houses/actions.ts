@@ -23,6 +23,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
         address: payload.address,
       };
       await HTTP.put(`/cooperations/1/houses/${payload.id}`, payloadtoSend).then((r) => {
+        console.log(r.data);
         commit(HousesMutationsEnum.EDIT_HOUSE, r.data);
       });
     } catch (err: any) {
