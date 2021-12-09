@@ -7,17 +7,17 @@
   />
   <Dialog
     header="Додати будинок"
-    v-model:visible="displayAddHouseModal"
+    v-model:visible="displayModal"
     :style="{ width: '51vw' }"
     :modal="true"
     :closable="false"
     :dismissableMask="true"
   >
-    <form @submit.prevent="addNewHouse" id="houseDataForm">
+    <form @submit.prevent="addNewHouse" id="house_data_form">
       <p>
-        <label class="dialog-item" for="quantityFlat">Кількість квартир в будинку : </label>
+        <label class="dialog-item" for="quantity_flat">Кількість квартир в будинку : </label>
         <InputText
-          id="quantityFlat"
+          id="quantity_flat"
           placeholder="Кількість квартир в будинку"
           v-model.trim="houseData.quantity_flat"
           :class="{
@@ -293,7 +293,7 @@ export default defineComponent({
     },
   },
   computed: {
-    displayAddHouseModal(): boolean {
+    displayModal(): boolean {
       return this.displayAddHouseModal;
     },
   },
