@@ -5,7 +5,7 @@ export enum AuthMutationEnum {
   SET_USER = 'SET_USER',
   SET_FORM = 'SET_FORM',
   UPDATE_CONTACT='UPDATE_CONTACT',
-  ADD_CONTACT = 'ADD_CONTACT'
+  ADD_CONTACT = 'ADD_CONTACT',
 }
 
 export enum AuthActionEnum {
@@ -29,6 +29,8 @@ export interface UserInterface {
   email: string;
   id: number;
   contacts: ContactInterface[];
+  error: string | null;
+  success: string;
 }
 
 export interface UpdateUserInterface {

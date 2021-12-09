@@ -58,18 +58,18 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
     });
   },
 
-  [AuthActionEnum.DELETE_CONTACT]: async ({ state, commit, dispatch }, payload) => {
+  [AuthActionEnum.DELETE_CONTACT]: async ({ state, commit }, payload) => {
     try {
       const userId = state.user!.id;
       await HTTP.delete(`/users/${userId}/contacts/${payload}`).then(() => {
         commit(AuthMutationEnum.UPDATE_CONTACT, payload);
       });
     } catch (e) {
-      console.log(e);
+      console.log(e.response.data.error_message);
     }
   },
 
-  [AuthActionEnum.ADD_CONTACT]: async ({ state, commit, dispatch }, payload) => {
+  [AuthActionEnum.ADD_CONTACT]: async ({ state, commit }, payload) => {
     const userId = state.user!.id;
     const payloadData = new PostContactModel(payload[0]);
     await HTTP.post(`/users/${userId}/contacts`, payloadData)
@@ -79,5 +79,6 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
       .catch((e) => {
         console.log(e.response.data.error_message);
       });
-  },
+  }
 };
+
