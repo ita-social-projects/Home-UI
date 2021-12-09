@@ -56,9 +56,6 @@ export const houseBlockValidator = helpers.withMessage('Цифри від 0 до
 const validZipCpde = helpers.regex(/^\d{5}$/);
 export const zipCpdeValidator = helpers.withMessage('Цифри від 0 до 9', validZipCpde);
 
-const validPhoneNumber = helpers.regex(/^\+?3?8?(0\d{8})$/);
-export const phoneNumberValidator = helpers.withMessage('Цифри від 0 до 9', validPhoneNumber);
-
 const validFlatQuantity = helpers.regex(/^\d+$/);
 export const flatQuantityValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validFlatQuantity);
 
@@ -87,3 +84,9 @@ export const houseNumberValidator = helpers.withMessage(`${ukranianMessage}`, va
 
 const validZipCode = helpers.regex(/^\d{5}$/);
 export const zipCodeValidator = helpers.withMessage('В назві мають бути 5 цифр від 0 до 9', validZipCode);
+
+const validPhoneNumber = helpers.regex(/^\+380\d{3}\d{2}\d{2}\d{2}$/);
+export const phoneNumberValidator = helpers.withMessage(
+  'Номер повинен починатися з + 38, а далi цифри від 0 до 9',
+  validPhoneNumber
+);

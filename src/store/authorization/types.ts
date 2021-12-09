@@ -1,17 +1,25 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
-import { UpdateUserModel } from '../models/update-user.model';
 
 export enum AuthMutationEnum {
   SET_USER = 'SET_USER',
+  SET_FORM = 'SET_FORM',
+  UPDATE_CONTACT='UPDATE_CONTACT',
+  ADD_CONTACT = 'ADD_CONTACT',
 }
 
 export enum AuthActionEnum {
-  TEST = 'TEST',
   SIGN_IN = 'SIGN_IN',
   SIGN_OUT = 'SIGN_OUT',
   GET_DATA = 'GET_DATA',
   UPDATE_USER = 'UPDATE_USER',
+  DELETE_CONTACT = 'DELETE_CONTACT',
+  ADD_CONTACT = 'ADD_CONTACT',
+}
+
+export enum ContactTypeEnum {
+  EMAIL = 'EMAIL',
+  PHONE = 'PHONE'
 }
 
 export interface UserInterface {
@@ -21,6 +29,8 @@ export interface UserInterface {
   email: string;
   id: number;
   contacts: ContactInterface[];
+  error: string | null;
+  success: string;
 }
 
 export interface UpdateUserInterface {
@@ -29,13 +39,15 @@ export interface UpdateUserInterface {
   last_name: string;
   email: string;
   password: string;
+  contacts: ContactInterface[];
 }
 
 export interface ContactInterface {
-  type: string;
+  type: ContactTypeEnum;
   main: boolean;
-  id: number;
-  email: string;
+  email?: string;
+  phone?: number;
+  id?: number
 }
 
 export interface AuthorizationStateInterface {
@@ -48,7 +60,7 @@ export type Mutations<S = AuthorizationStateInterface> = {
 
 export interface Actions {
   [AuthActionEnum.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload<UserLoginInterface>): void;
-  [AuthActionEnum.UPDATE_USER]({ commit }: AugmentedActionContext, payload: requestPayload<UpdateUserModel>): void;
+  [AuthActionEnum.UPDATE_USER]({ commit }: AugmentedActionContext, payload: UpdateUserInterface): void;
   [AuthActionEnum.SIGN_OUT]({ commit }: AugmentedActionContext, payload: null): void;
   [AuthActionEnum.GET_DATA]({ commit }: AugmentedActionContext, payload: string): void;
 }
