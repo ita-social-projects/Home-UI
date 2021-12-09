@@ -25,8 +25,8 @@ export default defineComponent({
     return {
       home: { label: 'ОСББ', to: RoutesEnum.Cooperation },
       items: [
-        { label: 'Квартири', to: RoutesEnum.ApartmentsMock },
-        { label: 'Інформація про квартиру', to: RoutesEnum.ApartmentsInfoMock },
+        { label: 'Квартири', to: RoutesEnum.ManageApartments },
+        { label: 'Інформація про квартиру', to: RoutesEnum.ApartmentInfo },
       ],
     };
   },

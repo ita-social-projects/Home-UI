@@ -153,7 +153,14 @@
     </div>
 
     <div class="container container-houses">
-      <DataTable ref="dt" :value="isLoaded ? houses : []" dataKey="houses.id" v-model:selection="selectedHouse">
+      <DataTable
+        ref="dt"
+        :value="isLoaded ? houses : []"
+        dataKey="houses.id"
+        selectionMode="single"
+        v-model:selection="selectedHouse"
+        @click="choosenHouse(selectedHouse)"
+      >
         <template #header>
           <h4>Будинки в цьому ОСББ</h4>
         </template>
@@ -230,7 +237,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -275,7 +282,6 @@ export default defineComponent({
           },
         },
       ],
-      selectedHouse: null,
       houses: [] as Array<HouseInterface>,
       id: 0,
       name: '',
@@ -284,6 +290,7 @@ export default defineComponent({
       phone: '',
       email: '',
       address: {},
+      selectedHouse: ref(),
       cooperationData: {
         id: 0,
         name: '',
@@ -378,6 +385,12 @@ export default defineComponent({
     },
     toggle(event: Event) {
       (this.$refs.menu as any).toggle(event);
+    },
+    choosenHouse(selectedHouse: HouseInterface) {
+      this.$router.push({
+        name: 'manage-apartment',
+        params: { id: selectedHouse.id },
+      });
     },
   },
   computed: {

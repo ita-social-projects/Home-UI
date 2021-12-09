@@ -6,4 +6,7 @@ export const getters: GetterTree<HousesStateInterface, RootStateInterface> & Get
   getHousesData: (state) => {
     return state.houses;
   },
+  getHouseInfo: (state) => {
+    return state.houseInfo;
+  }
 };
