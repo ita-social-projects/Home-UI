@@ -5,7 +5,7 @@ import { HTTP } from '@/core/api/http-common';
 
 export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Actions = {
   [HousesActionsEnum.SET_HOUSES]: ({ commit }) => {
-    HTTP.get(`/cooperations/553/houses`).then((r) => {
+    HTTP.get(`/cooperations/1/houses`).then((r) => {
       commit(HousesMutationsEnum.SET_HOUSES, r.data);
     });
   },
@@ -13,7 +13,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
     commit(HousesMutationsEnum.SET_MODAL_DISPLAY, payload);
   },
   [HousesActionsEnum.GET_HOUSE_BY_ID]: ({ commit }, payload) => {
-    HTTP.get(`/cooperations/553/houses/${payload}`).then((r) => {
+    HTTP.get(`/cooperations/1/houses/${payload}`).then((r) => {
       commit(HousesMutationsEnum.GET_HOUSE_BY_ID, r.data);
     });
   },
