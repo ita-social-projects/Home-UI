@@ -418,6 +418,7 @@ export default defineComponent({
           {
             label: 'Видалити',
             icon: 'pi pi-times',
+            type: 'Submit',
             command: () => {
               this.confirmDeleteHouse(event);
             },
@@ -572,8 +573,12 @@ export default defineComponent({
       this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_COOPERATION_UPDATE`, payload);
       this.closeCooperationModal();
     },
-    editHouseInfo(house: HouseInterface) {
-      console.log(house);
+    async editHouseInfo(house: HouseInterface) {
+      //Input validation on Confirm TEMPORARY DISABLED because of bug
+      // const isValid = await this.v$.$validate();
+      // if (!isValid) {
+      //   return;
+      // }
 
       const payload = {
         id: house.id,
@@ -600,9 +605,9 @@ export default defineComponent({
       (this.$refs.menu as any).toggle(event);
     },
 
-    toggleConfirm(event: Event) {
-      (this.$refs.menu as any).toggle(event);
-    },
+    // toggleConfirm(event: Event) {
+    //   (this.$refs.menu as any).toggle(event);
+    // },
     showSuccessDelete() {
       this.$toast.add({
         severity: 'success',
