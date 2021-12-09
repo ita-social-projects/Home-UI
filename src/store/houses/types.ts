@@ -39,7 +39,6 @@ export interface HouseInterface {
 export interface HousesStateInterface {
   houses: Array<HouseInterface> | null;
   displayModal: boolean;
-  displayAddHouseModal: boolean;
 }
 
 export type Mutations<S = HousesStateInterface> = {
