@@ -308,15 +308,15 @@ export default defineComponent({
 
 .address-details {
   margin-left: 2rem;
+  .dialog-item-address {
+    margin-right: -2rem;
+  }
 }
-.dialog-item-address {
-  margin-right: -2rem;
-}
-label {
+.dialog-item {
   display: inline-block;
   width: 260px;
 }
-small {
+.p-error {
   @extend %error-message;
 }
 </style>

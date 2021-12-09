@@ -7,7 +7,7 @@ const password = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)
 
 const ukranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]{1,50}$/);
 const ukrLangMessage = 'В назві мають бути українські літери';
-const validHouseNumAndHouseBlock = helpers.regex(/^[0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ-\s/]{1,10}$/);
+const validHouseNumAndHouseBlock = helpers.regex(/^[/0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ-]{1,10}$/);
 
 export const emailValidator = helpers.withMessage(
   'Електронна пошта містить латинські букви, цифри, та спеціальні символи',
