@@ -6,7 +6,6 @@ import {
   UserInterface,
   Actions,
   UpdateUserInterface,
-  ContactInterface,
 } from '@/store/authorization/types';
 import { RootStateInterface } from '@/store/types';
 import { HTTP } from '@/core/api/http-common';
