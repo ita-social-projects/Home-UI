@@ -47,7 +47,7 @@
 import { defineComponent } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import useVuelidate from '@vuelidate/core';
 import { RoutesEnum } from '@/router/types';
 import {
@@ -139,7 +139,7 @@ export default defineComponent({
             this.$router.push(RoutesEnum.MainPage);
           }
         },
-        errorCallback: (r: AxiosError): void => {
+        errorCallback: (): void => {
           this.check.password.correct = true;
           this.errors.checkError = true;
           this.isPasswordValid = true;

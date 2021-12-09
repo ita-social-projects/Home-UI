@@ -263,11 +263,18 @@
     </div>
 
     <div class="add_btn">
-      <Button label="Додати будинок" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
+      <AddHouseButton :id="cooperationData.id"></AddHouseButton>
     </div>
 
     <div class="container container-houses">
-      <DataTable ref="dt" :value="isLoaded ? houses : []" dataKey="houses.id" v-model:selection="selectedHouse">
+      <DataTable
+        ref="dt"
+        :value="isLoaded ? houses : []"
+        dataKey="houses.id"
+        selectionMode="single"
+        v-model:selection="selectedHouse"
+        @click="choosenHouse(selectedHouse)"
+      >
         <template #header>
           <h4>Будинки в цьому ОСББ</h4>
         </template>
@@ -276,7 +283,7 @@
         <Column field="adjoining_area" style="min-width: 20rem" header="Прибудинкової теріторії" :sortable="true" />
         <Column field="address" style="min-width: 20rem" header="Адреса" :sortable="true">
           <template #body="slotProps">
-            {{ slotProps.data.address.region }}, {{ slotProps.data.address.city }}, {{ slotProps.data.address.city }},
+            {{ slotProps.data.address.region }}, {{ slotProps.data.address.city }},
             {{ slotProps.data.address.district }}, {{ slotProps.data.address.street }},
             {{ slotProps.data.address.house_block }}, {{ slotProps.data.address.house_number }},
             {{ slotProps.data.address.zip_code }}
@@ -308,11 +315,11 @@
                 </p>
                 <p>
                   <label class="dialog-item" for="coopAddress">Площа будинку : </label>
-                  <InputText id="houseArea" placeholder="Площа будинку" v-model="house_area" />
+                  <InputText id="house_area" placeholder="Площа будинку" v-model="house_area" />
                 </p>
                 <p>
                   <label class="dialog-item" for="iban">Прибудинкової теріторії : </label>
-                  <InputText id="adjoiningArea" placeholder="Прибудинкової теріторії" v-model="adjoining_area" />
+                  <InputText id="adjoining_area" placeholder="Прибудинкової теріторії" v-model="adjoining_area" />
                 </p>
                 <p>
                   <label class="dialog-item" for="coopEmail">Адреса : </label>
@@ -344,8 +351,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-
+import { defineComponent, ref } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -353,8 +359,12 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import AddHouseButton from '@/components/AddHouseButton.vue';
+import useVuelidate from '@vuelidate/core';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
+import { HouseInterface } from '@/store/houses/types';
+import { StoreModuleEnum } from '@/store/types';
 import { HouseInterface } from '@/store/houses/types';
 import {
   requiredValidator,
@@ -370,9 +380,6 @@ import {
   houseNumAndHouseBlockValidator,
   zipCodeValidator,
 } from '@/utils/validators';
-import useVuelidate from '@vuelidate/core';
-import { StoreModuleEnum } from '@/store/types';
-
 
 export default defineComponent({
   name: 'CooperationInfo',
@@ -384,6 +391,7 @@ export default defineComponent({
     DataTable,
     Column,
     Menu,
+    AddHouseButton,
   },
   data() {
     return {
@@ -403,7 +411,6 @@ export default defineComponent({
           },
         },
       ],
-      selectedHouse: null,
       houses: [] as Array<HouseInterface>,
       cooperationData: {
         id: 0,
@@ -462,7 +469,7 @@ export default defineComponent({
   methods: {
     initData() {
       let cooperationInfo: CooperationModel | null = this.$store.state.cooperationStore.selectedCooperation;
-      this.cooperationData.id = cooperationInfo?.id ?? 0;
+      this.cooperationData.id = cooperationInfo?.id ?? 1;
       this.cooperationData.name = cooperationInfo?.name ?? '';
       this.cooperationData.edrpou = cooperationInfo?.edrpou ?? '';
       this.cooperationData.iban = cooperationInfo?.iban ?? '';
@@ -483,6 +490,9 @@ export default defineComponent({
           }
         }
       }
+    },
+    setHouse() {
+      this.houses = this.$store.state.housesStore.houses as HouseInterface[];
     },
     openCooperationModal() {
       this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
@@ -531,6 +541,12 @@ export default defineComponent({
     },
     toggle(event: Event) {
       (this.$refs.menu as any).toggle(event);
+    },
+    choosenHouse(selectedHouse: HouseInterface) {
+      this.$router.push({
+        name: 'manage-apartment',
+        params: { id: selectedHouse.id },
+      });
     },
   },
   computed: {
