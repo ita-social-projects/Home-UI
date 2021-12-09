@@ -151,7 +151,6 @@
     <div class="add_btn">
       <Button label="Додати будинок" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
     </div>
-    <!-- МОЙ КОНТЕЙНЕР -->
     <div class="container container-houses">
       <DataTable ref="dt" :value="houses" dataKey="houses" v-model:selection="selectedHouse">
         <template #header>
@@ -194,8 +193,7 @@
               :closable="false"
               :dismissableMask="true"
             >
-              <form>
-                <!-- submit.prevent="editHouseInfo"   removed from form-->
+              <form submit.prevent="editHouseInfo">
                 <p>
                   <label class="dialog-item" for="coopName">Кількість квартир в будинку : </label>
                   <InputText
@@ -587,7 +585,6 @@ export default defineComponent({
       (this.$refs.menu as any).toggle(event);
     },
     showSuccessDelete() {
-      this.housesInfo;
       this.$toast.add({
         severity: 'success',
         summary: 'Успішно',

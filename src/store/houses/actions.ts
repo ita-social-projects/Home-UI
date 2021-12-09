@@ -3,7 +3,6 @@ import { RootStateInterface } from '@/store/types';
 import { HousesStateInterface, HousesMutationsEnum, HousesActionsEnum, Actions } from '@/store/houses/types';
 import { HTTP } from '@/core/api/http-common';
 import { HouseDTOModel } from '@/shared/models/houseDTO.model';
-import { HouseModel } from '@/shared/models/house.model';
 
 export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Actions = {
   [HousesActionsEnum.SET_HOUSES]: ({ commit }) => {
