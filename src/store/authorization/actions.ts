@@ -69,15 +69,14 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
   },
 
   [AuthActionEnum.ADD_CONTACT]: async ({ state, commit }, payload) => {
-    const userId = state.user!.id;
-    const payloadData = new PostContactModel(payload[0]);
-    await HTTP.post(`/users/${userId}/contacts`, payloadData)
-      .then((r) => {
+    try {
+      const userId = state.user!.id;
+      const payloadData = new PostContactModel(payload[0]);
+      await HTTP.post(`/users/${userId}/contacts`, payloadData).then((r) => {
         commit(AuthMutationEnum.ADD_CONTACT, r.data);
-      })
-      .catch((e) => {
-        console.log(e.response.data.error_message);
       });
-  }
+    } catch (e) {
+      console.log(e.response.data.error_message);
+    }
+  },
 };
-
