@@ -22,16 +22,16 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
         address: payload.address,
       };
       await HTTP.put(`/cooperations/1/houses/${payload.id}`, payloadtoSend).then((r) => {
-        commit(HousesMutationsEnum.SET_HOUSES, r.data);
+        commit(HousesMutationsEnum.EDIT_HOUSE, r.data);
       });
     } catch (err: any) {
       console.log('error EDIT_HOUSE', err);
     }
   },
-  [HousesActionsEnum.DELETE_HOUSE]: async ({ dispatch }, payload) => {
+  [HousesActionsEnum.DELETE_HOUSE]: async ({ commit }, payload) => {
     try {
-      await HTTP.delete(`/cooperations/1/houses/${payload}`).then(() => {
-        dispatch('SET_HOUSES'); //removed 'housesStore/...' from  dispatch
+      await HTTP.delete(`/cooperations/1/houses/${payload.id}`).then(() => {
+        commit(HousesMutationsEnum.DELETE_HOUSE, payload);
       });
     } catch (err: any) {
       console.log('error DELETE_HOUSE', err);
@@ -39,6 +39,19 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   },
 };
 
+// responce after HTTP.delete in DELETE_HOUSE action is empty!
+
 // нужно НЕ делать диспатч в экшене, а в then  передавать response в мутацию DELETE_HOUSE,
 // а там посмотреть что приходит и в этой мутации вызвать SET_HOUSES
 // попробовать слушать изменение в сторе через watch
+
+// ACTION TO DELETE AFTER FIX
+// [HousesActionsEnum.DELETE_HOUSE]: async ({ dispatch }, payload) => {
+//   try {
+//     await HTTP.delete(`/cooperations/1/houses/${payload}`).then(() => {
+//       dispatch('SET_HOUSES'); //removed 'housesStore/...' from  dispatch
+//     });
+//   } catch (err: any) {
+//     console.log('error DELETE_HOUSE', err);
+//   }
+// },

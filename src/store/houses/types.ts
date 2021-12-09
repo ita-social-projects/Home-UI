@@ -39,14 +39,14 @@ export interface HousesStateInterface {
 }
 
 export type Mutations<S = HousesStateInterface> = {
-  [HousesMutationsEnum.SET_HOUSES](state: S, payload: HouseInterface): void; //change to Array -> fix bug!
-  [HousesMutationsEnum.DELETE_HOUSE](state: S, payload: HouseInterface): void;
+  [HousesMutationsEnum.SET_HOUSES](state: S, payload: HouseInterface): void;
+  [HousesMutationsEnum.DELETE_HOUSE](state: any, payload: HouseInterface): void;
   [HousesMutationsEnum.EDIT_HOUSE](state: S, payload: HouseInterface): void;
 };
 
 export interface Actions {
-  [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext, payload: HouseInterface): void; //change to Array
-  [HousesActionsEnum.DELETE_HOUSE]({ commit }: AugmentedActionContext, payload: number): void;
+  [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
+  [HousesActionsEnum.DELETE_HOUSE]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
   [HousesActionsEnum.EDIT_HOUSE]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
 }
 

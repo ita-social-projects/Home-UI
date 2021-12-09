@@ -193,9 +193,9 @@
               :modal="true"
               :closable="false"
               :dismissableMask="true"
-              :itemid="this.house.id"
             >
-              <form submit.prevent="editHouseInfo">
+              <form>
+                <!-- submit.prevent="editHouseInfo"   removed from form-->
                 <p>
                   <label class="dialog-item" for="coopName">Кількість квартир в будинку : </label>
                   <InputText
@@ -346,7 +346,7 @@
                 <Button
                   label="Зберегти зміни"
                   icon="pi pi-check"
-                  @click="editHouseInfo(this.house)"
+                  @click="editHouseInfo(house)"
                   autofocus
                   class="p-button-info"
                 />
@@ -371,7 +371,6 @@ import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
   flatQuantityValidator,
-  addressValidator,
   houseAreaValidator,
   adjoiningAreaValidator,
   regionValidator,
@@ -408,7 +407,7 @@ export default defineComponent({
   },
   data() {
     return {
-      houseActions: (house: any) => {
+      houseActions: (house: HouseInterface) => {
         return [
           {
             label: 'Видалити',
@@ -501,6 +500,7 @@ export default defineComponent({
       );
       cooperationInfo?.contacts.forEach((el) => this.mapContact(el));
       this.houses = this.housesInfo;
+      console.log('initData', this.houses);
     },
     mapContact(el: CooperationContactsInterface) {
       if (el.main === true) {
@@ -514,22 +514,19 @@ export default defineComponent({
         }
       }
     },
-    confirmDeleteHouse(event: any) {
+    confirmDeleteHouse(event: Event) {
       this.$confirm.require({
         target: event.currentTarget,
         message: 'Are you sure you want to proceed?',
         icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-          this.$store.dispatch('housesStore/DELETE_HOUSE', this.house.id);
+        accept: async () => {
+          await this.$store.dispatch('housesStore/DELETE_HOUSE', this.house);
           this.showSuccessDelete();
-          this.initData();
-          console.log('accepted delete');
-          //callback to execute when user confirms the action
+          this.houses = this.housesInfo;
+          console.log('accepted delete', this.house);
         },
         reject: () => {
           console.log('rejected delete');
-          console.log(event);
-          //callback to execute when user rejects the action
         },
       });
     },
@@ -566,13 +563,12 @@ export default defineComponent({
       this.closeCooperationModal();
     },
     editHouseInfo(house: HouseInterface) {
-      // house: HouseInterface not used because it gives wrong id (always last)
       const payload = {
-        id: this.house.id,
-        quantity_flat: this.house.quantity_flat,
-        house_area: this.house.house_area,
-        adjoining_area: this.house.adjoining_area,
-        address: this.house.address,
+        id: house.id,
+        quantity_flat: house.quantity_flat,
+        house_area: house.house_area,
+        adjoining_area: house.adjoining_area,
+        address: house.address,
       };
       this.$store.dispatch('housesStore/EDIT_HOUSE', payload);
       this.closeEditHouseModal();
@@ -586,6 +582,7 @@ export default defineComponent({
       (this.$refs.menu as any).toggle(event);
     },
     showSuccessDelete() {
+      this.housesInfo;
       this.$toast.add({
         severity: 'success',
         summary: 'Успішно',

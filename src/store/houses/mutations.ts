@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { HousesStateInterface, HousesMutationsEnum, Mutations } from '@/store/houses/types';
+import { HousesStateInterface, HousesMutationsEnum, Mutations, HouseInterface } from '@/store/houses/types';
 
 export const mutations: MutationTree<HousesStateInterface> & Mutations = {
   [HousesMutationsEnum.SET_HOUSES]: (state, payload) => {
@@ -12,9 +12,11 @@ export const mutations: MutationTree<HousesStateInterface> & Mutations = {
     state.houses = payload;
   },
   [HousesMutationsEnum.DELETE_HOUSE]: (state, payload) => {
-    // const myarray: any = state.houses;
-    // myarray.pop();
-    // console.log(myarray);
-    // state.houses?.pop()
+    const updateCont = state.houses?.filter((el: HouseInterface) => el.id !== payload.id);
+
+    console.log('state before MUT', state.houses);
+    console.log('updateCont', updateCont);
+    state.houses = updateCont;
+    console.log('state after MUT', state.houses);
   },
 };
