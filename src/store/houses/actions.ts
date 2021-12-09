@@ -2,7 +2,6 @@ import { ActionTree } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { HousesStateInterface, HousesMutationsEnum, HousesActionsEnum, Actions } from '@/store/houses/types';
 import { HTTP } from '@/core/api/http-common';
-import { HouseDTOModel } from '@/shared/models/houseDTO.model';
 
 export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Actions = {
   [HousesActionsEnum.SET_HOUSES]: ({ commit }) => {
@@ -16,13 +15,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
 
   [HousesActionsEnum.EDIT_HOUSE]: async ({ commit }, payload) => {
     try {
-      const payloadtoSend: HouseDTOModel = {
-        quantity_flat: payload.quantity_flat,
-        house_area: payload.house_area,
-        adjoining_area: payload.adjoining_area,
-        address: payload.address,
-      };
-      await HTTP.put(`/cooperations/1/houses/${payload.id}`, payloadtoSend).then((r) => {
+      await HTTP.put(`/cooperations/1/houses/${payload.id}`, payload).then((r) => {
         console.log(r.data);
         commit(HousesMutationsEnum.EDIT_HOUSE, r.data);
       });

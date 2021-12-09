@@ -526,13 +526,12 @@ export default defineComponent({
     confirmDeleteHouse(event: Event) {
       this.$confirm.require({
         target: event.currentTarget,
-        message: 'Are you sure you want to proceed?',
+        message: 'Видалити обраний будинок?',
         icon: 'pi pi-exclamation-triangle',
         accept: async () => {
           await this.$store.dispatch('housesStore/DELETE_HOUSE', this.house);
           this.showSuccessDelete();
           this.houses = this.housesInfo;
-          console.log('accepted delete', this.house);
         },
         reject: () => {
           console.log('rejected delete');
@@ -581,7 +580,16 @@ export default defineComponent({
         quantity_flat: house.quantity_flat,
         house_area: house.house_area,
         adjoining_area: house.adjoining_area,
-        address: house.address,
+
+        address: {
+          region: house.address.region,
+          city: house.address.city,
+          district: house.address.district,
+          street: house.address.street,
+          house_block: house.address.house_block,
+          house_number: house.address.house_number,
+          zip_code: house.address.zip_code,
+        },
       };
       this.$store.dispatch(`${StoreModuleEnum.housesStore}/EDIT_HOUSE`, payload);
       this.closeEditHouseModal();

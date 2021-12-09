@@ -1,5 +1,6 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
+import { HouseModel } from '@/shared/models/house.model';
 
 export enum HousesMutationsEnum {
   SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
