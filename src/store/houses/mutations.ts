@@ -11,4 +11,7 @@ export const mutations: MutationTree<HousesStateInterface> & Mutations = {
   [HousesMutationsEnum.GET_HOUSE_BY_ID]: (state, payload) => {
     state.houseInfo = payload;
   },
+  [HousesMutationsEnum.ADD_HOUSE]: (state, payload) => {
+    state.houses?.push(payload);
+  },
 };
