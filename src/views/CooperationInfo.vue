@@ -351,7 +351,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -365,7 +365,6 @@ import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { HouseInterface } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
-import { HouseInterface } from '@/store/houses/types';
 import {
   requiredValidator,
   edrpouValidator,
