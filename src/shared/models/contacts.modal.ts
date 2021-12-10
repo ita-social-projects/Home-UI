@@ -1,13 +1,13 @@
-import { ContactsModel } from './contacts.modal';
+import { ContactsDTOModel } from './contactsDTO.modal';
 
-export class ContactsDTOModel {
+export class ContactsModel {
   public id: number;
   public type: string;
   public main: boolean;
   public phone?: string;
   public email?: string;
 
-  constructor(contacts: ContactsModel) {
+  constructor(contacts: ContactsDTOModel) {
     this.id = contacts.id;
     this.type = contacts.type;
     this.main = contacts.main;

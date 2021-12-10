@@ -60,7 +60,9 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref, toRefs } from 'vue';
+import { useStore } from 'vuex';
+
 
 export default defineComponent({
   name: 'ApartmentInfo',
@@ -81,7 +83,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
     const ownershipsMock = ref([
       {
         id: 1,
@@ -98,6 +100,8 @@ export default defineComponent({
         voutsPart: 0.24,
       },
     ]);
+    const { apartment } = toRefs(props);
+    const store = useStore();
     const selectedOwner = ref();
     const loading = ref(false);
     const menu = ref();
@@ -118,8 +122,19 @@ export default defineComponent({
       menu.value.toggle(event);
     };
 
+    const setOwnerships = async () => {
+      await store.dispatch('ownershipsStore/SET_OWNERSHIPS', apartment.value);
+      console.log('ownerships')
+      // loading.value = false;
+    };
+
+    onMounted(() => {
+      setOwnerships();
+    });
+
     return {
       ownershipsMock,
+      setOwnerships,
       menu,
       menuActions,
       toggle,

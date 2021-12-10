@@ -225,16 +225,12 @@ export default defineComponent({
       return store.getters['apartmentsStore/getApartmentsData'];
     });
 
-    const onRowSelect = (event: any) => {
-      moveToApartment(event.data.id);
-    };
-
-    function moveToApartment(apartmentID: number) {
+    const onRowSelect = () => {
       router.push({
         name: 'apartment-info',
-        params: { apartment: apartmentID },
+        params: { apartment: selectedApartment.value.id },
       });
-    }
+    };
 
     const setHouseInfo = async () => {
       const payload = {
@@ -262,7 +258,6 @@ export default defineComponent({
       loading,
       apartmentsData,
       selectedApartment,
-      moveToApartment,
       onRowSelect,
       deleteApartmentDialog,
       deleteData,
