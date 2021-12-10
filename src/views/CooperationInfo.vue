@@ -518,6 +518,8 @@ export default defineComponent({
         target: event.currentTarget,
         message: 'Видалити обраний будинок?',
         icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Так',
+        rejectLabel: 'Ні',
         accept: async () => {
           await this.$store.dispatch('housesStore/DELETE_HOUSE', this.house);
           this.showSuccessDelete();
