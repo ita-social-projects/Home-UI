@@ -136,7 +136,7 @@
           </form>
 
           <template #footer>
-            <Button label="Редагувати" icon="pi pi-check" @click="editCoopInfo" autofocus class="p-button-info" />
+            <Button label="Редагувати" icon="pi pi-check" autofocus class="p-button-info" />
             <Button
               label="Скасувати"
               icon="pi pi-times"
@@ -155,15 +155,14 @@
       <DataTable
         ref="dt"
         :value="isLoaded ? houses : []"
-        dataKey="houses.id"
         selectionMode="single"
         v-model:selection="selectedHouse"
-        @click="choosenHouse(selectedHouse)"
+        dataKey="houses.id"
+        @rowSelect="onRowSelect"
       >
         <template #header>
           <h4>Будинки в цьому ОСББ</h4>
         </template>
-
         <Column field="quantity_flat" style="min-width: 20rem" header="Кількість квартир в будинку" :sortable="true" />
         <Column field="house_area" style="min-width: 20rem" header="Площа будинку" :sortable="true" />
         <Column field="adjoining_area" style="min-width: 20rem" header="Прибудинкової теріторії" :sortable="true" />
@@ -175,7 +174,7 @@
             {{ slotProps.data.address.zip_code }}
           </template>
         </Column>
-        <Column field="id" style="min-width: 20rem" header="id" :sortable="true" />
+
         <Column>
           <template #body="slotProps">
             <Button
@@ -186,7 +185,6 @@
               aria-haspopup="true"
               aria-controls="overlay_menu"
               ref="button"
-              :item="slotProps.data"
             />
             <Menu :model="houseActions(house)" id="overlay_menu" ref="menu" :popup="true" />
 
@@ -200,7 +198,7 @@
               :closable="false"
               :dismissableMask="true"
             >
-              <form submit.prevent="editHouseInfo">
+              <form>
                 <p>
                   <label class="dialog-item" for="coopName">Кількість квартир в будинку : </label>
                   <InputText
@@ -363,16 +361,13 @@
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
-  flatQuantityValidator,
-  houseAreaValidator,
-  adjoiningAreaValidator,
   mainHouseInfoValidator,
-  houseBlockNumberValidator,
-  houseNumberValidator,
+  addressValidator,
+  houseNumAndHouseBlockValidator,
   zipCodeValidator,
 } from '@/utils/validators';
 import { defineComponent, ref } from 'vue';
-
+import { mapGetters } from 'vuex';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -461,22 +456,23 @@ export default defineComponent({
   validations() {
     return {
       house: {
-        quantity_flat: { requiredValidator, flatQuantityValidator },
-        house_area: { requiredValidator, houseAreaValidator },
-        adjoining_area: { requiredValidator, adjoiningAreaValidator },
+        quantity_flat: { requiredValidator, mainHouseInfoValidator },
+        house_area: { requiredValidator, mainHouseInfoValidator },
+        adjoining_area: { requiredValidator, mainHouseInfoValidator },
         address: {
-          region: { requiredValidator, mainHouseInfoValidator },
-          city: { requiredValidator, mainHouseInfoValidator },
-          district: { requiredValidator, mainHouseInfoValidator },
-          street: { requiredValidator, mainHouseInfoValidator },
-          house_block: { requiredValidator, houseBlockNumberValidator },
-          house_number: { requiredValidator, houseNumberValidator },
+          region: { requiredValidator, addressValidator },
+          city: { requiredValidator, addressValidator },
+          district: { requiredValidator, addressValidator },
+          street: { requiredValidator, addressValidator },
+          house_block: { requiredValidator, houseNumAndHouseBlockValidator },
+          house_number: { requiredValidator, houseNumAndHouseBlockValidator },
           zip_code: { requiredValidator, zipCodeValidator },
         },
       },
     };
   },
   async mounted() {
+    this.houses = Object.assign({}, this.housesInfo);
     await Promise.all([
       this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS'),
       this.$store.dispatch('housesStore/SET_HOUSES'),
@@ -497,8 +493,6 @@ export default defineComponent({
         JSON.stringify(cooperationInfo?.address ?? ({} as CooperationAddressInterface))
       );
       cooperationInfo?.contacts.forEach((el) => this.mapContact(el));
-      this.houses = this.housesInfo;
-      console.log('initData', this.houses);
     },
     mapContact(el: CooperationContactsInterface) {
       if (el.main) {
@@ -512,7 +506,9 @@ export default defineComponent({
         }
       }
     },
-
+    onRowSelect() {
+      this.choosenHouse();
+    },
     confirmDeleteHouse(event: Event) {
       this.$confirm.require({
         target: event.currentTarget,
@@ -521,9 +517,13 @@ export default defineComponent({
         acceptLabel: 'Так',
         rejectLabel: 'Ні',
         accept: async () => {
-          await this.$store.dispatch('housesStore/DELETE_HOUSE', this.house);
+          const payload = {
+            cooperationId: this.cooperationData.id,
+            id: this.house.id,
+          };
+          await this.$store.dispatch('housesStore/DELETE_HOUSE', payload);
           this.showSuccessDelete();
-          this.houses = this.housesInfo;
+          this.houses = Object.assign({}, this.housesInfo);
         },
         reject: () => {
           console.log('rejected delete');
@@ -565,13 +565,8 @@ export default defineComponent({
       this.closeCooperationModal();
     },
     async editHouseInfo(house: HouseInterface) {
-      //Input validation on Confirm TEMPORARY DISABLED because of bug
-      // const isValid = await this.v$.$validate();
-      // if (!isValid) {
-      //   return;
-      // }
-
       const payload = {
+        cooperationId: this.cooperationData.id,
         id: house.id,
         quantity_flat: house.quantity_flat,
         house_area: house.house_area,
@@ -612,10 +607,10 @@ export default defineComponent({
       });
     },
 
-    choosenHouse(selectedHouse: HouseInterface) {
+    choosenHouse() {
       this.$router.push({
         name: 'manage-apartment',
-        params: { id: selectedHouse.id },
+        params: { id: this.selectedHouse.id },
       });
     },
   },
@@ -636,9 +631,9 @@ export default defineComponent({
     displayHouseModal(): boolean {
       return this.$store.state.housesStore.displayModal;
     },
-    housesInfo(): Array<HouseInterface> {
-      return this.$store.getters[`${StoreModuleEnum.housesStore}/getHousesData`];
-    },
+    ...mapGetters({
+      housesInfo: `${StoreModuleEnum.housesStore}/getHousesData`,
+    }),
   },
 });
 </script>

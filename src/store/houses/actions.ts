@@ -15,8 +15,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
 
   [HousesActionsEnum.EDIT_HOUSE]: async ({ commit }, payload) => {
     try {
-      await HTTP.put(`/cooperations/1/houses/${payload.id}`, payload).then((r) => {
-        console.log(r.data);
+      await HTTP.put(`/cooperations/${payload.cooperationId}/houses/${payload.id}`, payload).then((r) => {
         commit(HousesMutationsEnum.EDIT_HOUSE, r.data);
       });
     } catch (err: any) {
@@ -25,7 +24,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   },
   [HousesActionsEnum.DELETE_HOUSE]: async ({ commit }, payload) => {
     try {
-      await HTTP.delete(`/cooperations/1/houses/${payload.id}`).then(() => {
+      await HTTP.delete(`/cooperations/${payload.cooperationId}/houses/${payload.id}`).then(() => {
         commit(HousesMutationsEnum.DELETE_HOUSE, payload);
       });
     } catch (err: any) {
@@ -33,7 +32,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
     }
   },
   [HousesActionsEnum.GET_HOUSE_BY_ID]: ({ commit }, payload) => {
-    HTTP.get(`/cooperations/${payload.cooperationID}/houses/${payload.houseID}`).then((r) => {
+    HTTP.get(`/cooperations/${payload.cooperationId}/houses/${payload.houseID}`).then((r) => {
       commit(HousesMutationsEnum.GET_HOUSE_BY_ID, r.data);
     });
   },
