@@ -55,6 +55,24 @@ export const houseBlockValidator = helpers.withMessage('Цифри від 0 до
 const validZipCpde = helpers.regex(/^\d{5}$/);
 export const zipCpdeValidator = helpers.withMessage('Цифри від 0 до 9', validZipCpde);
 
+const validFlatQuantity = helpers.regex(/^\d+$/);
+export const flatQuantityValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validFlatQuantity);
+
+const validHouseArea = helpers.regex(/^\d+$/);
+export const houseAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validHouseArea);
+
+const validAdjoiningArea = helpers.regex(/^\d+$/);
+export const adjoiningAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validAdjoiningArea);
+
+const validHouseBlockNumber = helpers.regex(/^[0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ/]{1,10}$/);
+export const houseBlockNumberValidator = helpers.withMessage(
+  `${ukrLangMessage} або цифри від 0 до 9`,
+  validHouseBlockNumber
+);
+
+const validHouseNumber = helpers.regex(/^[0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ-]{1,10}$/);
+export const houseNumberValidator = helpers.withMessage(`${ukrLangMessage}`, validHouseNumber);
+
 const validMainHouseInfo = helpers.regex(/^\d+$/);
 export const mainHouseInfoValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validMainHouseInfo);
 
