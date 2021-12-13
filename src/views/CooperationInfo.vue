@@ -41,102 +41,218 @@
         <Dialog
           header="Редагувати ОСББ"
           v-model:visible="displayCooperationModal"
-          :style="{ width: '550px' }"
+          :style="{ width: '750px' }"
           :modal="true"
           :closable="false"
           :dismissableMask="true"
         >
-          <form @submit.prevent="editCoopInfo">
-            <p>
+          <form @submit.prevent="editCooperationInfo">
+            <div>
               <label for="coopName">Назва : </label>
-              <InputText id="coopName" placeholder="Назва" v-model="cooperationData.name" />
-            </p>
-            <p>
+              <div class="input-block">
+                <small v-if="v$.cooperationData.name.$error" class="p-error">{{
+                  v$.cooperationData.name.$errors[0].$message
+                }}</small>
+                <InputText
+                  id="coopName"
+                  :class="{ 'p-invalid': v$.cooperationData.name.$error }"
+                  @blur="v$.cooperationData.name.$touch"
+                  placeholder="Назва"
+                  v-model.trim="cooperationData.name"
+                />
+              </div>
+            </div>
+            <div>
               <label for="iban">Iban номер : </label>
-              <InputText id="coopIban" placeholder="iban номер" v-model="cooperationData.iban" />
-            </p>
-            <p>
+              <div class="input-block">
+                <small v-if="v$.cooperationData.iban.$error" class="p-error">{{
+                  v$.cooperationData.iban.$errors[0].$message
+                }}</small>
+                <InputText
+                  id="coopIban"
+                  placeholder="iban номер"
+                  v-model="cooperationData.iban"
+                  :class="{ 'p-invalid': v$.cooperationData.iban.$error }"
+                  @blur="v$.cooperationData.iban.$touch"
+                  maxlength="29"
+                />
+              </div>
+            </div>
+            <div>
               <label for="coopEmail">Електронна адреса : </label>
-              <InputText id="coopEmail" placeholder="Електрона адреса" v-model.trim="cooperationData.email" />
-            </p>
-            <p>
+              <div class="input-block">
+                <small v-if="v$.cooperationData.email.$error" class="p-error">{{
+                  v$.cooperationData.email.$errors[0].$message
+                }}</small>
+                <InputText
+                  id="coopEmail"
+                  placeholder="Електрона адреса"
+                  v-model.trim="cooperationData.email"
+                  :class="{ 'p-invalid': v$.cooperationData.email.$error }"
+                  @blur="v$.cooperationData.email.$touch"
+                  maxlength="320"
+                />
+              </div>
+            </div>
+            <div>
               <label for="edrpou">Код реєстрації : </label>
-              <InputText id="edrpou" placeholder="ОСББ номер" v-model="cooperationData.edrpou" maxlength="8" />
-            </p>
-            <p>
+              <div class="input-block">
+                <small v-if="v$.cooperationData.edrpou.$error" class="p-error">{{
+                  v$.cooperationData.edrpou.$errors[0].$message
+                }}</small>
+                <InputText
+                  id="edrpou"
+                  placeholder="ОСББ номер"
+                  v-model="cooperationData.edrpou"
+                  :class="{ 'p-invalid': v$.cooperationData.edrpou.$error }"
+                  @blur="v$.cooperationData.edrpou.$touch"
+                  maxlength="8"
+                />
+              </div>
+            </div>
+            <div>
               <label for="coopPhone">Номер телефону : </label>
-              <InputText
-                id="coopPhone"
-                placeholder="+38 000 000 00 00"
-                v-model="cooperationData.phone"
-                maxlength="13"
-              />
-            </p>
+              <div class="input-block">
+                <small v-if="v$.cooperationData.phone.$error" class="p-error">{{
+                  v$.cooperationData.phone.$errors[0].$message
+                }}</small>
+                <InputText
+                  id="coopPhone"
+                  placeholder="+38 000 000 00 00"
+                  v-model="cooperationData.phone"
+                  :class="{ 'p-invalid': v$.cooperationData.phone.$error }"
+                  @blur="v$.cooperationData.phone.$touch"
+                  maxlength="13"
+                />
+              </div>
+            </div>
             <div>
               Адреса
-              <p>
+              <div>
                 <label for="coopAddress">регіон : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="регіон"
-                  v-model="cooperationData.address.region"
-                  maxlength="50"
-                />
-              </p>
-              <p>
+                <div class="input-block">
+                  <small v-if="v$.cooperationData.address.region.$error" class="p-error">{{
+                    v$.cooperationData.address.$errors[0].$message
+                  }}</small>
+                  <InputText
+                    id="coopAddress"
+                    placeholder="регіон"
+                    v-model="cooperationData.address.region"
+                    :class="{ 'p-invalid': v$.cooperationData.address.$error }"
+                    @blur="v$.cooperationData.address.region.$touch"
+                    maxlength="50"
+                  />
+                </div>
+              </div>
+              <div>
                 <label for="coopAddress">місто : </label>
-                <InputText id="coopAddress" placeholder="місто" v-model="cooperationData.address.city" maxlength="50" />
-              </p>
-              <p>
+                <div class="input-block">
+                  <small v-if="v$.cooperationData.address.city.$error" class="p-error">{{
+                    v$.cooperationData.address.city.$errors[0].$message
+                  }}</small>
+                  <InputText
+                    id="coopAddress"
+                    placeholder="місто"
+                    v-model="cooperationData.address.city"
+                    :class="{ 'p-invalid': v$.cooperationData.address.$error }"
+                    @blur="v$.cooperationData.address.city.$touch"
+                    maxlength="50"
+                  />
+                </div>
+              </div>
+              <div>
                 <label for="coopAddress">район : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="район"
-                  v-model="cooperationData.address.district"
-                  maxlength="50"
-                />
-              </p>
-              <p>
+                <div class="input-block">
+                  <small v-if="v$.cooperationData.address.district.$error" class="p-error">{{
+                    v$.cooperationData.address.district.$errors[0].$message
+                  }}</small>
+                  <InputText
+                    id="coopAddress"
+                    placeholder="район"
+                    v-model="cooperationData.address.district"
+                    :class="{ 'p-invalid': v$.cooperationData.address.district.$error }"
+                    @blur="v$.cooperationData.address.district.$touch"
+                    maxlength="50"
+                  />
+                </div>
+              </div>
+              <div>
                 <label for="coopAddress">вулиця : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="вулиця"
-                  v-model="cooperationData.address.street"
-                  maxlength="50"
-                />
-              </p>
-              <p>
+                <div class="input-block">
+                  <small v-if="v$.cooperationData.address.street.$error" class="p-error">{{
+                    v$.cooperationData.address.street.$errors[0].$message
+                  }}</small>
+                  <InputText
+                    id="coopAddress"
+                    placeholder="вулиця"
+                    v-model="cooperationData.address.street"
+                    :class="{ 'p-invalid': v$.cooperationData.address.street.$error }"
+                    @blur="v$.cooperationData.address.street.$touch"
+                    maxlength="50"
+                  />
+                </div>
+              </div>
+              <div>
                 <label for="coopAddress">номер будинку : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="номер будинку"
-                  v-model="cooperationData.address.houseNumber"
-                  maxlength="10"
-                />
-              </p>
-              <p>
+                <div class="input-block">
+                  <small v-if="v$.cooperationData.address.houseNumber.$error" class="p-error">{{
+                    v$.cooperationData.address.houseNumber.$errors[0].$message
+                  }}</small>
+                  <InputText
+                    id="coopAddress"
+                    placeholder="номер будинку"
+                    v-model="cooperationData.address.houseNumber"
+                    :class="{ 'p-invalid': v$.cooperationData.address.houseNumber.$error }"
+                    @blur="v$.cooperationData.address.houseNumber.$touch"
+                    maxlength="10"
+                  />
+                </div>
+              </div>
+              <div>
                 <label for="coopAddress">блок : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="блок"
-                  v-model="cooperationData.address.houseBlock"
-                  maxlength="10"
-                />
-              </p>
-              <p>
+                <div class="input-block">
+                  <small v-if="v$.cooperationData.address.houseBlock.$error" class="p-error">{{
+                    v$.cooperationData.address.houseBlock.$errors[0].$message
+                  }}</small>
+                  <InputText
+                    id="coopAddress"
+                    placeholder="блок"
+                    v-model="cooperationData.address.houseBlock"
+                    :class="{ 'p-invalid': v$.cooperationData.address.houseBlock.$error }"
+                    @blur="v$.cooperationData.address.houseBlock.$touch"
+                    maxlength="10"
+                  />
+                </div>
+              </div>
+              <div>
                 <label for="coopAddress">індекс : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="індекс"
-                  v-model="cooperationData.address.zipCode"
-                  maxlength="5"
-                />
-              </p>
+                <div class="input-block">
+                  <small v-if="v$.cooperationData.address.zipCode.$error" class="p-error">{{
+                    v$.cooperationData.address.zipCode.$errors[0].$message
+                  }}</small>
+                  <InputText
+                    id="coopAddress"
+                    placeholder="індекс"
+                    v-model="cooperationData.address.zipCode"
+                    :class="{ 'p-invalid': v$.cooperationData.address.zipCode.$error }"
+                    @blur="v$.cooperationData.address.zipCode.$touch"
+                    maxlength="5"
+                  />
+                </div>
+              </div>
             </div>
           </form>
 
           <template #footer>
-            <Button label="Редагувати" icon="pi pi-check" autofocus class="p-button-info" />
+
+            <Button
+              label="Редагувати"
+              icon="pi pi-check"
+              @click="editCooperationInfo"
+              autofocus
+              class="p-button-info"
+            />
+
             <Button
               label="Скасувати"
               icon="pi pi-times"
@@ -358,14 +474,6 @@
 </template>
 
 <script lang="ts">
-import useVuelidate from '@vuelidate/core';
-import {
-  requiredValidator,
-  mainHouseInfoValidator,
-  addressValidator,
-  houseNumAndHouseBlockValidator,
-  zipCodeValidator,
-} from '@/utils/validators';
 import { defineComponent, ref } from 'vue';
 import { mapGetters } from 'vuex';
 import Button from 'primevue/button';
@@ -374,13 +482,31 @@ import InputText from 'primevue/inputtext';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
+import ConfirmPopup from 'primevue/confirmpopup';
+
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import AddHouseButton from '@/components/AddHouseButton.vue';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
-import { AddressInterface, HouseInterface } from '@/store/houses/types';
-import ConfirmPopup from 'primevue/confirmpopup';
-import AddHouseButton from '@/components/AddHouseButton.vue';
+import { HouseInterface } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
+import { AddressInterface, HouseInterface } from '@/store/houses/types';
+
+import useVuelidate from '@vuelidate/core';
+import {
+  requiredValidator,
+  edrpouValidator,
+  emailLastCharsValidator,
+  emailMaxLength,
+  emailMinLength,
+  emailValidator,
+  nameLenghtValidator,
+  ukrLangTitleValidator,
+  ibanValidator,
+  phoneNumberValidator,
+  houseNumAndHouseBlockValidator,
+  zipCodeValidator,
+} from '@/utils/validators';
 
 export default defineComponent({
   name: 'CooperationInfo',
@@ -419,13 +545,6 @@ export default defineComponent({
       },
       selectedHouse: ref(),
       houses: [] as Array<HouseInterface>,
-      id: 0,
-      name: '',
-      edrpou: '',
-      iban: '',
-      phone: '',
-      email: '',
-      address: {},
       cooperationData: {
         id: 0,
         name: '',
@@ -450,11 +569,36 @@ export default defineComponent({
           zip_code: '',
         } as AddressInterface,
       } as HouseInterface,
-      v$: useVuelidate(),
-    };
+      v$: useVuelidate(),  
   },
   validations() {
     return {
+      cooperationData: {
+        name: {
+          requiredValidator,
+          ukrLangTitleValidator,
+          nameLenghtValidator,
+        },
+        edrpou: { requiredValidator, edrpouValidator },
+        iban: { requiredValidator, ibanValidator },
+        phone: { requiredValidator, phoneNumberValidator },
+        email: {
+          requiredValidator,
+          emailMinLength,
+          emailLastCharsValidator,
+          emailValidator,
+          emailMaxLength,
+        },
+        address: {
+          region: { requiredValidator, ukrLangTitleValidator },
+          city: { requiredValidator, ukrLangTitleValidator },
+          district: { requiredValidator, ukrLangTitleValidator },
+          street: { requiredValidator, ukrLangTitleValidator },
+          houseBlock: { requiredValidator, houseNumAndHouseBlockValidator },
+          houseNumber: { requiredValidator, houseNumAndHouseBlockValidator },
+          zipCode: { requiredValidator, zipCodeValidator },
+        },
+      },
       house: {
         quantity_flat: { requiredValidator, mainHouseInfoValidator },
         house_area: { requiredValidator, mainHouseInfoValidator },
@@ -468,9 +612,9 @@ export default defineComponent({
           house_number: { requiredValidator, houseNumAndHouseBlockValidator },
           zip_code: { requiredValidator, zipCodeValidator },
         },
-      },
     };
   },
+
   async mounted() {
     this.houses = Object.assign({}, this.housesInfo);
     await Promise.all([
@@ -549,20 +693,23 @@ export default defineComponent({
       this.initData();
       this.closeCooperationModal();
     },
-    editCoopInfo() {
-      const payload = {
-        id: this.cooperationData.id,
-        name: this.cooperationData.name,
-        edrpou: this.cooperationData.edrpou,
-        iban: this.cooperationData.iban,
-        address: this.cooperationData.address,
-        contacts: [
-          { type: 'email', main: true, email: this.cooperationData.email },
-          { type: 'phone', main: true, phone: this.cooperationData.phone },
-        ],
-      };
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_COOPERATION_UPDATE`, payload);
-      this.closeCooperationModal();
+    editCooperationInfo() {
+      if (!this.v$.$invalid) {
+        const payload = {
+          id: this.cooperationData.id,
+          name: this.cooperationData.name,
+          edrpou: this.cooperationData.edrpou,
+          iban: this.cooperationData.iban,
+          address: this.cooperationData.address,
+          contacts: [
+            { type: 'email', main: true, email: this.cooperationData.email },
+            { type: 'phone', main: true, phone: this.cooperationData.phone },
+          ],
+        };
+
+        this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
+        this.closeCooperationModal();
+      }
     },
     async editHouseInfo(house: HouseInterface) {
       const payload = {
@@ -694,5 +841,13 @@ export default defineComponent({
 label {
   display: inline-block;
   width: 260px;
+}
+.input-block {
+  display: inline-block;
+  margin-bottom: 15px;
+}
+small {
+  display: block;
+  width: 280px;
 }
 </style>
