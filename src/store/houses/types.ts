@@ -1,5 +1,6 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
+import { HouseModel } from '@/shared/models/house.model';
 
 export enum HousesMutationsEnum {
   SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
@@ -46,13 +47,18 @@ export interface HousesStateInterface {
 
 export type Mutations<S = HousesStateInterface> = {
   [HousesMutationsEnum.SET_HOUSES](state: S, payload: Array<HouseInterface>): void;
+
+  [HousesMutationsEnum.DELETE_HOUSE](state: any, payload: HouseInterface): void;
+  [HousesMutationsEnum.EDIT_HOUSE](state: S, payload: HouseInterface): void;
   [HousesMutationsEnum.GET_HOUSE_BY_ID](state: S, payload: HouseInterface): void;
   [HousesMutationsEnum.ADD_HOUSE](state: S, payload: HouseInterface): void;
   [HousesMutationsEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
 };
 
 export interface Actions {
-  [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext): void;
+  [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext, payload: Array<HouseInterface>): void;
+  [HousesActionsEnum.DELETE_HOUSE]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
+  [HousesActionsEnum.EDIT_HOUSE]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
   [HousesActionsEnum.SET_MODAL_DISPLAY]({ commit }: AugmentedActionContext, payload: boolean): void;
   [HousesActionsEnum.ADD_HOUSE]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
   [HousesActionsEnum.GET_HOUSE_BY_ID]({ commit }: AugmentedActionContext, payload: any): void;
