@@ -6,7 +6,7 @@ import { InvitationsStateInterface } from '@/store/invitations/types';
 // import { mutations } from '@/store/invitations/mutations';
 
 export const state: InvitationsStateInterface = {
-  invitations: null,
+  invitations: [],
 };
 
 export const invitationsStore: Module<InvitationsStateInterface, RootStateInterface> = {
