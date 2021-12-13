@@ -6,8 +6,8 @@ export enum RoutesEnum {
   ManageUser = '/main/manage-user',
   MainPage = '/main',
   Cooperation = '/main/cooperation',
-  ApartmentsMock = '/cooperation/apartments-mock',
-  ApartmentsInfoMock = '/cooperation/apartments-info-mock',
+  ManageApartments = '/main/cooperation/:id',
+  ApartmentInfo = '/main/cooperation/:id/:apartment',
   Polls = '/main/polls',
   InvitationSection = '/main/invitations',
 

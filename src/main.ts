@@ -5,6 +5,7 @@ import store from './store';
 import { HTTP } from '@/core/api/http-common';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
 import App from './App.vue';
 import '@/styles/style.scss';
 
@@ -15,4 +16,5 @@ app.use(store);
 app.use(router);
 app.use(PrimeVue);
 app.use(ToastService);
+app.use(ConfirmationService);
 app.mount('#app');

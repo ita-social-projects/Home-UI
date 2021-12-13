@@ -7,6 +7,7 @@ import { housesStore } from '@/store/houses';
 import { userStore } from '@/store/user';
 import { pollsStore } from '@/store/polls';
 import { invitationsStore } from '@/store/invitations';
+import { apartmentsStore } from '@/store/apartments';
 
 export default createStore<RootStateInterface>({
   strict: process.env.NODE_ENV !== 'production',
@@ -18,5 +19,6 @@ export default createStore<RootStateInterface>({
     localStorageStore,
     housesStore,
     invitationsStore,
+    apartmentsStore,
   },
 });
