@@ -15,8 +15,8 @@ export interface RootStateInterface {
   pollsStore: PollsStateInterface;
   localStorageStore: LocalStorageStateInterface;
   housesStore: HousesStateInterface;
-  apartments: ApartmentsStateInterface;
-  ownerships: OwnershipsStateInterface;
+  apartmentsStore: ApartmentsStateInterface;
+  ownershipsStore: OwnershipsStateInterface;
 }
 
 export enum StoreModuleEnum {

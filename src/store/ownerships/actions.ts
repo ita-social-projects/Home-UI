@@ -22,13 +22,19 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
           owner: {
             id: 1,
             first_name: 'Petro',
-            middle_name: 'Petrovich',
+            middle_name: 'Evgenovich',
             last_name: 'Petrov',
             contacts: [
               {
                 id: 1,
                 type: 'email',
                 main: false,
+                email: 'readUserEmail@example.com',
+              },
+              {
+                id: 2,
+                type: 'email',
+                main: true,
                 email: 'readUserEmail@example.com',
               }
             ]
@@ -46,7 +52,7 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
               {
                 id: 1,
                 type: 'email',
-                main: false,
+                main: true,
                 email: 'newEmail@example.com',
               },
             ],
@@ -57,8 +63,8 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
           id: 3,
           owner: {
             id: 1,
-            first_name: 'Ivan',
-            middle_name: 'Petrovich',
+            first_name: 'Olga',
+            middle_name: 'Mukolaivna',
             last_name: 'Petrov',
             contacts: [
               {
@@ -66,6 +72,12 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
                 type: 'phone',
                 main: false,
                 phone: '+380985054044',
+              },
+              {
+                id: 2,
+                type: 'email',
+                main: true,
+                email: 'secondEmail@example.com',
               },
             ],
           },
