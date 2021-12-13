@@ -134,7 +134,7 @@
 import { toRefs, ref, computed, defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ApartmentModel } from '@/store/apartments/models/apartment.model';
-import { HouseInterface } from '@/store/houses/types';
+import { HouseInterface, HousesActionsEnum } from '@/store/houses/types';
 import { useStore } from 'vuex';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
@@ -143,6 +143,8 @@ import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import { StoreModuleEnum } from '@/store/types';
+import { ApartmentsActionsEnum } from '@/store/apartments/types';
 
 export default defineComponent({
   name: 'ManageApartments',
@@ -202,8 +204,8 @@ export default defineComponent({
       ];
     };
 
-    const cooperationID = computed(() => {
-      return store.getters['cooperationStore/getSelectedCooperationId'];
+    const cooperationId = computed(() => {
+      return store.getters[`${StoreModuleEnum.cooperationStore}/getSelectedCooperationId`];
     });
 
     const deleteApartment = () => {
@@ -217,12 +219,12 @@ export default defineComponent({
     };
 
     const setApartments = async () => {
-      await store.dispatch('apartmentsStore/SET_APARTMENTS', id.value);
+      await store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENTS}`, id.value);
       loading.value = false;
     };
 
     const apartmentsData = computed((): Array<ApartmentModel> => {
-      return store.getters['apartmentsStore/getApartmentsData'];
+      return store.getters[`${StoreModuleEnum.apartmentsStore}/getApartmentsData`];
     });
 
     const onRowSelect = () => {
@@ -234,14 +236,14 @@ export default defineComponent({
 
     const setHouseInfo = async () => {
       const payload = {
-        cooperationID: cooperationID.value,
+        cooperationId: cooperationId.value,
         houseID: id.value,
       };
-      await store.dispatch('housesStore/GET_HOUSE_BY_ID', payload);
+      await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
     };
 
     const houseInfo = computed((): HouseInterface => {
-      return store.getters['housesStore/getHouseInfo'];
+      return store.getters[`${StoreModuleEnum.housesStore}/getHouseInfo`];
     });
 
     onMounted(() => {
@@ -250,7 +252,7 @@ export default defineComponent({
     });
 
     return {
-      cooperationID,
+      cooperationId,
       menu,
       menuActions,
       houseInfo,
