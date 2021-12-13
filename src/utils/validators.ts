@@ -40,10 +40,21 @@ export const nameValidator = helpers.withMessage('Латинські літер�
 export const nameLenghtValidator = helpers.withMessage('Максимальна кількість символів - 50', maxLength(50));
 export const ukrLangTitleValidator = helpers.withMessage('В назві мають бути українські літери', ukranianLan);
 export const ibanValidator = helpers.withMessage('Складається з літр UA та 27 цифр', validIban);
+export const zipCodeValidator = helpers.withMessage('5 цифр від 0 до 9', validZipCpde);
+export const phoneNumberValidator = helpers.withMessage('Введіть номер коректно.', validPhoneNumber);
 export const houseNumAndHouseBlockValidator = helpers.withMessage(
   `${ukrLangMessage} або цифри від 0 до 9`,
   validHouseNumAndHouseBlock
 );
-export const zipCodeValidator = helpers.withMessage('5 цифр від 0 до 9', validZipCpde);
-export const phoneNumberValidator = helpers.withMessage('Введіть номер коректно.', validPhoneNumber);
 
+const validFlatQuantity = helpers.regex(/^\d+$/);
+export const flatQuantityValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validFlatQuantity);
+
+const validHouseArea = helpers.regex(/^\d+$/);
+export const houseAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validHouseArea);
+
+const validAdjoiningArea = helpers.regex(/^\d+$/);
+export const adjoiningAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validAdjoiningArea);
+
+const validMainHouseInfo = helpers.regex(/^\d+$/);
+export const mainHouseInfoValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validMainHouseInfo);
