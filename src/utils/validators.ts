@@ -12,7 +12,7 @@ const edrpou = helpers.regex(/^\d{8}$/);
 const validIban = helpers.regex(/^UA\d{27}$/);
 const validZipCpde = helpers.regex(/^\d{5}$/);
 const validPhoneNumber = helpers.regex(/^\+38(0\d{9})$/);
-const validHouseNumAndHouseBlock = helpers.regex(/^[0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ-]{1,10}$/);
+const validHouseNumAndHouseBlock = helpers.regex(/^[/0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ-]{1,10}$/);
 
 export const emailValidator = helpers.withMessage(
   'Електронна пошта містить латинські букви, цифри, та спеціальні символи',
@@ -37,11 +37,13 @@ export const passwordMaxLenght = helpers.withMessage('Максимальна к�
 export const passwordMinLenght = helpers.withMessage('Мінімальна кількість символів - 8', minLength(8));
 export const keyValidator = helpers.withMessage('Ключ з E-mail, 36 символів', validKey);
 export const nameValidator = helpers.withMessage('Латинські літери, цифри та спец.символи', validName);
+
 export const nameLenghtValidator = helpers.withMessage('Максимальна кількість символів - 50', maxLength(50));
 export const ukrLangTitleValidator = helpers.withMessage('В назві мають бути українські літери', ukranianLan);
 export const ibanValidator = helpers.withMessage('Складається з літр UA та 27 цифр', validIban);
 export const zipCodeValidator = helpers.withMessage('5 цифр від 0 до 9', validZipCpde);
 export const phoneNumberValidator = helpers.withMessage('Введіть номер коректно.', validPhoneNumber);
+
 export const houseNumAndHouseBlockValidator = helpers.withMessage(
   `${ukrLangMessage} або цифри від 0 до 9`,
   validHouseNumAndHouseBlock
