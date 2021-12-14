@@ -12,7 +12,6 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   [HousesActionsEnum.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
     commit(HousesMutationsEnum.SET_MODAL_DISPLAY, payload);
   },
-
   [HousesActionsEnum.EDIT_HOUSE]: async ({ commit }, payload) => {
     try {
       await HTTP.put(`/cooperations/${payload.cooperationId}/houses/${payload.id}`, payload).then((r) => {
@@ -32,7 +31,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
     }
   },
   [HousesActionsEnum.GET_HOUSE_BY_ID]: ({ commit }, payload) => {
-    HTTP.get(`/cooperations/${payload.cooperationId}/houses/${payload.houseID}`).then((r) => {
+    HTTP.get(`/cooperations/${payload.cooperationID}/houses/${payload.houseID}`).then((r) => {
       commit(HousesMutationsEnum.GET_HOUSE_BY_ID, r.data);
     });
   },

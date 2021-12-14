@@ -1,6 +1,6 @@
 <template>
   <div class="add_btn">
-    <Button label="Створити запрошення" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
+    <CreateInvitation></CreateInvitation>
   </div>
   <div class="container">
     <h1 class="page-title">{{ title }}</h1>
@@ -34,6 +34,7 @@ import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
+import CreateInvitation from '@/components/CreateInvitationButton.vue';
 
 export default defineComponent({
   name: 'InvitationSection',
@@ -42,6 +43,7 @@ export default defineComponent({
     DataTable,
     Column,
     Menu,
+    CreateInvitation,
   },
   data() {
     return {

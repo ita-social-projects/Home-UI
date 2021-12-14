@@ -472,7 +472,6 @@ export default defineComponent({
     };
   },
   async mounted() {
-    this.houses = Object.assign({}, this.housesInfo);
     await Promise.all([
       this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS'),
       this.$store.dispatch('housesStore/SET_HOUSES'),
@@ -480,6 +479,7 @@ export default defineComponent({
       this.initData();
       this.isLoaded = true;
     });
+    this.houses = Object.assign({}, this.housesInfo);
   },
 
   methods: {
