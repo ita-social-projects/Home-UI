@@ -244,7 +244,6 @@
           </form>
 
           <template #footer>
-
             <Button
               label="Редагувати"
               icon="pi pi-check"
@@ -488,7 +487,6 @@ import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddHouseButton from '@/components/AddHouseButton.vue';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
-import { HouseInterface } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
 import { AddressInterface, HouseInterface } from '@/store/houses/types';
 
@@ -506,6 +504,7 @@ import {
   phoneNumberValidator,
   houseNumAndHouseBlockValidator,
   zipCodeValidator,
+  mainHouseInfoValidator,
 } from '@/utils/validators';
 
 export default defineComponent({
@@ -569,7 +568,8 @@ export default defineComponent({
           zip_code: '',
         } as AddressInterface,
       } as HouseInterface,
-      v$: useVuelidate(),  
+      v$: useVuelidate(),
+    };
   },
   validations() {
     return {
@@ -604,17 +604,17 @@ export default defineComponent({
         house_area: { requiredValidator, mainHouseInfoValidator },
         adjoining_area: { requiredValidator, mainHouseInfoValidator },
         address: {
-          region: { requiredValidator, addressValidator },
-          city: { requiredValidator, addressValidator },
-          district: { requiredValidator, addressValidator },
-          street: { requiredValidator, addressValidator },
+          region: { requiredValidator, ukrLangTitleValidator },
+          city: { requiredValidator, ukrLangTitleValidator },
+          district: { requiredValidator, ukrLangTitleValidator },
+          street: { requiredValidator, ukrLangTitleValidator },
           house_block: { requiredValidator, houseNumAndHouseBlockValidator },
           house_number: { requiredValidator, houseNumAndHouseBlockValidator },
           zip_code: { requiredValidator, zipCodeValidator },
         },
+      },
     };
   },
-
   async mounted() {
     this.houses = Object.assign({}, this.housesInfo);
     await Promise.all([
@@ -625,7 +625,6 @@ export default defineComponent({
       this.isLoaded = true;
     });
   },
-
   methods: {
     initData() {
       let cooperationInfo: CooperationModel | null = this.$store.state.cooperationStore.selectedCooperation;

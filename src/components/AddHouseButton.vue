@@ -195,7 +195,7 @@ import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
   mainHouseInfoValidator,
-  addressValidator,
+  ukrLangTitleValidator,
   houseNumAndHouseBlockValidator,
   zipCodeValidator,
 } from '@/utils/validators';
@@ -245,10 +245,10 @@ export default defineComponent({
         house_area: { requiredValidator, mainHouseInfoValidator },
         adjoining_area: { requiredValidator, mainHouseInfoValidator },
         address: {
-          region: { requiredValidator, addressValidator },
-          city: { requiredValidator, addressValidator },
-          district: { requiredValidator, addressValidator },
-          street: { requiredValidator, addressValidator },
+          region: { requiredValidator, ukrLangTitleValidator },
+          city: { requiredValidator, ukrLangTitleValidator },
+          district: { requiredValidator, ukrLangTitleValidator },
+          street: { requiredValidator, ukrLangTitleValidator },
           house_block: { requiredValidator, houseNumAndHouseBlockValidator },
           house_number: { requiredValidator, houseNumAndHouseBlockValidator },
           zip_code: { requiredValidator, zipCodeValidator },
