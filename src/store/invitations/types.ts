@@ -11,19 +11,19 @@ export enum InvitationsActionsEnum {
 
 export interface InvitationInterface {
   email: string;
-  address: AddressInterface;
+  address: string;
   status: string;
   id: number;
 }
 
-export interface AddressInterface {
-  street: string;
-  houseBlock: string;
-  houseNumber: string;
-}
+// export interface AddressInterface {
+//   street: string;
+//   houseBlock: string;
+//   houseNumber: string;
+// }
 
 export interface InvitationsStateInterface {
-  invitations: Array<InvitationInterface> | null;
+  invitations: Array<InvitationInterface>;
 }
 
 export type Mutations<S = InvitationsStateInterface> = {

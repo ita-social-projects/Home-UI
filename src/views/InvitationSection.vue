@@ -6,6 +6,12 @@
     <h1 class="page-title">{{ title }}</h1>
     <div class="container-invitations">
       <DataTable :value="invitations" responsiveLayout="scroll">
+        <template #header>
+          <span class="p-input-icon-right search-field">
+            <i class="pi pi-search" />
+            <InputText placeholder="Введіть номер квартири" />
+          </span>
+        </template>
         <Column field="email" style="min-width: 20rem" header="Email" :sortable="true" />
         <Column field="address" style="min-width: 25rem" header="Адреса" :sortable="true" />
         <Column field="invitationStatus" style="min-width: 15rem" header="Статус" :sortable="true" />
@@ -34,6 +40,9 @@ import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
+import InputText from 'primevue/inputtext';
+import { StoreModuleEnum } from '@/store/types';
+import { InvitationsStateInterface } from '@/store/invitations/types';
 
 export default defineComponent({
   name: 'InvitationSection',
@@ -42,22 +51,12 @@ export default defineComponent({
     DataTable,
     Column,
     Menu,
+    InputText,
   },
   data() {
     return {
       title: 'Список запрошень',
-      invitations: [
-        {
-          email: 'paul@gmail.com',
-          address: 'вулиця Квіткова, будинок 27, квартира 3',
-          invitationStatus: 'запрошення створено',
-        },
-        {
-          email: 'john@gmail.com',
-          address: 'вулиця Квіткова, будинок 27, квартира 3',
-          invitationStatus: 'запрошення прийнято',
-        },
-      ],
+      invitations: [] as Array<InvitationsStateInterface>,
       invitationActions: () => {
         return [
           {
@@ -72,9 +71,15 @@ export default defineComponent({
       },
     };
   },
+  created() {
+    this.getInvitations();
+  },
   methods: {
     toggle(event: Event) {
       (this.$refs.menu as any).toggle(event);
+    },
+    getInvitations() {
+      this.invitations = this.$store.getters[`${StoreModuleEnum.invitationsStore}/getInvitations`];
     },
   },
 });
@@ -98,5 +103,9 @@ export default defineComponent({
   display: flex;
   margin: 15px;
   justify-content: flex-end;
+}
+.search-field {
+  display: block;
+  text-align: right;
 }
 </style>
