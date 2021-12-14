@@ -15,7 +15,8 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
   [OwnershipsActionEnum.SET_OWNERSHIPS]: async ({ commit }, payload) => {
     try {
       const url = `/apartments/${payload}/ownerships`;
-    //   const { data } = await HTTP.get(url);
+      // const { data } = await HTTP.get(url);
+      /// Mock data
       const data: Array<OwnershipsDTOModel> = [
         {
           id: 1,
@@ -91,6 +92,15 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
       commit(OwnershipsMutationEnum.SET_OWNERSHIPS, ownerships);
     } catch (e: any) {
       console.log(e.response);
+    }
+  },
+  [OwnershipsActionEnum.DELETE_OWNER]: async ({ commit }, payload) => {
+    try {
+      const url = `/apartments/${payload.apartmentId}/ownerships/${payload.ownerId}`;
+      // await HTTP.get(url);
+      commit(OwnershipsMutationEnum.DELETE_OWNER, payload);
+    } catch (err: any) {
+      console.log('error DELETE_OWNER', err);
     }
   },
 };

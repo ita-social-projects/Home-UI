@@ -119,13 +119,14 @@ import InputText from 'primevue/inputtext';
 import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue';
+import { computed, defineComponent, onMounted, reactive, ref, toRefs, watch } from 'vue';
 import { useStore } from 'vuex';
 import { StoreModuleEnum } from '@/store/types';
 import { OwnershipsModel } from '@/shared/models/ownerships.model';
 import { ContactsModel } from '@/shared/models/contacts.modal';
 import { ApartmentsActionsEnum } from '@/store/apartments/types';
 import { ApartmentModel } from '@/store/apartments/models/apartment.model';
+import { OwnershipsActionEnum } from '@/store/ownerships/types';
 
 export default defineComponent({
   name: 'ApartmentInfo',
@@ -158,9 +159,13 @@ export default defineComponent({
     const submitted = ref(false);
     const editOwnerDialog = ref(false);
     const deleteOwnerDialog = ref(false);
-    const editData = ref({});
-    const deleteData = ref({});
-    const item = ref({});
+    let editData = ref({});
+    let deleteData = ref({});
+    const item = ref({
+      id: 0,
+      owner: '',
+      ownerships: '',
+    });
     const menu = ref();
     const menuActions = () => {
       return [
@@ -169,8 +174,8 @@ export default defineComponent({
           icon: 'pi pi-times',
           command: () => {
             deleteOwnerDialog.value = true;
-            deleteData.value = item.value;
-            console.log(item);
+            deleteData.value = item.value.id;
+            console.log(deleteData);
           },
         },
         {
@@ -179,7 +184,7 @@ export default defineComponent({
           command: () => {
             editOwnerDialog.value = true;
             editData.value = item.value;
-            console.log(item);
+            console.log(editData);
           },
         },
       ];
@@ -219,7 +224,11 @@ export default defineComponent({
     watch(ownerShipsData, initData);
 
     const deleteOwner = () => {
-      console.log('delete owner', deleteData.value);
+      const payload = {
+        apartmentId: apartment.value,
+        ownerId: deleteData.value,
+      };
+      store.dispatch(`${StoreModuleEnum.ownershipsStore}/${OwnershipsActionEnum.DELETE_OWNER}`, payload);
       deleteOwnerDialog.value = false;
     };
 
