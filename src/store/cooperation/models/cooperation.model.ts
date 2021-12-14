@@ -14,9 +14,9 @@ export class CooperationModel {
 
   constructor(data: CooperationDTOModel) {
     this.id = data.id;
-    this.name = data.name;
+    this.name = data.name || '';
     this.edrpou = data.usreo;
-    this.iban = data.iban;
+    this.iban = data.iban || '';
     this.address = new AddressModel(data.address);
     this.houses = data.houses.map((el) => new HouseModel(el));
     this.contacts = data.contacts;

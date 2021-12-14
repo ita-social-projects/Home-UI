@@ -10,12 +10,22 @@ export class AddressModel {
   public zipCode: string;
 
   constructor(address: AddressDTOModel) {
-    this.region = address.region;
-    this.city = address.city;
-    this.district = address.district;
-    this.street = address.street;
-    this.houseBlock = address.house_block;
-    this.houseNumber = address.house_number;
-    this.zipCode = address.zip_code;
+    if (address) {
+      this.region = address.region;
+      this.city = address.city;
+      this.district = address.district;
+      this.street = address.street;
+      this.houseBlock = address.house_block;
+      this.houseNumber = address.house_number;
+      this.zipCode = address.zip_code;
+    } else {
+      this.region = '';
+      this.city = '';
+      this.district = '';
+      this.street = '';
+      this.houseBlock = '';
+      this.houseNumber = '';
+      this.zipCode = '';
+    }
   }
 }
