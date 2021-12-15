@@ -21,14 +21,7 @@
           v-model="selectedType"
           :options="invitationData.invitationType"
           placeholder="Оберіть тип запрошення"
-          :class="{
-            'p-invalid': v$.invitationData.invitationType.$error,
-          }"
-          @blur="v$.invitationData.invitationType.$touch"
         />
-        <small v-if="v$.invitationData.invitationType.$error" class="p-error">{{
-          v$.invitationData.invitationType.$errors[0].$message
-        }}</small>
       </p>
       <p>
         <label class="dialog-item dialog-item-address" for="user_email">Email : </label>
@@ -53,7 +46,7 @@
           :options="listOfHouses"
           optionLabel="houseData"
           placeholder="Оберіть дім"
-          @change="getTheApartments(selectedHouse.houseId)"
+          @change="getTheApartments(selectedHouse.houseId, selectedHouse.houseData)"
           emptyMessage="В цьому ОСББ немає будинків"
         />
       </p>
@@ -64,7 +57,7 @@
           v-model="selectedApartment"
           :options="listOfApartments"
           placeholder="Оберіть квартиру"
-          :disabled="isDisabled"
+          :disabled="isApartmentDisabled"
           emptyMessage="В цьому будинку немає квартир"
         />
       </p>
@@ -78,6 +71,7 @@
         class="p-button-info"
         type="button"
         value="Submit"
+        :disabled="isDisabled"
       />
       <Button
         label="Скасувати"
@@ -107,7 +101,9 @@ import {
   emailMaxLength,
   emailLastCharsValidator,
 } from '@/utils/validators';
-import { CreateInvitationInterface, InvitationsActionsEnum } from '@/store/invitations/types';
+import { CreateInvitationInterface, InvitationInterface, InvitationsActionsEnum } from '@/store/invitations/types';
+import { HousesActionsEnum } from '@/store/houses/types';
+import { InvitationModel } from '@/store/invitations/models/invitation.model';
 
 export default defineComponent({
   name: 'CreateInvitationButton',
@@ -120,34 +116,36 @@ export default defineComponent({
   data() {
     return {
       invitationData: {
-        invitationType: 'Ми запрошуємо власника квартири',
+        invitationType: ['Ми запрошуємо власника квартири', 'Ми запрошуємо власника ОСББ'],
         email: '',
         listOfHouses: [],
         listOfApartments: [],
-      } as CreateInvitationInterface,
+      },
       displayCreateInvitationModal: false,
       v$: useVuelidate(),
-      isDisabled: true,
+      isApartmentDisabled: true,
+      isSubmitDisabled: true,
       selectedHouse: null,
-      selectedType: null,
+      selectedType: '',
       selectedApartment: null,
+      displayAddress: '',
     };
   },
   validations() {
     return {
       invitationData: {
-        invitationType: { requiredValidator },
         email: { requiredValidator, emailValidator, emailMinLength, emailMaxLength, emailLastCharsValidator },
       },
     };
   },
+  async mounted() {
+    await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`);
+  },
   methods: {
     changeCreateInvitationModal(condition: boolean): void {
       if (condition) {
-        console.log(condition);
         this.displayCreateInvitationModal = condition;
       } else {
-        console.log(condition);
         this.displayCreateInvitationModal = condition;
         this.v$.$reset();
         this.resetHouseDataFields();
@@ -160,9 +158,12 @@ export default defineComponent({
         return;
       }
 
-      const payload = {
-        ...this.invitationData,
+      const payload: InvitationModel = {
+        invitationType: this.selectedType,
+        email: this.invitationData.email,
+        address: `${this.displayAddress}, ${this.selectedApartment}`,
       };
+
       await this.$store.dispatch(
         `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`,
         payload
@@ -172,14 +173,15 @@ export default defineComponent({
       this.changeCreateInvitationModal(false);
     },
     resetHouseDataFields(): void {
-      this.selectedType = null;
+      this.selectedType = '';
       this.invitationData.email = '';
       this.selectedHouse = null;
       this.selectedApartment = null;
-      this.isDisabled = true;
+      this.isApartmentDisabled = true;
     },
-    async getTheApartments(houseId: number): Promise<void> {
-      this.isDisabled = false;
+    async getTheApartments(houseId: number, houseData: any): Promise<void> {
+      this.isApartmentDisabled = false;
+      this.displayAddress = houseData;
 
       await this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENTS}`, houseId);
     },
@@ -187,6 +189,17 @@ export default defineComponent({
   computed: {
     displayModal(): boolean {
       return this.displayCreateInvitationModal;
+    },
+    isDisabled(): boolean {
+      const isValid =
+        this.selectedHouse !== null &&
+        this.selectedApartment !== null &&
+        this.selectedType !== null &&
+        this.invitationData.email !== ''
+          ? (this.isSubmitDisabled = false)
+          : (this.isSubmitDisabled = true);
+
+      return isValid;
     },
     ...mapGetters({
       listOfHouses: `${StoreModuleEnum.housesStore}/getListOfHouses`,

@@ -1,5 +1,7 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
+import { InvitationModel } from './models/invitation.model';
+import { InvitationDTOModel } from './models/invitationDTO.model';
 
 export enum InvitationsMutationsEnum {
   GET_ALL_INVITATIONS = 'GET_ALL_INVITATIONS',
@@ -13,16 +15,15 @@ export enum InvitationsActionsEnum {
 
 export interface InvitationInterface {
   email: string;
-  address: AddressInterface;
+  address: string;
   status: string;
   id: number;
 }
 
 export interface CreateInvitationInterface {
-  invitationType: 'Ми запрошуємо власника квартири' | 'Ми запрошуємо власника ОСББ';
+  invitationType: string;
   email: string;
-  listOfHouses: Array<AddressInterface>;
-  listOfApartments: Array<string>;
+  address: string;
 }
 
 export interface AddressInterface {
@@ -32,27 +33,24 @@ export interface AddressInterface {
 }
 
 export interface InvitationsStateInterface {
-  invitations: Array<InvitationInterface> | null;
+  invitations: Array<InvitationModel> | null;
 }
 
 export type Mutations<S = InvitationsStateInterface> = {
-  [InvitationsMutationsEnum.GET_ALL_INVITATIONS](state: S, payload: Array<InvitationInterface>): void;
-  [InvitationsMutationsEnum.CREATE_INVITATION](state: S, payload: InvitationInterface): void;
+  [InvitationsMutationsEnum.GET_ALL_INVITATIONS](state: S, payload: Array<InvitationModel>): void;
+  [InvitationsMutationsEnum.CREATE_INVITATION](state: S, payload: InvitationModel): void;
 };
 
 export interface Actions {
   [InvitationsActionsEnum.GET_ALL_INVITATIONS](
     { commit }: AugmentedActionContext,
-    payload: Array<InvitationInterface>
+    payload: Array<InvitationModel>
   ): void;
-  [InvitationsActionsEnum.CREATE_INVITATION](
-    { commit }: AugmentedActionContext,
-    payload: CreateInvitationInterface
-  ): void;
+  [InvitationsActionsEnum.CREATE_INVITATION]({ commit }: AugmentedActionContext, payload: InvitationModel): void;
 }
 
 export type Getters<S = InvitationsStateInterface> = {
-  getInvitations(state: S): Array<InvitationInterface> | null;
+  getInvitations(state: S): Array<InvitationModel> | null;
 };
 
 export type AugmentedActionContext = {

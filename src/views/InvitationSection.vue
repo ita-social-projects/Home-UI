@@ -8,7 +8,7 @@
       <DataTable :value="invitations" responsiveLayout="scroll">
         <Column field="email" style="min-width: 20rem" header="Email" :sortable="true" />
         <Column field="address" style="min-width: 25rem" header="Адреса" :sortable="true" />
-        <Column field="invitationStatus" style="min-width: 15rem" header="Статус" :sortable="true" />
+        <Column field="status" style="min-width: 15rem" header="Статус" :sortable="true" />
         <Column style="min-width: 10rem" header="Опції">
           <template #body="slotProps">
             <Button
@@ -48,18 +48,6 @@ export default defineComponent({
   data() {
     return {
       title: 'Список запрошень',
-      invitations: [
-        {
-          email: 'paul@gmail.com',
-          address: 'вулиця Квіткова, будинок 27, квартира 3',
-          invitationStatus: 'запрошення створено',
-        },
-        {
-          email: 'john@gmail.com',
-          address: 'вулиця Квіткова, будинок 27, квартира 3',
-          invitationStatus: 'запрошення прийнято',
-        },
-      ],
       invitationActions: () => {
         return [
           {
@@ -77,6 +65,11 @@ export default defineComponent({
   methods: {
     toggle(event: Event) {
       (this.$refs.menu as any).toggle(event);
+    },
+  },
+  computed: {
+    invitations() {
+      return this.$store.state.invitationsStore.invitations;
     },
   },
 });
