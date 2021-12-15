@@ -11,6 +11,7 @@ export default defineComponent({
   components: { ErrorPage },
   data() {
     return {
+
       errorNumber: '403',
       errorMessage: 'На жаль, посилання, за яким ви перейшли недійсне або застаріле.',
       decision: 'Щоб зареєструватися, будь ласка, зверніться до адміністратора вашого кооперативу.',
