@@ -81,7 +81,7 @@ export default defineComponent({
 .wrapper {
   width: 70%;
   margin: 0 auto;
-  padding-top: 90px;
+  padding: 50px 0;
   color: $thin-text-color;
 }
 .welcome_text {
