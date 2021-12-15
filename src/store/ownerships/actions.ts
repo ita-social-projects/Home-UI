@@ -16,7 +16,7 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
     try {
       const url = `/apartments/${payload}/ownerships`;
       // const { data } = await HTTP.get(url);
-      /// Mock data
+      /// ----- Mock data ----
       const data: Array<OwnershipsDTOModel> = [
         {
           id: 1,
@@ -40,7 +40,7 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
               }
             ]
           },
-          ownership_part: 0.6588,
+          ownership_part: 0.3333,
         },
         {
           id: 2,
@@ -58,7 +58,7 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
               },
             ],
           },
-          ownership_part: 0.26,
+          ownership_part: 0.25,
         },
         {
           id: 3,
@@ -82,7 +82,7 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
               },
             ],
           },
-          ownership_part: 0.26,
+          ownership_part: 0.7143,
         },
       ];
       const ownerships: Array<OwnershipsModel> = data.map((el: OwnershipsDTOModel) => {

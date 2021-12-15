@@ -60,3 +60,9 @@ export const adjoiningAreaValidator = helpers.withMessage('В назві маю�
 
 const validMainHouseInfo = helpers.regex(/^\d+$/);
 export const mainHouseInfoValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validMainHouseInfo);
+
+const validApartmentNumber = helpers.regex(/^(?!(0))\d{1,4}(\-[a-zа-я])?$/);
+export const apartmentNumberValidator = helpers.withMessage('1-6 цифр, літера через дефіс', validApartmentNumber);
+
+const validApartmentArea = helpers.regex(/(^([0-9]{2,3}){1}(\.[0-9]{1,2})?$)|1000/);
+export const apartmentAreaValidator = helpers.withMessage('числа від 10 до 1000 включно', validApartmentArea);
