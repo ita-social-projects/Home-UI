@@ -3,24 +3,26 @@ import { RootStateInterface } from '@/store/types';
 
 export enum InvitationsMutationsEnum {
   GET_ALL_INVITATIONS = 'GET_ALL_INVITATIONS',
+  DEL_INVITATION = 'DEL_INVITATION'
 }
 
 export enum InvitationsActionsEnum {
   GET_ALL_INVITATIONS = 'GET_ALL_INVITATIONS',
+  DEL_INVITATION = 'DEL_INVITATION'
 }
 
 export interface InvitationInterface {
   email: string;
-  address: AddressInterface;
+  address: string;
   status: string;
   id: number;
 }
 
-export interface AddressInterface {
-  street: string;
-  houseBlock: string;
-  houseNumber: string;
-}
+// export interface AddressInterface {
+//   street: string;
+//   houseBlock: string;
+//   houseNumber: string;
+// }
 
 export interface InvitationsStateInterface {
   invitations: Array<InvitationInterface> | null;
@@ -28,6 +30,7 @@ export interface InvitationsStateInterface {
 
 export type Mutations<S = InvitationsStateInterface> = {
   [InvitationsMutationsEnum.GET_ALL_INVITATIONS](state: S, payload: Array<InvitationInterface>): void;
+  [InvitationsMutationsEnum.DEL_INVITATION](state: S, payload: number): void;
 };
 
 export interface Actions {
@@ -38,7 +41,7 @@ export interface Actions {
 }
 
 export type Getters<S = InvitationsStateInterface> = {
-  getInvitations(state: S): Array<InvitationInterface> | null;
+  getInvitationData(state: S): Array<InvitationInterface> | null;
 };
 
 export type AugmentedActionContext = {

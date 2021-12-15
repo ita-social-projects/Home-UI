@@ -4,7 +4,7 @@ import { requestPayload, RootStateInterface } from '@/store/types';
 export enum AuthMutationEnum {
   SET_USER = 'SET_USER',
   SET_FORM = 'SET_FORM',
-  UPDATE_CONTACT='UPDATE_CONTACT',
+  UPDATE_CONTACT = 'UPDATE_CONTACT',
   ADD_CONTACT = 'ADD_CONTACT',
 }
 
@@ -19,7 +19,7 @@ export enum AuthActionEnum {
 
 export enum ContactTypeEnum {
   EMAIL = 'EMAIL',
-  PHONE = 'PHONE'
+  PHONE = 'PHONE',
 }
 
 export interface UserInterface {
@@ -29,8 +29,6 @@ export interface UserInterface {
   email: string;
   id: number;
   contacts: ContactInterface[];
-  error: string | null;
-  success: string;
 }
 
 export interface UpdateUserInterface {
@@ -47,7 +45,7 @@ export interface ContactInterface {
   main: boolean;
   email?: string;
   phone?: number;
-  id?: number
+  id?: number;
 }
 
 export interface AuthorizationStateInterface {

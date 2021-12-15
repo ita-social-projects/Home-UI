@@ -5,17 +5,17 @@
   <div class="container">
     <h1 class="page-title">{{ title }}</h1>
     <div class="container-invitations">
-      <DataTable :value="invitations" responsiveLayout="scroll">
+      <DataTable :value="getInvitation" responsiveLayout="scroll">
         <Column field="email" style="min-width: 20rem" header="Email" :sortable="true" />
         <Column field="address" style="min-width: 25rem" header="Адреса" :sortable="true" />
-        <Column field="invitationStatus" style="min-width: 15rem" header="Статус" :sortable="true" />
+        <Column field="status" style="min-width: 15rem" header="Статус" :sortable="true" />
         <Column style="min-width: 10rem" header="Опції">
           <template #body="slotProps">
             <Button
               icon="pi pi-cog"
               class="p-button p-button-info p-button-text"
               type="button"
-              @click="toggle"
+              @click="toggle($event, slotProps.data)"
               aria-haspopup="true"
               aria-controls="overlay_menu"
             />
@@ -29,11 +29,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { mapGetters } from 'vuex';
 
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'InvitationSection',
@@ -46,23 +48,14 @@ export default defineComponent({
   data() {
     return {
       title: 'Список запрошень',
-      invitations: [
-        {
-          email: 'paul@gmail.com',
-          address: 'вулиця Квіткова, будинок 27, квартира 3',
-          invitationStatus: 'запрошення створено',
-        },
-        {
-          email: 'john@gmail.com',
-          address: 'вулиця Квіткова, будинок 27, квартира 3',
-          invitationStatus: 'запрошення прийнято',
-        },
-      ],
       invitationActions: () => {
         return [
           {
             label: 'Видалити запрошення',
             icon: 'pi pi-times',
+            command: () => {
+              this.deleteInvitation();
+            },
           },
           {
             label: 'Використати як шаблон',
@@ -70,12 +63,23 @@ export default defineComponent({
           },
         ];
       },
+      invitationInfo: {},
     };
   },
   methods: {
-    toggle(event: Event) {
+    toggle(event: any, data: any): void {
+      this.invitationInfo = data;
       (this.$refs.menu as any).toggle(event);
     },
+
+    deleteInvitation() {
+      this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/DEL_INVITATION`, this.invitationInfo)
+    },
+  },
+  computed: {
+    ...mapGetters({
+      getInvitation: `${StoreModuleEnum.invitationsStore}/getInvitationData`,
+    }),
   },
 });
 </script>
