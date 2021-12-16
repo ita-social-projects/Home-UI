@@ -13,7 +13,7 @@
     :closable="false"
     :dismissableMask="true"
   >
-    <form @submit.prevent="createInvitation" id="create_invit_form">
+    <form id="create_invit_form">
       <p>
         <label class="dialog-item" for="invitation_type">Тип запрошення : </label>
         <Dropdown
@@ -72,7 +72,7 @@
           :options="listOfApartments"
           optionLabel="apartmentData"
           placeholder="Оберіть квартиру"
-          :disabled="isApartBtnDisabled"
+          :disabled="v$.selectedData.selectedHouse.$invalid"
           emptyMessage="В цьому будинку немає квартир"
           @change="
             onChangeApartment(selectedData.selectedApartment.apartmentId, selectedData.selectedApartment.apartmentData)
@@ -96,7 +96,7 @@
         class="p-button-info"
         type="button"
         value="Submit"
-        :disabled="isDisabled"
+        :disabled="v$.$invalid"
       />
       <Button
         label="Скасувати"
@@ -128,6 +128,7 @@ import {
 } from '@/utils/validators';
 import { InvitationsActionsEnum } from '@/store/invitations/types';
 import { HousesActionsEnum } from '@/store/houses/types';
+import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 
 export default defineComponent({
   name: 'CreateInvitationButton',
@@ -139,6 +140,7 @@ export default defineComponent({
   },
   data() {
     return {
+      cooperationId: 0,
       invitationData: {
         invitationType: ['Ми запрошуємо власника квартири', 'Ми запрошуємо власника ОСББ'],
         email: '',
@@ -150,9 +152,8 @@ export default defineComponent({
         selectedType: '',
         selectedApartment: '',
       },
-      displayCreateInvitationModal: false,
+      displayCreateInvitModal: false,
 
-      isApartBtnDisabled: true,
       isSubmitDisabled: true,
 
       houseAddress: '',
@@ -175,25 +176,24 @@ export default defineComponent({
     };
   },
   async mounted(): Promise<void> {
-    await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`);
+    this.initData();
+    await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationId);
   },
   methods: {
+    initData(): void {
+      let cooperationData: CooperationModel | null = this.$store.state.cooperationStore.selectedCooperation;
+      this.cooperationId = cooperationData?.id ?? 1;
+    },
     changeInvitationModal(condition: boolean): void {
       if (condition) {
-        this.displayCreateInvitationModal = condition;
+        this.displayCreateInvitModal = condition;
       } else {
-        this.displayCreateInvitationModal = condition;
+        this.displayCreateInvitModal = condition;
         this.v$.$reset();
         this.resetHouseDataFields(this.selectedData);
       }
     },
     async createInvitation(): Promise<void> {
-      const isValid = await this.v$.$validate();
-
-      if (!isValid) {
-        return;
-      }
-
       const payload = {
         invitationType: this.selectedData.selectedType,
         email: this.invitationData.email,
@@ -213,11 +213,8 @@ export default defineComponent({
       for (let field in data) {
         data[field] = '';
       }
-
-      this.isApartBtnDisabled = true;
     },
     async onChangeHouse(houseId: number, houseData: string): Promise<void> {
-      this.isApartBtnDisabled = false;
       this.houseAddress = houseData;
       this.selectedData.selectedApartment = '';
 
@@ -230,15 +227,7 @@ export default defineComponent({
   },
   computed: {
     displayModal(): boolean {
-      return this.displayCreateInvitationModal;
-    },
-    isDisabled(): boolean {
-      const isValid =
-        Object.values(this.selectedData).every((selectedField) => selectedField !== '') &&
-        this.invitationData.email !== '';
-      isValid ? (this.isSubmitDisabled = false) : (this.isSubmitDisabled = true);
-
-      return this.isSubmitDisabled;
+      return this.displayCreateInvitModal;
     },
     ...mapGetters({
       listOfHouses: `${StoreModuleEnum.housesStore}/getListOfHouses`,

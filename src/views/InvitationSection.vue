@@ -34,7 +34,7 @@ import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
-import CreateInvitation from '@/components/CreateInvitationButton.vue';
+import CreateInvitation from '@/components/CreateInvitation.vue';
 
 export default defineComponent({
   name: 'InvitationSection',

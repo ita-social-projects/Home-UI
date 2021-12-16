@@ -545,7 +545,7 @@ export default defineComponent({
       selectedHouse: ref(),
       houses: [] as Array<HouseInterface>,
       cooperationData: {
-        id: 0,
+        id: 1,
         name: '',
         edrpou: '',
         iban: '',
@@ -616,14 +616,14 @@ export default defineComponent({
     };
   },
   async mounted() {
+    this.houses = Object.assign({}, this.housesInfo);
     await Promise.all([
       this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS'),
-      this.$store.dispatch('housesStore/SET_HOUSES'),
+      this.$store.dispatch('housesStore/SET_HOUSES', this.cooperationData.id),
     ]).then(() => {
       this.initData();
       this.isLoaded = true;
     });
-    this.houses = Object.assign({}, this.housesInfo);
   },
   methods: {
     initData() {
