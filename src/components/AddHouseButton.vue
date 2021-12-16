@@ -178,6 +178,7 @@
         class="p-button-info"
         type="button"
         value="Submit"
+        :disabled="isDisabled"
       />
       <Button
         label="Скасувати зміни"
@@ -234,6 +235,7 @@ export default defineComponent({
           zip_code: '',
         },
       },
+      isSubmitDisabled: true,
       displayAddHouseModal: false,
       v$: useVuelidate(),
     };
@@ -291,10 +293,23 @@ export default defineComponent({
         }
       }
     },
+    checkObjectField(obj: object) {
+      return Object.values(obj).every((field) => field !== '');
+    },
   },
   computed: {
     displayModal(): boolean {
       return this.displayAddHouseModal;
+    },
+    isDisabled(): boolean {
+      const fullAddress = this.houseData.address;
+      const houseData = this.houseData;
+
+      const isValid = this.checkObjectField(houseData) && this.checkObjectField(fullAddress);
+
+      isValid ? (this.isSubmitDisabled = false) : (this.isSubmitDisabled = true);
+
+      return this.isSubmitDisabled;
     },
   },
 });
