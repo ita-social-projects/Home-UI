@@ -7,7 +7,6 @@ export const mutations: MutationTree<InvitationsStateInterface> & Mutations = {
     state.invitations = payload;
   },
   [InvitationsMutationsEnum.CREATE_INVITATION]: (state, payload) => {
-    console.log('payload', payload);
     state.invitations?.push(payload);
   },
 };

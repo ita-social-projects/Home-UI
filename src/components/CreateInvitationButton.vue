@@ -3,7 +3,7 @@
     label="Створити запрошення"
     icon="pi pi-pencil"
     class="p-button-outlined p-button-info"
-    @click="changeCreateInvitationModal(true)"
+    @click="changeInvitationModal(true)"
   />
   <Dialog
     header="Створити запрошення"
@@ -18,10 +18,17 @@
         <label class="dialog-item" for="invitation_type">Тип запрошення : </label>
         <Dropdown
           id="invitation_type"
-          v-model="selectedType"
+          v-model="selectedData.selectedType"
           :options="invitationData.invitationType"
           placeholder="Оберіть тип запрошення"
+          :class="{
+            'p-invalid': v$.selectedData.selectedType.$error,
+          }"
+          @blur="v$.selectedData.selectedType.$touch"
         />
+        <small v-if="v$.selectedData.selectedType.$error" class="p-error">{{
+          v$.selectedData.selectedType.$errors[0].$message
+        }}</small>
       </p>
       <p>
         <label class="dialog-item dialog-item-address" for="user_email">Email : </label>
@@ -42,25 +49,43 @@
         <label class="dialog-item" for="list_of_houses">Список домів : </label>
         <Dropdown
           id="list_of_houses"
-          v-model="selectedHouse"
+          v-model="selectedData.selectedHouse"
           :options="listOfHouses"
           optionLabel="houseData"
           placeholder="Оберіть дім"
-          @change="getTheApartments(selectedHouse.houseId, selectedHouse.houseData)"
+          @change="onChangeHouse(selectedData.selectedHouse.houseId, selectedData.selectedHouse.houseData)"
           emptyMessage="В цьому ОСББ немає будинків"
+          :class="{
+            'p-invalid': v$.selectedData.selectedHouse.$error,
+          }"
+          @blur="v$.selectedData.selectedHouse.$touch"
         />
+        <small v-if="v$.selectedData.selectedHouse.$error" class="p-error">{{
+          v$.selectedData.selectedHouse.$errors[0].$message
+        }}</small>
       </p>
       <p>
         <label class="dialog-item" for="list_of_apartments">Список квартир : </label>
         <Dropdown
           id="list_of_apartments"
-          v-model="selectedApartment"
+          v-model="selectedData.selectedApartment"
           :options="listOfApartments"
+          optionLabel="apartmentData"
           placeholder="Оберіть квартиру"
-          :disabled="isApartmentDisabled"
+          :disabled="isApartBtnDisabled"
           emptyMessage="В цьому будинку немає квартир"
+          @change="
+            onChangeApartment(selectedData.selectedApartment.apartmentId, selectedData.selectedApartment.apartmentData)
+          "
+          :class="{
+            'p-invalid': v$.selectedData.selectedApartment.$error,
+          }"
+          @blur="v$.selectedData.selectedApartment.$touch"
         />
       </p>
+      <small v-if="v$.selectedData.selectedApartment.$error" class="p-error">{{
+        v$.selectedData.selectedApartment.$errors[0].$message
+      }}</small>
     </form>
     <template #footer>
       <Button
@@ -76,7 +101,7 @@
       <Button
         label="Скасувати"
         icon="pi pi-times"
-        @click="changeCreateInvitationModal(false)"
+        @click="changeInvitationModal(false)"
         class="p-button-outlined p-button-info"
       />
     </template>
@@ -101,9 +126,8 @@ import {
   emailMaxLength,
   emailLastCharsValidator,
 } from '@/utils/validators';
-import { CreateInvitationInterface, InvitationInterface, InvitationsActionsEnum } from '@/store/invitations/types';
+import { InvitationsActionsEnum } from '@/store/invitations/types';
 import { HousesActionsEnum } from '@/store/houses/types';
-import { InvitationModel } from '@/store/invitations/models/invitation.model';
 
 export default defineComponent({
   name: 'CreateInvitationButton',
@@ -121,14 +145,21 @@ export default defineComponent({
         listOfHouses: [],
         listOfApartments: [],
       },
+      selectedData: {
+        selectedHouse: '',
+        selectedType: '',
+        selectedApartment: '',
+      },
       displayCreateInvitationModal: false,
-      v$: useVuelidate(),
-      isApartmentDisabled: true,
+
+      isApartBtnDisabled: true,
       isSubmitDisabled: true,
-      selectedHouse: null,
-      selectedType: '',
-      selectedApartment: null,
-      displayAddress: '',
+
+      houseAddress: '',
+      apartmentNumber: '',
+      apartmentId: 0,
+
+      v$: useVuelidate(),
     };
   },
   validations() {
@@ -136,19 +167,24 @@ export default defineComponent({
       invitationData: {
         email: { requiredValidator, emailValidator, emailMinLength, emailMaxLength, emailLastCharsValidator },
       },
+      selectedData: {
+        selectedApartment: { requiredValidator },
+        selectedHouse: { requiredValidator },
+        selectedType: { requiredValidator },
+      },
     };
   },
-  async mounted() {
+  async mounted(): Promise<void> {
     await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`);
   },
   methods: {
-    changeCreateInvitationModal(condition: boolean): void {
+    changeInvitationModal(condition: boolean): void {
       if (condition) {
         this.displayCreateInvitationModal = condition;
       } else {
         this.displayCreateInvitationModal = condition;
         this.v$.$reset();
-        this.resetHouseDataFields();
+        this.resetHouseDataFields(this.selectedData);
       }
     },
     async createInvitation(): Promise<void> {
@@ -158,10 +194,10 @@ export default defineComponent({
         return;
       }
 
-      const payload: InvitationModel = {
-        invitationType: this.selectedType,
+      const payload = {
+        invitationType: this.selectedData.selectedType,
         email: this.invitationData.email,
-        address: `${this.displayAddress}, ${this.selectedApartment}`,
+        address: `${this.houseAddress}, ${this.apartmentNumber}`,
       };
 
       await this.$store.dispatch(
@@ -169,21 +205,27 @@ export default defineComponent({
         payload
       );
 
-      this.resetHouseDataFields();
-      this.changeCreateInvitationModal(false);
+      this.resetHouseDataFields(this.selectedData);
+      this.changeInvitationModal(false);
     },
-    resetHouseDataFields(): void {
-      this.selectedType = '';
+    resetHouseDataFields(data: any): void {
       this.invitationData.email = '';
-      this.selectedHouse = null;
-      this.selectedApartment = null;
-      this.isApartmentDisabled = true;
+      for (let field in data) {
+        data[field] = '';
+      }
+
+      this.isApartBtnDisabled = true;
     },
-    async getTheApartments(houseId: number, houseData: any): Promise<void> {
-      this.isApartmentDisabled = false;
-      this.displayAddress = houseData;
+    async onChangeHouse(houseId: number, houseData: string): Promise<void> {
+      this.isApartBtnDisabled = false;
+      this.houseAddress = houseData;
+      this.selectedData.selectedApartment = '';
 
       await this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENTS}`, houseId);
+    },
+    onChangeApartment(apartmentId: number, apartmentData: string): void {
+      this.apartmentId = apartmentId;
+      this.apartmentNumber = apartmentData;
     },
   },
   computed: {
@@ -192,14 +234,11 @@ export default defineComponent({
     },
     isDisabled(): boolean {
       const isValid =
-        this.selectedHouse !== null &&
-        this.selectedApartment !== null &&
-        this.selectedType !== null &&
-        this.invitationData.email !== ''
-          ? (this.isSubmitDisabled = false)
-          : (this.isSubmitDisabled = true);
+        Object.values(this.selectedData).every((selectedField) => selectedField !== '') &&
+        this.invitationData.email !== '';
+      isValid ? (this.isSubmitDisabled = false) : (this.isSubmitDisabled = true);
 
-      return isValid;
+      return this.isSubmitDisabled;
     },
     ...mapGetters({
       listOfHouses: `${StoreModuleEnum.housesStore}/getListOfHouses`,

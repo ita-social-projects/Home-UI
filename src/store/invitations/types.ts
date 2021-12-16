@@ -20,12 +20,6 @@ export interface InvitationInterface {
   id: number;
 }
 
-export interface CreateInvitationInterface {
-  invitationType: string;
-  email: string;
-  address: string;
-}
-
 export interface AddressInterface {
   street: string;
   houseBlock: string;
