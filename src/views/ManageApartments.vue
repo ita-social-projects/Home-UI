@@ -371,4 +371,27 @@ export default defineComponent({
 .p-field {
   margin-bottom: 20px;
 }
+%error-message {
+  margin: 0.4em 0.5rem;
+  width: 100%;
+}
+
+.address-details {
+  margin-left: 2rem;
+  .dialog-item-address {
+    margin-right: -2rem;
+  }
+}
+.dialog-item {
+  display: inline-block;
+  width: 260px;
+  margin-top: 30px;
+}
+.p-error {
+  display: flex;
+  justify-content: right;
+  margin-bottom: -30px;
+  margin-top: 0;
+  @extend %error-message;
+}
 </style>

@@ -25,18 +25,24 @@
         v$.apartmentData.apartmentArea.$errors[0].$message
       }}</small>
     </p>
-    <Button
-      label="Додати квартиру"
-      icon="pi pi-check"
-      @click="addNewApartment"
-      autofocus
-      class="p-button-info"
-      type="button"
-      value="Submit"
-    />
-    <Button label="Відмінити" icon="pi pi-times" @click="closeApartmentModal" class="p-button-outlined p-button-info" />
+    <div class="button-div">
+      <Button
+        label="Додати квартиру"
+        icon="pi pi-check"
+        @click="addNewApartment"
+        autofocus
+        class="p-button-info"
+        type="button"
+        value="Submit"
+      />
+      <Button
+        label="Відмінити"
+        icon="pi pi-times"
+        @click="closeApartmentModal"
+        class="p-button-outlined p-button-info"
+      />
+    </div>
   </form>
-  <div></div>
 </template>
 
 <script lang="ts">
@@ -139,14 +145,27 @@ export default defineComponent({
 }
 .dialog-item {
   display: inline-block;
+  position: relative;
   width: 260px;
-  margin-top: 30px;
+  height: 50px;
+  margin-bottom: 13px;
 }
 .p-error {
   display: flex;
+  position: absolute;
   justify-content: right;
-  margin-bottom: -30px;
-  margin-top: 0;
+  margin: -26px -25px 0 -50px;
   @extend %error-message;
+}
+
+.button-div {
+  float: right;
+  .p-button-outlined {
+    margin-left: 20px;
+  }
+}
+
+.input {
+  min-height: 50px;
 }
 </style>
