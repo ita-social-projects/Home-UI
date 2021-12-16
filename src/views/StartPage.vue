@@ -3,10 +3,10 @@
     <div class="wrapper">
       <div class="welcome_text">
         <div>
-          Товариство виконує функції управителя та надання послуг з утримання будинку, споруди або групи будинків і споруд
-          та об’єктів благоустрою. Співвласники багатоквартирного будинку перераховують кошти на розрахунковий рахунок
-          Товариства з подальшим використанням їх за цільовим призначенням. Товариство запитує, чи є такі кошти об’єктом
-          оподаткування ПДВ.
+          Товариство виконує функції управителя та надання послуг з утримання будинку, споруди або групи будинків і
+          споруд та об’єктів благоустрою. Співвласники багатоквартирного будинку перераховують кошти на розрахунковий
+          рахунок Товариства з подальшим використанням їх за цільовим призначенням. Товариство запитує, чи є такі кошти
+          об’єктом оподаткування ПДВ.
         </div>
         <div>
           Якщо ОСББ створюється на базі будинку комунальної власності, воно може претендувати на одноразове
@@ -26,7 +26,7 @@
         </div>
         <div class="y feature__item">
           <span class="pi pi-info-circle"></span>
-          <h3>Нова фіча</h3>
+          <h3>Легкий облік</h3>
         </div>
         <div class="y feature__item">
           <span class="pi pi-briefcase"></span>
@@ -34,7 +34,7 @@
         </div>
         <div class="y feature__item">
           <span class="pi pi-chart-bar"></span>
-          <h3>Гарна штука</h3>
+          <h3>Економія часу</h3>
         </div>
         <div class="y feature__item">
           <span class="pi pi-print"></span>
@@ -46,7 +46,7 @@
         </div>
         <div class="y feature__item">
           <span class="pi pi-info-circle"></span>
-          <h3>Нова фіча</h3>
+          <h3>Легкий облік</h3>
         </div>
       </div>
 
@@ -81,7 +81,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .container {
-  width: 100%;
   overflow: auto;
   overflow-x: hidden;
 }
@@ -90,7 +89,6 @@ export default defineComponent({
   margin: 0 auto;
   padding: 40px 10px;
   color: $thin-text-color;
-
 }
 .welcome_text {
   margin-bottom: 10px;
