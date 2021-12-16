@@ -29,9 +29,30 @@
             <Button label="Редагувати" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
           </div>
         </div>
+
+        <!--  MY COMPONENT HERE -->
+
+        <div class="add-btn">
+          <Button
+            label="Додати квартиру"
+            icon="pi pi-pencil"
+            class="p-button-outlined p-button-info"
+            @click="changeAddApartmentModal(true)"
+          />
+          <Dialog
+            header="Додати квартиру"
+            v-model:visible="displayModal"
+            :modal="true"
+            :closable="false"
+            :dismissableMask="true"
+          >
+            <AddApartmentButton :houseId="id"> </AddApartmentButton>
+          </Dialog>
+        </div>
+        <!--         
         <div class="add-btn">
           <AddApartmentButton :id="id"> </AddApartmentButton>
-        </div>
+        </div> -->
 
         <div class="container">
           <DataTable
@@ -165,6 +186,8 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const displayModal = ref(false);
+
     const router = useRouter();
     const store = useStore();
     const selectedApartment = ref();
@@ -204,6 +227,14 @@ export default defineComponent({
         },
       ];
     };
+
+    function changeAddApartmentModal(condition: any) {
+      if (condition) {
+        displayModal.value = condition;
+      } else {
+        displayModal.value = condition;
+      }
+    }
 
     const cooperationID = computed(() => {
       return store.getters['cooperationStore/getSelectedCooperationId'];
@@ -275,6 +306,8 @@ export default defineComponent({
       editApartment,
       submitted,
       item,
+      changeAddApartmentModal,
+      displayModal,
     };
   },
 });
