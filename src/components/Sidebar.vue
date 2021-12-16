@@ -25,16 +25,11 @@
         badge-type="secondary"
       />
     </nav>
-
-    <div class="create-btn-wrap">
-      <Button label="Створити ОСББ" class="p-button-info" />
-    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Button from 'primevue/button';
 import BaseSidebarNavButton from '@/components/base/BaseSidebarNavButton.vue';
 import { RoutesEnum } from '@/router/types';
 import { UserInterface } from '@/store/authorization/types';
@@ -49,7 +44,6 @@ export default defineComponent({
     };
   },
   components: {
-    Button,
     BaseSidebarNavButton,
   },
   computed: {
