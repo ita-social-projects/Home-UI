@@ -86,10 +86,11 @@ export default defineComponent({
   overflow-x: hidden;
 }
 .wrapper {
-  width: 70%;
+  max-width: 1020px;
   margin: 0 auto;
-  padding: 40px 0;
+  padding: 40px 10px;
   color: $thin-text-color;
+
 }
 .welcome_text {
   margin-bottom: 10px;
@@ -98,7 +99,7 @@ export default defineComponent({
   padding-bottom: 20px;
 }
 .features {
-  width: 100%;
+  max-width: 940px;
   margin: 0 auto;
   padding-bottom: 30px;
   display: flex;
@@ -108,7 +109,7 @@ export default defineComponent({
 .feature__item {
   display: flex;
   flex-direction: column;
-  width: 240px;
+  flex: 1 1 180px;
   margin: 5px;
   text-align: center;
   padding: 10px;
