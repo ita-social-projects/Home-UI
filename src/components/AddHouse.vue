@@ -293,7 +293,7 @@ export default defineComponent({
         }
       }
     },
-    checkObjectField(obj: object) {
+    checkObjectFields(obj: object) {
       return Object.values(obj).every((field) => field !== '');
     },
   },
@@ -305,7 +305,7 @@ export default defineComponent({
       const fullAddress = this.houseData.address;
       const houseData = this.houseData;
 
-      const isValid = this.checkObjectField(houseData) && this.checkObjectField(fullAddress);
+      const isValid = this.checkObjectFields(houseData) && this.checkObjectFields(fullAddress);
 
       isValid ? (this.isSubmitDisabled = false) : (this.isSubmitDisabled = true);
 
