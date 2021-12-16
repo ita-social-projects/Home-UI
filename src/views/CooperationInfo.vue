@@ -616,8 +616,8 @@ export default defineComponent({
     };
   },
   async mounted() {
+    this.houses = Object.assign({}, this.housesInfo);
     await Promise.all([
-      (this.houses = Object.assign({}, this.housesInfo)),
       this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS'),
       this.$store.dispatch('housesStore/SET_HOUSES'),
     ]).then(() => {
