@@ -1,17 +1,4 @@
 <template>
-  <!-- <Button
-    label="Додати квартиру"
-    icon="pi pi-pencil"
-    class="p-button-outlined p-button-info"
-    @click="changeAddApartmentModal(true)"
-  />
-  <Dialog
-    header="Додати квартиру"
-    v-model:visible="displayModal"
-    :modal="true"
-    :closable="false"
-    :dismissableMask="true"
-  > -->
   <form @submit.prevent="addNewApartment" id="apartment_data_form">
     <p>
       <label class="dialog-item" for="apartment_number">Номер квартири: </label>
@@ -47,16 +34,9 @@
       type="button"
       value="Submit"
     />
-    <Button
-      label="Відмінити"
-      icon="pi pi-times"
-      @click="changeAddApartmentModal(false)"
-      class="p-button-outlined p-button-info"
-    />
+    <Button label="Відмінити" icon="pi pi-times" @click="closeApartmentModal" class="p-button-outlined p-button-info" />
   </form>
   <div></div>
-
-  <!-- </Dialog> -->
 </template>
 
 <script lang="ts">
@@ -70,6 +50,7 @@ import {
 } from '@/utils/validators';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'AddApartment',
@@ -112,33 +93,24 @@ export default defineComponent({
     };
   },
   methods: {
-    changeAddApartmentModal(condition: boolean) {
-      if (condition) {
-        this.displayAddApartmentModal = condition;
-      } else {
-        this.displayAddApartmentModal = condition;
-        this.v$.$reset();
-        this.resetApartmentDataFields(this.apartmentData);
-      }
-    },
     async addNewApartment() {
-      console.log(this.$props.houseId);
-
       const isValid = await this.v$.$validate();
-
       if (!isValid) {
         return;
       }
-
       const payload = {
         id: this.$props.houseId,
         number: this.apartmentData.apartmentNumber.toString(),
         area: this.apartmentData.apartmentArea,
       };
-
       await this.$store.dispatch(`apartmentsStore/ADD_APARTMENT`, payload);
+      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
       this.resetApartmentDataFields(this.apartmentData);
-      this.changeAddApartmentModal(false);
+      this.v$.$reset();
+    },
+    closeApartmentModal() {
+      this.resetApartmentDataFields(this.apartmentData);
+      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
     },
     resetApartmentDataFields(apartmentData: any) {
       for (let field in apartmentData) {
@@ -148,11 +120,6 @@ export default defineComponent({
           apartmentData[field] = '';
         }
       }
-    },
-  },
-  computed: {
-    displayModal(): boolean {
-      return this.displayAddApartmentModal;
     },
   },
 });

@@ -29,19 +29,16 @@
             <Button label="Редагувати" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
           </div>
         </div>
-
-        <!--  MY COMPONENT HERE -->
-
         <div class="add-btn">
           <Button
             label="Додати квартиру"
             icon="pi pi-pencil"
             class="p-button-outlined p-button-info"
-            @click="changeAddApartmentModal(true)"
+            @click="openApartmentModal"
           />
           <Dialog
             header="Додати квартиру"
-            v-model:visible="displayModal"
+            v-model:visible="displayApartmentModal"
             :modal="true"
             :closable="false"
             :dismissableMask="true"
@@ -49,11 +46,6 @@
             <AddApartmentButton :houseId="id"> </AddApartmentButton>
           </Dialog>
         </div>
-        <!--         
-        <div class="add-btn">
-          <AddApartmentButton :id="id"> </AddApartmentButton>
-        </div> -->
-
         <div class="container">
           <DataTable
             :value="apartmentsData"
@@ -166,6 +158,7 @@ import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddApartmentButton from '@/components/AddApartmentButton.vue';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'ManageApartments',
@@ -186,8 +179,6 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const displayModal = ref(false);
-
     const router = useRouter();
     const store = useStore();
     const selectedApartment = ref();
@@ -228,12 +219,12 @@ export default defineComponent({
       ];
     };
 
-    function changeAddApartmentModal(condition: any) {
-      if (condition) {
-        displayModal.value = condition;
-      } else {
-        displayModal.value = condition;
-      }
+    const displayApartmentModal = computed(() => {
+      return store.state.cooperationStore.displayModal;
+    });
+
+    function openApartmentModal() {
+      store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
     }
 
     const cooperationID = computed(() => {
@@ -306,8 +297,8 @@ export default defineComponent({
       editApartment,
       submitted,
       item,
-      changeAddApartmentModal,
-      displayModal,
+      displayApartmentModal,
+      openApartmentModal,
     };
   },
 });
