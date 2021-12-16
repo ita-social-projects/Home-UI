@@ -473,13 +473,13 @@ export default defineComponent({
   },
   async mounted() {
     await Promise.all([
+      (this.houses = Object.assign({}, this.housesInfo)),
       this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS'),
       this.$store.dispatch('housesStore/SET_HOUSES'),
     ]).then(() => {
       this.initData();
       this.isLoaded = true;
     });
-    this.houses = Object.assign({}, this.housesInfo);
   },
 
   methods: {

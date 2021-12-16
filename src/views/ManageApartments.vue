@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="add-btn">
-          <Button label="Додати квартиру" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
+          <AddApartmentButton :id="id"> </AddApartmentButton>
         </div>
 
         <div class="container">
@@ -54,7 +54,8 @@
               style="width: 40em"
               showGridlines
             ></Column>
-            <Column style="width: 50rem" />
+            <Column field="apartmentArea" header="Площа квартири" :sortable="true" showGridlines style="width: 50rem">
+            </Column>
             <Column style="width: 10em">
               <template #body="slotProps">
                 <Button
@@ -143,6 +144,7 @@ import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import AddApartmentButton from '@/components/AddApartmentButton.vue';
 
 export default defineComponent({
   name: 'ManageApartments',
@@ -154,10 +156,11 @@ export default defineComponent({
     Menu,
     Dialog,
     InputText,
+    AddApartmentButton,
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true,
     },
   },

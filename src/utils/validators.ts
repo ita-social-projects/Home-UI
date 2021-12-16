@@ -90,3 +90,12 @@ export const phoneNumberValidator = helpers.withMessage(
   'Номер повинен починатися з + 38, а далi цифри від 0 до 9',
   validPhoneNumber
 );
+
+const validApartmentArea = helpers.regex(/(^([0-9]{2,3}){1}(\.[0-9]{1,9})?$)|1000/);
+export const apartmentAreaValidator = helpers.withMessage('Площа має бути від 10 до 1000 м.кв', validApartmentArea);
+
+const validApartmentDecimal = helpers.regex(/(^([0-9]{2,3}){1}(\.[0-9]{1,2})?$)|1000/);
+export const apartmentDecimalValidator = helpers.withMessage('Не більше 2 значень після крапки', validApartmentDecimal);
+
+const validApartmentNumber = helpers.regex(/^(?!(0))\d{1,4}(\-[a-zа-я])?$/);
+export const apartmentNumberValidator = helpers.withMessage('1-6 цифр, літера через дефіс', validApartmentNumber);
