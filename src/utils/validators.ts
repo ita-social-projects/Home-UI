@@ -67,11 +67,10 @@ export const phoneNumberValidator = helpers.withMessage(
   validPhoneNumber
 );
 
-const validApartmentArea = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,9})?$)|1000$/);
-export const apartmentAreaValidator = helpers.withMessage('Площа має бути від 10 до 1000 м.кв', validApartmentArea);
-
-const validApartmentDecimal = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|1000$/);
-export const apartmentDecimalValidator = helpers.withMessage('Не більше 2 значень після крапки', validApartmentDecimal);
-
+const validApartmentArea = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,9})?$)|(1000$)/);
+const validApartmentDecimal = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|(1000$)/);
 const validApartmentNumber = helpers.regex(/^(?!(0))\d{1,4}(\-[a-zа-я])?$/);
+
+export const apartmentAreaValidator = helpers.withMessage('Площа має бути від 10 до 1000 м.кв', validApartmentArea);
+export const apartmentDecimalValidator = helpers.withMessage('Не більше 2 значень після крапки', validApartmentDecimal);
 export const apartmentNumberValidator = helpers.withMessage('1-6 цифр, літера через дефіс', validApartmentNumber);
