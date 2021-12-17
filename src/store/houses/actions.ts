@@ -32,7 +32,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
     }
   },
   [HousesActionsEnum.GET_HOUSE_BY_ID]: ({ commit }, payload) => {
-    HTTP.get(`/cooperations/${payload.cooperationId}/houses/${payload.houseID}`).then((r) => {
+    HTTP.get(`/cooperations/${payload.cooperationID}/houses/${payload.houseID}`).then((r) => {
       commit(HousesMutationsEnum.GET_HOUSE_BY_ID, r.data);
     });
   },

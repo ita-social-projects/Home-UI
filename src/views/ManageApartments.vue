@@ -30,9 +30,27 @@
           </div>
         </div>
         <div class="add-btn">
-          <Button label="Додати квартиру" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
+          <Button
+            label="Додати квартиру"
+            icon="pi pi-pencil"
+            class="p-button-outlined p-button-info"
+            @click="openApartmentModal"
+          />
+          <Dialog
+            header="Додати квартиру"
+            v-model:visible="displayApartmentModal"
+            :modal="true"
+            :closable="false"
+            :dismissableMask="true"
+          >
+            <AddApartmentForm
+              :houseId="id"
+              @apartment-saved="displayApartmentModal = false"
+              @cancel-editing="displayApartmentModal = false"
+            >
+            </AddApartmentForm>
+          </Dialog>
         </div>
-
         <div class="container">
           <DataTable
             :value="apartmentsData"
@@ -54,7 +72,8 @@
               style="width: 40em"
               showGridlines
             ></Column>
-            <Column style="width: 50rem" />
+            <Column field="apartmentArea" header="Площа квартири" :sortable="true" showGridlines style="width: 50rem">
+            </Column>
             <Column style="width: 10em">
               <template #body="slotProps">
                 <Button
@@ -143,6 +162,7 @@ import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import AddApartmentForm from '@/components/AddApartmentForm.vue';
 
 export default defineComponent({
   name: 'ManageApartments',
@@ -154,10 +174,11 @@ export default defineComponent({
     Menu,
     Dialog,
     InputText,
+    AddApartmentForm,
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
@@ -174,6 +195,7 @@ export default defineComponent({
     const editData = ref({});
     const item = ref({});
     const submitted = ref(false);
+    const displayApartmentModal = ref(false);
 
     const toggle = (event: any, data: ApartmentModel) => {
       menu.value.toggle(event);
@@ -201,6 +223,10 @@ export default defineComponent({
         },
       ];
     };
+
+    function openApartmentModal() {
+      displayApartmentModal.value = true;
+    }
 
     const cooperationID = computed(() => {
       return store.getters['cooperationStore/getSelectedCooperationId'];
@@ -272,6 +298,8 @@ export default defineComponent({
       editApartment,
       submitted,
       item,
+      displayApartmentModal,
+      openApartmentModal,
     };
   },
 });
@@ -343,5 +371,28 @@ export default defineComponent({
 
 .p-field {
   margin-bottom: 20px;
+}
+%error-message {
+  margin: 0.4em 0.5rem;
+  width: 100%;
+}
+
+.address-details {
+  margin-left: 2rem;
+  .dialog-item-address {
+    margin-right: -2rem;
+  }
+}
+.dialog-item {
+  display: inline-block;
+  width: 260px;
+  margin-top: 30px;
+}
+.p-error {
+  display: flex;
+  justify-content: right;
+  margin-bottom: -30px;
+  margin-top: 0;
+  @extend %error-message;
 }
 </style>
