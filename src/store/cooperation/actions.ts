@@ -53,6 +53,7 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
     try {
       const payloadData = new CooperationPutDTOModel(payload);
       await HTTP.put(`/cooperations/${payloadData.id}`, payloadData);
+      commit(CooperationMutationEnum.SET_COOPERATION_UPDATE, payload);
     } catch (err: any) {
       console.log('error SET_COOPERATION_UPDATE', err);
     }

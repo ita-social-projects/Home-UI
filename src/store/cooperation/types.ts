@@ -27,9 +27,9 @@ export interface CooperationStateInterface {
 
 export type Mutations<S = CooperationStateInterface> = {
   [CooperationMutationEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
-
   [CooperationMutationEnum.SET_USER_COOPERATIONS](state: S, payload: Array<CooperationModel>): void;
   [CooperationMutationEnum.SET_SELECTED_COOPERATION](state: S, payload: number): void;
+  [CooperationMutationEnum.SET_COOPERATION_UPDATE](state: S, payload: CooperationModel): void;
 };
 
 export interface Actions {
