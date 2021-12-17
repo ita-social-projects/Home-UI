@@ -95,7 +95,7 @@ export default defineComponent({
         area: this.apartmentData.apartmentArea,
       };
       this.$store.dispatch(`apartmentsStore/ADD_APARTMENT`, payload);
-      await this.resetApartmentDataFields(this.apartmentData);
+      this.resetApartmentDataFields(this.apartmentData);
       this.v$.$reset();
       this.$emit('apartment-saved');
     },
