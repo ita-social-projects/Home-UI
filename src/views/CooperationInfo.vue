@@ -7,7 +7,7 @@
       <div class="coop_info">
         <div>
           <span>Назва ОСББ : </span>
-          <span>{{ cooperationData.name }}</span>
+          <span>{{ cooperationInfo.name }}</span>
         </div>
         <div>
           <span>Адреса : </span>
@@ -15,19 +15,19 @@
         </div>
         <div>
           <span>IBAN номер : </span>
-          <span>{{ cooperationData.iban }}</span>
+          <span>{{ cooperationInfo.iban }}</span>
         </div>
         <div v-if="cooperationData.email">
           <span>Електрона адреса : </span>
-          <span>{{ cooperationData.email }}</span>
+          <span>{{ cooperationInfo.contacts[0].email }}</span>
         </div>
         <div>
-          <span>Код реєстрации : </span>
-          <span>{{ cooperationData.edrpou }}</span>
+          <span>Код реєстрації : </span>
+          <span>{{ cooperationInfo.edrpou }}</span>
         </div>
         <div v-if="cooperationData.phone">
           <span>Номер телефону : </span>
-          <span>{{ cooperationData.phone }}</span>
+          <span>{{ cooperationInfo.contacts[1].phone }}</span>
         </div>
       </div>
 
@@ -46,7 +46,7 @@
           :closable="false"
           :dismissableMask="true"
         >
-          <form @submit.prevent="editCooperationInfo">
+          <form>
             <div>
               <label for="coopName">Назва : </label>
               <div class="input-block">
@@ -71,7 +71,7 @@
                 <InputText
                   id="coopIban"
                   placeholder="iban номер"
-                  v-model="cooperationData.iban"
+                  v-model.trim="cooperationData.iban"
                   :class="{ 'p-invalid': v$.cooperationData.iban.$error }"
                   @blur="v$.cooperationData.iban.$touch"
                   maxlength="29"
@@ -103,7 +103,7 @@
                 <InputText
                   id="edrpou"
                   placeholder="ОСББ номер"
-                  v-model="cooperationData.edrpou"
+                  v-model.trim="cooperationData.edrpou"
                   :class="{ 'p-invalid': v$.cooperationData.edrpou.$error }"
                   @blur="v$.cooperationData.edrpou.$touch"
                   maxlength="8"
@@ -119,7 +119,7 @@
                 <InputText
                   id="coopPhone"
                   placeholder="+38 000 000 00 00"
-                  v-model="cooperationData.phone"
+                  v-model.trim="cooperationData.phone"
                   :class="{ 'p-invalid': v$.cooperationData.phone.$error }"
                   @blur="v$.cooperationData.phone.$touch"
                   maxlength="13"
@@ -132,13 +132,13 @@
                 <label for="coopAddress">регіон : </label>
                 <div class="input-block">
                   <small v-if="v$.cooperationData.address.region.$error" class="p-error">{{
-                    v$.cooperationData.address.$errors[0].$message
+                    v$.cooperationData.address.region.$errors[0].$message
                   }}</small>
                   <InputText
                     id="coopAddress"
                     placeholder="регіон"
-                    v-model="cooperationData.address.region"
-                    :class="{ 'p-invalid': v$.cooperationData.address.$error }"
+                    v-model.trim="cooperationData.address.region"
+                    :class="{ 'p-invalid': v$.cooperationData.address.region.$error }"
                     @blur="v$.cooperationData.address.region.$touch"
                     maxlength="50"
                   />
@@ -153,8 +153,8 @@
                   <InputText
                     id="coopAddress"
                     placeholder="місто"
-                    v-model="cooperationData.address.city"
-                    :class="{ 'p-invalid': v$.cooperationData.address.$error }"
+                    v-model.trim="cooperationData.address.city"
+                    :class="{ 'p-invalid': v$.cooperationData.address.city.$error }"
                     @blur="v$.cooperationData.address.city.$touch"
                     maxlength="50"
                   />
@@ -169,7 +169,7 @@
                   <InputText
                     id="coopAddress"
                     placeholder="район"
-                    v-model="cooperationData.address.district"
+                    v-model.trim="cooperationData.address.district"
                     :class="{ 'p-invalid': v$.cooperationData.address.district.$error }"
                     @blur="v$.cooperationData.address.district.$touch"
                     maxlength="50"
@@ -185,7 +185,7 @@
                   <InputText
                     id="coopAddress"
                     placeholder="вулиця"
-                    v-model="cooperationData.address.street"
+                    v-model.trim="cooperationData.address.street"
                     :class="{ 'p-invalid': v$.cooperationData.address.street.$error }"
                     @blur="v$.cooperationData.address.street.$touch"
                     maxlength="50"
@@ -201,7 +201,7 @@
                   <InputText
                     id="coopAddress"
                     placeholder="номер будинку"
-                    v-model="cooperationData.address.houseNumber"
+                    v-model.trim="cooperationData.address.houseNumber"
                     :class="{ 'p-invalid': v$.cooperationData.address.houseNumber.$error }"
                     @blur="v$.cooperationData.address.houseNumber.$touch"
                     maxlength="10"
@@ -217,7 +217,7 @@
                   <InputText
                     id="coopAddress"
                     placeholder="блок"
-                    v-model="cooperationData.address.houseBlock"
+                    v-model.trim="cooperationData.address.houseBlock"
                     :class="{ 'p-invalid': v$.cooperationData.address.houseBlock.$error }"
                     @blur="v$.cooperationData.address.houseBlock.$touch"
                     maxlength="10"
@@ -233,7 +233,7 @@
                   <InputText
                     id="coopAddress"
                     placeholder="індекс"
-                    v-model="cooperationData.address.zipCode"
+                    v-model.trim="cooperationData.address.zipCode"
                     :class="{ 'p-invalid': v$.cooperationData.address.zipCode.$error }"
                     @blur="v$.cooperationData.address.zipCode.$touch"
                     maxlength="5"
@@ -245,6 +245,7 @@
 
           <template #footer>
             <Button
+              :disabled="v$.cooperationData.$invalid"
               label="Редагувати"
               icon="pi pi-check"
               @click="editCooperationInfo"
@@ -264,7 +265,7 @@
     </div>
 
     <div class="add_btn">
-      <AddHouseButton :id="cooperationData.id"></AddHouseButton>
+      <AddHouse :id="cooperationData.id"></AddHouse>
     </div>
     <div class="container container-houses">
       <DataTable
@@ -451,6 +452,7 @@
 
               <template #footer>
                 <Button
+                  :disabled="v$.house.$invalid"
                   label="Зберегти зміни"
                   icon="pi pi-check"
                   @click="editHouseInfo(house)"
@@ -484,8 +486,7 @@ import Menu from 'primevue/menu';
 import ConfirmPopup from 'primevue/confirmpopup';
 
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import AddHouseButton from '@/components/AddHouseButton.vue';
-import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
+import AddHouse from '@/components/AddHouse.vue';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { StoreModuleEnum } from '@/store/types';
 import { AddressInterface, HouseInterface } from '@/store/houses/types';
@@ -518,7 +519,7 @@ export default defineComponent({
     Column,
     Menu,
     ConfirmPopup,
-    AddHouseButton,
+    AddHouse,
   },
   data() {
     return {
@@ -627,15 +628,14 @@ export default defineComponent({
   },
   methods: {
     initData() {
-      let cooperationInfo: CooperationModel | null = this.$store.state.cooperationStore.selectedCooperation;
-      this.cooperationData.id = cooperationInfo?.id ?? 1;
-      this.cooperationData.name = cooperationInfo?.name ?? '';
-      this.cooperationData.edrpou = cooperationInfo?.edrpou ?? '';
-      this.cooperationData.iban = cooperationInfo?.iban ?? '';
+      this.cooperationData.id = this.cooperationInfo?.id ?? 1;
+      this.cooperationData.name = this.cooperationInfo?.name ?? '';
+      this.cooperationData.edrpou = this.cooperationInfo?.edrpou ?? '';
+      this.cooperationData.iban = this.cooperationInfo?.iban ?? '';
       this.cooperationData.address = JSON.parse(
-        JSON.stringify(cooperationInfo?.address ?? ({} as CooperationAddressInterface))
+        JSON.stringify(this.cooperationInfo?.address ?? ({} as CooperationAddressInterface))
       );
-      cooperationInfo?.contacts.forEach((el) => this.mapContact(el));
+      this.cooperationInfo?.contacts.forEach((el: CooperationContactsInterface) => this.mapContact(el));
     },
     mapContact(el: CooperationContactsInterface) {
       if (el.main) {
@@ -693,22 +693,19 @@ export default defineComponent({
       this.closeCooperationModal();
     },
     editCooperationInfo() {
-      if (!this.v$.$invalid) {
-        const payload = {
-          id: this.cooperationData.id,
-          name: this.cooperationData.name,
-          edrpou: this.cooperationData.edrpou,
-          iban: this.cooperationData.iban,
-          address: this.cooperationData.address,
-          contacts: [
-            { type: 'email', main: true, email: this.cooperationData.email },
-            { type: 'phone', main: true, phone: this.cooperationData.phone },
-          ],
-        };
-
-        this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
-        this.closeCooperationModal();
-      }
+      const payload = {
+        id: this.cooperationData.id,
+        name: this.cooperationData.name,
+        edrpou: this.cooperationData.edrpou,
+        iban: this.cooperationData.iban,
+        address: this.cooperationData.address,
+        contacts: [
+          { type: 'email', main: true, email: this.cooperationData.email },
+          { type: 'phone', main: true, phone: this.cooperationData.phone },
+        ],
+      };
+      this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
+      this.closeCooperationModal();
     },
     async editHouseInfo(house: HouseInterface) {
       const payload = {
@@ -763,13 +760,13 @@ export default defineComponent({
 
   computed: {
     fillAddress(): string {
-      return `${this.cooperationData.address.street},
-      ${this.cooperationData.address.houseNumber},
-      ${this.cooperationData.address.houseBlock},
-      ${this.cooperationData.address.district},
-      ${this.cooperationData.address.city},
-      ${this.cooperationData.address.region},
-      ${this.cooperationData.address.zipCode} `;
+      return `${this.cooperationInfo.address.street},
+      ${this.cooperationInfo.address.houseNumber},
+      ${this.cooperationInfo.address.houseBlock},
+      ${this.cooperationInfo.address.district},
+      ${this.cooperationInfo.address.city},
+      ${this.cooperationInfo.address.region},
+      ${this.cooperationInfo.address.zipCode} `;
     },
     displayCooperationModal(): boolean {
       return this.$store.state.cooperationStore.displayModal;
@@ -779,6 +776,7 @@ export default defineComponent({
     },
     ...mapGetters({
       housesInfo: `${StoreModuleEnum.housesStore}/getHousesData`,
+      cooperationInfo: `${StoreModuleEnum.cooperationStore}/getSelectedCooperation`,
     }),
   },
 });
