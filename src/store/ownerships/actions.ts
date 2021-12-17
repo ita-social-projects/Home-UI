@@ -10,13 +10,13 @@ import {
 import { HTTP } from '@/core/api/http-common';
 import { OwnershipsModel } from '@/shared/models/ownerships.model';
 import { OwnershipsDTOModel } from '@/shared/models/ownershipsDTO.model';
-import { UpdateOwnershipsDTOModel } from '@/shared/models/update-ownershipsDTO.model';
 
 export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> & Actions = {
   [OwnershipsActionEnum.SET_OWNERSHIPS]: async ({ commit }, payload) => {
     try {
       const url = `/apartments/${payload}/ownerships`;
       // const { data } = await HTTP.get(url);
+
       /// ----- Mock data ----
       const data: Array<OwnershipsDTOModel> = [
         {
@@ -41,7 +41,7 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
               }
             ]
           },
-          ownership_part: 0.3333,
+          ownership_part: 0.02,
         },
         {
           id: 2,
@@ -83,7 +83,7 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
               },
             ],
           },
-          ownership_part: 0.7143,
+          ownership_part: 0.7142,
         },
       ];
       const ownerships: Array<OwnershipsModel> = data.map((el: OwnershipsDTOModel) => {
@@ -107,6 +107,8 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
     try {
       const url = `/apartments/${payload.apartmentId}/ownerships/${payload.ownerId}`;
       //const { data } = await HTTP.put(url, payload.payloadData);
+
+      /// ----- Mock data ----
       const data = {
         id: payload.ownerId,
         owner: {

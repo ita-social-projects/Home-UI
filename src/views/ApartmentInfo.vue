@@ -104,7 +104,7 @@
             <Column field="ownershipPart" header="Частка власності" style="width: 20em" showGridlines></Column>
             <Column field="voutsPart" header="Кількість голосів свіввласника" style="width: 25em" showGridlines>
               <template #body="slotProps">
-                {{ calcOwnerVoutingShare.find((el) => el.id === slotProps.data.id)?.ownershipsPart }}
+                {{ calcOwnerVoutingShare.find((el) => el.id === slotProps.data.id)?.ownershipPart }}
               </template>
             </Column>
             <Column style="width: 10em">
@@ -158,8 +158,9 @@
               required="true"
               autofocus
               :class="{ 'p-invalid': v$$.ownershipPart.$error }"
+              @blur="checkSum(selectedOwner.id)"
               @input="v$$.ownershipPart.$touch"
-              maxlength="9"
+              maxlength="10"
             />
             <small v-if="v$$.ownershipPart.$error" class="p-error">{{ v$$.ownershipPart.$errors[0].$message }}</small>
           </div>
@@ -174,7 +175,7 @@
               label="Зберегти"
               icon="pi pi-check"
               class="p-button-info"
-              :disabled="v$$.$invalid"
+              :disabled="v$$.$invalid || checkSum(selectedOwner.id)"
               @click="editOwner"
             />
           </template>
@@ -208,7 +209,7 @@ import {
   requiredValidator,
   apartmentNumberValidator,
   apartmentAreaValidator,
-  OwnershipsPartValidator,
+  ownershipPartValidator,
 } from '@/utils/validators';
 
 export default defineComponent({
@@ -266,7 +267,7 @@ export default defineComponent({
         apartmentArea: { requiredValidator, apartmentAreaValidator },
       },
       owner: {
-        ownershipPart: { requiredValidator, OwnershipsPartValidator },
+        ownershipPart: { requiredValidator, ownershipPartValidator },
       },
     };
     const v$ = useVuelidate(rules.apartment, editApartmentInfo);
@@ -340,6 +341,11 @@ export default defineComponent({
     });
 
     const displayFractionOwnershipPart = (ownershipPart: number) => {
+      if (ownershipPart === 1) {
+        return '1';
+      } else if (ownershipPart === 0) {
+        return '0';
+      }
       const splitOwnershipPart = ownershipPart.toString().split('.')[1];
       const nullsQvt = splitOwnershipPart.length;
 
@@ -383,11 +389,12 @@ export default defineComponent({
       } else {
         return ownershipsData.value.reduce((acc: any, cur: OwnershipsModel) => {
           const voutingShare =
-            (cur.ownershipPart * (apartmentInfo?.value.apartmentArea || 1) * 100) / (houseInfo?.value.house_area || 1);
+            (cur.ownershipPart * (apartmentInfo?.value?.apartmentArea || 1) * 100) /
+            (houseInfo?.value?.house_area || 1);
           const element = {
             id: cur.id,
-            ownershipsPart: voutingShare.toFixed(3),
-          }
+            ownershipPart: voutingShare.toFixed(3),
+          };
           acc.push(element);
           return acc;
         }, []);
@@ -404,8 +411,14 @@ export default defineComponent({
     };
 
     const editOwner = () => {
-      const splitOwnershipPart = editOwnershipData.ownershipPart.split('/');
-      const correctOwnershipPart = Number((+splitOwnershipPart[0] / +splitOwnershipPart[1]).toFixed(4));
+      if (editOwnershipData.ownershipPart === selectedOwner.value.ownershipPart) {
+        editOwnerDialog.value = false;
+        return;
+      }
+      // const splitOwnershipPart = editOwnershipData.ownershipPart.split('/');
+      // const correctOwnershipPart = Number((+splitOwnershipPart[0] / +splitOwnershipPart[1]).toFixed(4));
+      const correctOwnershipPart = Number(convertFractionToDecimal(editOwnershipData.ownershipPart));
+
       const payload = {
         apartmentId: apartment.value,
         ownerId: selectedOwner.value.id,
@@ -416,6 +429,17 @@ export default defineComponent({
       };
       store.dispatch(`${StoreModuleEnum.ownershipsStore}/${OwnershipsActionEnum.EDIT_OWNER}`, payload);
       editOwnerDialog.value = false;
+    };
+
+    const convertFractionToDecimal = (fraction: string) => {
+      if (fraction === '1') {
+        return '1';
+      } else if (fraction === '0') {
+        return '0';
+      }
+      const splitFraction = fraction.split('/');
+      const decimal = String((+splitFraction[0] / +splitFraction[1]).toFixed(4));
+      return decimal;
     };
 
     const openEditApartmentDialog = () => {
@@ -442,6 +466,29 @@ export default defineComponent({
       visibleApartmentDialog.value = false;
     };
 
+    const sumOwnershipPart = computed(() => {
+      const sum = ownershipsData.value.reduce((acc: number, cur: any) => {
+        acc += Number(cur.ownershipPart);
+        return acc;
+      }, 0);
+      return sum;
+    });
+
+    const checkSum = (id: any) =>{
+      const prevValue = ownershipsData.value.find((el: any) => el.id === id);
+      const check =
+        Number(sumOwnershipPart.value) +
+        Number(convertFractionToDecimal(editOwnershipData.ownershipPart)) -
+        Number(prevValue.ownershipPart);
+      console.log(check);
+      if (check > 1) {
+        console.log(true);
+        return true;
+      }
+      console.log(false);
+      return false;
+    };
+
     watch(ownershipsData, initDataTable);
 
     onMounted(() => {
@@ -451,6 +498,9 @@ export default defineComponent({
     });
 
     return {
+      checkSum,
+      convertFractionToDecimal,
+      sumOwnershipPart,
       editApartmentInfo,
       openEditApartmentDialog,
       updateApartment,
