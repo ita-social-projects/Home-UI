@@ -43,7 +43,12 @@
             :closable="false"
             :dismissableMask="true"
           >
-            <AddApartmentButton :houseId="id"> </AddApartmentButton>
+            <AddApartmentForm
+              :houseId="id"
+              @apartment-saved="displayApartmentModal = false"
+              @cancel-editing="displayApartmentModal = false"
+            >
+            </AddApartmentForm>
           </Dialog>
         </div>
         <div class="container">
@@ -157,8 +162,7 @@ import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import AddApartmentButton from '@/components/AddApartmentButton.vue';
-import { StoreModuleEnum } from '@/store/types';
+import AddApartmentForm from '@/components/AddApartmentForm.vue';
 
 export default defineComponent({
   name: 'ManageApartments',
@@ -170,7 +174,7 @@ export default defineComponent({
     Menu,
     Dialog,
     InputText,
-    AddApartmentButton,
+    AddApartmentForm,
   },
   props: {
     id: {
@@ -191,6 +195,7 @@ export default defineComponent({
     const editData = ref({});
     const item = ref({});
     const submitted = ref(false);
+    const displayApartmentModal = ref(false);
 
     const toggle = (event: any, data: ApartmentModel) => {
       menu.value.toggle(event);
@@ -219,12 +224,8 @@ export default defineComponent({
       ];
     };
 
-    const displayApartmentModal = computed(() => {
-      return store.state.cooperationStore.displayModal;
-    });
-
     function openApartmentModal() {
-      store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
+      displayApartmentModal.value = true;
     }
 
     const cooperationID = computed(() => {

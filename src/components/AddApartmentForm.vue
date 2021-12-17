@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="addNewApartment" id="apartment_data_form">
+  <form @submit.prevent="saveApartment" id="apartment_data_form">
     <p>
       <label class="dialog-item" for="apartment_number">Номер квартири: </label>
       <InputText
@@ -29,18 +29,13 @@
       <Button
         label="Додати квартиру"
         icon="pi pi-check"
-        @click="addNewApartment"
+        @click="saveApartment"
         autofocus
         class="p-button-info"
         type="button"
         value="Submit"
       />
-      <Button
-        label="Відмінити"
-        icon="pi pi-times"
-        @click="closeApartmentModal"
-        class="p-button-outlined p-button-info"
-      />
+      <Button label="Відмінити" icon="pi pi-times" @click="cancelEditing" class="p-button-outlined p-button-info" />
     </div>
   </form>
 </template>
@@ -56,7 +51,6 @@ import {
 } from '@/utils/validators';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'AddApartment',
@@ -89,8 +83,9 @@ export default defineComponent({
     };
   },
   methods: {
-    async addNewApartment() {
+    async saveApartment() {
       const isValid = await this.v$.$validate();
+      console.log(this.v$.$validate);
       if (!isValid) {
         return;
       }
@@ -99,14 +94,14 @@ export default defineComponent({
         number: this.apartmentData.apartmentNumber.toString(),
         area: this.apartmentData.apartmentArea,
       };
-      await this.$store.dispatch(`apartmentsStore/ADD_APARTMENT`, payload);
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
-      this.resetApartmentDataFields(this.apartmentData);
+      this.$store.dispatch(`apartmentsStore/ADD_APARTMENT`, payload);
+      await this.resetApartmentDataFields(this.apartmentData);
       this.v$.$reset();
+      this.$emit('apartment-saved');
     },
-    closeApartmentModal() {
+    cancelEditing() {
       this.resetApartmentDataFields(this.apartmentData);
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
+      this.$emit('cancel-editing');
     },
     resetApartmentDataFields(apartmentData: any) {
       for (let field in apartmentData) {
