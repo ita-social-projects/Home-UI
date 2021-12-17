@@ -12,4 +12,9 @@ export const mutations: MutationTree<OwnershipsStateInterface> & Mutations = {
     );
     state.ownerships = updateOwnerships;
   },
+  [OwnershipsMutationEnum.EDIT_OWNER]: (state, payload) => {
+    const index = state.ownerships.findIndex((el: OwnershipsModel) => el.id === payload.id);
+    state.ownerships[index] = payload;
+    state.ownerships = [...state.ownerships];
+  },
 };

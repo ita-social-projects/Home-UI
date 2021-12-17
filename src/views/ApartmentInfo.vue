@@ -36,7 +36,7 @@
           :closable="false"
           :dismissableMask="true"
         >
-          <form @submit.prevent="editCooperationInfo">
+          <form>
             <div>
               <label for="iban">Номер квартири : </label>
               <div class="input-block">
@@ -51,7 +51,6 @@
                   @input="v$.apartmentNumber.$touch"
                   maxlength="6"
                 />
-                <span> кв.м.</span>
               </div>
             </div>
             <div>
@@ -75,10 +74,9 @@
             <Button
               label="Редагувати"
               icon="pi pi-check"
-              @click="updateApartment"
-              autofocus
               class="p-button-info"
               :disabled="v$.$invalid"
+              @click="updateApartment"
             />
 
             <Button
@@ -156,12 +154,14 @@
             <label for="name" class="dialog_item-label">Частка власності: </label>
             <InputText
               id="name"
-              v-model.trim="selectedOwner.ownershipPart"
+              v-model.trim="editOwnershipData.ownershipPart"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !selectedOwner.ownershipPart }"
+              :class="{ 'p-invalid': v$$.ownershipPart.$error }"
+              @input="v$$.ownershipPart.$touch"
+              maxlength="9"
             />
-            <small class="p-error" v-if="submitted && !selectedOwner.ownershipPart">Введіть частку власності</small>
+            <small v-if="v$$.ownershipPart.$error" class="p-error">{{ v$$.ownershipPart.$errors[0].$message }}</small>
           </div>
           <template #footer>
             <Button
@@ -170,7 +170,13 @@
               class="p-button-outlined p-button-info"
               @click="editOwnerDialog = false"
             />
-            <Button label="Зберегти" icon="pi pi-check" class="p-button-info" @click="editOwner" />
+            <Button
+              label="Зберегти"
+              icon="pi pi-check"
+              class="p-button-info"
+              :disabled="v$$.$invalid"
+              @click="editOwner"
+            />
           </template>
         </Dialog>
       </div>
@@ -193,11 +199,17 @@ import { ContactsModel } from '@/shared/models/contacts.modal';
 import { ApartmentModel } from '@/store/apartments/models/apartment.model';
 import { OwnershipsModel } from '@/shared/models/ownerships.model';
 import { UpdateApartmentDTOModel } from '@/store/apartments/models/update-upartmentDTO.model';
+import { UpdateOwnershipsDTOModel } from '@/shared/models/update-ownershipsDTO.model';
 import { ApartmentsActionsEnum } from '@/store/apartments/types';
 import { OwnershipsActionEnum } from '@/store/ownerships/types';
 import { HousesActionsEnum } from '@/store/houses/types';
 import { useVuelidate } from '@vuelidate/core';
-import { requiredValidator, apartmentNumberValidator, apartmentAreaValidator } from '@/utils/validators';
+import {
+  requiredValidator,
+  apartmentNumberValidator,
+  apartmentAreaValidator,
+  OwnershipsPartValidator,
+} from '@/utils/validators';
 
 export default defineComponent({
   name: 'ApartmentInfo',
@@ -232,8 +244,14 @@ export default defineComponent({
     const visibleApartmentDialog = ref(false);
     const selectedOwner = ref({
       id: 0,
-      owner: '',
-      ownerships: '',
+      fullName: '',
+      ownershipPart: '',
+      contact: '',
+      voutsPart: 0,
+    });
+    const editOwnershipData = reactive({
+      id: 0,
+      ownershipPart: '',
     });
     const editApartmentInfo = reactive({
       id: 0,
@@ -243,10 +261,16 @@ export default defineComponent({
     const menu = ref();
 
     const rules = {
-      apartmentNumber: { requiredValidator, apartmentNumberValidator },
-      apartmentArea: { requiredValidator, apartmentAreaValidator },
+      apartment: {
+        apartmentNumber: { requiredValidator, apartmentNumberValidator },
+        apartmentArea: { requiredValidator, apartmentAreaValidator },
+      },
+      owner: {
+        ownershipPart: { requiredValidator, OwnershipsPartValidator },
+      },
     };
-    const v$ = useVuelidate(rules, editApartmentInfo);
+    const v$ = useVuelidate(rules.apartment, editApartmentInfo);
+    const v$$ = useVuelidate(rules.owner, editOwnershipData);
 
     const menuActions = () => {
       return [
@@ -261,6 +285,8 @@ export default defineComponent({
           label: 'Редагувати',
           icon: 'pi pi-refresh',
           command: () => {
+            editOwnershipData.id = selectedOwner.value.id;
+            editOwnershipData.ownershipPart = selectedOwner.value.ownershipPart;
             editOwnerDialog.value = true;
           },
         },
@@ -270,24 +296,6 @@ export default defineComponent({
     const toggle = (event: any, data: any) => {
       menu.value.toggle(event);
       selectedOwner.value = data;
-    };
-
-    const openEditApartmentDialog = () => {
-      visibleApartmentDialog.value = true;
-      editApartmentInfo.id = apartmentInfo.value.id;
-      editApartmentInfo.apartmentNumber = apartmentInfo.value.apartmentNumber;
-      editApartmentInfo.apartmentArea = apartmentInfo.value.apartmentArea;
-    };
-
-    const updateApartment = () => {
-      const payload = {
-        houseId: id.value,
-        apartmentId: editApartmentInfo.id,
-        payloadData: new UpdateApartmentDTOModel(editApartmentInfo),
-      };
-      store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.EDIT_APARTMENT}`, payload);
-      console.log(payload);
-      visibleApartmentDialog.value = false;
     };
 
     const cooperationId = computed(() => {
@@ -340,7 +348,6 @@ export default defineComponent({
       const gcd = findGcd(numerator, denominator);
 
       const ownerFraction = `${numerator / gcd}/${denominator / gcd}`;
-      console.log(houseInfo);
       return ownerFraction;
     };
 
@@ -357,6 +364,7 @@ export default defineComponent({
         const currentContact = el?.owner.contacts.find(
           (contact: ContactsModel) => !!contact.main && contact.type === 'email'
         );
+
         const newElem = {
           id: el?.id,
           fullName: `${el?.owner.firstName} ${el?.owner.middleName} ${el?.owner.lastName}`,
@@ -364,6 +372,7 @@ export default defineComponent({
           ownershipPart: displayFractionOwnershipPart(el?.ownershipPart),
           voutsPart: 0,
         };
+
         ownershipsInfo.value.push(newElem);
       });
     };
@@ -395,8 +404,42 @@ export default defineComponent({
     };
 
     const editOwner = () => {
-      console.log('edit owner');
+      const splitOwnershipPart = editOwnershipData.ownershipPart.split('/');
+      const correctOwnershipPart = Number((+splitOwnershipPart[0] / +splitOwnershipPart[1]).toFixed(4));
+      const payload = {
+        apartmentId: apartment.value,
+        ownerId: selectedOwner.value.id,
+        payloadData: new UpdateOwnershipsDTOModel({
+          ownershipPart: correctOwnershipPart,
+        }),
+        number: correctOwnershipPart, ////for mock and testing
+      };
+      store.dispatch(`${StoreModuleEnum.ownershipsStore}/${OwnershipsActionEnum.EDIT_OWNER}`, payload);
       editOwnerDialog.value = false;
+    };
+
+    const openEditApartmentDialog = () => {
+      visibleApartmentDialog.value = true;
+      editApartmentInfo.id = apartmentInfo.value.id;
+      editApartmentInfo.apartmentNumber = apartmentInfo.value.apartmentNumber;
+      editApartmentInfo.apartmentArea = apartmentInfo.value.apartmentArea;
+    };
+
+    const updateApartment = () => {
+      if (
+        editApartmentInfo.apartmentNumber === apartmentInfo.value.apartmentNumber &&
+        editApartmentInfo.apartmentArea === apartmentInfo.value.apartmentArea
+      ) {
+        visibleApartmentDialog.value = false;
+        return;
+      }
+      const payload = {
+        houseId: id.value,
+        apartmentId: editApartmentInfo.id,
+        payloadData: new UpdateApartmentDTOModel(editApartmentInfo),
+      };
+      store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.EDIT_APARTMENT}`, payload);
+      visibleApartmentDialog.value = false;
     };
 
     watch(ownershipsData, initDataTable);
@@ -412,6 +455,7 @@ export default defineComponent({
       openEditApartmentDialog,
       updateApartment,
       v$,
+      v$$,
       calcOwnerVoutingShare,
       setApartmentInfo,
       apartmentInfo,
@@ -423,6 +467,7 @@ export default defineComponent({
       menuActions,
       toggle,
       selectedOwner,
+      editOwnershipData,
       loading,
       submitted,
       editOwnerDialog,

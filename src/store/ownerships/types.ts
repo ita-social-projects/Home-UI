@@ -21,11 +21,13 @@ export interface OwnershipsStateInterface {
 export interface Actions {
   [OwnershipsActionEnum.SET_OWNERSHIPS]({ commit }: AugmentedActionContext, payload: number): void;
   [OwnershipsActionEnum.DELETE_OWNER]({ commit }: AugmentedActionContext, payload: Record<string, unknown>): void;
+  [OwnershipsActionEnum.EDIT_OWNER]({ commit }: AugmentedActionContext, payload: any): void;
 }
 
 export type Mutations<S = OwnershipsStateInterface> = {
   [OwnershipsMutationEnum.SET_OWNERSHIPS](state: S, payload: Array<OwnershipsModel>): void;
   [OwnershipsMutationEnum.DELETE_OWNER](state: any, payload: Record<string, unknown>): void;
+  [OwnershipsMutationEnum.EDIT_OWNER](state: any, payload: OwnershipsModel): void;
 };
 
 export type Getters<S = OwnershipsStateInterface> = {

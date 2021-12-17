@@ -64,5 +64,11 @@ export const mainHouseInfoValidator = helpers.withMessage('В назві маю�
 const validApartmentNumber = helpers.regex(/^(?!(0))\d{1,4}(\-[a-zа-я])?$/);
 export const apartmentNumberValidator = helpers.withMessage('1-6 цифр, літера через дефіс', validApartmentNumber);
 
-const validApartmentArea = helpers.regex(/(^([0-9]{2,3}){1}(\.[0-9]{1,2})?$)|1000/);
+const validApartmentArea = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|1000$/);
 export const apartmentAreaValidator = helpers.withMessage('числа від 10 до 1000 включно', validApartmentArea);
+
+const validOwnershipsPart = helpers.regex(/(^(?!(0))\d{1,4}){1}(\/(?!(0))\d{1,4})?$/);
+export const OwnershipsPartValidator = helpers.withMessage(
+  'введіть коректно дріб, наприклад: 1/5',
+  validOwnershipsPart
+);
