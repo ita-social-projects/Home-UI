@@ -75,16 +75,6 @@ export default defineComponent({
       apartmentData: {
         apartmentNumber: '',
         apartmentArea: '',
-        invitations: [
-          {
-            email: 'test.receive.messages@gmail.com',
-            type: 'apartment',
-          },
-          {
-            email: 'test.receive.messages@gmail.com',
-            type: 'apartment',
-          },
-        ],
       },
       displayAddApartmentModal: false,
       v$: useVuelidate(),
