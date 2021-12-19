@@ -569,6 +569,8 @@ export default defineComponent({
           zip_code: '',
         } as AddressInterface,
       } as HouseInterface,
+      displayModalForHouse: false,
+      displayModalForCooperation: false,
       v$: useVuelidate(),
     };
   },
@@ -617,6 +619,7 @@ export default defineComponent({
     };
   },
   async mounted() {
+    this.houses = Object.assign({}, this.housesInfo);
     await Promise.all([
       this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS'),
       this.$store.dispatch('housesStore/SET_HOUSES'),
@@ -624,7 +627,6 @@ export default defineComponent({
       this.initData();
       this.isLoaded = true;
     });
-    this.houses = Object.assign({}, this.housesInfo);
   },
   methods: {
     initData() {
@@ -677,16 +679,28 @@ export default defineComponent({
       this.houses = this.$store.state.housesStore.houses as HouseInterface[];
     },
     openCooperationModal() {
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
+      //delete store dispatch before pushing!
+      // this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
+      this.$emit('confirm-editing-coop'); //use this when split cooperation login to separate components
+      this.displayModalForCooperation = true;
     },
     closeCooperationModal() {
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
+      //delete store dispatch before pushing!
+      //  this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
+      this.$emit('cancel-editing-coop'); //use this when split cooperation login to separate components
+      this.displayModalForCooperation = false;
     },
     openEditHouseModal() {
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, true);
+      //delete store dispatch before pushing!
+      //  this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, true);
+      this.$emit('cancel-editing-house'); //use this when split cooperation login to separate components
+      this.displayModalForHouse = true;
     },
     closeEditHouseModal() {
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, false);
+      //delete store dispatch before pushing!
+      // this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, false);
+      this.$emit('cancel-editing-house'); //use this when split cooperation login to separate components
+      this.displayModalForHouse = false;
     },
     cancelCooperationEdit() {
       this.initData();
@@ -769,10 +783,14 @@ export default defineComponent({
       ${this.cooperationInfo.address.zipCode} `;
     },
     displayCooperationModal(): boolean {
-      return this.$store.state.cooperationStore.displayModal;
+      return this.displayModalForCooperation;
+      // delete store dispatch before pushing!
+      //return this.$store.state.cooperationStore.displayModal;
     },
     displayHouseModal(): boolean {
-      return this.$store.state.housesStore.displayModal;
+      // delete store dispatch before pushing!
+      // return this.$store.state.housesStore.displayModal;
+      return this.displayModalForHouse;
     },
     ...mapGetters({
       housesInfo: `${StoreModuleEnum.housesStore}/getHousesData`,

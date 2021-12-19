@@ -21,7 +21,4 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
   [PollsActionEnum.SET_SELECTED_POLL]: ({ commit }, payload) => {
     commit(PollsMutationEnum.SET_SELECTED_POLL, payload);
   },
-  [PollsActionEnum.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
-    commit(PollsMutationEnum.SET_MODAL_DISPLAY, payload);
-  },
 };

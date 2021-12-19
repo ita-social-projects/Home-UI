@@ -24,9 +24,6 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
       payload.errorCallback();
     }
   },
-  [CooperationActionEnum.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
-    commit(CooperationMutationEnum.SET_MODAL_DISPLAY, payload);
-  },
 
   [CooperationActionEnum.SET_USER_COOPERATIONS]: async ({ commit }) => {
     try {
