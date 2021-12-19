@@ -35,7 +35,7 @@
         <Button
           label="Редагувати"
           icon="pi pi-pencil"
-          @click="openCooperationModal"
+          @click="manageCooperationModal"
           class="p-button-outlined p-button-info"
         />
         <Dialog
@@ -462,7 +462,7 @@
                 <Button
                   label="Скасувати"
                   icon="pi pi-times"
-                  @click="closeEditHouseModal"
+                  @click="manageHouseModal"
                   class="p-button-outlined p-button-info"
                 />
               </template>
@@ -537,7 +537,7 @@ export default defineComponent({
             label: 'Редагувати',
             icon: 'pi pi-user-edit',
             command: () => {
-              this.openEditHouseModal();
+              this.manageHouseModal();
               this.showSuccessEdit(house);
             },
           },
@@ -678,33 +678,23 @@ export default defineComponent({
     setHouse() {
       this.houses = this.$store.state.housesStore.houses as HouseInterface[];
     },
-    openCooperationModal() {
-      //delete store dispatch before pushing!
-      // this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
-      this.$emit('confirm-editing-coop'); //use this when split cooperation login to separate components
-      this.displayModalForCooperation = true;
+    manageCooperationModal() {
+      if (this.displayModalForCooperation) {
+        this.displayModalForCooperation = false;
+      } else {
+        this.displayModalForCooperation = true;
+      }
     },
-    closeCooperationModal() {
-      //delete store dispatch before pushing!
-      //  this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
-      this.$emit('cancel-editing-coop'); //use this when split cooperation login to separate components
-      this.displayModalForCooperation = false;
-    },
-    openEditHouseModal() {
-      //delete store dispatch before pushing!
-      //  this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, true);
-      this.$emit('cancel-editing-house'); //use this when split cooperation login to separate components
-      this.displayModalForHouse = true;
-    },
-    closeEditHouseModal() {
-      //delete store dispatch before pushing!
-      // this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, false);
-      this.$emit('cancel-editing-house'); //use this when split cooperation login to separate components
-      this.displayModalForHouse = false;
+    manageHouseModal() {
+      if (this.displayModalForHouse) {
+        this.displayModalForHouse = false;
+      } else {
+        this.displayModalForHouse = true;
+      }
     },
     cancelCooperationEdit() {
       this.initData();
-      this.closeCooperationModal();
+      this.manageCooperationModal();
     },
     editCooperationInfo() {
       const payload = {
@@ -719,7 +709,7 @@ export default defineComponent({
         ],
       };
       this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
-      this.closeCooperationModal();
+      this.manageCooperationModal();
     },
     async editHouseInfo(house: HouseInterface) {
       const payload = {
@@ -740,7 +730,7 @@ export default defineComponent({
         },
       };
       this.$store.dispatch(`${StoreModuleEnum.housesStore}/EDIT_HOUSE`, payload);
-      this.closeEditHouseModal();
+      this.manageHouseModal();
     },
     toggle(event: any, slotProps: any) {
       this.house = slotProps;
@@ -784,12 +774,8 @@ export default defineComponent({
     },
     displayCooperationModal(): boolean {
       return this.displayModalForCooperation;
-      // delete store dispatch before pushing!
-      //return this.$store.state.cooperationStore.displayModal;
     },
     displayHouseModal(): boolean {
-      // delete store dispatch before pushing!
-      // return this.$store.state.housesStore.displayModal;
       return this.displayModalForHouse;
     },
     ...mapGetters({
