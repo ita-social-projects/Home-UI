@@ -258,8 +258,24 @@
     </div>
 
     <div class="add_btn">
-      <AddHouse :id="cooperationData.id"></AddHouse>
+      <Button
+        label="Додати будинок"
+        icon="pi pi-pencil"
+        class="p-button-outlined p-button-info"
+        @click="this.displayAddHouseModal = true"
+      />
+      <Dialog
+        header="Додати будинок"
+        v-model:visible="displayAddHouseModal"
+        :style="{ width: '51vw' }"
+        :modal="true"
+        :closable="false"
+        :dismissableMask="true"
+      >
+        <AddHouseForm :id="cooperationData.id" @cancel-addHouseModal="displayAddHouseModal = false"></AddHouseForm>
+      </Dialog>
     </div>
+
     <div class="container container-houses">
       <DataTable
         ref="dt"
@@ -479,7 +495,7 @@ import Menu from 'primevue/menu';
 import ConfirmPopup from 'primevue/confirmpopup';
 
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import AddHouse from '@/components/AddHouse.vue';
+import AddHouseForm from '@/components/AddHouseForm.vue';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { StoreModuleEnum } from '@/store/types';
 import { AddressInterface, HouseInterface } from '@/store/houses/types';
@@ -517,7 +533,7 @@ export default defineComponent({
     Column,
     Menu,
     ConfirmPopup,
-    AddHouse,
+    AddHouseForm,
   },
   data() {
     return {
@@ -568,6 +584,7 @@ export default defineComponent({
         } as AddressInterface,
       } as HouseInterface,
       v$: useVuelidate(),
+      displayAddHouseModal: false,
     };
   },
   validations() {
@@ -690,6 +707,16 @@ export default defineComponent({
       this.initData();
       this.closeCooperationModal();
     },
+
+    resetAddHouseDataFields(houseData: any) {
+      for (let field in houseData) {
+        if (typeof houseData[field] === 'object') {
+          this.resetAddHouseDataFields(houseData[field]);
+        } else {
+          houseData[field] = '';
+        }
+      }
+    },
     editCooperationInfo() {
       const payload = {
         id: this.cooperationData.id,
@@ -771,6 +798,9 @@ export default defineComponent({
     },
     displayHouseModal(): boolean {
       return this.$store.state.housesStore.displayModal;
+    },
+    displayAddHouseModal(): boolean {
+      return this.displayAddHouseModal;
     },
     ...mapGetters({
       housesInfo: `${StoreModuleEnum.housesStore}/getHousesData`,
