@@ -11,7 +11,7 @@
     <div class="header__btn">
       <Dropdown
         v-show="isLoggedIn"
-        class="drop__menu"
+        class="drop-menu"
         v-model="typeContact"
         :options="contactsType"
         optionLabel="name"
@@ -80,18 +80,14 @@ export default defineComponent({
       ],
 
       typeContact: null,
-      contactsType: [
-        { name: 'Авіатор-1' },
-        { name: 'Дубовий гай' },
-        { name: 'Добробут' },
-      ],
+      contactsType: [{ name: 'Авіатор-1' }, { name: 'Дубовий гай' }, { name: 'Добробут' }],
     };
   },
   components: {
     Avatar,
     Button,
     Menu,
-    Dropdown
+    Dropdown,
   },
   computed: {
     isLoggedIn(): boolean {
@@ -155,22 +151,25 @@ export default defineComponent({
   width: 100%;
   flex: 1 1 auto;
 }
+
 .header__btn {
-  display: flex;
-  justify-content: space-around;
+  @include flex-custom(flex-end);
+  align-items: center;
   width: 100%;
   flex: 1 1 auto;
-  .drop__menu {
+  .drop-menu {
     width: 200px;
     background-color: $main-background-color;
     display: flex;
     align-items: center;
+    box-shadow: none;
   }
   .p-avatar {
     margin-right: 10px;
   }
   button {
-    margin-top: -5px;
+    margin: 0 65px;
   }
 }
+
 </style>
