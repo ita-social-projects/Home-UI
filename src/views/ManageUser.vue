@@ -161,8 +161,8 @@ import {
   emailValidator,
   emailMinLength,
   emailMaxLength,
-  phoneNumberValidator,
-} from '@/utils/validators';
+  phoneNumberValidator
+} from "@/utils/validators";
 import useVuelidate from '@vuelidate/core';
 
 // primevue
@@ -222,6 +222,7 @@ export default defineComponent({
     return {
       firstName: {
         requiredValidator,
+        // ukrLangTitleValidator,
         nameValidator,
         nameLenghtValidator,
       },

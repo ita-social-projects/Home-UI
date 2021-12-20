@@ -9,6 +9,14 @@
     </div>
 
     <div class="header__btn">
+      <Dropdown
+        v-show="isLoggedIn"
+        class="drop__menu"
+        v-model="typeContact"
+        :options="contactsType"
+        optionLabel="name"
+        placeholder="Обрати ОСББ"
+      />
       <div>
         <Button
           v-if="!isLoggedIn"
@@ -42,6 +50,8 @@ import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 
+import Dropdown from 'primevue/dropdown';
+
 export default defineComponent({
   name: 'baseHeader',
   data() {
@@ -68,12 +78,20 @@ export default defineComponent({
           },
         },
       ],
+
+      typeContact: null,
+      contactsType: [
+        { name: 'Авіатор-1' },
+        { name: 'Дубовий гай' },
+        { name: 'Добробут' },
+      ],
     };
   },
   components: {
     Avatar,
     Button,
     Menu,
+    Dropdown
   },
   computed: {
     isLoggedIn(): boolean {
@@ -109,6 +127,7 @@ export default defineComponent({
   background-color: $main-background-color;
   box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px, rgba(0, 0, 0, 0.06) 0 1px 2px;
   display: flex;
+  align-items: center;
   padding: 20px;
   color: #495057;
   user-select: none;
@@ -137,11 +156,16 @@ export default defineComponent({
   flex: 1 1 auto;
 }
 .header__btn {
-  @include flex-custom(flex-end);
-  padding-left: 15px;
-  padding-right: 65px;
+  display: flex;
+  justify-content: space-around;
   width: 100%;
   flex: 1 1 auto;
+  .drop__menu {
+    width: 200px;
+    background-color: $main-background-color;
+    display: flex;
+    align-items: center;
+  }
   .p-avatar {
     margin-right: 10px;
   }
