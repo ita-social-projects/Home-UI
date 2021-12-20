@@ -146,9 +146,10 @@
           :modal="true"
         >
           <div class="p-field dialog">
-            <label for="name" class="dialog_item-label"
-              >Власник: <strong>{{ selectedOwner.fullName }}</strong></label
-            >
+            <label for="name" class="dialog_item-label">Власник: </label>
+            <div>
+              <strong>{{ selectedOwner.fullName }}</strong>
+            </div>
           </div>
           <div class="p-field dialog">
             <label for="name" class="dialog_item-label">Частка власності: </label>
@@ -163,6 +164,7 @@
               maxlength="10"
             />
             <small v-if="v$$.ownershipPart.$error" class="p-error">{{ v$$.ownershipPart.$errors[0].$message }}</small>
+            <small v-if="isErrorOwnershipSum" class="p-error">{{ errorSumText }}</small>
           </div>
           <template #footer>
             <Button
@@ -235,6 +237,9 @@ export default defineComponent({
   },
   setup(props) {
     const ownershipsInfo: any = ref([]);
+    const isErrorOwnershipSum = ref(false);
+    const errorSumText =
+      'Перевірте усі поля "Частка власності, сумма усіх часток власності повинна бути рівна чи менше 1';
     const { apartment } = toRefs(props);
     const { id } = toRefs(props);
     const store = useStore();
@@ -349,6 +354,11 @@ export default defineComponent({
       const splitOwnershipPart = ownershipPart.toString().split('.')[1];
       const nullsQvt = splitOwnershipPart.length;
 
+      const period = checkPeriod(splitOwnershipPart);
+      if (+period < 1000) {
+        return convertPeriodDecimal(period);
+      }
+
       const numerator = Number(splitOwnershipPart);
       const denominator = Math.pow(10, nullsQvt);
       const gcd = findGcd(numerator, denominator);
@@ -362,6 +372,25 @@ export default defineComponent({
         return a;
       }
       return findGcd(b, a % b);
+    };
+
+    const checkPeriod = (numbers: any) => {
+      const arrayNumbers = numbers.split('');
+      if (((arrayNumbers[0] === arrayNumbers[1]) === arrayNumbers[2]) === arrayNumbers[3]) {
+        return arrayNumbers[0];
+      } else if (arrayNumbers[0] === arrayNumbers[2] && arrayNumbers[1] === arrayNumbers[3]) {
+        return `${arrayNumbers[0]}${arrayNumbers[1]}`;
+      } else if (arrayNumbers[0] === arrayNumbers[3]) {
+        return `${arrayNumbers[0]}${arrayNumbers[1]}${arrayNumbers[2]}`;
+      } else return;
+    };
+
+    const convertPeriodDecimal = (period: any) => {
+      const numerator = Number(`${period}`);
+      const denominator = Number('9'.repeat(period.length));
+      const gcd = findGcd(numerator, denominator);
+      const ownerFraction = `${numerator / gcd}/${denominator / gcd}`;
+      return ownerFraction;
     };
 
     const initDataTable = () => {
@@ -415,8 +444,7 @@ export default defineComponent({
         editOwnerDialog.value = false;
         return;
       }
-      // const splitOwnershipPart = editOwnershipData.ownershipPart.split('/');
-      // const correctOwnershipPart = Number((+splitOwnershipPart[0] / +splitOwnershipPart[1]).toFixed(4));
+
       const correctOwnershipPart = Number(convertFractionToDecimal(editOwnershipData.ownershipPart));
 
       const payload = {
@@ -425,7 +453,6 @@ export default defineComponent({
         payloadData: new UpdateOwnershipsDTOModel({
           ownershipPart: correctOwnershipPart,
         }),
-        number: correctOwnershipPart, ////for mock and testing
       };
       store.dispatch(`${StoreModuleEnum.ownershipsStore}/${OwnershipsActionEnum.EDIT_OWNER}`, payload);
       editOwnerDialog.value = false;
@@ -474,18 +501,17 @@ export default defineComponent({
       return sum;
     });
 
-    const checkSum = (id: any) =>{
+    const checkSum = (id: number) =>{
       const prevValue = ownershipsData.value.find((el: any) => el.id === id);
-      const check =
+      const totalSum =
         Number(sumOwnershipPart.value) +
         Number(convertFractionToDecimal(editOwnershipData.ownershipPart)) -
         Number(prevValue.ownershipPart);
-      console.log(check);
-      if (check > 1) {
-        console.log(true);
+      if (totalSum > 1) {
+        isErrorOwnershipSum.value = true;
         return true;
       }
-      console.log(false);
+      isErrorOwnershipSum.value = false;
       return false;
     };
 
@@ -499,6 +525,8 @@ export default defineComponent({
 
     return {
       checkSum,
+      isErrorOwnershipSum,
+      errorSumText,
       convertFractionToDecimal,
       sumOwnershipPart,
       editApartmentInfo,

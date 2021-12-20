@@ -68,7 +68,4 @@ const validApartmentArea = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|1000$/);
 export const apartmentAreaValidator = helpers.withMessage('числа від 10 до 1000 включно', validApartmentArea);
 
 const validOwnershipPart = helpers.regex(/((^(?!(0))\d{1,4}\/(?!(0))\d{1,5})$)|(^0$)|(^1$)/);
-export const ownershipPartValidator = helpers.withMessage(
-  'введіть коректно дріб, наприклад: 1/5',
-  validOwnershipPart
-);
+export const ownershipPartValidator = helpers.withMessage('Введіть коректно дріб, наприклад: 1/5', validOwnershipPart);
