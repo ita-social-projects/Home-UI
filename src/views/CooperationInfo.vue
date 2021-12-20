@@ -634,7 +634,6 @@ export default defineComponent({
         JSON.stringify(this.cooperationInfo?.address ?? ({} as CooperationAddressInterface))
       );
       this.cooperationInfo?.contacts.forEach((el: CooperationContactsInterface) => this.mapContact(el));
-      console.log('getter', this.cooperationInfo);
     },
     mapContact(el: CooperationContactsInterface) {
       if (el.main) {
