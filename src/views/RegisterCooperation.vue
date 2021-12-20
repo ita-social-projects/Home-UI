@@ -31,7 +31,12 @@
           </div>
         </div>
         <section class="submit-buttons">
-          <Button label="Відмінити" class="p-button-outlined p-button-info" @click="v$.$reset" type="reset" />
+          <Button
+            label="Відмінити"
+            class="p-button-outlined p-button-info"
+            @click="redirectToMainPage()"
+            type="reset"
+          />
           <Button label="Заре'єструвати" :disabled="v$.$invalid" class="p-button-info" type="submit" />
         </section>
       </form>
@@ -54,6 +59,7 @@ import {
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { StoreModuleEnum } from '@/store/types';
+import { RoutesEnum } from '@/router/types';
 
 export default defineComponent({
   name: 'RegisterCooperation',
@@ -136,6 +142,9 @@ export default defineComponent({
         },
       };
       await this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/CREATE_COOPERATION`, payload);
+    },
+    redirectToMainPage() {
+      this.$router.push({ path: RoutesEnum.StartPage });
     },
   },
   validations() {

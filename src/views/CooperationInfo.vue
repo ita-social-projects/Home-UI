@@ -140,7 +140,6 @@
                     v-model.trim="cooperationData.address.region"
                     :class="{ 'p-invalid': v$.cooperationData.address.region.$error }"
                     @blur="v$.cooperationData.address.region.$touch"
-                    maxlength="50"
                   />
                 </div>
               </div>
@@ -156,7 +155,6 @@
                     v-model.trim="cooperationData.address.city"
                     :class="{ 'p-invalid': v$.cooperationData.address.city.$error }"
                     @blur="v$.cooperationData.address.city.$touch"
-                    maxlength="50"
                   />
                 </div>
               </div>
@@ -172,7 +170,6 @@
                     v-model.trim="cooperationData.address.district"
                     :class="{ 'p-invalid': v$.cooperationData.address.district.$error }"
                     @blur="v$.cooperationData.address.district.$touch"
-                    maxlength="50"
                   />
                 </div>
               </div>
@@ -188,7 +185,6 @@
                     v-model.trim="cooperationData.address.street"
                     :class="{ 'p-invalid': v$.cooperationData.address.street.$error }"
                     @blur="v$.cooperationData.address.street.$touch"
-                    maxlength="50"
                   />
                 </div>
               </div>
@@ -204,7 +200,6 @@
                     v-model.trim="cooperationData.address.houseNumber"
                     :class="{ 'p-invalid': v$.cooperationData.address.houseNumber.$error }"
                     @blur="v$.cooperationData.address.houseNumber.$touch"
-                    maxlength="10"
                   />
                 </div>
               </div>
@@ -220,7 +215,6 @@
                     v-model.trim="cooperationData.address.houseBlock"
                     :class="{ 'p-invalid': v$.cooperationData.address.houseBlock.$error }"
                     @blur="v$.cooperationData.address.houseBlock.$touch"
-                    maxlength="10"
                   />
                 </div>
               </div>
@@ -236,7 +230,6 @@
                     v-model.trim="cooperationData.address.zipCode"
                     :class="{ 'p-invalid': v$.cooperationData.address.zipCode.$error }"
                     @blur="v$.cooperationData.address.zipCode.$touch"
-                    maxlength="5"
                   />
                 </div>
               </div>
@@ -505,7 +498,12 @@ import {
   phoneNumberValidator,
   houseNumAndHouseBlockValidator,
   zipCodeValidator,
-  mainHouseInfoValidator,
+  zeroValidator,
+  regionCityDistrictMaxLength,
+  streetMaxLength,
+  houseBlockAndNumberMaxLength,
+  quantityAndAreaValidator,
+  houseAreaValidator,
 } from '@/utils/validators';
 
 export default defineComponent({
@@ -591,26 +589,26 @@ export default defineComponent({
           emailMaxLength,
         },
         address: {
-          region: { requiredValidator, ukrLangTitleValidator },
-          city: { requiredValidator, ukrLangTitleValidator },
-          district: { requiredValidator, ukrLangTitleValidator },
-          street: { requiredValidator, ukrLangTitleValidator },
-          houseBlock: { requiredValidator, houseNumAndHouseBlockValidator },
-          houseNumber: { requiredValidator, houseNumAndHouseBlockValidator },
+          region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
+          city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
+          district: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
+          street: { requiredValidator, ukrLangTitleValidator, streetMaxLength },
+          houseBlock: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
+          houseNumber: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
           zipCode: { requiredValidator, zipCodeValidator },
         },
       },
       house: {
-        quantity_flat: { requiredValidator, mainHouseInfoValidator },
-        house_area: { requiredValidator, mainHouseInfoValidator },
-        adjoining_area: { requiredValidator, mainHouseInfoValidator },
+        quantity_flat: { requiredValidator, zeroValidator, quantityAndAreaValidator },
+        house_area: { requiredValidator, zeroValidator, houseAreaValidator },
+        adjoining_area: { requiredValidator, zeroValidator, quantityAndAreaValidator },
         address: {
-          region: { requiredValidator, ukrLangTitleValidator },
-          city: { requiredValidator, ukrLangTitleValidator },
-          district: { requiredValidator, ukrLangTitleValidator },
-          street: { requiredValidator, ukrLangTitleValidator },
-          house_block: { requiredValidator, houseNumAndHouseBlockValidator },
-          house_number: { requiredValidator, houseNumAndHouseBlockValidator },
+          region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
+          city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
+          district: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
+          street: { requiredValidator, ukrLangTitleValidator, streetMaxLength },
+          house_block: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
+          house_number: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
           zip_code: { requiredValidator, zipCodeValidator },
         },
       },
