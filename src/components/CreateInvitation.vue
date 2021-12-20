@@ -8,7 +8,7 @@
   <Dialog
     header="Створити запрошення"
     v-model:visible="displayModal"
-    :style="{ width: '51vw' }"
+    :style="{ width: '52vw' }"
     :modal="true"
     :closable="false"
     :dismissableMask="true"
@@ -83,7 +83,7 @@
           @blur="v$.selectedData.selectedApartment.$touch"
         />
       </p>
-      <small v-if="v$.selectedData.selectedApartment.$error" class="p-error">{{
+      <small v-if="v$.selectedData.selectedApartment.$error" class="p-error apartment">{{
         v$.selectedData.selectedApartment.$errors[0].$message
       }}</small>
     </form>
@@ -128,7 +128,6 @@ import {
 } from '@/utils/validators';
 import { InvitationsActionsEnum } from '@/store/invitations/types';
 import { HousesActionsEnum } from '@/store/houses/types';
-import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 
 export default defineComponent({
   name: 'CreateInvitationButton',
@@ -140,7 +139,6 @@ export default defineComponent({
   },
   data() {
     return {
-      cooperationId: 0,
       invitationData: {
         invitationType: ['Ми запрошуємо власника квартири', 'Ми запрошуємо власника ОСББ'],
         email: '',
@@ -153,8 +151,6 @@ export default defineComponent({
         selectedApartment: '',
       },
       displayCreateInvitModal: false,
-
-      isSubmitDisabled: true,
 
       houseAddress: '',
       apartmentNumber: '',
@@ -176,14 +172,9 @@ export default defineComponent({
     };
   },
   async mounted(): Promise<void> {
-    this.initData();
     await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationId);
   },
   methods: {
-    initData(): void {
-      let cooperationData: CooperationModel | null = this.$store.state.cooperationStore.selectedCooperation;
-      this.cooperationId = cooperationData?.id ?? 1;
-    },
     changeInvitationModal(condition: boolean): void {
       if (condition) {
         this.displayCreateInvitModal = condition;
@@ -232,6 +223,7 @@ export default defineComponent({
     ...mapGetters({
       listOfHouses: `${StoreModuleEnum.housesStore}/getListOfHouses`,
       listOfApartments: `${StoreModuleEnum.apartmentsStore}/getListOfApartments`,
+      cooperationId: `${StoreModuleEnum.cooperationStore}/getSelectedCooperationId`,
     }),
   },
 });
@@ -249,5 +241,10 @@ export default defineComponent({
 }
 .p-error {
   @extend %error-message;
+}
+.apartment {
+  position: absolute;
+  margin-left: 30rem;
+  margin-top: -3rem;
 }
 </style>

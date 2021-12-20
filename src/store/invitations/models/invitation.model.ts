@@ -1,9 +1,9 @@
 import { InvitationDTOModel } from './invitationDTO.model';
 
 export class InvitationModel {
-  public id?: number;
+  public id: number;
   public email: string;
-  public status?: string;
+  public status: string;
   public address: string;
   public invitationType: string;
 

@@ -16,14 +16,14 @@ export const actions: ActionTree<InvitationsStateInterface, RootStateInterface> 
       const payloadToSend = new InvitationDTOModel(payload);
       //   const { data } = await HTTP.post(`/invitations/`, payloadToSend);
       // Mock data
-      const receiveData: InvitationDTOModel = {
+      const receivedData: InvitationDTOModel = {
         id: 1300,
         email: payload.email,
         status: 'запрошення створено',
         address: payload.address,
         invitation_type: payload.invitationType,
       };
-      const data = new InvitationModel(receiveData);
+      const data = new InvitationModel(receivedData);
       commit(InvitationsMutationsEnum.CREATE_INVITATION, data);
     } catch (e: any) {
       console.log(e.response);
