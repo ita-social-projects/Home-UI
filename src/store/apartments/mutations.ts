@@ -20,4 +20,7 @@ export const mutations: MutationTree<ApartmentsStateInterface> & Mutations = {
       }
     });
   },
+  [ApartmentsMutationsEnum.ADD_APARTMENT]: (state, payload) => {
+    state.apartments?.push(payload);
+  },
 };

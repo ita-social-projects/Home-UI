@@ -33,7 +33,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   },
   [HousesActionsEnum.GET_HOUSE_BY_ID]: async ({ commit }, payload) => {
     try {
-      await HTTP.get(`/cooperations/${payload.cooperationId}/houses/${payload.houseID}`).then((r) => {
+      await HTTP.get(`/cooperations/${payload.cooperationId}/houses/${payload.houseId}`).then((r) => {
         commit(HousesMutationsEnum.GET_HOUSE_BY_ID, r.data);
       });
     } catch (err: any) {

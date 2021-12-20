@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex';
 import { ApartmentModel } from '@/store/apartments/models/apartment.model';
+import { AddApartmentModel } from '@/store/apartments/models/add-apartment.model';
 import { ApartmentDTOModel } from '@/store/apartments/models/apartmentDTO.model';
-
 import { RootStateInterface } from '@/store/types';
 import {
   ApartmentsStateInterface,
@@ -40,6 +40,16 @@ export const actions: ActionTree<ApartmentsStateInterface, RootStateInterface> &
       const { data } = await HTTP.put(url, payload.payloadData);
       const apartment: ApartmentModel = new ApartmentModel(data);
       commit(ApartmentsMutationsEnum.EDIT_APARTMENT, apartment);
+    } catch (e: any) {
+      console.log(e.response);
+    }
+  },
+  [ApartmentsActionsEnum.ADD_APARTMENT]: async ({ commit }, payload) => {
+    try {
+      await HTTP.post(`/houses/${payload.id}/apartments`, payload).then((r) => {
+        const data = new AddApartmentModel(r.data);
+        commit(ApartmentsMutationsEnum.ADD_APARTMENT, data);
+      });
     } catch (e: any) {
       console.log(e.response);
     }
