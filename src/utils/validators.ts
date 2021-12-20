@@ -5,12 +5,12 @@ const emailLastChars = helpers.regex(/^[a-z\d].*[a-z]$/i);
 const password = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
 const validKey = helpers.regex(/^[a-zA-Z0-9]{36}$/);
 const validName = helpers.regex(/^[a-zA-Z0-9!#$%&'*+\-/=?^_`{|(),:;<>@[\]]*$/);
-const ukranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]{0,}$/);
+const ukranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]*$/);
 const ukrLangMessage = 'В назві мають бути українські літери';
 
 const edrpou = helpers.regex(/^\d{8}$/);
 const validIban = helpers.regex(/^UA\d{27}$/);
-const validHouseNumAndHouseBlock = helpers.regex(/^[/0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ-]{0,}$/);
+const validHouseNumAndHouseBlock = helpers.regex(/^[/0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ-]*$/);
 
 export const emailValidator = helpers.withMessage(
   'Електронна пошта містить латинські букви, цифри, та спеціальні символи',
@@ -40,13 +40,13 @@ export const nameLenghtValidator = helpers.withMessage('Максимальна �
 export const ukrLangTitleValidator = helpers.withMessage(`${ukrLangMessage}`, ukranianLan);
 export const ibanValidator = helpers.withMessage('Складається з літр UA та 27 цифр', validIban);
 
-const validQuantityAndArea = helpers.regex(/^(?<![-.])\b[0-9]+\b(?!\.[0-9])/);
+const validQuantityAndArea = helpers.regex(/^(?<![-.])\b[\d]+\b(?!\.[\d])/);
 export const quantityAndAreaValidator = helpers.withMessage(
   'В назві мають бути цілі цифри від 0 до 9',
   validQuantityAndArea
 );
 
-const validHouseArea = helpers.regex(/^[-+]?[0-9]*[.,]?[0-9]+(?:[eE][-+]?[0-9]+)?$/);
+const validHouseArea = helpers.regex(/^[-+]?[\d]*[.,]?[\d]+(?:[eE][-+]?[\d]+)?$/);
 export const houseAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validHouseArea);
 
 export const houseNumAndHouseBlockValidator = helpers.withMessage(
