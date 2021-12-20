@@ -70,7 +70,7 @@ export const phoneNumberValidator = helpers.withMessage(
 const validApartmentNumber = helpers.regex(/^(?!(0))\d{1,4}(\-[a-zа-я])?$/);
 export const apartmentNumberValidator = helpers.withMessage('1-6 цифр, літера через дефіс', validApartmentNumber);
 
-const validApartmentArea = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|1000$/);
+const validApartmentArea = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|(1000$)/);
 export const apartmentAreaValidator = helpers.withMessage('числа від 10 до 1000 включно', validApartmentArea);
 
 const validApartmentDecimal = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|(1000$)/);

@@ -362,9 +362,7 @@ export default defineComponent({
       const numerator = Number(splitOwnershipPart);
       const denominator = Math.pow(10, nullsQvt);
       const gcd = findGcd(numerator, denominator);
-
-      const ownerFraction = `${numerator / gcd}/${denominator / gcd}`;
-      return ownerFraction;
+      return `${numerator / gcd}/${denominator / gcd}`;
     };
 
     const findGcd = (a: number, b: number): number => {
@@ -389,8 +387,7 @@ export default defineComponent({
       const numerator = Number(`${period}`);
       const denominator = Number('9'.repeat(period.length));
       const gcd = findGcd(numerator, denominator);
-      const ownerFraction = `${numerator / gcd}/${denominator / gcd}`;
-      return ownerFraction;
+      return `${numerator / gcd}/${denominator / gcd}`;
     };
 
     const initDataTable = () => {
@@ -465,8 +462,8 @@ export default defineComponent({
         return '0';
       }
       const splitFraction = fraction.split('/');
-      const decimal = String((+splitFraction[0] / +splitFraction[1]).toFixed(4));
-      return decimal;
+      const decimal = (+splitFraction[0] / +splitFraction[1]).toFixed(4);
+      return String(decimal);
     };
 
     const openEditApartmentDialog = () => {
@@ -494,15 +491,14 @@ export default defineComponent({
     };
 
     const sumOwnershipPart = computed(() => {
-      const sum = ownershipsData.value.reduce((acc: number, cur: any) => {
+      return ownershipsData.value.reduce((acc: number, cur: any) => {
         acc += Number(cur.ownershipPart);
         return acc;
       }, 0);
-      return sum;
     });
 
-    const checkSum = (id: number) =>{
-      const prevValue = ownershipsData.value.find((el: any) => el.id === id);
+    const checkSum = (ownerId: number) =>{
+      const prevValue = ownershipsData.value.find((el: any) => el.id === ownerId);
       const totalSum =
         Number(sumOwnershipPart.value) +
         Number(convertFractionToDecimal(editOwnershipData.ownershipPart)) -
