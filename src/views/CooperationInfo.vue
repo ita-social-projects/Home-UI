@@ -263,18 +263,19 @@
     <div class="container container-houses">
       <DataTable
         ref="dt"
-        :value="isLoaded ? houses : []"
+        :value="isLoaded ? housesInfo : []"
         selectionMode="single"
         v-model:selection="selectedHouse"
         dataKey="houses.id"
         @rowSelect="onRowSelect"
+        responsiveLayout="scroll"
       >
         <template #header>
           <h4>Будинки в цьому ОСББ</h4>
         </template>
-        <Column field="quantity_flat" style="min-width: 20rem" header="Кількість квартир в будинку" :sortable="true" />
-        <Column field="house_area" style="min-width: 20rem" header="Площа будинку" :sortable="true" />
-        <Column field="adjoining_area" style="min-width: 20rem" header="Прибудинкової теріторії" :sortable="true" />
+        <Column field="quantity_flat" style="min-width: 15rem" header="Кількість квартир в будинку" :sortable="true" />
+        <Column field="house_area" style="min-width: 15rem" header="Площа будинку" :sortable="true" />
+        <Column field="adjoining_area" style="min-width: 15rem" header="Прибудинкової теріторії" :sortable="true" />
         <Column field="address" style="min-width: 20rem" header="Адреса" :sortable="true">
           <template #body="slotProps">
             {{ slotProps.data.address.region }}, {{ slotProps.data.address.city }},
@@ -295,175 +296,172 @@
               aria-controls="overlay_menu"
               ref="button"
             />
-            <Menu :model="houseActions(house)" id="overlay_menu" ref="menu" :popup="true" />
+            <Menu :model="houseActions()" id="overlay_menu" ref="menu" :popup="true" />
 
             <ConfirmPopup></ConfirmPopup>
-
-            <Dialog
-              header="Редагувати будинок"
-              v-model:visible="displayHouseModal"
-              :style="{ width: '50vw' }"
-              :modal="true"
-              :closable="false"
-              :dismissableMask="true"
-            >
-              <form>
-                <p>
-                  <label class="dialog-item" for="coopName">Кількість квартир в будинку : </label>
-                  <InputText
-                    id="quantityFlat"
-                    placeholder="Кількість квартир в будинку"
-                    v-model.trim="house.quantity_flat"
-                    :class="{ 'p-invalid': v$.house.quantity_flat.$error }"
-                    @blur="v$.house.quantity_flat.$touch"
-                  />
-                  <small v-if="v$.house.quantity_flat.$error" class="p-error">{{
-                    v$.house.quantity_flat.$errors[0].$message
-                  }}</small>
-                </p>
-                <p>
-                  <label class="dialog-item" for="coopAddress">Площа будинку : </label>
-                  <InputText
-                    id="houseArea"
-                    placeholder="Площа будинку"
-                    v-model="house.house_area"
-                    :class="{ 'p-invalid': v$.house.house_area.$error }"
-                    @blur="v$.house.house_area.$touch"
-                  />
-                  <small v-if="v$.house.house_area.$error" class="p-error">{{
-                    v$.house.house_area.$errors[0].$message
-                  }}</small>
-                </p>
-                <p>
-                  <label class="dialog-item" for="iban">Прибудинкової теріторії : </label>
-                  <InputText
-                    id="adjoiningArea"
-                    v-model="house.adjoining_area"
-                    :class="{ 'p-invalid': v$.house.adjoining_area.$error }"
-                    @blur="v$.house.adjoining_area.$touch"
-                  />
-                  <small v-if="v$.house.adjoining_area.$error" class="p-error">{{
-                    v$.house.adjoining_area.$errors[0].$message
-                  }}</small>
-                </p>
-
-                <label class="dialog-item" for="address-details-id">Адреса : </label>
-                <div class="address-details" id="address-details-id">
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Регіон : </label>
-                    <InputText
-                      id="address-region"
-                      placeholder="Регіон"
-                      v-model="house.address.region"
-                      :class="{ 'p-invalid': v$.house.address.region.$error }"
-                      @blur="v$.house.address.region.$touch"
-                    />
-                    <small v-if="v$.house.address.region.$error" class="p-error">{{
-                      v$.house.address.region.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Місто : </label>
-                    <InputText
-                      id="address-city"
-                      placeholder="Регіон"
-                      v-model="house.address.city"
-                      :class="{ 'p-invalid': v$.house.address.city.$error }"
-                      @blur="v$.house.address.city.$touch"
-                    />
-                    <small v-if="v$.house.address.city.$error" class="p-error">{{
-                      v$.house.address.city.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Район : </label>
-                    <InputText
-                      id="address-region"
-                      placeholder="Регіон"
-                      v-model="house.address.district"
-                      :class="{ 'p-invalid': v$.house.address.district.$error }"
-                      @blur="v$.house.address.district.$touch"
-                    />
-                    <small v-if="v$.house.address.district.$error" class="p-error">{{
-                      v$.house.address.district.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Вулиця : </label>
-                    <InputText
-                      id="address-street"
-                      placeholder="Регіон"
-                      v-model="house.address.street"
-                      :class="{ 'p-invalid': v$.house.address.street.$error }"
-                      @blur="v$.house.address.street.$touch"
-                    />
-                    <small v-if="v$.house.address.street.$error" class="p-error">{{
-                      v$.house.address.street.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Блок : </label>
-                    <InputText
-                      id="address-block"
-                      placeholder="Регіон"
-                      v-model="house.address.house_block"
-                      :class="{ 'p-invalid': v$.house.address.house_block.$error }"
-                      @blur="v$.house.address.house_block.$touch"
-                    />
-                    <small v-if="v$.house.address.house_block.$error" class="p-error">{{
-                      v$.house.address.house_block.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Номер будинку : </label>
-                    <InputText
-                      id="address-housenumber"
-                      placeholder="Регіон"
-                      v-model="house.address.house_number"
-                      :class="{ 'p-invalid': v$.house.address.house_number.$error }"
-                      @blur="v$.house.address.house_number.$touch"
-                    />
-                    <small v-if="v$.house.address.house_number.$error" class="p-error">{{
-                      v$.house.address.house_number.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Код : </label>
-                    <InputText
-                      id="address-zipcode"
-                      placeholder="Регіон"
-                      v-model="house.address.zip_code"
-                      :class="{ 'p-invalid': v$.house.address.zip_code.$error }"
-                      @blur="v$.house.address.zip_code.$touch"
-                    />
-                    <small v-if="v$.house.address.zip_code.$error" class="p-error">{{
-                      v$.house.address.zip_code.$errors[0].$message
-                    }}</small>
-                  </p>
-                </div>
-              </form>
-
-              <template #footer>
-                <Button
-                  :disabled="v$.house.$invalid"
-                  label="Зберегти зміни"
-                  icon="pi pi-check"
-                  @click="editHouseInfo(house)"
-                  autofocus
-                  class="p-button-info"
-                />
-                <Button
-                  label="Скасувати"
-                  icon="pi pi-times"
-                  @click="closeEditHouseModal"
-                  class="p-button-outlined p-button-info"
-                />
-              </template>
-            </Dialog>
           </template>
         </Column>
       </DataTable>
     </div>
+    <Dialog
+      header="Редагувати будинок"
+      v-model:visible="displayHouseModal"
+      :style="{ width: '50vw' }"
+      :modal="true"
+      :closable="false"
+      :dismissableMask="true"
+    >
+      <form>
+        <p>
+          <label class="dialog-item" for="coopName">Кількість квартир в будинку : </label>
+          <InputText
+            id="quantityFlat"
+            placeholder="Кількість квартир в будинку"
+            v-model.trim="house.quantity_flat"
+            :class="{ 'p-invalid': v$.house.quantity_flat.$error }"
+            @blur="v$.house.quantity_flat.$touch"
+          />
+          <small v-if="v$.house.quantity_flat.$error" class="p-error">{{
+            v$.house.quantity_flat.$errors[0].$message
+          }}</small>
+        </p>
+        <p>
+          <label class="dialog-item" for="coopAddress">Площа будинку : </label>
+          <InputText
+            id="houseArea"
+            placeholder="Площа будинку"
+            v-model="house.house_area"
+            :class="{ 'p-invalid': v$.house.house_area.$error }"
+            @blur="v$.house.house_area.$touch"
+          />
+          <small v-if="v$.house.house_area.$error" class="p-error">{{ v$.house.house_area.$errors[0].$message }}</small>
+        </p>
+        <p>
+          <label class="dialog-item" for="iban">Прибудинкової теріторії : </label>
+          <InputText
+            id="adjoiningArea"
+            v-model="house.adjoining_area"
+            :class="{ 'p-invalid': v$.house.adjoining_area.$error }"
+            @blur="v$.house.adjoining_area.$touch"
+          />
+          <small v-if="v$.house.adjoining_area.$error" class="p-error">{{
+            v$.house.adjoining_area.$errors[0].$message
+          }}</small>
+        </p>
+
+        <label class="dialog-item" for="address-details-id">Адреса : </label>
+        <div class="address-details" id="address-details-id">
+          <p>
+            <label class="dialog-item dialog-item-address" for="coopEmail">Регіон : </label>
+            <InputText
+              id="address-region"
+              placeholder="Регіон"
+              v-model="house.address.region"
+              :class="{ 'p-invalid': v$.house.address.region.$error }"
+              @blur="v$.house.address.region.$touch"
+            />
+            <small v-if="v$.house.address.region.$error" class="p-error">{{
+              v$.house.address.region.$errors[0].$message
+            }}</small>
+          </p>
+          <p>
+            <label class="dialog-item dialog-item-address" for="coopEmail">Місто : </label>
+            <InputText
+              id="address-city"
+              placeholder="Регіон"
+              v-model="house.address.city"
+              :class="{ 'p-invalid': v$.house.address.city.$error }"
+              @blur="v$.house.address.city.$touch"
+            />
+            <small v-if="v$.house.address.city.$error" class="p-error">{{
+              v$.house.address.city.$errors[0].$message
+            }}</small>
+          </p>
+          <p>
+            <label class="dialog-item dialog-item-address" for="coopEmail">Район : </label>
+            <InputText
+              id="address-region"
+              placeholder="Регіон"
+              v-model="house.address.district"
+              :class="{ 'p-invalid': v$.house.address.district.$error }"
+              @blur="v$.house.address.district.$touch"
+            />
+            <small v-if="v$.house.address.district.$error" class="p-error">{{
+              v$.house.address.district.$errors[0].$message
+            }}</small>
+          </p>
+          <p>
+            <label class="dialog-item dialog-item-address" for="coopEmail">Вулиця : </label>
+            <InputText
+              id="address-street"
+              placeholder="Регіон"
+              v-model="house.address.street"
+              :class="{ 'p-invalid': v$.house.address.street.$error }"
+              @blur="v$.house.address.street.$touch"
+            />
+            <small v-if="v$.house.address.street.$error" class="p-error">{{
+              v$.house.address.street.$errors[0].$message
+            }}</small>
+          </p>
+          <p>
+            <label class="dialog-item dialog-item-address" for="coopEmail">Блок : </label>
+            <InputText
+              id="address-block"
+              placeholder="Регіон"
+              v-model="house.address.house_block"
+              :class="{ 'p-invalid': v$.house.address.house_block.$error }"
+              @blur="v$.house.address.house_block.$touch"
+            />
+            <small v-if="v$.house.address.house_block.$error" class="p-error">{{
+              v$.house.address.house_block.$errors[0].$message
+            }}</small>
+          </p>
+          <p>
+            <label class="dialog-item dialog-item-address" for="coopEmail">Номер будинку : </label>
+            <InputText
+              id="address-housenumber"
+              placeholder="Регіон"
+              v-model="house.address.house_number"
+              :class="{ 'p-invalid': v$.house.address.house_number.$error }"
+              @blur="v$.house.address.house_number.$touch"
+            />
+            <small v-if="v$.house.address.house_number.$error" class="p-error">{{
+              v$.house.address.house_number.$errors[0].$message
+            }}</small>
+          </p>
+          <p>
+            <label class="dialog-item dialog-item-address" for="coopEmail">Код : </label>
+            <InputText
+              id="address-zipcode"
+              placeholder="Регіон"
+              v-model="house.address.zip_code"
+              :class="{ 'p-invalid': v$.house.address.zip_code.$error }"
+              @blur="v$.house.address.zip_code.$touch"
+            />
+            <small v-if="v$.house.address.zip_code.$error" class="p-error">{{
+              v$.house.address.zip_code.$errors[0].$message
+            }}</small>
+          </p>
+        </div>
+      </form>
+
+      <template #footer>
+        <Button
+          :disabled="v$.house.$invalid"
+          label="Зберегти зміни"
+          icon="pi pi-check"
+          @click="editHouseInfo"
+          autofocus
+          class="p-button-info"
+        />
+        <Button
+          label="Скасувати"
+          icon="pi pi-times"
+          @click="closeEditHouseModal"
+          class="p-button-outlined p-button-info"
+        />
+      </template>
+    </Dialog>
   </div>
 </template>
 
@@ -521,7 +519,7 @@ export default defineComponent({
   },
   data() {
     return {
-      houseActions: (house: HouseInterface) => {
+      houseActions: () => {
         return [
           {
             label: 'Видалити',
@@ -536,7 +534,6 @@ export default defineComponent({
             icon: 'pi pi-user-edit',
             command: () => {
               this.openEditHouseModal();
-              this.showSuccessEdit(house);
             },
           },
         ];
@@ -554,6 +551,7 @@ export default defineComponent({
       },
       isLoaded: false,
       house: {
+        id: 0,
         quantity_flat: 0,
         house_area: 0,
         adjoining_area: 0,
@@ -664,15 +662,11 @@ export default defineComponent({
           };
           await this.$store.dispatch('housesStore/DELETE_HOUSE', payload);
           this.showSuccessDelete();
-          this.houses = Object.assign({}, this.housesInfo);
         },
         reject: () => {
           console.log('rejected delete');
         },
       });
-    },
-    setHouse() {
-      this.houses = this.$store.state.housesStore.houses as HouseInterface[];
     },
     openCooperationModal() {
       this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
@@ -705,29 +699,41 @@ export default defineComponent({
       this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
       this.closeCooperationModal();
     },
-    async editHouseInfo(house: HouseInterface) {
+    async editHouseInfo() {
       const payload = {
         cooperationId: this.cooperationData.id,
-        id: house.id,
-        quantity_flat: house.quantity_flat,
-        house_area: house.house_area,
-        adjoining_area: house.adjoining_area,
+        id: this.house.id,
+        quantity_flat: this.house.quantity_flat,
+        house_area: this.house.house_area,
+        adjoining_area: this.house.adjoining_area,
 
         address: {
-          region: house.address.region,
-          city: house.address.city,
-          district: house.address.district,
-          street: house.address.street,
-          house_block: house.address.house_block,
-          house_number: house.address.house_number,
-          zip_code: house.address.zip_code,
+          region: this.house.address.region,
+          city: this.house.address.city,
+          district: this.house.address.district,
+          street: this.house.address.street,
+          house_block: this.house.address.house_block,
+          house_number: this.house.address.house_number,
+          zip_code: this.house.address.zip_code,
         },
       };
       this.$store.dispatch(`${StoreModuleEnum.housesStore}/EDIT_HOUSE`, payload);
       this.closeEditHouseModal();
+      this.showSuccessEdit(this.house.id);
     },
     toggle(event: any, slotProps: any) {
-      this.house = slotProps;
+      // this.house = {...slotProps};
+      this.house.id = slotProps.id;
+      this.house.quantity_flat = slotProps.quantity_flat;
+      this.house.house_area = slotProps.house_area;
+      this.house.adjoining_area = slotProps.adjoining_area;
+      this.house.address.region = slotProps.address.region;
+      this.house.address.city = slotProps.address.city;
+      this.house.address.district = slotProps.address.district;
+      this.house.address.street = slotProps.address.street;
+      this.house.address.house_block = slotProps.address.house_block;
+      this.house.address.house_number = slotProps.address.house_number;
+      this.house.address.zip_code = slotProps.address.zip_code;
       (this.$refs.menu as any).toggle(event);
     },
 
@@ -739,11 +745,11 @@ export default defineComponent({
         life: 3000,
       });
     },
-    showSuccessEdit(house: HouseInterface) {
+    showSuccessEdit(id: number) {
       this.$toast.add({
         severity: 'success',
         summary: 'Успішно',
-        detail: `Дані про будинок з ID ${house.id} змінено`,
+        detail: `Дані про будинок з ID ${id} змінено`,
         life: 3000,
       });
     },
