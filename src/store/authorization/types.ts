@@ -1,10 +1,11 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
+import { UserModel } from './models/user.model';
 
 export enum AuthMutationEnum {
   SET_USER = 'SET_USER',
   SET_FORM = 'SET_FORM',
-  UPDATE_CONTACT='UPDATE_CONTACT',
+  UPDATE_CONTACT = 'UPDATE_CONTACT',
   ADD_CONTACT = 'ADD_CONTACT',
 }
 
@@ -19,13 +20,13 @@ export enum AuthActionEnum {
 
 export enum ContactTypeEnum {
   EMAIL = 'EMAIL',
-  PHONE = 'PHONE'
+  PHONE = 'PHONE',
 }
 
 export interface UserInterface {
-  first_name: string;
-  middle_name: string;
-  last_name: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
   email: string;
   id: number;
   contacts: ContactInterface[];
@@ -34,9 +35,9 @@ export interface UserInterface {
 }
 
 export interface UpdateUserInterface {
-  first_name: string;
-  middle_name: string;
-  last_name: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
   email: string;
   password: string;
   contacts: ContactInterface[];
@@ -47,15 +48,18 @@ export interface ContactInterface {
   main: boolean;
   email?: string;
   phone?: number;
-  id?: number
+  id?: number;
 }
 
 export interface AuthorizationStateInterface {
-  user: UserInterface | null;
+  user: UserModel | null;
 }
 
 export type Mutations<S = AuthorizationStateInterface> = {
-  [AuthMutationEnum.SET_USER](state: S, payload: UserInterface | null): void;
+  [AuthMutationEnum.SET_USER](state: S, payload: UserModel | null): void;
+  [AuthMutationEnum.SET_FORM](state: S, payload: any): void;
+  [AuthMutationEnum.ADD_CONTACT](state: S, payload: ContactInterface): void;
+  [AuthMutationEnum.UPDATE_CONTACT](state: S, payload: UserModel | null): void;
 };
 
 export interface Actions {
@@ -67,7 +71,7 @@ export interface Actions {
 
 export type Getters<S = AuthorizationStateInterface> = {
   loggedIn(state: S): boolean;
-  userData(state: S): UserInterface | null;
+  userData(state: S): UserModel | null;
 };
 
 export type AugmentedActionContext = {

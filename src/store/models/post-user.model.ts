@@ -7,6 +7,7 @@ export class PostUserModel {
   public email: string;
   public password: string;
   public contacts: ContactInterface[];
+
   constructor(userData: UserDataInterface) {
     this.registration_token = userData.registrationToken;
     this.first_name = userData.firstName;
