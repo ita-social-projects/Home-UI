@@ -35,7 +35,7 @@
         <Button
           label="Редагувати"
           icon="pi pi-pencil"
-          @click="openCooperationModal"
+          @click="manageCooperationModal"
           class="p-button-outlined p-button-info"
         />
         <Dialog
@@ -475,7 +475,7 @@
         <Button
           label="Скасувати"
           icon="pi pi-times"
-          @click="closeEditHouseModal"
+          @click="manageHouseModal"
           class="p-button-outlined p-button-info"
         />
       </template>
@@ -551,7 +551,7 @@ export default defineComponent({
             label: 'Редагувати',
             icon: 'pi pi-user-edit',
             command: () => {
-              this.openEditHouseModal();
+              this.manageHouseModal();
             },
           },
         ];
@@ -582,6 +582,8 @@ export default defineComponent({
           zip_code: '',
         } as AddressInterface,
       } as HouseInterface,
+      displayModalForHouse: false,
+      displayModalForCooperation: false,
       v$: useVuelidate(),
       displayAddHouseModal: false,
     };
@@ -685,21 +687,24 @@ export default defineComponent({
         },
       });
     },
-    openCooperationModal() {
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
+
+    manageCooperationModal() {
+      if (this.displayModalForCooperation) {
+        this.displayModalForCooperation = false;
+      } else {
+        this.displayModalForCooperation = true;
+      }
     },
-    closeCooperationModal() {
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
-    },
-    openEditHouseModal() {
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, true);
-    },
-    closeEditHouseModal() {
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, false);
+    manageHouseModal() {
+      if (this.displayModalForHouse) {
+        this.displayModalForHouse = false;
+      } else {
+        this.displayModalForHouse = true;
+      }
     },
     cancelCooperationEdit() {
       this.initData();
-      this.closeCooperationModal();
+      this.manageCooperationModal();
     },
 
     resetAddHouseDataFields(houseData: any) {
@@ -724,7 +729,7 @@ export default defineComponent({
         ],
       };
       this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
-      this.closeCooperationModal();
+      this.manageCooperationModal();
     },
     async editHouseInfo() {
       const payload = {
@@ -745,7 +750,7 @@ export default defineComponent({
         },
       };
       this.$store.dispatch(`${StoreModuleEnum.housesStore}/EDIT_HOUSE`, payload);
-      this.closeEditHouseModal();
+      this.manageHouseModal();
       this.showSuccessEdit(this.house.id);
     },
     toggle(event: any, slotProps: any) {
@@ -794,10 +799,10 @@ export default defineComponent({
       ${this.cooperationInfo.address.zipCode} `;
     },
     displayCooperationModal(): boolean {
-      return this.$store.state.cooperationStore.displayModal;
+      return this.displayModalForCooperation;
     },
     displayHouseModal(): boolean {
-      return this.$store.state.housesStore.displayModal;
+      return this.displayModalForHouse;
     },
     displayAddHouseModal(): boolean {
       return this.displayAddHouseModal;
