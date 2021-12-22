@@ -153,7 +153,6 @@
 import { toRefs, ref, computed, defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ApartmentModel } from '@/store/apartments/models/apartment.model';
-import { HouseInterface } from '@/store/houses/types';
 import { useStore } from 'vuex';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
