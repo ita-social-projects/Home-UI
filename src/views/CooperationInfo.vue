@@ -496,7 +496,6 @@ import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddHouseForm from '@/components/AddHouseForm.vue';
 import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
 import { StoreModuleEnum } from '@/store/types';
-import { AddressInterface, HouseInterface } from '@/store/houses/types';
 
 import useVuelidate from '@vuelidate/core';
 import {
@@ -706,7 +705,6 @@ export default defineComponent({
       this.initData();
       this.manageCooperationModal();
     },
-
     resetAddHouseDataFields(houseData: any) {
       for (let field in houseData) {
         if (typeof houseData[field] === 'object') {
@@ -762,7 +760,6 @@ export default defineComponent({
       this.house.address = { ...address };
       (this.$refs.menu as any).toggle(event);
     },
-
     showSuccessDelete() {
       this.$toast.add({
         severity: 'success',
@@ -779,7 +776,6 @@ export default defineComponent({
         life: 3000,
       });
     },
-
     choosenHouse() {
       this.$router.push({
         name: 'manage-apartment',
@@ -787,7 +783,6 @@ export default defineComponent({
       });
     },
   },
-
   computed: {
     fillAddress(): string {
       return `${this.cooperationInfo.address.street},
