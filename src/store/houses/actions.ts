@@ -42,11 +42,8 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   },
   [HousesActionsEnum.ADD_HOUSE]: async ({ commit }, payload) => {
     try {
-      console.log('payload', payload);
       const payloadToSend: HouseDTOModel = new HouseDTOModel(payload);
-      console.log('payloadToSend', payloadToSend);
       const { data } = await HTTP.post(`/cooperations/${payload.cooperationId}/houses`, payloadToSend);
-      console.log('data', data);
       const house: HouseModel = new HouseModel(data);
 
       commit(HousesMutationsEnum.ADD_HOUSE, house);
