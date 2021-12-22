@@ -12,9 +12,6 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
 
     commit(HousesMutationsEnum.SET_HOUSES, houses);
   },
-  [HousesActionsEnum.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
-    commit(HousesMutationsEnum.SET_MODAL_DISPLAY, payload);
-  },
   [HousesActionsEnum.EDIT_HOUSE]: async ({ commit }, payload) => {
     try {
       const payloadToSend: HouseDTOModel = new HouseDTOModel(payload);

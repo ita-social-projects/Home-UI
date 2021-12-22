@@ -6,9 +6,6 @@ export const mutations: MutationTree<HousesStateInterface> & Mutations = {
   [HousesMutationsEnum.SET_HOUSES]: (state, payload) => {
     state.houses = payload;
   },
-  [HousesMutationsEnum.SET_MODAL_DISPLAY]: (state, payload) => {
-    state.displayModal = payload;
-  },
   [HousesMutationsEnum.EDIT_HOUSE]: (state, payload) => {
     state.houses?.forEach((el: HouseModel) => {
       if (el.id === payload.id) {
