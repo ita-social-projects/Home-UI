@@ -10,17 +10,17 @@
             <div class="detailed-info">
               <div>
                 <span>Номер будинку: </span>
-                <span>{{ houseInfo?.address.house_number }}</span>
+                <span>{{ houseInfo?.address.houseNumber }}</span>
               </div>
               <div>
                 <span>Кількість квартир: </span>
-                <span>{{ houseInfo?.quantity_flat }}</span>
+                <span>{{ houseInfo?.flatQuantity }}</span>
               </div>
               <div>
                 <span>Адреса: </span>
                 <span>
                   місто {{ houseInfo?.address.city }}, вулиця {{ houseInfo?.address.street }}, будинок
-                  {{ houseInfo?.address.house_number }}, {{ houseInfo?.address.house_block }} блок.
+                  {{ houseInfo?.address.houseNumber }}, {{ houseInfo?.address.houseBlock }} блок.
                 </span>
               </div>
             </div>
@@ -153,7 +153,6 @@
 import { toRefs, ref, computed, defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ApartmentModel } from '@/store/apartments/models/apartment.model';
-import { HouseInterface } from '@/store/houses/types';
 import { useStore } from 'vuex';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
@@ -163,6 +162,7 @@ import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddApartmentForm from '@/components/AddApartmentForm.vue';
+import { HouseModel } from '@/shared/models/house.model';
 
 export default defineComponent({
   name: 'ManageApartments',
@@ -270,7 +270,7 @@ export default defineComponent({
       await store.dispatch('housesStore/GET_HOUSE_BY_ID', payload);
     };
 
-    const houseInfo = computed((): HouseInterface => {
+    const houseInfo = computed((): HouseModel => {
       return store.getters['housesStore/getHouseInfo'];
     });
 

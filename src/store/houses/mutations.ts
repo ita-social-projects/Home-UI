@@ -1,16 +1,17 @@
 import { MutationTree } from 'vuex';
 import { HousesStateInterface, HousesMutationsEnum, Mutations, HouseInterface } from '@/store/houses/types';
+import { HouseModel } from '@/shared/models/house.model';
 
 export const mutations: MutationTree<HousesStateInterface> & Mutations = {
   [HousesMutationsEnum.SET_HOUSES]: (state, payload) => {
     state.houses = payload;
   },
   [HousesMutationsEnum.EDIT_HOUSE]: (state, payload) => {
-    state.houses?.forEach((el: HouseInterface) => {
+    state.houses?.forEach((el: HouseModel) => {
       if (el.id === payload.id) {
-        el.quantity_flat = payload.quantity_flat;
-        el.house_area = payload.house_area;
-        el.adjoining_area = payload.adjoining_area;
+        el.flatQuantity = payload.flatQuantity;
+        el.houseArea = payload.houseArea;
+        el.adjoiningArea = payload.adjoiningArea;
         el.address = payload.address;
       }
     });
