@@ -1,48 +1,54 @@
 <template>
   <form @submit.prevent="addNewHouse" id="house_data_form">
     <p>
-      <label class="dialog-item" for="quantity_flat">Кількість квартир в будинку : </label>
+      <label
+        class="dialog-item"
+        for="
+      flatQuantity"
+        >Кількість квартир в будинку :
+      </label>
       <InputText
-        id="quantity_flat"
+        id="
+        flatQuantity"
         placeholder="Кількість квартир в будинку"
-        v-model.trim="houseData.quantity_flat"
+        v-model.trim="houseData.flatQuantity"
         :class="{
-          'p-invalid': v$.houseData.quantity_flat.$error,
+          'p-invalid': v$.houseData.flatQuantity.$error,
         }"
-        @blur="v$.houseData.quantity_flat.$touch"
+        @blur="v$.houseData.flatQuantity.$touch;"
       />
-      <small v-if="v$.houseData.quantity_flat.$error" class="p-error">{{
-        v$.houseData.quantity_flat.$errors[0].$message
+      <small v-if="v$.houseData.flatQuantity.$error" class="p-error">{{
+        v$.houseData.flatQuantity.$errors[0].$message
       }}</small>
     </p>
     <p>
-      <label class="dialog-item" for="house_area">Площа будинку : </label>
+      <label class="dialog-item" for="houseArea">Площа будинку : </label>
       <InputText
-        id="house_area"
+        id="houseArea"
         placeholder="Площа будинку"
-        v-model.trim="houseData.house_area"
+        v-model.trim="houseData.houseArea"
         :class="{
-          'p-invalid': v$.houseData.house_area.$error,
+          'p-invalid': v$.houseData.houseArea.$error,
         }"
-        @blur="v$.houseData.house_area.$touch"
+        @blur="v$.houseData.houseArea.$touch"
       />
-      <small v-if="v$.houseData.house_area.$error" class="p-error">{{
-        v$.houseData.house_area.$errors[0].$message
+      <small v-if="v$.houseData.houseArea.$error" class="p-error">{{
+        v$.houseData.houseArea.$errors[0].$message
       }}</small>
     </p>
     <p>
-      <label class="dialog-item" for="adjoining_area">Прибудинкової теріторії : </label>
+      <label class="dialog-item" for="adjoiningArea">Прибудинкової теріторії : </label>
       <InputText
-        id="adjoining_area"
+        id="adjoiningArea"
         placeholder="Прибудинкової теріторії"
-        v-model.trim="houseData.adjoining_area"
+        v-model.trim="houseData.adjoiningArea"
         :class="{
-          'p-invalid': v$.houseData.adjoining_area.$error,
+          'p-invalid': v$.houseData.adjoiningArea.$error,
         }"
-        @blur="v$.houseData.adjoining_area.$touch"
+        @blur="v$.houseData.adjoiningArea.$touch"
       />
-      <small v-if="v$.houseData.adjoining_area.$error" class="p-error">{{
-        v$.houseData.adjoining_area.$errors[0].$message
+      <small v-if="v$.houseData.adjoiningArea.$error" class="p-error">{{
+        v$.houseData.adjoiningArea.$errors[0].$message
       }}</small>
     </p>
 
@@ -109,48 +115,48 @@
         }}</small>
       </p>
       <p>
-        <label class="dialog-item dialog-item-address" for="house_block">Блок : </label>
+        <label class="dialog-item dialog-item-address" for="houseBlock">Блок : </label>
         <InputText
-          id="house_block"
+          id="houseBlock"
           placeholder="Блок"
-          v-model.trim="houseData.address.house_block"
+          v-model.trim="houseData.address.houseBlock"
           :class="{
-            'p-invalid': v$.houseData.address.house_block.$error,
+            'p-invalid': v$.houseData.address.houseBlock.$error,
           }"
-          @blur="v$.houseData.address.house_block.$touch"
+          @blur="v$.houseData.address.houseBlock.$touch"
         />
-        <small v-if="v$.houseData.address.house_block.$error" class="p-error">{{
-          v$.houseData.address.house_block.$errors[0].$message
+        <small v-if="v$.houseData.address.houseBlock.$error" class="p-error">{{
+          v$.houseData.address.houseBlock.$errors[0].$message
         }}</small>
       </p>
       <p>
-        <label class="dialog-item dialog-item-address" for="house_number">Номер будинку: </label>
+        <label class="dialog-item dialog-item-address" for="houseNumber">Номер будинку: </label>
         <InputText
-          id="house_number"
+          id="houseNumber"
           placeholder="Номер"
-          v-model.trim="houseData.address.house_number"
+          v-model.trim="houseData.address.houseNumber"
           :class="{
-            'p-invalid': v$.houseData.address.house_number.$error,
+            'p-invalid': v$.houseData.address.houseNumber.$error,
           }"
-          @blur="v$.houseData.address.house_number.$touch"
+          @blur="v$.houseData.address.houseNumber.$touch"
         />
-        <small v-if="v$.houseData.address.house_number.$error" class="p-error">{{
-          v$.houseData.address.house_number.$errors[0].$message
+        <small v-if="v$.houseData.address.houseNumber.$error" class="p-error">{{
+          v$.houseData.address.houseNumber.$errors[0].$message
         }}</small>
       </p>
       <p>
-        <label class="dialog-item dialog-item-address" for="zip_code">Код : </label>
+        <label class="dialog-item dialog-item-address" for="zipCode">Код : </label>
         <InputText
-          id="zip_code"
+          id="zipCode"
           placeholder="Код"
-          v-model.trim="houseData.address.zip_code"
+          v-model.trim="houseData.address.zipCode"
           :class="{
-            'p-invalid': v$.houseData.address.zip_code.$error,
+            'p-invalid': v$.houseData.address.zipCode.$error,
           }"
-          @blur="v$.houseData.address.zip_code.$touch"
+          @blur="v$.houseData.address.zipCode.$touch"
         />
-        <small v-if="v$.houseData.address.zip_code.$error" class="p-error">{{
-          v$.houseData.address.zip_code.$errors[0].$message
+        <small v-if="v$.houseData.address.zipCode.$error" class="p-error">{{
+          v$.houseData.address.zipCode.$errors[0].$message
         }}</small>
       </p>
     </div>
@@ -195,6 +201,8 @@ import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum } from '@/store/houses/types';
+import { AddressModel } from '@/shared/models/address.model';
+import { HouseModel } from '@/shared/models/house.model';
 
 export default defineComponent({
   name: 'AddHouseForm',
@@ -212,36 +220,36 @@ export default defineComponent({
   data() {
     return {
       houseData: {
-        quantity_flat: '',
-        house_area: '',
-        adjoining_area: '',
+        flatQuantity: null,
+        houseArea: null,
+        adjoiningArea: null,
         address: {
           region: '',
           city: '',
           district: '',
           street: '',
-          house_block: '',
-          house_number: '',
-          zip_code: '',
-        },
-      },
+          houseBlock: '',
+          houseNumber: '',
+          zipCode: '',
+        } as AddressModel,
+      } as HouseModel,
       v$: useVuelidate(),
     };
   },
   validations() {
     return {
       houseData: {
-        quantity_flat: { requiredValidator, zeroValidator, quantityAndAreaValidator },
-        house_area: { requiredValidator, zeroValidator, houseAreaValidator },
-        adjoining_area: { requiredValidator, zeroValidator, quantityAndAreaValidator },
+        flatQuantity: { requiredValidator, zeroValidator, quantityAndAreaValidator },
+        houseArea: { requiredValidator, zeroValidator, houseAreaValidator },
+        adjoiningArea: { requiredValidator, zeroValidator, quantityAndAreaValidator },
         address: {
           region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           district: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           street: { requiredValidator, ukrLangTitleValidator, streetMaxLength },
-          house_block: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
-          house_number: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
-          zip_code: { requiredValidator, zipCodeValidator },
+          houseBlock: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
+          houseNumber: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
+          zipCode: { requiredValidator, zipCodeValidator },
         },
       },
     };
@@ -268,6 +276,8 @@ export default defineComponent({
       for (let field in houseData) {
         if (typeof houseData[field] === 'object') {
           this.resetHouseDataFields(houseData[field]);
+        } else if (typeof houseData[field] === 'number') {
+          houseData[field] = 0;
         } else {
           houseData[field] = '';
         }
