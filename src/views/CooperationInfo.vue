@@ -539,7 +539,6 @@ export default defineComponent({
         ];
       },
       selectedHouse: ref(),
-      houses: [] as Array<HouseInterface>,
       cooperationData: {
         id: 0,
         name: '',
@@ -620,7 +619,6 @@ export default defineComponent({
       this.initData();
       this.isLoaded = true;
     });
-    this.houses = Object.assign({}, this.housesInfo);
   },
   methods: {
     initData() {
@@ -722,18 +720,12 @@ export default defineComponent({
       this.showSuccessEdit(this.house.id);
     },
     toggle(event: any, slotProps: any) {
-      // this.house = {...slotProps};
-      this.house.id = slotProps.id;
-      this.house.quantity_flat = slotProps.quantity_flat;
-      this.house.house_area = slotProps.house_area;
-      this.house.adjoining_area = slotProps.adjoining_area;
-      this.house.address.region = slotProps.address.region;
-      this.house.address.city = slotProps.address.city;
-      this.house.address.district = slotProps.address.district;
-      this.house.address.street = slotProps.address.street;
-      this.house.address.house_block = slotProps.address.house_block;
-      this.house.address.house_number = slotProps.address.house_number;
-      this.house.address.zip_code = slotProps.address.zip_code;
+      const { id, quantity_flat, house_area, adjoining_area, address } = slotProps;
+      this.house.id = id;
+      this.house.quantity_flat = quantity_flat;
+      this.house.house_area = house_area;
+      this.house.adjoining_area = adjoining_area;
+      this.house.address = { ...address };
       (this.$refs.menu as any).toggle(event);
     },
 
