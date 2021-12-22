@@ -6,8 +6,8 @@ import { HouseModel } from './../../shared/models/house.model';
 import { HouseDTOModel } from './../../shared/models/houseDTO.model';
 
 export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Actions = {
-  [HousesActionsEnum.SET_HOUSES]: async ({ commit }) => {
-    const { data } = await HTTP.get(`/cooperations/1/houses`);
+  [HousesActionsEnum.SET_HOUSES]: async ({ commit }, payload) => {
+    const { data } = await HTTP.get(`/cooperations/${payload}/houses`);
     const houses: Array<HouseModel> = data.map((el: HouseDTOModel) => new HouseModel(el));
 
     commit(HousesMutationsEnum.SET_HOUSES, houses);

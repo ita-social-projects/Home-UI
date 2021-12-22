@@ -632,9 +632,11 @@ export default defineComponent({
     };
   },
   async mounted() {
+    this.cooperationData.id = this.cooperationInfo?.id ?? 1;
+
     await Promise.all([
       this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS'),
-      this.$store.dispatch('housesStore/SET_HOUSES'),
+      this.$store.dispatch('housesStore/SET_HOUSES', this.cooperationData.id),
     ]).then(() => {
       this.initData();
       this.isLoaded = true;
@@ -642,7 +644,6 @@ export default defineComponent({
   },
   methods: {
     initData() {
-      this.cooperationData.id = this.cooperationInfo?.id ?? 1;
       this.cooperationData.name = this.cooperationInfo?.name ?? '';
       this.cooperationData.edrpou = this.cooperationInfo?.edrpou ?? '';
       this.cooperationData.iban = this.cooperationInfo?.iban ?? '';

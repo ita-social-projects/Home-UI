@@ -1,15 +1,9 @@
 <template>
   <form @submit.prevent="addNewHouse" id="house_data_form">
     <p>
-      <label
-        class="dialog-item"
-        for="
-      flatQuantity"
-        >Кількість квартир в будинку :
-      </label>
+      <label class="dialog-item" for="flatQuantity">Кількість квартир в будинку : </label>
       <InputText
-        id="
-        flatQuantity"
+        id="flatQuantity"
         placeholder="Кількість квартир в будинку"
         v-model.trim="houseData.flatQuantity"
         :class="{
