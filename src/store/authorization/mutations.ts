@@ -7,7 +7,7 @@ export const mutations: MutationTree<AuthorizationStateInterface> & Mutations = 
   },
 
   [AuthMutationEnum.SET_FORM]: (state, payload) => {
-    // state.user = { ...state.user, ...payload };
+    state.user = { ...state.user, ...payload };
   },
 
   [AuthMutationEnum.ADD_CONTACT]: (state, payload) => {

@@ -1,14 +1,13 @@
 import { UserModel } from './user.model';
-import { ContactInterface } from '../../user/types';
-import { ContactsDTOModel } from '@/shared/models/contactsDTO.modal';
+import { UserContactInterface } from './../../user/types';
 
 export class UserDTOModel {
   public first_name: string;
   public middle_name: string;
   public last_name: string;
-  public email: string;
-  public id: number;
-  public contacts: ContactInterface[];
+  public email?: string;
+  public id?: number;
+  public contacts?: UserContactInterface[];
   public error?: string | null;
   public success?: string;
 

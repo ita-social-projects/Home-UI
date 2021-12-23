@@ -5,9 +5,9 @@ export class UserModel {
   public firstName: string;
   public middleName: string;
   public lastName: string;
-  public email: string;
-  public id: number;
-  public contacts: UserContactInterface[];
+  public email?: string;
+  public id?: number;
+  public contacts?: UserContactInterface[];
   public error?: string | null;
   public success?: string;
 

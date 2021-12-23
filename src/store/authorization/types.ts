@@ -31,8 +31,8 @@ export interface UserInterface {
   email: string;
   id: number;
   contacts?: UserContactInterface[];
-  error: string | null;
-  success: string;
+  error?: string | null;
+  success?: string;
 }
 
 export interface UpdateUserInterface {
