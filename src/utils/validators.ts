@@ -27,10 +27,9 @@ const validNonZeroFields = helpers.regex(/^(?!0+$)/g);
 
 const lengthMessage = (number: number, describtion: string): string => {
   let res: string = '';
-  describtion === 'max'
-    ? (res = `Максимальна кількість символів - ${number}`)
-    : `Мінімальна кількість символів - ${number}`;
-  return res;
+  const max = `Максимальна кількість символів - ${number}`;
+  const min = `Мінімальна кількість символів - ${number}`;
+  return describtion === 'max' ? (res = max) : (res = min);
 };
 
 const correctNumberMessage = (additionalInfo: string) => {
