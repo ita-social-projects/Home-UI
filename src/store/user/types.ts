@@ -32,6 +32,7 @@ export interface ContactInterface {
   type: string;
   main: boolean;
   email: string;
+  id?: number;
 }
 
 export type Mutations<S = UserStateInterface> = {

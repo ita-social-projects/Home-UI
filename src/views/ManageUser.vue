@@ -167,7 +167,7 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import { helpers, requiredIf } from '@vuelidate/validators';
-import { UserModel } from '@/store/authorization/models/user.model';
+import { UserCredentialInterface } from '@/store/authorization/types';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
@@ -208,7 +208,7 @@ export default defineComponent({
   async mounted() {
     const user: string | null = localStorage.getItem('user');
     if (user !== null) {
-      const userData: UserModel = JSON.parse(user);
+      const userData: UserCredentialInterface = JSON.parse(user);
       await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
       this.firstName = this.userInfo.firstName;
       this.middleName = this.userInfo.middleName;

@@ -11,14 +11,12 @@ export class UserModel {
   public error?: string | null;
   public success?: string;
 
-  constructor(polledAuthorization: UserDTOModel) {
-    this.firstName = polledAuthorization.first_name;
-    this.middleName = polledAuthorization.middle_name;
-    this.lastName = polledAuthorization.last_name;
-    this.id = polledAuthorization.id;
-    this.email = polledAuthorization.email;
-    this.contacts = polledAuthorization.contacts;
-    this.error = polledAuthorization.error;
-    this.success = polledAuthorization.success;
+  constructor(user: UserDTOModel) {
+    this.firstName = user.first_name;
+    this.middleName = user.middle_name;
+    this.lastName = user.last_name;
+    this.id = user.id;
+    this.email = user.email;
+    this.contacts = user.contacts;
   }
 }

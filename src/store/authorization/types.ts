@@ -48,9 +48,14 @@ export interface ContactInterface {
   main: boolean;
   email?: string;
   phone?: number;
-  id?: number;
+  id: number;
 }
 
+export interface UserCredentialInterface {
+  email: string;
+  token: string;
+  id: number;
+}
 export interface AuthorizationStateInterface {
   user: UserModel | null;
 }
@@ -59,14 +64,14 @@ export type Mutations<S = AuthorizationStateInterface> = {
   [AuthMutationEnum.SET_USER](state: S, payload: UserModel | null): void;
   [AuthMutationEnum.SET_FORM](state: S, payload: any): void;
   [AuthMutationEnum.ADD_CONTACT](state: S, payload: ContactInterface): void;
-  [AuthMutationEnum.UPDATE_CONTACT](state: S, payload: UserModel | null): void;
+  [AuthMutationEnum.UPDATE_CONTACT](state: S, payload: number): void;
 };
 
 export interface Actions {
   [AuthActionEnum.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload<UserLoginInterface>): void;
   [AuthActionEnum.UPDATE_USER]({ commit }: AugmentedActionContext, payload: UpdateUserInterface): void;
   [AuthActionEnum.SIGN_OUT]({ commit }: AugmentedActionContext, payload: null): void;
-  [AuthActionEnum.GET_DATA]({ commit }: AugmentedActionContext, payload: string): void;
+  [AuthActionEnum.GET_DATA]({ commit }: AugmentedActionContext, payload: number): void;
 }
 
 export type Getters<S = AuthorizationStateInterface> = {

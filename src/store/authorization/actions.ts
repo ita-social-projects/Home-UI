@@ -74,8 +74,8 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
     try {
       const userId = state.user!.id;
       const payloadData = new PostContactModel(payload[0]);
-
       const { data } = await HTTP.post(`/users/${userId}/contacts`, payloadData);
+
       commit(AuthMutationEnum.ADD_CONTACT, data);
     } catch (e: any) {
       console.log(e.response.data.error_message);
