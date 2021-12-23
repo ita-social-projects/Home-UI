@@ -1,4 +1,5 @@
-import { UserDataInterface, ContactInterface } from '@/store/user/types';
+import { UserDataInterface } from '@/store/user/types';
+import { UserContactInterface } from './../user/types';
 export class PostUserModel {
   public registration_token: string;
   public first_name: string;
@@ -6,7 +7,7 @@ export class PostUserModel {
   public last_name: string;
   public email: string;
   public password: string;
-  public contacts: ContactInterface[];
+  public contacts: UserContactInterface[];
 
   constructor(userData: UserDataInterface) {
     this.registration_token = userData.registrationToken;

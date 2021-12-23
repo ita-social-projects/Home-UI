@@ -1,4 +1,5 @@
-import { UserContactInterface, UpdateUserInterface } from '../authorization/types';
+import { UpdateUserInterface } from '../authorization/types';
+import { UserContactInterface } from './../user/types';
 
 export class UpdateUserModel {
   public first_name: string;

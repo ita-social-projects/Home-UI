@@ -1,5 +1,5 @@
 import { UserDTOModel } from './userDTO.model';
-import { ContactInterface } from '../../user/types';
+import { UserContactInterface } from './../../user/types';
 
 export class UserModel {
   public firstName: string;
@@ -7,7 +7,7 @@ export class UserModel {
   public lastName: string;
   public email: string;
   public id: number;
-  public contacts: ContactInterface[];
+  public contacts: UserContactInterface[];
   public error?: string | null;
   public success?: string;
 

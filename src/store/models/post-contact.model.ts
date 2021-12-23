@@ -1,4 +1,5 @@
-import { UserContactInterface, ContactTypeEnum } from '../authorization/types';
+import { ContactTypeEnum } from '../authorization/types';
+import { UserContactInterface } from './../user/types';
 
 export class PostContactModel {
   public type: ContactTypeEnum;

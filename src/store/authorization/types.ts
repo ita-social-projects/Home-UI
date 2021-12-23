@@ -1,6 +1,7 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
 import { UserModel } from './models/user.model';
+import { UserContactInterface } from './../user/types';
 
 export enum AuthMutationEnum {
   SET_USER = 'SET_USER',
@@ -43,24 +44,22 @@ export interface UpdateUserInterface {
   contacts: UserContactInterface[];
 }
 
-export interface UserContactInterface {
-  type: ContactTypeEnum;
-  main: boolean;
-  email?: string;
-  phone?: number;
-  id: number;
-}
-
 export interface UpdateUserFullNameInterface {
-  first_name: string;
-  middle_name: string;
-  last_name: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
 }
 
 export interface UserCredentialInterface {
   email: string;
   token: string;
   id: number;
+}
+
+export interface UserLoginInterface {
+  id: number;
+  email: string;
+  password: string;
 }
 export interface AuthorizationStateInterface {
   user: UserModel | null;
@@ -90,9 +89,3 @@ export type Getters<S = AuthorizationStateInterface> = {
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
 } & Omit<ActionContext<AuthorizationStateInterface, RootStateInterface>, 'commit'>;
-
-export interface UserLoginInterface {
-  id: number;
-  email: string;
-  password: string;
-}
