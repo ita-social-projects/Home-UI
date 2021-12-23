@@ -156,13 +156,13 @@ import { UserInterface } from '@/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
 import {
   requiredValidator,
-  nameValidator,
-  nameLenghtValidator,
+  userNameValidator,
+  someTitleLenghtValidator,
   emailValidator,
   emailMinLength,
   emailMaxLength,
-  phoneNumberValidator
-} from "@/utils/validators";
+  userPhoneValidator,
+} from '@/utils/validators';
 import useVuelidate from '@vuelidate/core';
 
 // primevue
@@ -222,18 +222,18 @@ export default defineComponent({
     return {
       firstName: {
         requiredValidator,
-        nameValidator,
-        nameLenghtValidator,
+        userNameValidator,
+        someTitleLenghtValidator,
       },
       middleName: {
         requiredValidator,
-        nameValidator,
-        nameLenghtValidator,
+        userNameValidator,
+        someTitleLenghtValidator,
       },
       lastName: {
         requiredValidator,
-        nameValidator,
-        nameLenghtValidator,
+        userNameValidator,
+        someTitleLenghtValidator,
       },
       inputValue: {
         email: {
@@ -254,7 +254,7 @@ export default defineComponent({
               return this.typeContact.name === 'Телефон';
             })
           ),
-          phoneNumberValidator,
+          userPhoneValidator,
         },
       },
     };

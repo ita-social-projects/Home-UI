@@ -187,7 +187,7 @@ import {
   regionCityDistrictMaxLength,
   streetMaxLength,
   houseBlockAndNumberMaxLength,
-  quantityAndAreaValidator,
+  quantityAndResidentialAreasValidator,
   houseAreaValidator,
 } from '@/utils/validators';
 import Button from 'primevue/button';
@@ -233,9 +233,9 @@ export default defineComponent({
   validations() {
     return {
       houseData: {
-        flatQuantity: { requiredValidator, zeroValidator, quantityAndAreaValidator },
+        flatQuantity: { requiredValidator, zeroValidator, quantityAndResidentialAreasValidator },
         houseArea: { requiredValidator, zeroValidator, houseAreaValidator },
-        adjoiningArea: { requiredValidator, zeroValidator, quantityAndAreaValidator },
+        adjoiningArea: { requiredValidator, zeroValidator, quantityAndResidentialAreasValidator },
         address: {
           region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },

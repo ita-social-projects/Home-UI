@@ -93,8 +93,8 @@ import {
   passwordValidator,
   passwordMinLenght,
   passwordMaxLenght,
-  nameValidator,
-  nameLenghtValidator,
+  userNameValidator,
+  someTitleLenghtValidator,
 } from '@/utils/validators';
 import { sameAs } from '@vuelidate/validators';
 import Password from 'primevue/password';
@@ -129,18 +129,18 @@ export default defineComponent({
       return {
         firstName: {
           requiredValidator,
-          nameValidator,
-          nameLenghtValidator,
+          userNameValidator,
+          someTitleLenghtValidator,
         },
         middleName: {
           requiredValidator,
-          nameValidator,
-          nameLenghtValidator,
+          userNameValidator,
+          someTitleLenghtValidator,
         },
         lastName: {
           requiredValidator,
-          nameValidator,
-          nameLenghtValidator,
+          userNameValidator,
+          someTitleLenghtValidator,
         },
         email: {
           requiredValidator,
