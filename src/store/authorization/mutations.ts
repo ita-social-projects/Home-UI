@@ -11,11 +11,15 @@ export const mutations: MutationTree<AuthorizationStateInterface> & Mutations = 
   },
 
   [AuthMutationEnum.ADD_CONTACT]: (state, payload) => {
-    state.user!.contacts.push(payload);
+    if (state.user!.contacts !== undefined) {
+      state.user!.contacts.push(payload);
+    }
   },
 
   [AuthMutationEnum.UPDATE_CONTACT]: (state, payload) => {
-    const updateContacts = state.user!.contacts.filter((el) => el.id !== payload);
-    state.user!.contacts = updateContacts;
+    if (state.user!.contacts !== undefined) {
+      const updateContacts = state.user!.contacts.filter((el) => el.id !== payload);
+      state.user!.contacts = updateContacts;
+    }
   },
 };

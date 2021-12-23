@@ -1,4 +1,4 @@
-import { ContactInterface, ContactTypeEnum } from '../authorization/types';
+import { UserContactInterface, ContactTypeEnum } from '../authorization/types';
 
 export class PostContactModel {
   public type: ContactTypeEnum;
@@ -6,7 +6,7 @@ export class PostContactModel {
   public email?: string;
   public phone?: number;
   public id?: number;
-  constructor(contacts: ContactInterface) {
+  constructor(contacts: UserContactInterface) {
     this.type = contacts.type;
     this.main = contacts.main;
     this.email = contacts.email;
