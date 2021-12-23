@@ -26,10 +26,9 @@ const validApartmentNumber = helpers.regex(/^(?!(0))\d{1,4}(\-[a-zа-я])?$/);
 const validNonZeroFields = helpers.regex(/^(?!0+$)/g);
 
 const lengthMessage = (number: number, describtion: string): string => {
-  let res: string = '';
   const max = `Максимальна кількість символів - ${number}`;
   const min = `Мінімальна кількість символів - ${number}`;
-  return describtion === 'max' ? (res = max) : (res = min);
+  return describtion === 'max' ? max : min;
 };
 
 const correctNumberMessage = (additionalInfo: string) => {
