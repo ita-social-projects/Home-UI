@@ -29,7 +29,7 @@ export interface UserInterface {
   lastName: string;
   email: string;
   id: number;
-  contacts: ContactInterface[];
+  contacts?: UserContactInterface[];
   error: string | null;
   success: string;
 }
@@ -40,15 +40,21 @@ export interface UpdateUserInterface {
   lastName: string;
   email: string;
   password: string;
-  contacts: ContactInterface[];
+  contacts: UserContactInterface[];
 }
 
-export interface ContactInterface {
+export interface UserContactInterface {
   type: ContactTypeEnum;
   main: boolean;
   email?: string;
   phone?: number;
   id: number;
+}
+
+export interface UpdateUserFullNameInterface {
+  first_name: string;
+  middle_name: string;
+  last_name: string;
 }
 
 export interface UserCredentialInterface {
@@ -62,8 +68,8 @@ export interface AuthorizationStateInterface {
 
 export type Mutations<S = AuthorizationStateInterface> = {
   [AuthMutationEnum.SET_USER](state: S, payload: UserModel | null): void;
-  [AuthMutationEnum.SET_FORM](state: S, payload: any): void;
-  [AuthMutationEnum.ADD_CONTACT](state: S, payload: ContactInterface): void;
+  [AuthMutationEnum.SET_FORM](state: S, payload: UpdateUserFullNameInterface): void;
+  [AuthMutationEnum.ADD_CONTACT](state: S, payload: UserContactInterface): void;
   [AuthMutationEnum.UPDATE_CONTACT](state: S, payload: number): void;
 };
 
@@ -71,7 +77,9 @@ export interface Actions {
   [AuthActionEnum.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload<UserLoginInterface>): void;
   [AuthActionEnum.UPDATE_USER]({ commit }: AugmentedActionContext, payload: UpdateUserInterface): void;
   [AuthActionEnum.SIGN_OUT]({ commit }: AugmentedActionContext, payload: null): void;
-  [AuthActionEnum.GET_DATA]({ commit }: AugmentedActionContext, payload: number): void;
+  [AuthActionEnum.GET_DATA]({ commit }: AugmentedActionContext, payload: string): void;
+  [AuthActionEnum.DELETE_CONTACT]({ state, commit }: AugmentedActionContext, payload: number): void;
+  [AuthActionEnum.ADD_CONTACT]({ state, commit }: AugmentedActionContext, payload: any): void;
 }
 
 export type Getters<S = AuthorizationStateInterface> = {
