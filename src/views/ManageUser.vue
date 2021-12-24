@@ -161,8 +161,8 @@ import {
   emailValidator,
   emailMinLength,
   emailMaxLength,
-  phoneNumberValidator,
-} from '@/utils/validators';
+  phoneNumberValidator
+} from "@/utils/validators";
 import useVuelidate from '@vuelidate/core';
 
 // primevue
@@ -260,9 +260,6 @@ export default defineComponent({
     };
   },
   methods: {
-    showStatus(status: string, message: string) {
-      this.$toast.add({severity:'error', summary: 'Error Message', detail:'Message Content', life: 3000});
-    },
     updateName(e: any) {
       this.newUpdateData = { ...this.newUpdateData, first_name: e.target.value };
     },

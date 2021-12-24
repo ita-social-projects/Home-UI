@@ -10,7 +10,7 @@
             placeholder="john.doe@gmail.com"
             v-model.trim="email"
             :class="{ 'p-invalid': v$.email.$error || !check.isRegistrationAvailable }"
-            @blur="emailBlur"
+            @input="emailBlur"
             maxlength="321"
           />
           <small v-if="v$.email.$error" id="email-help" class="p-error">{{ v$.email.$errors[0].$message }}</small>
@@ -22,7 +22,7 @@
             placeholder="12345678"
             v-model="edrpou"
             :class="{ 'p-invalid': v$.edrpou.$error || !check.isRegistrationAvailable }"
-            @blur="edrpouBlur"
+            @input="edrpouBlur"
             maxlength="8"
           />
           <small v-if="v$.edrpou.$error" id="edrpou-help" class="p-error">{{ v$.edrpou.$errors[0].$message }}</small>
@@ -31,8 +31,13 @@
           </div>
         </div>
         <section class="submit-buttons">
-          <Button label="Відмінити" class="p-button-outlined p-button-info" @click="v$.$reset" type="reset" />
-          <Button label="Заре'єструвати" :disabled="!isFormValid" class="p-button-info" type="submit" />
+          <Button
+            label="Відмінити"
+            class="p-button-outlined p-button-info"
+            @click="redirectToMainPage()"
+            type="reset"
+          />
+          <Button label="Заре'єструвати" :disabled="v$.$invalid" class="p-button-info" type="submit" />
         </section>
       </form>
     </div>
@@ -54,6 +59,7 @@ import {
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { StoreModuleEnum } from '@/store/types';
+import { RoutesEnum } from '@/router/types';
 
 export default defineComponent({
   name: 'RegisterCooperation',
@@ -136,6 +142,9 @@ export default defineComponent({
         },
       };
       await this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/CREATE_COOPERATION`, payload);
+    },
+    redirectToMainPage() {
+      this.$router.push({ path: RoutesEnum.StartPage });
     },
   },
   validations() {
