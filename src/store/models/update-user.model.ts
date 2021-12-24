@@ -1,4 +1,5 @@
-import { UserContactInterface, UpdateUserInterface } from "../authorization/types";
+import { UpdateUserInterface } from '../authorization/types';
+import { UserContactInterface } from './../user/types';
 
 export class UpdateUserModel {
   public first_name: string;
@@ -7,12 +8,13 @@ export class UpdateUserModel {
   public email: string;
   public password: string;
   public contacts: UserContactInterface[];
+
   constructor(userData: UpdateUserInterface) {
-    this.first_name = userData.first_name;
-    this.middle_name = userData.middle_name;
-    this.last_name = userData.last_name;
+    this.first_name = userData.firstName;
+    this.middle_name = userData.middleName;
+    this.last_name = userData.lastName;
     this.email = userData.email;
     this.password = 'passworD123';
-    this.contacts = userData.contacts
+    this.contacts = userData.contacts;
   }
 }
