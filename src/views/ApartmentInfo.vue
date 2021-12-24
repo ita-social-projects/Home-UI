@@ -227,11 +227,11 @@ export default defineComponent({
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true,
     },
     apartment: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
