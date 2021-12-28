@@ -10,8 +10,8 @@
 <script lang="ts">
 import Sidebar from '@/components/Sidebar.vue';
 import { defineComponent } from 'vue';
-import { UserInterface } from '@/store/authorization/types';
 import { StoreModuleEnum } from '@/store/types';
+import { UserModel } from '@/store/authorization/models/user.model';
 
 export default defineComponent({
   name: 'MainPage',
@@ -26,7 +26,7 @@ export default defineComponent({
   mounted() {
     const user: string | null = localStorage.getItem('user');
     if (user !== null && !this.userData) {
-      const userData: UserInterface = JSON.parse(user);
+      const userData: UserModel = JSON.parse(user);
       this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/GET_DATA`, userData.id);
     }
   },

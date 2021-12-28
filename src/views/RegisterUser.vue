@@ -105,6 +105,7 @@ import store from '@/store';
 import { UserStateInterface } from '@/store/user/types';
 import { useToast } from 'primevue/usetoast';
 import { StoreModuleEnum } from '@/store/types';
+import { ContactTypeEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'userRegistration',
@@ -175,7 +176,7 @@ export default defineComponent({
         lastName: state.formData.lastName,
         email: state.formData.email,
         password: state.formData.password.confirm,
-        contacts: [{ type: 'email', main: false, email: state.formData.email }],
+        contacts: [{ type: ContactTypeEnum.EMAIL, main: false, email: state.formData.email }],
       };
       await store.dispatch(`${StoreModuleEnum.userStore}/SET_USER_INFO`, userData);
     }

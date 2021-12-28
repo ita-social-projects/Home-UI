@@ -95,7 +95,7 @@ export default defineComponent({
     },
     getNameFromStore(): any {
       const dataFromStore = this.$store.getters['authorizationStore/userData'];
-      return `${dataFromStore['first_name']} ${dataFromStore['last_name']}`;
+      return `${dataFromStore['firstName']} ${dataFromStore['lastName']}`;
     },
   },
   methods: {
@@ -171,5 +171,4 @@ export default defineComponent({
     margin: 0 65px;
   }
 }
-
 </style>

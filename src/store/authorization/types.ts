@@ -1,5 +1,7 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
+import { UserModel } from './models/user.model';
+import { UserContactInterface } from './../user/types';
 
 export enum AuthMutationEnum {
   SET_USER = 'SET_USER',
@@ -23,43 +25,48 @@ export enum ContactTypeEnum {
 }
 
 export interface UserInterface {
-  first_name: string;
-  middle_name: string;
-  last_name: string;
-  email?: string;
-  id?: number;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  email: string;
+  id: number;
   contacts?: UserContactInterface[];
+  error?: string | null;
+  success?: string;
 }
 
 export interface UpdateUserInterface {
-  first_name: string;
-  middle_name: string;
-  last_name: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
   email: string;
   password: string;
   contacts: UserContactInterface[];
 }
 
-export interface UserContactInterface {
-  type: ContactTypeEnum;
-  main: boolean;
-  email?: string;
-  phone?: number;
-  id?: number;
-}
-
 export interface UpdateUserFullNameInterface {
-  first_name: string;
-  middle_name: string;
-  last_name: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
 }
 
+export interface UserCredentialInterface {
+  email: string;
+  token: string;
+  id: number;
+}
+
+export interface UserLoginInterface {
+  id: number;
+  email: string;
+  password: string;
+}
 export interface AuthorizationStateInterface {
-  user: UserInterface | null;
+  user: UserModel | null;
 }
 
 export type Mutations<S = AuthorizationStateInterface> = {
-  [AuthMutationEnum.SET_USER](state: S, payload: UserInterface | null): void;
+  [AuthMutationEnum.SET_USER](state: S, payload: UserModel | null): void;
   [AuthMutationEnum.SET_FORM](state: S, payload: UpdateUserFullNameInterface): void;
   [AuthMutationEnum.ADD_CONTACT](state: S, payload: UserContactInterface): void;
   [AuthMutationEnum.UPDATE_CONTACT](state: S, payload: number): void;
@@ -76,15 +83,9 @@ export interface Actions {
 
 export type Getters<S = AuthorizationStateInterface> = {
   loggedIn(state: S): boolean;
-  userData(state: S): UserInterface | null;
+  userData(state: S): UserModel | null;
 };
 
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
 } & Omit<ActionContext<AuthorizationStateInterface, RootStateInterface>, 'commit'>;
-
-export interface UserLoginInterface {
-  id: number;
-  email: string;
-  password: string;
-}

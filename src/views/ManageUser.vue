@@ -152,7 +152,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
-import { UserInterface } from '@/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
 import {
   requiredValidator,
@@ -164,12 +163,11 @@ import {
   userPhoneValidator,
 } from '@/utils/validators';
 import useVuelidate from '@vuelidate/core';
-
-// primevue
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import { helpers, requiredIf } from '@vuelidate/validators';
+import { UserCredentialInterface } from '@/store/authorization/types';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
@@ -210,11 +208,11 @@ export default defineComponent({
   async mounted() {
     const user: string | null = localStorage.getItem('user');
     if (user !== null) {
-      const userData: UserInterface = JSON.parse(user);
+      const userData: UserCredentialInterface = JSON.parse(user);
       await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
-      this.firstName = this.userInfo.first_name;
-      this.middleName = this.userInfo.middle_name;
-      this.lastName = this.userInfo.last_name;
+      this.firstName = this.userInfo.firstName;
+      this.middleName = this.userInfo.middleName;
+      this.lastName = this.userInfo.lastName;
       this.dataReady = true;
     }
   },
@@ -260,14 +258,17 @@ export default defineComponent({
     };
   },
   methods: {
+    showStatus(status: string, message: string) {
+      this.$toast.add({ severity: 'error', summary: 'Error Message', detail: 'Message Content', life: 3000 });
+    },
     updateName(e: any) {
-      this.newUpdateData = { ...this.newUpdateData, first_name: e.target.value };
+      this.newUpdateData = { ...this.newUpdateData, firstName: e.target.value };
     },
     updateMiddleName(e: any) {
-      this.newUpdateData = { ...this.newUpdateData, middle_name: e.target.value };
+      this.newUpdateData = { ...this.newUpdateData, middleName: e.target.value };
     },
     updateLastName(e: any) {
-      this.newUpdateData = { ...this.newUpdateData, last_name: e.target.value };
+      this.newUpdateData = { ...this.newUpdateData, lastName: e.target.value };
     },
 
     onSubmit() {
