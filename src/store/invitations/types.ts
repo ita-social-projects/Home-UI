@@ -9,6 +9,10 @@ export enum InvitationsActionsEnum {
   GET_ALL_INVITATIONS = 'GET_ALL_INVITATIONS',
 }
 
+export enum InvitationsGettersEnum {
+  getInvitations = 'getInvitations',
+}
+
 export interface InvitationInterface {
   email: string;
   address: string;
@@ -38,7 +42,7 @@ export interface Actions {
 }
 
 export type Getters<S = InvitationsStateInterface> = {
-  getInvitations(state: S): Array<InvitationInterface> | null;
+  [InvitationsGettersEnum.getInvitations](state: S): Array<InvitationInterface> | null;
 };
 
 export type AugmentedActionContext = {

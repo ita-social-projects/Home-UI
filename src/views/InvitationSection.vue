@@ -42,7 +42,7 @@ import Column from 'primevue/column';
 import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
-import { InvitationsStateInterface } from '@/store/invitations/types';
+import { InvitationsStateInterface, InvitationsGettersEnum } from '@/store/invitations/types';
 
 export default defineComponent({
   name: 'InvitationSection',
@@ -79,7 +79,8 @@ export default defineComponent({
       (this.$refs.menu as any).toggle(event);
     },
     getInvitations() {
-      this.invitations = this.$store.getters[`${StoreModuleEnum.invitationsStore}/getInvitations`];
+      this.invitations =
+        this.$store.getters[`${StoreModuleEnum.invitationsStore}/${InvitationsGettersEnum.getInvitations}`];
     },
   },
 });
