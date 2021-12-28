@@ -31,9 +31,8 @@
 import { defineComponent } from 'vue';
 import BaseSidebarNavButton from '@/components/base/BaseSidebarNavButton.vue';
 import { RoutesEnum } from '@/router/types';
-import { UserInterface } from '@/store/authorization/types';
+import { UserInterface, AuthGettersEnum } from '@/store/authorization/types';
 import { StoreModuleEnum } from '@/store/types';
-import { AuthGettersEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'Sidebar',
