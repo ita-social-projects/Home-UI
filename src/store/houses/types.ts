@@ -38,9 +38,9 @@ export interface HouseInterface {
 }
 
 export interface HousesStateInterface {
-  houses: Array<HouseModel> | null;
+  houses: Array<HouseModel>;
   displayModal: boolean;
-  houseInfo: HouseModel | null;
+  houseInfo: HouseModel;
 }
 
 export type Mutations<S = HousesStateInterface> = {
@@ -60,8 +60,8 @@ export interface Actions {
 }
 
 export type Getters<S = HousesStateInterface> = {
-  getHousesData(state: S): Array<HouseModel> | null;
-  getHouseInfo(state: S): HouseModel | null;
+  getHousesData(state: S): Array<HouseModel> | [];
+  getHouseInfo(state: S): HouseModel;
 };
 
 export type AugmentedActionContext = {

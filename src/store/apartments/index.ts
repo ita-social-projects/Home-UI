@@ -6,7 +6,7 @@ import { actions } from '@/store/apartments/actions';
 import { mutations } from '@/store/apartments/mutations';
 
 export const state: ApartmentsStateInterface = {
-  apartments: null,
+  apartments: [],
 };
 
 export const apartmentsStore: Module<ApartmentsStateInterface, RootStateInterface> = {
