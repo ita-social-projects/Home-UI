@@ -167,7 +167,14 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import { helpers, requiredIf } from '@vuelidate/validators';
-import { UserCredentialInterface } from '@/store/authorization/types';
+
+import { StoreModuleEnum } from '@/store/types';
+import {
+  UserCredentialInterface,
+  AuthActionEnum,
+  AuthMutationEnum,
+  AuthGettersEnum,
+} from '@/store/authorization/types';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
@@ -209,7 +216,7 @@ export default defineComponent({
     const user: string | null = localStorage.getItem('user');
     if (user !== null) {
       const userData: UserCredentialInterface = JSON.parse(user);
-      await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
+      await this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.GET_DATA}`, userData.id);
       this.firstName = this.userInfo.firstName;
       this.middleName = this.userInfo.middleName;
       this.lastName = this.userInfo.lastName;
@@ -275,8 +282,8 @@ export default defineComponent({
       if (this.inputValue.email.length > 0 || this.inputValue.phone.length > 0) {
         this.addContact();
       }
-      this.$store.commit('authorizationStore/SET_FORM', this.newUpdateData);
-      this.$store.dispatch('authorizationStore/UPDATE_USER', this.userInfo);
+      this.$store.commit(`${StoreModuleEnum.authorizationStore}/${AuthMutationEnum.SET_FORM}`, this.newUpdateData);
+      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.UPDATE_USER}`, this.userInfo);
       this.$router.push(RoutesEnum.MainPage);
     },
 
@@ -297,19 +304,19 @@ export default defineComponent({
         contactsType.type = 'phone';
       }
       this.userContacts.push(contactsType);
-      this.$store.dispatch('authorizationStore/ADD_CONTACT', this.userContacts);
+      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.ADD_CONTACT}`, this.userContacts);
       this.inputValue.email = this.inputValue.phone = '';
       this.userContacts = [];
       this.typeContact = String;
     },
 
     deleteContact(idx: number) {
-      this.$store.dispatch('authorizationStore/DELETE_CONTACT', idx);
+      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.DELETE_CONTACT}`, idx);
     },
   },
   computed: {
     ...mapGetters({
-      userInfo: 'authorizationStore/userData',
+      userInfo: `${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`,
     }),
   },
 });

@@ -51,6 +51,8 @@ import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 
 import Dropdown from 'primevue/dropdown';
+import { StoreModuleEnum } from '@/store/types';
+import { AuthActionEnum, AuthGettersEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'baseHeader',
@@ -73,7 +75,7 @@ export default defineComponent({
           label: 'Вийти',
           icon: 'pi pi-fw pi-power-off',
           command: () => {
-            this.$store.dispatch('authorizationStore/SIGN_OUT', null);
+            this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.SIGN_OUT}`, null);
             this.$router.push(RoutesEnum.StartPage);
           },
         },
@@ -91,10 +93,10 @@ export default defineComponent({
   },
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters['authorizationStore/loggedIn'];
+      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.loggedIn}`];
     },
     getNameFromStore(): any {
-      const dataFromStore = this.$store.getters['authorizationStore/userData'];
+      const dataFromStore = this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
       return `${dataFromStore['firstName']} ${dataFromStore['lastName']}`;
     },
   },
@@ -106,7 +108,7 @@ export default defineComponent({
       this.$router.push(RoutesEnum.UserLogin);
     },
     userLogout() {
-      this.$store.dispatch('authorizationStore/SIGN_OUT', null);
+      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.SIGN_OUT}`, null);
       this.$router.push(RoutesEnum.StartPage);
     },
     toggle(event: any) {

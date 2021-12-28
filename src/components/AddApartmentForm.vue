@@ -51,6 +51,8 @@ import {
 } from '@/utils/validators';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
+import { StoreModuleEnum } from '@/store/types';
+import { ApartmentsActionsEnum } from '@/store/apartments/types';
 
 export default defineComponent({
   name: 'AddApartment',
@@ -94,7 +96,7 @@ export default defineComponent({
         number: this.apartmentData.apartmentNumber.toString(),
         area: this.apartmentData.apartmentArea,
       };
-      this.$store.dispatch(`apartmentsStore/ADD_APARTMENT`, payload);
+      this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.ADD_APARTMENT}`, payload);
       this.resetApartmentDataFields(this.apartmentData);
       this.v$.$reset();
       this.$emit('apartment-saved');
