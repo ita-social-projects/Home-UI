@@ -5,8 +5,17 @@ import { getters } from '@/store/authorization/getters';
 import { mutations } from '@/store/authorization/mutations';
 import { actions } from '@/store/authorization/actions';
 
+export const DefaultStateInterface = {
+  first_name: '',
+  middle_name: '',
+  last_name: '',
+  email: '',
+  password: '',
+  contacts: [],
+};
+
 export const state: AuthorizationStateInterface = {
-  user: null,
+  user: DefaultStateInterface,
 };
 
 export const authorizationStore: Module<AuthorizationStateInterface, RootStateInterface> = {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataReady" class="wrapper">
+  <div class="wrapper">
     <div class="card">
       <div class="cards__wrap">
         <div class="card card__name">
@@ -16,7 +16,9 @@
                 :class="{ 'p-invalid': v$.firstName.$error }"
                 @blur="v$.firstName.$touch"
               />
-              <small v-if="v$.firstName.$error" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
+              <small id="firstName-help" v-if="v$.firstName.$error" class="p-error">{{
+                v$.firstName.$errors[0].$message
+              }}</small>
             </div>
             <div class="field">
               <label for="middleName">По-батькові</label>
@@ -161,8 +163,8 @@ import {
   emailValidator,
   emailMinLength,
   emailMaxLength,
-  phoneNumberValidator
-} from "@/utils/validators";
+  phoneNumberValidator,
+} from '@/utils/validators';
 import useVuelidate from '@vuelidate/core';
 
 // primevue
@@ -174,18 +176,14 @@ import { helpers, requiredIf } from '@vuelidate/validators';
 export default defineComponent({
   storeFirstName: 'ManageUser',
   components: { Button, InputText, Dropdown },
-  setup() {
-    return {
-      v$: useVuelidate(),
-    };
-  },
+
   data() {
     return {
+      v$: useVuelidate(),
       firstName: '',
       middleName: '',
       lastName: '',
       newUpdateData: {},
-      dataReady: false,
       placeholderValue: 'Спочатку оберіть тип контакту...',
       inputValue: {
         email: '',
@@ -208,15 +206,11 @@ export default defineComponent({
     };
   },
   async mounted() {
-    const user: string | null = localStorage.getItem('user');
-    if (user !== null) {
-      const userData: UserInterface = JSON.parse(user);
-      await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
-      this.firstName = this.userInfo.first_name;
-      this.middleName = this.userInfo.middle_name;
-      this.lastName = this.userInfo.last_name;
-      this.dataReady = true;
-    }
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
+    this.firstName = this.userInfo.first_name;
+    this.middleName = this.userInfo.middle_name;
+    this.lastName = this.userInfo.last_name;
   },
   validations() {
     return {
