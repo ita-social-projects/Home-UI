@@ -31,7 +31,9 @@
                 :class="{ 'p-invalid': v$.middleName.$error }"
                 @blur="v$.middleName.$touch"
               />
-              <small v-if="v$.middleName.$error" class="p-error">{{ v$.middleName.$errors[0].$message }}</small>
+              <small id="middleName-help" v-if="v$.middleName.$error" class="p-error">{{
+                v$.middleName.$errors[0].$message
+              }}</small>
             </div>
             <div class="field">
               <label for="lastname">Прізвище</label>
@@ -44,7 +46,9 @@
                 :class="{ 'p-invalid': v$.lastName.$error }"
                 @blur="v$.lastName.$touch"
               />
-              <small v-if="v$.lastName.$error" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
+              <small id="lastname-help" v-if="v$.lastName.$error" class="p-error">{{
+                v$.lastName.$errors[0].$message
+              }}</small>
             </div>
           </form>
         </div>
@@ -133,12 +137,14 @@
 
       <div class="buttons__box">
         <Button
+          id="cancel-button"
           @click="closeEditPage"
           label="Скасувати"
           icon="pi pi-times"
           class="btn p-button-secondary p-button-outlined p-button-sm"
         />
         <Button
+          id="submit-btn"
           :disabled="v$.$invalid"
           @click="onSubmit"
           label="Зберегти"
@@ -154,7 +160,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
-import { UserInterface } from '@/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
 import {
   requiredValidator,
@@ -266,7 +271,7 @@ export default defineComponent({
 
     onSubmit() {
       if (this.inputValue.email.length > 0 || this.inputValue.phone.length > 0) {
-        this.addContact();
+        this.addContact()
       }
       this.$store.commit('authorizationStore/SET_FORM', this.newUpdateData);
       this.$store.dispatch('authorizationStore/UPDATE_USER', this.userInfo);
