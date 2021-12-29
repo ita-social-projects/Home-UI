@@ -187,11 +187,10 @@ import {
   regionCityDistrictMaxLength,
   streetMaxLength,
   houseBlockAndNumberMaxLength,
-  quantityAndAreaValidator,
+  quantityAndResidentialAreasValidator,
   houseAreaValidator,
 } from '@/utils/validators';
 import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum } from '@/store/houses/types';
@@ -201,7 +200,6 @@ import { HouseModel } from '@/shared/models/house.model';
 export default defineComponent({
   name: 'AddHouseForm',
   components: {
-    Dialog,
     Button,
     InputText,
   },
@@ -233,9 +231,9 @@ export default defineComponent({
   validations() {
     return {
       houseData: {
-        flatQuantity: { requiredValidator, zeroValidator, quantityAndAreaValidator },
+        flatQuantity: { requiredValidator, zeroValidator, quantityAndResidentialAreasValidator },
         houseArea: { requiredValidator, zeroValidator, houseAreaValidator },
-        adjoiningArea: { requiredValidator, zeroValidator, quantityAndAreaValidator },
+        adjoiningArea: { requiredValidator, zeroValidator, quantityAndResidentialAreasValidator },
         address: {
           region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },

@@ -19,6 +19,11 @@ export enum AuthActionEnum {
   ADD_CONTACT = 'ADD_CONTACT',
 }
 
+export enum AuthGettersEnum {
+  userData = 'userData',
+  loggedIn = 'loggedIn',
+}
+
 export enum ContactTypeEnum {
   EMAIL = 'EMAIL',
   PHONE = 'PHONE',
@@ -82,8 +87,8 @@ export interface Actions {
 }
 
 export type Getters<S = AuthorizationStateInterface> = {
-  loggedIn(state: S): boolean;
-  userData(state: S): UserModel;
+  [AuthGettersEnum.loggedIn](state: S): boolean;
+  [AuthGettersEnum.userData](state: S): UserModel;
 };
 
 export type AugmentedActionContext = {

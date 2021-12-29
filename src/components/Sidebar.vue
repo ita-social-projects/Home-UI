@@ -31,7 +31,8 @@
 import { defineComponent } from 'vue';
 import BaseSidebarNavButton from '@/components/base/BaseSidebarNavButton.vue';
 import { RoutesEnum } from '@/router/types';
-import { UserInterface } from '@/store/authorization/types';
+import { UserInterface, AuthGettersEnum } from '@/store/authorization/types';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'Sidebar',
@@ -53,7 +54,7 @@ export default defineComponent({
       return RoutesEnum.Polls;
     },
     userData(): UserInterface | null {
-      return this.$store.getters['authorizationStore/userData'];
+      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
     },
   },
 });

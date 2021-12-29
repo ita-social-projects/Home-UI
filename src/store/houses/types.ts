@@ -18,6 +18,11 @@ export enum HousesActionsEnum {
   ADD_HOUSE = 'ADD_HOUSE',
 }
 
+export enum HousesGettersEnum {
+  getHousesData = 'getHousesData',
+  getHouseInfo = 'getHouseInfo',
+}
+
 export interface AddressInterface {
   region: string;
   city: string;
@@ -60,8 +65,8 @@ export interface Actions {
 }
 
 export type Getters<S = HousesStateInterface> = {
-  getHousesData(state: S): Array<HouseModel> | [];
-  getHouseInfo(state: S): HouseModel;
+  [HousesGettersEnum.getHousesData](state: S): Array<HouseModel> | [];
+  [HousesGettersEnum.getHouseInfo](state: S): HouseModel;
 };
 
 export type AugmentedActionContext = {

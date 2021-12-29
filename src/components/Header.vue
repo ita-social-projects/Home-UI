@@ -52,6 +52,7 @@ import Menu from 'primevue/menu';
 import Dropdown from 'primevue/dropdown';
 import { UserCredentialInterface } from '@/store/authorization/types';
 import { StoreModuleEnum } from '@/store/types';
+import { AuthActionEnum, AuthGettersEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'baseHeader',
@@ -82,7 +83,7 @@ export default defineComponent({
               id: 0,
               contacts: [],
             };
-            this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/SIGN_OUT`, payload);
+            this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.SIGN_OUT}`, payload);
             this.$router.push(RoutesEnum.StartPage);
           },
         },
@@ -100,10 +101,10 @@ export default defineComponent({
   },
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/loggedIn`];
+      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.loggedIn}`];
     },
     getNameFromStore(): any {
-      const dataFromStore = this.$store.getters[`${StoreModuleEnum.authorizationStore}/userData`];
+      const dataFromStore = this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
       return `${dataFromStore['firstName']} ${dataFromStore['lastName']}`;
     },
   },
@@ -121,6 +122,7 @@ export default defineComponent({
     redirectToLogin() {
       this.$router.push(RoutesEnum.UserLogin);
     },
+
     toggle(event: any) {
       (this.$refs.menu as Menu).toggle(event);
     },

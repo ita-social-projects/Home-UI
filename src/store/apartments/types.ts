@@ -21,6 +21,10 @@ export enum ApartmentsActionsEnum {
   ADD_APARTMENT = 'ADD_APARTMENT',
 }
 
+export enum ApartmentsGettersEnum {
+  getApartmentsData = 'getApartmentsData',
+}
+
 export type Mutations<S = ApartmentsStateInterface> = {
   [ApartmentsMutationsEnum.SET_APARTMENTS](state: S, payload: Array<ApartmentModel>): void;
   [ApartmentsMutationsEnum.ADD_APARTMENT](state: S, payload: AddApartmentModel): void;
@@ -32,7 +36,7 @@ export interface Actions {
 }
 
 export type Getters<S = ApartmentsStateInterface> = {
-  getApartmentsData(state: S): Array<ApartmentModel> | [];
+  [ApartmentsGettersEnum.getApartmentsData](state: S): Array<ApartmentModel> | [];
 };
 
 export type AugmentedActionContext = {
