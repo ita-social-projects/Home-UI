@@ -1,6 +1,7 @@
 import { shallowMount, VueWrapper, mount } from '@vue/test-utils';
 import AddHouseForm from '@/components/AddHouseForm.vue';
 import { ComponentPublicInstance } from 'vue';
+import Vuex from 'vuex';
 
 const setup = async (id: string, value: string | number, wrapper: VueWrapper<ComponentPublicInstance>) => {
   const el = wrapper.find(id);
@@ -9,6 +10,19 @@ const setup = async (id: string, value: string | number, wrapper: VueWrapper<Com
 };
 
 describe('AddHouseForm.vue', () => {
+  let actions: any;
+  let store: any;
+
+  beforeEach(() => {
+    actions = {
+      ADD_HOUSE: jest.fn(),
+    };
+
+    store = new Vuex.Store({
+      actions,
+    });
+  });
+
   it('should exist', () => {
     const wrapper = shallowMount(AddHouseForm);
 
@@ -250,5 +264,24 @@ describe('AddHouseForm.vue', () => {
     const wrapper = mount(AddHouseForm);
     await setup('#street', 'Аааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааа', wrapper);
     expect(wrapper.find('small#street-help').text()).toBe('Максимальна кількість символів - 25');
+  });
+
+  it('props', () => {
+    const wrapper = mount(AddHouseForm, {
+      propsData: {
+        id: 918,
+      },
+    });
+    expect(wrapper.props().id).toBe(918);
+  });
+
+  it('test method addNewHouse', async () => {
+    const addNewHouse = jest.spyOn(AddHouseForm.methods, 'addNewHouse');
+    const wrapper = shallowMount(AddHouseForm, { global: { plugins: [store] } });
+    wrapper.find('#house_data_form').trigger('submit', {
+      preventDefault: () => {},
+    });
+    expect(addNewHouse).toBeCalled();
+    expect(actions.ADD_HOUSE).toHaveBeenCalled();
   });
 });

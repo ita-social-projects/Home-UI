@@ -9,7 +9,7 @@
         :class="{
           'p-invalid': v$.houseData.flatQuantity.$error,
         }"
-        @blur="v$.houseData.flatQuantity.$touch;"
+        @blur="v$.houseData.flatQuantity.$touch"
       />
       <small v-if="v$.houseData.flatQuantity.$error" class="p-error" id="flatQuantity-help">{{
         v$.houseData.flatQuantity.$errors[0].$message
@@ -158,18 +158,18 @@
       <Button
         label="Зберегти зміни"
         icon="pi pi-check"
-        @click="addNewHouse"
         autofocus
         class="p-button-info"
-        type="button"
-        value="Submit"
+        type="submit"
         :disabled="v$.houseData.$invalid"
+        id="add-new-house-btn"
       />
       <Button
         label="Скасувати зміни"
         icon="pi pi-times"
         @click="closeAddHouseModal"
         class="p-button-outlined p-button-info"
+        id="cancel-btn"
       />
     </div>
   </form>
