@@ -62,7 +62,7 @@ describe('RegisterCooperation.vue', () => {
   it('should fail the validation - email field [less than 5 symbols]', async () => {
     const wrapper = mount(RegisterCooperation);
     await setup('#email', 'eee', wrapper);
-    expect(wrapper.find('small#email-help').text()).toBe('Мінімальна довжина електронної пошти - 5 символів');
+    expect(wrapper.find('small#email-help').text()).toBe('Мінімальна кількість символів - 5');
   });
 
   it('should fail the validation - email field [more than 320 symbols]', async () => {
@@ -71,7 +71,7 @@ describe('RegisterCooperation.vue', () => {
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`;
     await setup('#email', longEmail, wrapper);
-    expect(wrapper.find('small#email-help').text()).toBe('Максимальна довжина електронної пошти - 320 символів');
+    expect(wrapper.find('small#email-help').text()).toBe('Максимальна кількість символів - 320');
   });
 
   it('should fail the validation - email field [first symbol is a special symbol]', async () => {
