@@ -100,10 +100,10 @@ export default defineComponent({
         number: this.apartmentData.apartmentNumber.toString(),
         area: this.apartmentData.apartmentArea,
       };
-      this.$store.dispatch(`apartmentsStore/ADD_APARTMENT`, payload);
       this.resetApartmentDataFields(this.apartmentData);
       this.v$.$reset();
       this.$emit('apartment-saved');
+      this.$store.dispatch(`apartmentsStore/ADD_APARTMENT`, payload);
     },
     cancelEditing() {
       this.resetApartmentDataFields(this.apartmentData);

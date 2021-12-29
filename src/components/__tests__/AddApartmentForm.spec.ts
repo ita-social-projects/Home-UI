@@ -83,29 +83,29 @@ describe('AddApartmentForm.vue', () => {
     await wrapper.vm.$nextTick(); // Wait until $emits have been handled
     // assert event has been emitted
     expect(wrapper.emitted('apartment-saved')).toBeTruthy();
+    expect(wrapper.emitted()).toHaveProperty('apartment-saved');
     // assert event count
     //expect(wrapper.emitted('apartment-saved').length).toBe(2);
   });
 
   it('cancel-editing emit test', async () => {
     const wrapper = mount(AddApartmentForm);
-    wrapper.vm.$emit('cancel-editing', 10);
+    wrapper.vm.$emit('cancel-editing');
     //wrapper.vm.$emit('cancel-editing', 123);
     await wrapper.vm.$nextTick(); // Wait until $emits have been handled
     // assert event has been emitted
     expect(wrapper.emitted('cancel-editing')).toBeTruthy();
-    expect(wrapper.emitted('cancel-editing')[1]).toEqual([123]);
+    expect(wrapper.emitted()).toHaveProperty('cancel-editing');
     // assert event count
     //  expect(wrapper.emitted('apartment-saved').length).toBe(2);
   });
 
-  it('props', () => {
+  it('props check', () => {
     const wrapper = mount(AddApartmentForm, {
-      propsData: {
+      props: {
         houseId: 5,
       },
     });
-    expect(wrapper.props().houseId).toBe(5);
     expect(wrapper.props('houseId')).toBe(5);
   });
 
@@ -125,7 +125,7 @@ describe('AddApartmentForm.vue', () => {
     expect(saveApartment).toBeCalled();
   });
 
-  // ??????
+  // ?????? doesnt do anything
   test('emit check test', async () => {
     const wrapper = mount(AddApartmentForm);
     await wrapper.find('#save-button').trigger('click');
@@ -170,15 +170,21 @@ describe('AddApartmentForm.vue', () => {
   //   expect(wrapper.vm.updateCart).toHaveBeenCalled();
   // });
 
-  // it('test method resetApartmentDataFields with jest.fn', async () => {
-  //   const mockCallback = jest.fn(() => '');
-  //   const wrapper = mount(AddApartmentForm);
-  //   const resetApartmentDataFields = jest.spyOn(AddApartmentForm.methods, 'resetApartmentDataFields');
-  //   wrapper.find('#apartment_number').setValue('123');
-  //   wrapper.find('#apartment_area').setValue(555);
-  //   wrapper.find('#save-button').trigger('click');
-  //   await wrapper.vm.$nextTick();
-  //   //  expect(mockCallback.mock.results[0].value).toBe('');
-  //   expect(resetApartmentDataFields).toHaveBeenCalledWith(mockCallback);
-  // });
+  it('test method resetApartmentDataFields with jest.fn', async () => {
+    const mockCallback = jest.fn();
+    const wrapper = mount(AddApartmentForm);
+    const resetApartmentDataFields = jest.spyOn(AddApartmentForm.methods, 'resetApartmentDataFields');
+    wrapper.find('#apartment_number').setValue('123');
+    wrapper.find('#apartment_area').setValue(555);
+    wrapper.find('#save-button').trigger('click');
+    await wrapper.vm.$nextTick();
+    // expect(mockCallback.mock.results[0].value).toBeTruthy;
+    expect(resetApartmentDataFields).toHaveBeenCalled();
+  });
+
+  it('test method resetApartmentDataFields with jest.fn', async () => {
+    const returnsTrue = jest.fn(() => true);
+    console.log(returnsTrue()); // true;
+    expect(returnsTrue.mock.calls);
+  });
 });
