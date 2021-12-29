@@ -18,12 +18,7 @@
         placeholder="Обрати ОСББ"
       />
       <div>
-        <Button
-          v-if="!isLoggedIn"
-          label="Увійти"
-          @click="redirectToLogin"
-          class="p-button-info"
-        />
+        <Button v-if="!isLoggedIn" label="Увійти" @click="redirectToLogin" class="p-button-info" />
         <Button
           label="Info"
           v-else
@@ -50,9 +45,8 @@ import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 
 import Dropdown from 'primevue/dropdown';
-import { UserCredentialInterface } from '@/store/authorization/types';
+import { UserCredentialInterface, AuthActionEnum, AuthGettersEnum } from '@/store/authorization/types';
 import { StoreModuleEnum } from '@/store/types';
-import { AuthActionEnum, AuthGettersEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'baseHeader',
