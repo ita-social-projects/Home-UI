@@ -5,9 +5,9 @@ import { UserModel } from './models/user.model';
 
 export const getters: GetterTree<AuthorizationStateInterface, RootStateInterface> & Getters = {
   loggedIn(state): boolean {
-    return !!state.user;
+    return !!(state.user?.id !== 0);
   },
-  userData(state): UserModel | null {
+  userData(state): UserModel {
     return state.user;
   },
 };

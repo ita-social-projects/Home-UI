@@ -20,7 +20,6 @@
       <div>
         <Button
           v-if="!isLoggedIn"
-          v-show="$route.name !== '/login'"
           label="Увійти"
           @click="redirectToLogin"
           class="p-button-info"
@@ -51,6 +50,8 @@ import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 
 import Dropdown from 'primevue/dropdown';
+import { UserCredentialInterface } from '@/store/authorization/types';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'baseHeader',
@@ -73,7 +74,15 @@ export default defineComponent({
           label: 'Вийти',
           icon: 'pi pi-fw pi-power-off',
           command: () => {
-            this.$store.dispatch('authorizationStore/SIGN_OUT', null);
+            const payload = {
+              firstName: '',
+              middleName: '',
+              lastName: '',
+              email: '',
+              id: 0,
+              contacts: [],
+            };
+            this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/SIGN_OUT`, payload);
             this.$router.push(RoutesEnum.StartPage);
           },
         },
@@ -91,12 +100,19 @@ export default defineComponent({
   },
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters['authorizationStore/loggedIn'];
+      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/loggedIn`];
     },
     getNameFromStore(): any {
-      const dataFromStore = this.$store.getters['authorizationStore/userData'];
+      const dataFromStore = this.$store.getters[`${StoreModuleEnum.authorizationStore}/userData`];
       return `${dataFromStore['firstName']} ${dataFromStore['lastName']}`;
     },
+  },
+  async mounted() {
+    const user: string | null = localStorage.getItem('user');
+    if (user !== null) {
+      const userData: UserCredentialInterface = JSON.parse(user);
+      await this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/GET_DATA`, userData.id);
+    }
   },
   methods: {
     redirectToMain() {
@@ -104,10 +120,6 @@ export default defineComponent({
     },
     redirectToLogin() {
       this.$router.push(RoutesEnum.UserLogin);
-    },
-    userLogout() {
-      this.$store.dispatch('authorizationStore/SIGN_OUT', null);
-      this.$router.push(RoutesEnum.StartPage);
     },
     toggle(event: any) {
       (this.$refs.menu as Menu).toggle(event);
