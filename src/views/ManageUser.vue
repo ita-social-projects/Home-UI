@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataReady" class="wrapper">
+  <div class="wrapper">
     <div class="card">
       <div class="cards__wrap">
         <div class="card card__name">
@@ -16,7 +16,9 @@
                 :class="{ 'p-invalid': v$.firstName.$error }"
                 @blur="v$.firstName.$touch"
               />
-              <small v-if="v$.firstName.$error" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
+              <small id="firstName-help" v-if="v$.firstName.$error" class="p-error">{{
+                v$.firstName.$errors[0].$message
+              }}</small>
             </div>
             <div class="field">
               <label for="middleName">По-батькові</label>
@@ -29,7 +31,9 @@
                 :class="{ 'p-invalid': v$.middleName.$error }"
                 @blur="v$.middleName.$touch"
               />
-              <small v-if="v$.middleName.$error" class="p-error">{{ v$.middleName.$errors[0].$message }}</small>
+              <small id="middleName-help" v-if="v$.middleName.$error" class="p-error">{{
+                v$.middleName.$errors[0].$message
+              }}</small>
             </div>
             <div class="field">
               <label for="lastname">Прізвище</label>
@@ -42,7 +46,9 @@
                 :class="{ 'p-invalid': v$.lastName.$error }"
                 @blur="v$.lastName.$touch"
               />
-              <small v-if="v$.lastName.$error" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
+              <small id="lastname-help" v-if="v$.lastName.$error" class="p-error">{{
+                v$.lastName.$errors[0].$message
+              }}</small>
             </div>
           </form>
         </div>
@@ -131,6 +137,7 @@
 
       <div class="buttons__box">
         <Button
+          id="cancel-button"
           @click="closeEditPage"
           label="Скасувати"
           icon="pi pi-times"
@@ -190,7 +197,6 @@ export default defineComponent({
       middleName: '',
       lastName: '',
       newUpdateData: {},
-      dataReady: false,
       placeholderValue: 'Спочатку оберіть тип контакту...',
       inputValue: {
         email: '',
@@ -220,7 +226,6 @@ export default defineComponent({
       this.firstName = this.userInfo.firstName;
       this.middleName = this.userInfo.middleName;
       this.lastName = this.userInfo.lastName;
-      this.dataReady = true;
     }
   },
   validations() {
@@ -265,9 +270,6 @@ export default defineComponent({
     };
   },
   methods: {
-    showStatus(status: string, message: string) {
-      this.$toast.add({ severity: 'error', summary: 'Error Message', detail: 'Message Content', life: 3000 });
-    },
     updateName(e: any) {
       this.newUpdateData = { ...this.newUpdateData, firstName: e.target.value };
     },
@@ -296,13 +298,9 @@ export default defineComponent({
         type: this.typeContact.name,
         main: this.priorityContact.code,
       };
-      if (contactsType.type === 'Пошта') {
-        contactsType.email = this.inputValue.email;
-        contactsType.type = 'email';
-      } else {
-        contactsType.phone = this.inputValue.phone;
-        contactsType.type = 'phone';
-      }
+      contactsType.type === 'Пошта'
+        ? ((contactsType.email = this.inputValue.email), (contactsType.type = 'email'))
+        : ((contactsType.phone = this.inputValue.phone), (contactsType.type = 'phone'));
       this.userContacts.push(contactsType);
       this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.ADD_CONTACT}`, this.userContacts);
       this.inputValue.email = this.inputValue.phone = '';
