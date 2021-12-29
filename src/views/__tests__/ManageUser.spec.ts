@@ -1,7 +1,7 @@
-import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
-import ManageUser from '@/views/ManageUser.vue';
-import store from '@/store';
-import { ComponentPublicInstance } from 'vue';
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import ManageUser from "@/views/ManageUser.vue";
+import store from "@/store";
+import { ComponentPublicInstance } from "vue";
 
 const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
   const el = wrapper.find(id);
@@ -15,6 +15,7 @@ const mockRouter = {
 
 describe('ManageUser', () => {
   let wrapper: any;
+  let data: any;
 
   beforeEach(async () => {
     wrapper = mount(ManageUser, {
@@ -26,6 +27,7 @@ describe('ManageUser', () => {
       },
     });
     await flushPromises();
+    data = ManageUser.methods
   });
 
   it('should exist', () => {
@@ -65,10 +67,8 @@ describe('ManageUser', () => {
     expect(wrapper.find('small#lastname-help').text()).toBe("Це обов'язкове поле");
   });
 
-  it('should be redirect Main page ', async () => {
+  it('should be cancel page ', async () => {
     await wrapper.find('#cancel-button').trigger('click');
     expect(mockRouter.push).toHaveBeenCalledTimes(1);
-    expect(mockRouter.push).toHaveBeenCalledWith('/main');
   });
-
 });

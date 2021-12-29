@@ -123,6 +123,7 @@
                 <td>{{ contact.type === 'email' ? contact.email : contact.phone }}</td>
                 <td class="td__del">
                   <Button
+                    id="delete-сontact"
                     @click="deleteContact(contact.id)"
                     label="Видалити"
                     type="submit"
@@ -271,7 +272,7 @@ export default defineComponent({
 
     onSubmit() {
       if (this.inputValue.email.length > 0 || this.inputValue.phone.length > 0) {
-        this.addContact()
+        this.addContact();
       }
       this.$store.commit('authorizationStore/SET_FORM', this.newUpdateData);
       this.$store.dispatch('authorizationStore/UPDATE_USER', this.userInfo);
@@ -287,13 +288,9 @@ export default defineComponent({
         type: this.typeContact.name,
         main: this.priorityContact.code,
       };
-      if (contactsType.type === 'Пошта') {
-        contactsType.email = this.inputValue.email;
-        contactsType.type = 'email';
-      } else {
-        contactsType.phone = this.inputValue.phone;
-        contactsType.type = 'phone';
-      }
+      contactsType.type === 'Пошта'
+        ? ((contactsType.email = this.inputValue.email), (contactsType.type = 'email'))
+        : ((contactsType.phone = this.inputValue.phone), (contactsType.type = 'phone'));
       this.userContacts.push(contactsType);
       this.$store.dispatch('authorizationStore/ADD_CONTACT', this.userContacts);
       this.inputValue.email = this.inputValue.phone = '';
