@@ -155,12 +155,12 @@ import { mapGetters } from 'vuex';
 import { RoutesEnum } from '@/router/types';
 import {
   requiredValidator,
-  nameValidator,
-  nameLenghtValidator,
+  userNameValidator,
+  someTitleLenghtValidator,
   emailValidator,
   emailMinLength,
   emailMaxLength,
-  phoneNumberValidator,
+  userPhoneValidator,
 } from '@/utils/validators';
 import useVuelidate from '@vuelidate/core';
 import Button from 'primevue/button';
@@ -227,18 +227,18 @@ export default defineComponent({
     return {
       firstName: {
         requiredValidator,
-        nameValidator,
-        nameLenghtValidator,
+        userNameValidator,
+        someTitleLenghtValidator,
       },
       middleName: {
         requiredValidator,
-        nameValidator,
-        nameLenghtValidator,
+        userNameValidator,
+        someTitleLenghtValidator,
       },
       lastName: {
         requiredValidator,
-        nameValidator,
-        nameLenghtValidator,
+        userNameValidator,
+        someTitleLenghtValidator,
       },
       inputValue: {
         email: {
@@ -259,7 +259,7 @@ export default defineComponent({
               return this.typeContact.name === 'Телефон';
             })
           ),
-          phoneNumberValidator,
+          userPhoneValidator,
         },
       },
     };

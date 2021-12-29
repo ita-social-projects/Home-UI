@@ -513,17 +513,17 @@ import {
   emailMaxLength,
   emailMinLength,
   emailValidator,
-  nameLenghtValidator,
+  someTitleLenghtValidator,
   ukrLangTitleValidator,
   ibanValidator,
-  phoneNumberValidator,
+  userPhoneValidator,
   houseNumAndHouseBlockValidator,
   zipCodeValidator,
   zeroValidator,
   regionCityDistrictMaxLength,
   streetMaxLength,
   houseBlockAndNumberMaxLength,
-  quantityAndAreaValidator,
+  quantityAndResidentialAreasValidator,
   houseAreaValidator,
 } from '@/utils/validators';
 import { HouseModel } from '@/shared/models/house.model';
@@ -601,11 +601,11 @@ export default defineComponent({
         name: {
           requiredValidator,
           ukrLangTitleValidator,
-          nameLenghtValidator,
+          someTitleLenghtValidator,
         },
         edrpou: { requiredValidator, edrpouValidator },
         iban: { requiredValidator, ibanValidator },
-        phone: { requiredValidator, phoneNumberValidator },
+        phone: { requiredValidator, userPhoneValidator },
         email: {
           requiredValidator,
           emailMinLength,
@@ -624,9 +624,9 @@ export default defineComponent({
         },
       },
       house: {
-        flatQuantity: { requiredValidator, zeroValidator, quantityAndAreaValidator },
+        flatQuantity: { requiredValidator, zeroValidator, quantityAndResidentialAreasValidator },
         houseArea: { requiredValidator, zeroValidator, houseAreaValidator },
-        adjoiningArea: { requiredValidator, zeroValidator, quantityAndAreaValidator },
+        adjoiningArea: { requiredValidator, zeroValidator, quantityAndResidentialAreasValidator },
         address: {
           region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
