@@ -232,9 +232,19 @@ export default defineComponent({
   validations() {
     return {
       houseData: {
-        flatQuantity: { requiredValidator, zeroValidator, flatQuantityAndAdjoiningAreaValidator },
+        flatQuantity: {
+          requiredValidator,
+          zeroValidator,
+          flatQuantityAndAdjoiningAreaValidator,
+          houseDecimalValidator,
+        },
         houseArea: { requiredValidator, zeroValidator, houseAreaValidator, houseDecimalValidator },
-        adjoiningArea: { requiredValidator, zeroValidator, flatQuantityAndAdjoiningAreaValidator },
+        adjoiningArea: {
+          requiredValidator,
+          zeroValidator,
+          flatQuantityAndAdjoiningAreaValidator,
+          houseDecimalValidator,
+        },
         address: {
           region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
