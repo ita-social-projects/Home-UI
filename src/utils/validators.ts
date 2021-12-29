@@ -22,18 +22,19 @@ const validPhoneNumber = helpers.regex(/^\+380\d{3}\d{2}\d{2}\d{2}$/);
 const validApartmentArea = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,9})?$)|(1000$)/);
 const validApartmentDecimal = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|(1000$)/);
 const validApartmentNumber = helpers.regex(/^(?!(0))\d{1,4}(\-[a-zа-я])?$/);
+const validHouseDecimal = helpers.regex(/(^(\d{1,100}){1}(\.\d{1,3})?$)/);
 
-const validNonZeroFields = helpers.regex(/^(?!0+$)/g);
+const validNonZeroFields = helpers.regex(/^[^0]/);
 
 const lengthMessage = (number: number, description: string): string => {
   const max = `Максимальна кількість символів - ${number}`;
   const min = `Мінімальна кількість символів - ${number}`;
   return description === 'max' ? max : min;
 };
-
 const correctNumberMessage = (additionalInfo: string) => {
-  return `В назві мають бути ${additionalInfo} цифр від 0 до 9`;
+  return `В полі мають бути ${additionalInfo} цифри від 0 до 9`;
 };
+const validFlatQuantityAndAdjoiningArea = helpers.regex(/^\d+$/);
 
 export const requiredValidator = helpers.withMessage("Це обов'язкове поле", required);
 export const someTitleLenghtValidator = helpers.withMessage(lengthMessage(50, 'max'), maxLength(50));
@@ -83,3 +84,10 @@ export const houseBlockAndNumberMaxLength = helpers.withMessage(lengthMessage(10
 export const apartmentAreaValidator = helpers.withMessage('Площа має бути від 10 до 1000 м.кв', validApartmentArea);
 export const apartmentDecimalValidator = helpers.withMessage('Не більше 2 значень після крапки', validApartmentDecimal);
 export const apartmentNumberValidator = helpers.withMessage('1-6 цифр, літера через дефіс', validApartmentNumber);
+
+export const houseDecimalValidator = helpers.withMessage('Не більше 3 значень після крапки', validHouseDecimal);
+
+export const flatQuantityAndAdjoiningAreaValidator = helpers.withMessage(
+  'Це поле має містити цілі цифри',
+  validFlatQuantityAndAdjoiningArea
+);
