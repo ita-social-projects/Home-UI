@@ -67,11 +67,11 @@ export interface UserLoginInterface {
   password: string;
 }
 export interface AuthorizationStateInterface {
-  user: UserModel | null;
+  user: UserModel;
 }
 
 export type Mutations<S = AuthorizationStateInterface> = {
-  [AuthMutationEnum.SET_USER](state: S, payload: UserModel | null): void;
+  [AuthMutationEnum.SET_USER](state: S, payload: UserModel): void;
   [AuthMutationEnum.SET_FORM](state: S, payload: UpdateUserFullNameInterface): void;
   [AuthMutationEnum.ADD_CONTACT](state: S, payload: UserContactInterface): void;
   [AuthMutationEnum.UPDATE_CONTACT](state: S, payload: number): void;
@@ -80,7 +80,7 @@ export type Mutations<S = AuthorizationStateInterface> = {
 export interface Actions {
   [AuthActionEnum.SIGN_IN]({ commit }: AugmentedActionContext, payload: requestPayload<UserLoginInterface>): void;
   [AuthActionEnum.UPDATE_USER]({ commit }: AugmentedActionContext, payload: UpdateUserInterface): void;
-  [AuthActionEnum.SIGN_OUT]({ commit }: AugmentedActionContext, payload: null): void;
+  [AuthActionEnum.SIGN_OUT]({ commit }: AugmentedActionContext, payload: UserModel): void;
   [AuthActionEnum.GET_DATA]({ commit }: AugmentedActionContext, payload: string): void;
   [AuthActionEnum.DELETE_CONTACT]({ state, commit }: AugmentedActionContext, payload: number): void;
   [AuthActionEnum.ADD_CONTACT]({ state, commit }: AugmentedActionContext, payload: any): void;
@@ -88,7 +88,7 @@ export interface Actions {
 
 export type Getters<S = AuthorizationStateInterface> = {
   [AuthGettersEnum.loggedIn](state: S): boolean;
-  [AuthGettersEnum.userData](state: S): UserModel | null;
+  [AuthGettersEnum.userData](state: S): UserModel;
 };
 
 export type AugmentedActionContext = {
