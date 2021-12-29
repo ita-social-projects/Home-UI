@@ -13,6 +13,12 @@ export enum UserActionEnum {
   RESET_ERROR_ACTION = 'RESET_ERROR_ACTION',
 }
 
+export enum UserGettersEnum {
+  getErrorMessage = 'getErrorMessage',
+  getSuccessMessage = 'getSuccessMessage',
+  getUserInfo = 'getUserInfo',
+}
+
 export interface UserDataInterface {
   registrationToken: string;
   firstName: string;
@@ -49,9 +55,9 @@ export interface Actions {
 }
 
 export type Getters<S = UserStateInterface> = {
-  getErrorMessage(state: S): string | null;
-  getSuccessMessage(state: S): string;
-  getUserInfo(state: S): UserDataInterface | null;
+  [UserGettersEnum.getErrorMessage](state: S): string | null;
+  [UserGettersEnum.getSuccessMessage](state: S): string;
+  [UserGettersEnum.getUserInfo](state: S): UserDataInterface | null;
 };
 
 export type AugmentedActionContext = {

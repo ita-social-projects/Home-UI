@@ -102,7 +102,7 @@ import Password from 'primevue/password';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import store from '@/store';
-import { UserStateInterface } from '@/store/user/types';
+import { UserStateInterface, UserActionEnum, UserGettersEnum } from '@/store/user/types';
 import { useToast } from 'primevue/usetoast';
 import { StoreModuleEnum } from '@/store/types';
 import { ContactTypeEnum } from '@/store/authorization/types';
@@ -178,7 +178,7 @@ export default defineComponent({
         password: state.formData.password.confirm,
         contacts: [{ type: ContactTypeEnum.EMAIL, main: false, email: state.formData.email }],
       };
-      await store.dispatch(`${StoreModuleEnum.userStore}/SET_USER_INFO`, userData);
+      await store.dispatch(`${StoreModuleEnum.userStore}/${UserActionEnum.SET_USER_INFO}`, userData);
     }
     const showStatus = (status: string, message: string) => {
       toast.add({ severity: status, summary: message, life: 6000 });
@@ -199,21 +199,21 @@ export default defineComponent({
     async function onSubmit() {
       await sendInfo();
       watch(
-        () => store.getters[`${StoreModuleEnum.userStore}/getErrorMessage`],
+        () => store.getters[`${StoreModuleEnum.userStore}/${UserGettersEnum.getErrorMessage}`],
         function () {
-          if (store.getters[`${StoreModuleEnum.userStore}/getErrorMessage`]) {
-            const errMessage = store.getters[`${StoreModuleEnum.userStore}/getErrorMessage`];
+          if (store.getters[`${StoreModuleEnum.userStore}/${UserGettersEnum.getErrorMessage}`]) {
+            const errMessage = store.getters[`${StoreModuleEnum.userStore}/${UserGettersEnum.getErrorMessage}`];
             const severityStatus = 'error';
             showStatus(severityStatus, errMessage);
-            store.dispatch(`${StoreModuleEnum.userStore}/RESET_ERROR_ACTION`);
+            store.dispatch(`${StoreModuleEnum.userStore}/${UserActionEnum.RESET_ERROR_ACTION}`);
           }
         }
       );
       watch(
-        () => store.getters[`${StoreModuleEnum.userStore}/getSuccessMessage`],
+        () => store.getters[`${StoreModuleEnum.userStore}/${UserGettersEnum.getSuccessMessage}`],
         function () {
           const severityStatus = 'success';
-          const sucMessage = store.getters[`${StoreModuleEnum.userStore}/getSuccessMessage`];
+          const sucMessage = store.getters[`${StoreModuleEnum.userStore}/${UserGettersEnum.getSuccessMessage}`];
           showStatus(severityStatus, sucMessage);
           resetFields();
         }

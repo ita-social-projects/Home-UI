@@ -191,7 +191,6 @@ import {
   houseAreaValidator,
 } from '@/utils/validators';
 import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum } from '@/store/houses/types';
@@ -201,7 +200,6 @@ import { HouseModel } from '@/shared/models/house.model';
 export default defineComponent({
   name: 'AddHouseForm',
   components: {
-    Dialog,
     Button,
     InputText,
   },

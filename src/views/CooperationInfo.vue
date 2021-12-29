@@ -496,7 +496,13 @@ import ConfirmPopup from 'primevue/confirmpopup';
 
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddHouseForm from '@/components/AddHouseForm.vue';
-import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
+import {
+  CooperationAddressInterface,
+  CooperationContactsInterface,
+  CooperationActionEnum,
+  CooperationGettersEnum,
+} from '@/store/cooperation/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
 
 import useVuelidate from '@vuelidate/core';
@@ -637,8 +643,8 @@ export default defineComponent({
     this.cooperationData.id = this.cooperationInfo?.id ?? 1;
 
     await Promise.all([
-      this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS'),
-      this.$store.dispatch('housesStore/SET_HOUSES', this.cooperationData.id),
+      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/${CooperationActionEnum.SET_USER_COOPERATIONS}`),
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationData.id),
     ]).then(() => {
       this.initData();
       this.isLoaded = true;
@@ -681,7 +687,7 @@ export default defineComponent({
             cooperationId: this.cooperationData.id,
             id: this.house.id,
           };
-          await this.$store.dispatch('housesStore/DELETE_HOUSE', payload);
+          await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.DELETE_HOUSE}`, payload);
           this.showSuccessDelete();
         },
         reject: () => {
@@ -729,7 +735,10 @@ export default defineComponent({
           { type: 'phone', main: true, phone: this.cooperationData.phone },
         ],
       };
-      this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
+      this.$store.dispatch(
+        `${StoreModuleEnum.cooperationStore}/${CooperationActionEnum.SET_COOPERATION_UPDATE}`,
+        payload
+      );
       this.manageCooperationModal();
     },
     async editHouseInfo() {
@@ -750,7 +759,7 @@ export default defineComponent({
           zipCode: this.house.address.zipCode,
         },
       };
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/EDIT_HOUSE`, payload);
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.EDIT_HOUSE}`, payload);
       this.manageHouseModal();
       this.showSuccessEdit(this.house.id!);
     },
@@ -806,8 +815,8 @@ export default defineComponent({
       return this.displayAddHouseModal;
     },
     ...mapGetters({
-      housesInfo: `${StoreModuleEnum.housesStore}/getHousesData`,
-      cooperationInfo: `${StoreModuleEnum.cooperationStore}/getSelectedCooperation`,
+      housesInfo: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
+      cooperationInfo: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperation}`,
     }),
   },
 });
