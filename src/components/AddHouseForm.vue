@@ -9,7 +9,7 @@
         :class="{
           'p-invalid': v$.houseData.flatQuantity.$error,
         }"
-        @blur="v$.houseData.flatQuantity.$touch;"
+        @blur="v$.houseData.flatQuantity.$touch"
       />
       <small v-if="v$.houseData.flatQuantity.$error" class="p-error">{{
         v$.houseData.flatQuantity.$errors[0].$message
@@ -187,11 +187,11 @@ import {
   regionCityDistrictMaxLength,
   streetMaxLength,
   houseBlockAndNumberMaxLength,
-  quantityAndAreaValidator,
   houseAreaValidator,
+  flatQuantityAndAdjoiningAreaValidator,
+  houseDecimalValidator,
 } from '@/utils/validators';
 import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum } from '@/store/houses/types';
@@ -201,7 +201,6 @@ import { HouseModel } from '@/shared/models/house.model';
 export default defineComponent({
   name: 'AddHouseForm',
   components: {
-    Dialog,
     Button,
     InputText,
   },
@@ -233,9 +232,19 @@ export default defineComponent({
   validations() {
     return {
       houseData: {
-        flatQuantity: { requiredValidator, zeroValidator, quantityAndAreaValidator },
-        houseArea: { requiredValidator, zeroValidator, houseAreaValidator },
-        adjoiningArea: { requiredValidator, zeroValidator, quantityAndAreaValidator },
+        flatQuantity: {
+          requiredValidator,
+          zeroValidator,
+          flatQuantityAndAdjoiningAreaValidator,
+          houseDecimalValidator,
+        },
+        houseArea: { requiredValidator, zeroValidator, houseAreaValidator, houseDecimalValidator },
+        adjoiningArea: {
+          requiredValidator,
+          zeroValidator,
+          flatQuantityAndAdjoiningAreaValidator,
+          houseDecimalValidator,
+        },
         address: {
           region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
@@ -287,7 +296,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 %error-message {
-  margin: 0.4em 0.5rem;
+  margin: 0.2em 0.9rem;
   width: 80%;
 }
 

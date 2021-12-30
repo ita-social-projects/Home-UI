@@ -162,6 +162,12 @@ import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddApartmentForm from '@/components/AddApartmentForm.vue';
+
+import { StoreModuleEnum } from '@/store/types';
+import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
+
 import { HouseModel } from '@/shared/models/house.model';
 
 export default defineComponent({
@@ -225,7 +231,7 @@ export default defineComponent({
     }
 
     const cooperationId = computed(() => {
-      return store.getters['cooperationStore/getSelectedCooperationId'];
+      return store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
     });
 
     const deleteApartment = () => {
@@ -239,12 +245,12 @@ export default defineComponent({
     };
 
     const setApartments = async () => {
-      await store.dispatch('apartmentsStore/SET_APARTMENTS', id.value);
+      await store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENTS}`, id.value);
       loading.value = false;
     };
 
     const apartmentsData = computed((): Array<ApartmentModel> => {
-      return store.getters['apartmentsStore/getApartmentsData'];
+      return store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`];
     });
 
     const onRowSelect = (event: any) => {
@@ -260,11 +266,11 @@ export default defineComponent({
         cooperationId: cooperationId.value,
         houseId: id.value,
       };
-      await store.dispatch('housesStore/GET_HOUSE_BY_ID', payload);
+      await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
     };
 
     const houseInfo = computed((): HouseModel => {
-      return store.getters['housesStore/getHouseInfo'];
+      return store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`];
     });
 
     onMounted(() => {
