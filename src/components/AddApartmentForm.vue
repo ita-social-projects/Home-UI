@@ -105,7 +105,7 @@ export default defineComponent({
       this.resetApartmentDataFields(this.apartmentData);
       this.v$.$reset();
       this.$emit('apartment-saved');
-      this.$store.dispatch(`apartmentsStore/ADD_APARTMENT`, payload);
+      this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.ADD_APARTMENT}`, payload);
     },
     cancelEditing() {
       this.resetApartmentDataFields(this.apartmentData);

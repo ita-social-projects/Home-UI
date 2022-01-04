@@ -1,7 +1,6 @@
-import { mount, VueWrapper, shallowMount } from '@vue/test-utils';
+import { mount, VueWrapper } from '@vue/test-utils';
 import AddApartmentForm from '@/components/AddApartmentForm.vue';
 import { ComponentPublicInstance } from 'vue';
-import { createStore } from 'vuex';
 
 const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
   const el = wrapper.find(id);
@@ -96,7 +95,6 @@ describe('AddApartmentForm.vue', () => {
     expect(saveApartment).toBeCalled();
   });
 
-  // ?????? doesnt do anything
   test('emit check test', async () => {
     const wrapper = mount(AddApartmentForm);
     await wrapper.find('#save-button').trigger('click');
@@ -116,7 +114,7 @@ describe('AddApartmentForm.vue', () => {
 
   it('test jest.fn', async () => {
     const returnsTrue = jest.fn(() => true);
-    console.log(returnsTrue()); // true;
+    console.log(returnsTrue());
     expect(returnsTrue.mock.calls);
   });
 });

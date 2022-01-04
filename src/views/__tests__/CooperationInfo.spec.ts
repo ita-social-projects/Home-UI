@@ -1,4 +1,4 @@
-import { mount, VueWrapper, shallowMount } from '@vue/test-utils';
+import { VueWrapper, shallowMount } from '@vue/test-utils';
 import CooperationInfo from '@/views/CooperationInfo.vue';
 import { ComponentPublicInstance } from 'vue';
 
