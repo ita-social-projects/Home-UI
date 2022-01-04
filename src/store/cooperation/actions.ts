@@ -25,7 +25,7 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
     }
   },
 
-  [CooperationActionEnum.SET_USER_COOPERATIONS]: async ({ commit }, payload) => {
+  [CooperationActionEnum.SET_USER_COOPERATIONS]: async ({ commit }) => {
     try {
       const { data } = await HTTP.get('/cooperations', {
         params: {
@@ -36,7 +36,7 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
       const cooperationData: Array<CooperationModel> = data.map((el: CooperationDTOModel) => new CooperationModel(el));
 
       commit(CooperationMutationEnum.SET_USER_COOPERATIONS, cooperationData);
-      commit(CooperationMutationEnum.SET_SELECTED_COOPERATION, payload);
+      commit(CooperationMutationEnum.SET_SELECTED_COOPERATION, 0);
     } catch (err) {
       console.log('error SET_USER_COOPERATIONS', err);
     }

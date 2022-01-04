@@ -17,7 +17,7 @@
           <span>IBAN номер : </span>
           <span>{{ cooperationInfo.iban }}</span>
         </div>
-        <div v-if="cooperationData.email">
+        <div v-if="cooperationInfo.contacts[0].email">
           <span>Електрона адреса : </span>
           <span>{{ cooperationInfo.contacts[0].email }}</span>
         </div>
@@ -25,7 +25,7 @@
           <span>Код реєстрації : </span>
           <span>{{ cooperationInfo.edrpou }}</span>
         </div>
-        <div v-if="cooperationData.phone">
+        <div v-if="cooperationInfo.contacts[1].phone">
           <span>Номер телефону : </span>
           <span>{{ cooperationInfo.contacts[1].phone }}</span>
         </div>
@@ -46,12 +46,11 @@
           :closable="false"
           :dismissableMask="true"
         >
-          <EditCooperationInfo
-            :mapContact="mapContact"
+          <EditCooperationForm
             @cancel-editCoopInfo="displayModalForCooperation = false"
             @isLoadedMode="isLoaded = true"
             :cooperationId="cooperationData.id"
-          ></EditCooperationInfo>
+          ></EditCooperationForm>
         </Dialog>
       </div>
     </div>
@@ -293,13 +292,8 @@ import ConfirmPopup from 'primevue/confirmpopup';
 
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddHouseForm from '@/components/AddHouseForm.vue';
-import EditCooperationInfo from '@/components/EditCooperationInfo.vue';
-import {
-  CooperationAddressInterface,
-  CooperationContactsInterface,
-  CooperationActionEnum,
-  CooperationGettersEnum,
-} from '@/store/cooperation/types';
+import EditCooperationForm from '@/components/EditCooperationInfo.vue';
+import { CooperationActionEnum, CooperationGettersEnum } from '@/store/cooperation/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
 
@@ -332,7 +326,7 @@ export default defineComponent({
     Menu,
     ConfirmPopup,
     AddHouseForm,
-    EditCooperationInfo,
+    EditCooperationForm,
   },
   data() {
     return {

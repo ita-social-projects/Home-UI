@@ -241,7 +241,7 @@ import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
-  name: 'EditCooperationInfo',
+  name: 'EditCooperationForm',
   components: {
     Button,
     InputText,
@@ -298,6 +298,7 @@ export default defineComponent({
   },
   async mounted() {
     this.initData();
+    this.$emit('isLoadedMode');
   },
   methods: {
     initData() {

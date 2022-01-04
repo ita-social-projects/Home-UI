@@ -39,7 +39,7 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: requestPayload<CooperationRegistrationInterface>
   ): void;
-  [CooperationActionEnum.SET_USER_COOPERATIONS]({ commit }: AugmentedActionContext, payload: number): void;
+  [CooperationActionEnum.SET_USER_COOPERATIONS]({ commit }: AugmentedActionContext): void;
   [CooperationActionEnum.SET_SELECTED_COOPERATION]({ commit }: AugmentedActionContext, payload: number): void;
   [CooperationActionEnum.SET_COOPERATION_UPDATE]({ commit }: AugmentedActionContext, payload: CooperationModel): void;
 }
