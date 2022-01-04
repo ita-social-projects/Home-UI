@@ -180,7 +180,6 @@ import { helpers, requiredIf } from '@vuelidate/validators';
 
 import { StoreModuleEnum } from '@/store/types';
 import {
-  UserCredentialInterface,
   AuthActionEnum,
   AuthMutationEnum,
   AuthGettersEnum,
