@@ -11,7 +11,7 @@
         }"
         @blur="v$.houseData.flatQuantity.$touch"
       />
-      <small v-if="v$.houseData.flatQuantity.$error" class="p-error">{{
+      <small v-if="v$.houseData.flatQuantity.$error" class="p-error" id="flatQuantity-help">{{
         v$.houseData.flatQuantity.$errors[0].$message
       }}</small>
     </p>
@@ -26,7 +26,7 @@
         }"
         @blur="v$.houseData.houseArea.$touch"
       />
-      <small v-if="v$.houseData.houseArea.$error" class="p-error">{{
+      <small v-if="v$.houseData.houseArea.$error" class="p-error" id="houseArea-help">{{
         v$.houseData.houseArea.$errors[0].$message
       }}</small>
     </p>
@@ -41,7 +41,7 @@
         }"
         @blur="v$.houseData.adjoiningArea.$touch"
       />
-      <small v-if="v$.houseData.adjoiningArea.$error" class="p-error">{{
+      <small v-if="v$.houseData.adjoiningArea.$error" class="p-error" id="adjoiningArea-help">{{
         v$.houseData.adjoiningArea.$errors[0].$message
       }}</small>
     </p>
@@ -59,7 +59,7 @@
           }"
           @blur="v$.houseData.address.region.$touch"
         />
-        <small v-if="v$.houseData.address.region.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.region.$error" class="p-error" id="region-help">{{
           v$.houseData.address.region.$errors[0].$message
         }}</small>
       </p>
@@ -74,7 +74,7 @@
           }"
           @blur="v$.houseData.address.city.$touch"
         />
-        <small v-if="v$.houseData.address.city.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.city.$error" class="p-error" id="city-help">{{
           v$.houseData.address.city.$errors[0].$message
         }}</small>
       </p>
@@ -89,7 +89,7 @@
           }"
           @blur="v$.houseData.address.district.$touch"
         />
-        <small v-if="v$.houseData.address.district.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.district.$error" class="p-error" id="district-help">{{
           v$.houseData.address.district.$errors[0].$message
         }}</small>
       </p>
@@ -104,7 +104,7 @@
           }"
           @blur="v$.houseData.address.street.$touch"
         />
-        <small v-if="v$.houseData.address.street.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.street.$error" class="p-error" id="street-help">{{
           v$.houseData.address.street.$errors[0].$message
         }}</small>
       </p>
@@ -119,7 +119,7 @@
           }"
           @blur="v$.houseData.address.houseBlock.$touch"
         />
-        <small v-if="v$.houseData.address.houseBlock.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.houseBlock.$error" class="p-error" id="houseBlock-help">{{
           v$.houseData.address.houseBlock.$errors[0].$message
         }}</small>
       </p>
@@ -134,7 +134,7 @@
           }"
           @blur="v$.houseData.address.houseNumber.$touch"
         />
-        <small v-if="v$.houseData.address.houseNumber.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.houseNumber.$error" class="p-error" id="houseNumber-help">{{
           v$.houseData.address.houseNumber.$errors[0].$message
         }}</small>
       </p>
@@ -149,7 +149,7 @@
           }"
           @blur="v$.houseData.address.zipCode.$touch"
         />
-        <small v-if="v$.houseData.address.zipCode.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.zipCode.$error" class="p-error" id="zipCode-help">{{
           v$.houseData.address.zipCode.$errors[0].$message
         }}</small>
       </p>
@@ -158,18 +158,18 @@
       <Button
         label="Зберегти зміни"
         icon="pi pi-check"
-        @click="addNewHouse"
         autofocus
         class="p-button-info"
-        type="button"
-        value="Submit"
+        type="submit"
         :disabled="v$.houseData.$invalid"
+        id="add-new-house-btn"
       />
       <Button
         label="Скасувати зміни"
         icon="pi pi-times"
         @click="closeAddHouseModal"
         class="p-button-outlined p-button-info"
+        id="cancel-btn"
       />
     </div>
   </form>
@@ -276,11 +276,10 @@ export default defineComponent({
       this.$emit('cancel-addHouseModal');
     },
     resetHouseDataFields(houseData: any) {
+      console.log('yes');
       for (let field in houseData) {
         if (typeof houseData[field] === 'object') {
           this.resetHouseDataFields(houseData[field]);
-        } else if (typeof houseData[field] === 'number') {
-          houseData[field] = 0;
         } else {
           houseData[field] = '';
         }
