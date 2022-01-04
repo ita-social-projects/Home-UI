@@ -298,9 +298,13 @@ export default defineComponent({
         type: this.typeContact.name,
         main: this.priorityContact.code,
       };
-      contactsType.type === 'Пошта'
-        ? ((contactsType.email = this.inputValue.email), (contactsType.type = 'email'))
-        : ((contactsType.phone = this.inputValue.phone), (contactsType.type = 'phone'));
+      if (contactsType.type === 'Пошта') {
+        contactsType.email = this.inputValue.email;
+        contactsType.type = 'email';
+      } else {
+        contactsType.phone = this.inputValue.phone;
+        contactsType.type = 'phone';
+      }
       this.userContacts.push(contactsType);
       this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.ADD_CONTACT}`, this.userContacts);
       this.inputValue.email = this.inputValue.phone = '';
