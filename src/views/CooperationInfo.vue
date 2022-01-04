@@ -35,7 +35,7 @@
         <Button
           label="Редагувати"
           icon="pi pi-pencil"
-          @click="this.displayCooperationModal = true"
+          @click="this.displayModalForCooperation = true"
           class="p-button-outlined p-button-info"
         />
         <Dialog
@@ -47,8 +47,10 @@
           :dismissableMask="true"
         >
           <EditCooperationInfo
-            :initData="initData"
-            @cancel-editCoopInfo="displayCooperationModal = false"
+            :mapContact="mapContact"
+            @cancel-editCoopInfo="displayModalForCooperation = false"
+            @isLoadedMode="isLoaded = true"
+            :cooperationId="cooperationData.id"
           ></EditCooperationInfo>
         </Dialog>
       </div>
@@ -356,12 +358,6 @@ export default defineComponent({
       selectedHouse: ref(),
       cooperationData: {
         id: 0,
-        name: '',
-        edrpou: '',
-        iban: '',
-        phone: '',
-        email: '',
-        address: {} as CooperationAddressInterface,
       },
       isLoaded: false,
       house: {
@@ -417,35 +413,16 @@ export default defineComponent({
     this.cooperationData.id = this.cooperationInfo?.id ?? 1;
 
     await Promise.all([
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/${CooperationActionEnum.SET_USER_COOPERATIONS}`),
+      this.$store.dispatch(
+        `${StoreModuleEnum.cooperationStore}/${CooperationActionEnum.SET_USER_COOPERATIONS}`,
+        this.cooperationData.id
+      ),
       this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationData.id),
     ]).then(() => {
-      this.initData();
       this.isLoaded = true;
     });
   },
   methods: {
-    initData() {
-      this.cooperationData.name = this.cooperationInfo?.name ?? '';
-      this.cooperationData.edrpou = this.cooperationInfo?.edrpou ?? '';
-      this.cooperationData.iban = this.cooperationInfo?.iban ?? '';
-      this.cooperationData.address = JSON.parse(
-        JSON.stringify(this.cooperationInfo?.address ?? ({} as CooperationAddressInterface))
-      );
-      this.cooperationInfo?.contacts.forEach((el: CooperationContactsInterface) => this.mapContact(el));
-    },
-    mapContact(el: CooperationContactsInterface) {
-      if (el.main) {
-        for (let key in el) {
-          if (key === 'email') {
-            this.cooperationData.email = el[key];
-          }
-          if (key === 'phone') {
-            this.cooperationData.phone = el[key];
-          }
-        }
-      }
-    },
     onRowSelect() {
       this.choosenHouse();
     },
@@ -474,15 +451,6 @@ export default defineComponent({
         this.displayModalForHouse = false;
       } else {
         this.displayModalForHouse = true;
-      }
-    },
-    resetAddHouseDataFields(houseData: any) {
-      for (let field in houseData) {
-        if (typeof houseData[field] === 'object') {
-          this.resetAddHouseDataFields(houseData[field]);
-        } else {
-          houseData[field] = '';
-        }
       }
     },
     async editHouseInfo() {

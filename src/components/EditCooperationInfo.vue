@@ -211,7 +211,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { CooperationAddressInterface, CooperationActionEnum } from '@/store/cooperation/types';
+import {
+  CooperationAddressInterface,
+  CooperationContactsInterface,
+  CooperationActionEnum,
+  CooperationGettersEnum,
+} from '@/store/cooperation/types';
+import { mapGetters } from 'vuex';
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
@@ -230,10 +236,16 @@ import {
   streetMaxLength,
   houseBlockAndNumberMaxLength,
 } from '@/utils/validators';
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'EditCooperationInfo',
+  components: {
+    Button,
+    InputText,
+  },
   data() {
     return {
       cooperationData: {
@@ -249,8 +261,8 @@ export default defineComponent({
     };
   },
   props: {
-    initData: {
-      type: Function,
+    cooperationId: {
+      type: Number,
       required: true,
     },
   },
@@ -284,10 +296,34 @@ export default defineComponent({
       },
     };
   },
+  async mounted() {
+    this.initData();
+  },
   methods: {
+    initData() {
+      this.cooperationData.name = this.cooperationInfo?.name ?? '';
+      this.cooperationData.edrpou = this.cooperationInfo?.edrpou ?? '';
+      this.cooperationData.iban = this.cooperationInfo?.iban ?? '';
+      this.cooperationData.address = JSON.parse(
+        JSON.stringify(this.cooperationInfo?.address ?? ({} as CooperationAddressInterface))
+      );
+      this.cooperationInfo?.contacts.forEach((el: CooperationContactsInterface) => this.mapContact(el));
+    },
+    mapContact(el: CooperationContactsInterface) {
+      if (el.main) {
+        for (let key in el) {
+          if (key === 'email') {
+            this.cooperationData.email = el[key];
+          }
+          if (key === 'phone') {
+            this.cooperationData.phone = el[key];
+          }
+        }
+      }
+    },
     editCooperationInfo(): void {
       const payload = {
-        id: this.cooperationData.id,
+        id: this.$props.cooperationId,
         name: this.cooperationData.name,
         edrpou: this.cooperationData.edrpou,
         iban: this.cooperationData.iban,
@@ -304,11 +340,43 @@ export default defineComponent({
       this.$emit('cancel-editCoopInfo');
     },
     cancelCooperationEdit() {
-      this.$props.initData();
+      this.initData();
       this.$emit('cancel-editCoopInfo');
     },
+  },
+  computed: {
+    ...mapGetters({
+      cooperationInfo: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperation}`,
+    }),
   },
 });
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.dialog-item {
+  display: inline-block;
+  width: 240px;
+}
+label {
+  display: inline-block;
+  width: 240px;
+}
+.address-wrapper label {
+  margin-left: 25px;
+  width: 215px;
+}
+.input-block {
+  display: inline-block;
+  margin-bottom: 15px;
+}
+small {
+  display: block;
+  width: 280px;
+}
+.buttons-container {
+  float: right;
+  .p-button-outlined {
+    margin-left: 20px;
+  }
+}
+</style>
