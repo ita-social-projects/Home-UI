@@ -10,17 +10,12 @@ const setup = async (id: string, value: string | number, wrapper: VueWrapper<Com
 };
 
 describe('AddHouseForm.vue', () => {
-  let actions: any;
-  let store: any;
+  const actions = {
+    ADD_HOUSE: jest.fn(),
+  };
 
-  beforeEach(() => {
-    actions = {
-      ADD_HOUSE: jest.fn(),
-    };
-
-    store = new Vuex.Store({
-      actions,
-    });
+  const store = new Vuex.Store({
+    actions,
   });
 
   it('should exist', () => {
@@ -275,13 +270,57 @@ describe('AddHouseForm.vue', () => {
     expect(wrapper.props().id).toBe(918);
   });
 
-  it('test method addNewHouse', async () => {
+  it('tests method addNewHouse', async () => {
     const addNewHouse = jest.spyOn(AddHouseForm.methods, 'addNewHouse');
     const wrapper = shallowMount(AddHouseForm, { global: { plugins: [store] } });
+
+    wrapper.find('#add-new-house-btn').trigger('click');
     wrapper.find('#house_data_form').trigger('submit', {
       preventDefault: () => {},
     });
+
+    wrapper.vm.$emit('cancel-addHouseModal');
+    await wrapper.vm.$nextTick();
+
     expect(addNewHouse).toBeCalled();
-    expect(actions.ADD_HOUSE).toHaveBeenCalled();
+    expect(wrapper.emitted('cancel-addHouseModal')).toBeTruthy();
+  });
+
+  it('should make fields clear after sumbit', async () => {
+    const wrapper = mount(AddHouseForm);
+
+    wrapper.find('#flatQuantity').setValue(111);
+    wrapper.find('#houseArea').setValue(111.11);
+    wrapper.find('#adjoiningArea').setValue(56);
+    wrapper.find('#region').setValue('Дніпропетровський');
+    wrapper.find('#city').setValue('Дніпро');
+    wrapper.find('#district').setValue('Сонячний');
+    wrapper.find('#street').setValue('Воронцова');
+    wrapper.find('#houseBlock').setValue('Н/2');
+    wrapper.find('#houseNumber').setValue('5');
+    wrapper.find('#zipCode').setValue('12345');
+
+    wrapper.find('#house_data_form').trigger('submit', {
+      preventDefault: () => {},
+    });
+
+    expect(wrapper.find('#flatQuantity').text()).toBe('');
+    expect(wrapper.find('#houseArea').text()).toBe('');
+    expect(wrapper.find('#adjoiningArea').text()).toBe('');
+    expect(wrapper.find('#region').text()).toBe('');
+    expect(wrapper.find('#city').text()).toBe('');
+    expect(wrapper.find('#district').text()).toBe('');
+    expect(wrapper.find('#houseBlock').text()).toBe('');
+    expect(wrapper.find('#houseNumber').text()).toBe('');
+    expect(wrapper.find('#zipCode').text()).toBe('');
+  });
+
+  it('tests closeAddHouseModal method', async () => {
+    const wrapper = mount(AddHouseForm);
+    wrapper.vm.$emit('cancel-addHouseModal');
+    await wrapper.find('#cancel-btn').trigger('click');
+
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted('cancel-addHouseModal')).toBeTruthy();
   });
 });

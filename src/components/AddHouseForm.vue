@@ -265,11 +265,10 @@ export default defineComponent({
       this.$emit('cancel-addHouseModal');
     },
     resetHouseDataFields(houseData: any) {
+      console.log('yes');
       for (let field in houseData) {
         if (typeof houseData[field] === 'object') {
           this.resetHouseDataFields(houseData[field]);
-        } else if (typeof houseData[field] === 'number') {
-          houseData[field] = 0;
         } else {
           houseData[field] = '';
         }
