@@ -59,6 +59,7 @@
           <form @submit.prevent class="add__contact">
             <input-text class="phone-input" disabled v-if="typeContact === String" :placeholder="placeholderValue" />
             <input-text
+              id="phone-input"
               class="phone-input"
               v-else-if="typeContact.name === 'Телефон'"
               placeholder="Телефон"
@@ -179,11 +180,7 @@ import Dropdown from 'primevue/dropdown';
 import { helpers, requiredIf } from '@vuelidate/validators';
 
 import { StoreModuleEnum } from '@/store/types';
-import {
-  AuthActionEnum,
-  AuthMutationEnum,
-  AuthGettersEnum,
-} from '@/store/authorization/types';
+import { AuthActionEnum, AuthMutationEnum, AuthGettersEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
@@ -220,12 +217,8 @@ export default defineComponent({
       userContacts: [] as any,
     };
   },
-  async mounted() {
-    const userData = JSON.parse(localStorage.getItem('user') || '{}');
-    await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
-    this.firstName = this.userInfo.firstName;
-    this.middleName = this.userInfo.middleName;
-    this.lastName = this.userInfo.lastName;
+  mounted() {
+    this.setData();
   },
   validations() {
     return {
@@ -269,6 +262,13 @@ export default defineComponent({
     };
   },
   methods: {
+    async setData() {
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
+      this.firstName = this.userInfo.firstName;
+      this.middleName = this.userInfo.middleName;
+      this.lastName = this.userInfo.lastName;
+    },
     updateName(e: any) {
       this.newUpdateData = { ...this.newUpdateData, firstName: e.target.value };
     },
