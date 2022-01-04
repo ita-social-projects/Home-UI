@@ -88,6 +88,10 @@ describe('Manage apartments', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
+  it('props check', () => {
+    expect(wrapper.props('id')).toBe('4567');
+  });
+
   it('length of rendered list of apartments should be equal to length of state.apartments', async () => {
     const apartmentsListLength = store.state.apartments.length;
     expect(wrapper.findAll('.p-selectable-row')).toHaveLength(apartmentsListLength);
