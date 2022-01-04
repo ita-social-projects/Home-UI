@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataReady" class="wrapper">
+  <div class="wrapper">
     <div class="card">
       <div class="cards__wrap">
         <div class="card card__name">
@@ -16,7 +16,9 @@
                 :class="{ 'p-invalid': v$.firstName.$error }"
                 @blur="v$.firstName.$touch"
               />
-              <small v-if="v$.firstName.$error" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
+              <small id="firstName-help" v-if="v$.firstName.$error" class="p-error">{{
+                v$.firstName.$errors[0].$message
+              }}</small>
             </div>
             <div class="field">
               <label for="middleName">По-батькові</label>
@@ -29,7 +31,9 @@
                 :class="{ 'p-invalid': v$.middleName.$error }"
                 @blur="v$.middleName.$touch"
               />
-              <small v-if="v$.middleName.$error" class="p-error">{{ v$.middleName.$errors[0].$message }}</small>
+              <small id="middleName-help" v-if="v$.middleName.$error" class="p-error">{{
+                v$.middleName.$errors[0].$message
+              }}</small>
             </div>
             <div class="field">
               <label for="lastname">Прізвище</label>
@@ -42,7 +46,9 @@
                 :class="{ 'p-invalid': v$.lastName.$error }"
                 @blur="v$.lastName.$touch"
               />
-              <small v-if="v$.lastName.$error" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
+              <small id="lastname-help" v-if="v$.lastName.$error" class="p-error">{{
+                v$.lastName.$errors[0].$message
+              }}</small>
             </div>
           </form>
         </div>
@@ -97,6 +103,7 @@
           </div>
 
           <Button
+            id="add-contact"
             @click="addContact"
             :disabled="v$.$invalid || typeContact === String"
             type="submit"
@@ -117,6 +124,7 @@
                 <td>{{ contact.type === 'email' ? contact.email : contact.phone }}</td>
                 <td class="td__del">
                   <Button
+                    id="delete-contact"
                     @click="deleteContact(contact.id)"
                     label="Видалити"
                     type="submit"
@@ -131,12 +139,14 @@
 
       <div class="buttons__box">
         <Button
+          id="cancel-button"
           @click="closeEditPage"
           label="Скасувати"
           icon="pi pi-times"
           class="btn p-button-secondary p-button-outlined p-button-sm"
         />
         <Button
+          id="submit-btn"
           :disabled="v$.$invalid"
           @click="onSubmit"
           label="Зберегти"
@@ -152,24 +162,28 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
-import { UserInterface } from '@/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
 import {
   requiredValidator,
-  nameValidator,
-  nameLenghtValidator,
+  userNameValidator,
+  someTitleLenghtValidator,
   emailValidator,
   emailMinLength,
   emailMaxLength,
-  phoneNumberValidator
-} from "@/utils/validators";
+  userPhoneValidator,
+} from '@/utils/validators';
 import useVuelidate from '@vuelidate/core';
-
-// primevue
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import { helpers, requiredIf } from '@vuelidate/validators';
+
+import { StoreModuleEnum } from '@/store/types';
+import {
+  AuthActionEnum,
+  AuthMutationEnum,
+  AuthGettersEnum,
+} from '@/store/authorization/types';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
@@ -185,7 +199,6 @@ export default defineComponent({
       middleName: '',
       lastName: '',
       newUpdateData: {},
-      dataReady: false,
       placeholderValue: 'Спочатку оберіть тип контакту...',
       inputValue: {
         email: '',
@@ -208,33 +221,28 @@ export default defineComponent({
     };
   },
   async mounted() {
-    const user: string | null = localStorage.getItem('user');
-    if (user !== null) {
-      const userData: UserInterface = JSON.parse(user);
-      await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
-      this.firstName = this.userInfo.first_name;
-      this.middleName = this.userInfo.middle_name;
-      this.lastName = this.userInfo.last_name;
-      this.dataReady = true;
-    }
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
+    this.firstName = this.userInfo.firstName;
+    this.middleName = this.userInfo.middleName;
+    this.lastName = this.userInfo.lastName;
   },
   validations() {
     return {
       firstName: {
         requiredValidator,
-        // ukrLangTitleValidator,
-        nameValidator,
-        nameLenghtValidator,
+        userNameValidator,
+        someTitleLenghtValidator,
       },
       middleName: {
         requiredValidator,
-        nameValidator,
-        nameLenghtValidator,
+        userNameValidator,
+        someTitleLenghtValidator,
       },
       lastName: {
         requiredValidator,
-        nameValidator,
-        nameLenghtValidator,
+        userNameValidator,
+        someTitleLenghtValidator,
       },
       inputValue: {
         email: {
@@ -255,31 +263,28 @@ export default defineComponent({
               return this.typeContact.name === 'Телефон';
             })
           ),
-          phoneNumberValidator,
+          userPhoneValidator,
         },
       },
     };
   },
   methods: {
-    showStatus(status: string, message: string) {
-      this.$toast.add({severity:'error', summary: 'Error Message', detail:'Message Content', life: 3000});
-    },
     updateName(e: any) {
-      this.newUpdateData = { ...this.newUpdateData, first_name: e.target.value };
+      this.newUpdateData = { ...this.newUpdateData, firstName: e.target.value };
     },
     updateMiddleName(e: any) {
-      this.newUpdateData = { ...this.newUpdateData, middle_name: e.target.value };
+      this.newUpdateData = { ...this.newUpdateData, middleName: e.target.value };
     },
     updateLastName(e: any) {
-      this.newUpdateData = { ...this.newUpdateData, last_name: e.target.value };
+      this.newUpdateData = { ...this.newUpdateData, lastName: e.target.value };
     },
 
     onSubmit() {
       if (this.inputValue.email.length > 0 || this.inputValue.phone.length > 0) {
         this.addContact();
       }
-      this.$store.commit('authorizationStore/SET_FORM', this.newUpdateData);
-      this.$store.dispatch('authorizationStore/UPDATE_USER', this.userInfo);
+      this.$store.commit(`${StoreModuleEnum.authorizationStore}/${AuthMutationEnum.SET_FORM}`, this.newUpdateData);
+      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.UPDATE_USER}`, this.userInfo);
       this.$router.push(RoutesEnum.MainPage);
     },
 
@@ -300,19 +305,19 @@ export default defineComponent({
         contactsType.type = 'phone';
       }
       this.userContacts.push(contactsType);
-      this.$store.dispatch('authorizationStore/ADD_CONTACT', this.userContacts);
+      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.ADD_CONTACT}`, this.userContacts);
       this.inputValue.email = this.inputValue.phone = '';
       this.userContacts = [];
       this.typeContact = String;
     },
 
     deleteContact(idx: number) {
-      this.$store.dispatch('authorizationStore/DELETE_CONTACT', idx);
+      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.DELETE_CONTACT}`, idx);
     },
   },
   computed: {
     ...mapGetters({
-      userInfo: 'authorizationStore/userData',
+      userInfo: `${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`,
     }),
   },
 });

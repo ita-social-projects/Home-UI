@@ -496,7 +496,13 @@ import ConfirmPopup from 'primevue/confirmpopup';
 
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddHouseForm from '@/components/AddHouseForm.vue';
-import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
+import {
+  CooperationAddressInterface,
+  CooperationContactsInterface,
+  CooperationActionEnum,
+  CooperationGettersEnum,
+} from '@/store/cooperation/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
 
 import useVuelidate from '@vuelidate/core';
@@ -507,18 +513,19 @@ import {
   emailMaxLength,
   emailMinLength,
   emailValidator,
-  nameLenghtValidator,
+  someTitleLenghtValidator,
   ukrLangTitleValidator,
   ibanValidator,
-  phoneNumberValidator,
+  userPhoneValidator,
   houseNumAndHouseBlockValidator,
   zipCodeValidator,
   zeroValidator,
   regionCityDistrictMaxLength,
   streetMaxLength,
   houseBlockAndNumberMaxLength,
-  quantityAndAreaValidator,
   houseAreaValidator,
+  flatQuantityAndAdjoiningAreaValidator,
+  houseDecimalValidator,
 } from '@/utils/validators';
 import { HouseModel } from '@/shared/models/house.model';
 import { AddressModel } from '@/shared/models/address.model';
@@ -595,11 +602,11 @@ export default defineComponent({
         name: {
           requiredValidator,
           ukrLangTitleValidator,
-          nameLenghtValidator,
+          someTitleLenghtValidator,
         },
         edrpou: { requiredValidator, edrpouValidator },
         iban: { requiredValidator, ibanValidator },
-        phone: { requiredValidator, phoneNumberValidator },
+        phone: { requiredValidator, userPhoneValidator },
         email: {
           requiredValidator,
           emailMinLength,
@@ -618,9 +625,19 @@ export default defineComponent({
         },
       },
       house: {
-        flatQuantity: { requiredValidator, zeroValidator, quantityAndAreaValidator },
-        houseArea: { requiredValidator, zeroValidator, houseAreaValidator },
-        adjoiningArea: { requiredValidator, zeroValidator, quantityAndAreaValidator },
+        flatQuantity: {
+          requiredValidator,
+          zeroValidator,
+          flatQuantityAndAdjoiningAreaValidator,
+          houseDecimalValidator,
+        },
+        houseArea: { requiredValidator, zeroValidator, houseAreaValidator, houseDecimalValidator },
+        adjoiningArea: {
+          requiredValidator,
+          zeroValidator,
+          flatQuantityAndAdjoiningAreaValidator,
+          houseDecimalValidator,
+        },
         address: {
           region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
@@ -637,8 +654,8 @@ export default defineComponent({
     this.cooperationData.id = this.cooperationInfo?.id ?? 1;
 
     await Promise.all([
-      this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS'),
-      this.$store.dispatch('housesStore/SET_HOUSES', this.cooperationData.id),
+      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/${CooperationActionEnum.SET_USER_COOPERATIONS}`),
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationData.id),
     ]).then(() => {
       this.initData();
       this.isLoaded = true;
@@ -681,7 +698,7 @@ export default defineComponent({
             cooperationId: this.cooperationData.id,
             id: this.house.id,
           };
-          await this.$store.dispatch('housesStore/DELETE_HOUSE', payload);
+          await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.DELETE_HOUSE}`, payload);
           this.showSuccessDelete();
         },
         reject: () => {
@@ -729,7 +746,10 @@ export default defineComponent({
           { type: 'phone', main: true, phone: this.cooperationData.phone },
         ],
       };
-      this.$store.dispatch('cooperationStore/SET_COOPERATION_UPDATE', payload);
+      this.$store.dispatch(
+        `${StoreModuleEnum.cooperationStore}/${CooperationActionEnum.SET_COOPERATION_UPDATE}`,
+        payload
+      );
       this.manageCooperationModal();
     },
     async editHouseInfo() {
@@ -750,7 +770,7 @@ export default defineComponent({
           zipCode: this.house.address.zipCode,
         },
       };
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/EDIT_HOUSE`, payload);
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.EDIT_HOUSE}`, payload);
       this.manageHouseModal();
       this.showSuccessEdit(this.house.id!);
     },
@@ -806,8 +826,8 @@ export default defineComponent({
       return this.displayAddHouseModal;
     },
     ...mapGetters({
-      housesInfo: `${StoreModuleEnum.housesStore}/getHousesData`,
-      cooperationInfo: `${StoreModuleEnum.cooperationStore}/getSelectedCooperation`,
+      housesInfo: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
+      cooperationInfo: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperation}`,
     }),
   },
 });

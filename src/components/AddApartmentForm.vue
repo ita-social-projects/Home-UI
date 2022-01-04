@@ -58,6 +58,8 @@ import {
 } from '@/utils/validators';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
+import { StoreModuleEnum } from '@/store/types';
+import { ApartmentsActionsEnum } from '@/store/apartments/types';
 
 export default defineComponent({
   name: 'AddApartment',
