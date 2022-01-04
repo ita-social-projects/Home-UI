@@ -18,13 +18,7 @@
         placeholder="Обрати ОСББ"
       />
       <div>
-        <Button
-          v-if="!isLoggedIn"
-          v-show="$route.name !== '/login'"
-          label="Увійти"
-          @click="redirectToLogin"
-          class="p-button-info"
-        />
+        <Button v-if="!isLoggedIn" label="Увійти" @click="redirectToLogin" class="p-button-info" />
         <Button
           label="Info"
           v-else
@@ -51,8 +45,8 @@ import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 
 import Dropdown from 'primevue/dropdown';
+import { UserCredentialInterface, AuthActionEnum, AuthGettersEnum } from '@/store/authorization/types';
 import { StoreModuleEnum } from '@/store/types';
-import { AuthActionEnum, AuthGettersEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'baseHeader',
@@ -75,7 +69,15 @@ export default defineComponent({
           label: 'Вийти',
           icon: 'pi pi-fw pi-power-off',
           command: () => {
-            this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.SIGN_OUT}`, null);
+            const payload = {
+              firstName: '',
+              middleName: '',
+              lastName: '',
+              email: '',
+              id: 0,
+              contacts: [],
+            };
+            this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.SIGN_OUT}`, payload);
             this.$router.push(RoutesEnum.StartPage);
           },
         },
@@ -100,6 +102,13 @@ export default defineComponent({
       return `${dataFromStore['firstName']} ${dataFromStore['lastName']}`;
     },
   },
+  async mounted() {
+    const user: string | null = localStorage.getItem('user');
+    if (user !== null) {
+      const userData: UserCredentialInterface = JSON.parse(user);
+      await this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/GET_DATA`, userData.id);
+    }
+  },
   methods: {
     redirectToMain() {
       this.isLoggedIn ? this.$router.push(RoutesEnum.MainPage) : this.$router.push(RoutesEnum.StartPage);
@@ -107,10 +116,7 @@ export default defineComponent({
     redirectToLogin() {
       this.$router.push(RoutesEnum.UserLogin);
     },
-    userLogout() {
-      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.SIGN_OUT}`, null);
-      this.$router.push(RoutesEnum.StartPage);
-    },
+
     toggle(event: any) {
       (this.$refs.menu as Menu).toggle(event);
     },

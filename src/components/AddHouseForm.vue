@@ -187,8 +187,9 @@ import {
   regionCityDistrictMaxLength,
   streetMaxLength,
   houseBlockAndNumberMaxLength,
-  quantityAndResidentialAreasValidator,
   houseAreaValidator,
+  flatQuantityAndAdjoiningAreaValidator,
+  houseDecimalValidator,
 } from '@/utils/validators';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -231,9 +232,19 @@ export default defineComponent({
   validations() {
     return {
       houseData: {
-        flatQuantity: { requiredValidator, zeroValidator, quantityAndResidentialAreasValidator },
-        houseArea: { requiredValidator, zeroValidator, houseAreaValidator },
-        adjoiningArea: { requiredValidator, zeroValidator, quantityAndResidentialAreasValidator },
+        flatQuantity: {
+          requiredValidator,
+          zeroValidator,
+          flatQuantityAndAdjoiningAreaValidator,
+          houseDecimalValidator,
+        },
+        houseArea: { requiredValidator, zeroValidator, houseAreaValidator, houseDecimalValidator },
+        adjoiningArea: {
+          requiredValidator,
+          zeroValidator,
+          flatQuantityAndAdjoiningAreaValidator,
+          houseDecimalValidator,
+        },
         address: {
           region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
@@ -284,7 +295,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 %error-message {
-  margin: 0.4em 0.5rem;
+  margin: 0.2em 0.9rem;
   width: 80%;
 }
 
