@@ -1,7 +1,6 @@
 import { shallowMount, VueWrapper, mount } from '@vue/test-utils';
 import AddHouseForm from '@/components/AddHouseForm.vue';
 import { ComponentPublicInstance } from 'vue';
-import Vuex from 'vuex';
 
 const setup = async (id: string, value: string | number, wrapper: VueWrapper<ComponentPublicInstance>) => {
   const el = wrapper.find(id);
