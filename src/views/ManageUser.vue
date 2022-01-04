@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataReady" class="wrapper">
+  <div class="wrapper">
     <div class="card">
       <div class="cards__wrap">
         <div class="card card__name">
@@ -16,7 +16,9 @@
                 :class="{ 'p-invalid': v$.firstName.$error }"
                 @blur="v$.firstName.$touch"
               />
-              <small v-if="v$.firstName.$error" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
+              <small id="firstName-help" v-if="v$.firstName.$error" class="p-error">{{
+                v$.firstName.$errors[0].$message
+              }}</small>
             </div>
             <div class="field">
               <label for="middleName">По-батькові</label>
@@ -29,7 +31,9 @@
                 :class="{ 'p-invalid': v$.middleName.$error }"
                 @blur="v$.middleName.$touch"
               />
-              <small v-if="v$.middleName.$error" class="p-error">{{ v$.middleName.$errors[0].$message }}</small>
+              <small id="middleName-help" v-if="v$.middleName.$error" class="p-error">{{
+                v$.middleName.$errors[0].$message
+              }}</small>
             </div>
             <div class="field">
               <label for="lastname">Прізвище</label>
@@ -42,7 +46,9 @@
                 :class="{ 'p-invalid': v$.lastName.$error }"
                 @blur="v$.lastName.$touch"
               />
-              <small v-if="v$.lastName.$error" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
+              <small id="lastname-help" v-if="v$.lastName.$error" class="p-error">{{
+                v$.lastName.$errors[0].$message
+              }}</small>
             </div>
           </form>
         </div>
@@ -97,6 +103,7 @@
           </div>
 
           <Button
+            id="add-contact"
             @click="addContact"
             :disabled="v$.$invalid || typeContact === String"
             type="submit"
@@ -117,6 +124,7 @@
                 <td>{{ contact.type === 'email' ? contact.email : contact.phone }}</td>
                 <td class="td__del">
                   <Button
+                    id="delete-contact"
                     @click="deleteContact(contact.id)"
                     label="Видалити"
                     type="submit"
@@ -131,12 +139,14 @@
 
       <div class="buttons__box">
         <Button
+          id="cancel-button"
           @click="closeEditPage"
           label="Скасувати"
           icon="pi pi-times"
           class="btn p-button-secondary p-button-outlined p-button-sm"
         />
         <Button
+          id="submit-btn"
           :disabled="v$.$invalid"
           @click="onSubmit"
           label="Зберегти"
@@ -170,7 +180,6 @@ import { helpers, requiredIf } from '@vuelidate/validators';
 
 import { StoreModuleEnum } from '@/store/types';
 import {
-  UserCredentialInterface,
   AuthActionEnum,
   AuthMutationEnum,
   AuthGettersEnum,
@@ -190,7 +199,6 @@ export default defineComponent({
       middleName: '',
       lastName: '',
       newUpdateData: {},
-      dataReady: false,
       placeholderValue: 'Спочатку оберіть тип контакту...',
       inputValue: {
         email: '',
@@ -213,15 +221,11 @@ export default defineComponent({
     };
   },
   async mounted() {
-    const user: string | null = localStorage.getItem('user');
-    if (user !== null) {
-      const userData: UserCredentialInterface = JSON.parse(user);
-      await this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.GET_DATA}`, userData.id);
-      this.firstName = this.userInfo.firstName;
-      this.middleName = this.userInfo.middleName;
-      this.lastName = this.userInfo.lastName;
-      this.dataReady = true;
-    }
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
+    this.firstName = this.userInfo.firstName;
+    this.middleName = this.userInfo.middleName;
+    this.lastName = this.userInfo.lastName;
   },
   validations() {
     return {
@@ -265,9 +269,6 @@ export default defineComponent({
     };
   },
   methods: {
-    showStatus(status: string, message: string) {
-      this.$toast.add({ severity: 'error', summary: 'Error Message', detail: 'Message Content', life: 3000 });
-    },
     updateName(e: any) {
       this.newUpdateData = { ...this.newUpdateData, firstName: e.target.value };
     },
