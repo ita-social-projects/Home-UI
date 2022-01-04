@@ -1,7 +1,7 @@
-import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
-import ManageUser from "@/views/ManageUser.vue";
-import store from "@/store";
-import { ComponentPublicInstance } from "vue";
+import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
+import ManageUser from '@/views/ManageUser.vue';
+import store from '@/store';
+import { ComponentPublicInstance, nextTick } from 'vue';
 
 const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
   const el = wrapper.find(id);
@@ -26,8 +26,7 @@ describe('ManageUser', () => {
         },
       },
     });
-    await flushPromises();
-    data = ManageUser.methods
+    data = ManageUser.methods;
   });
 
   it('should exist', () => {
@@ -70,5 +69,21 @@ describe('ManageUser', () => {
   it('should be cancel page ', async () => {
     await wrapper.find('#cancel-button').trigger('click');
     expect(mockRouter.push).toHaveBeenCalledTimes(1);
+  });
+
+  it('should ', async () => {
+    await wrapper.find('#submit-btn').trigger('click');
+    expect(mockRouter.push).toHaveBeenCalled();
+  });
+
+  it('test ', async () => {
+    // debugger;
+    // const spy = jest.spyOn(wrapper.vm, 'closeEditPage');
+    // const btn = await wrapper.find('#cancel-button');
+    // btn.trigger('click');
+    // await nextTick()
+    // expect(spy).toBeCalled();
+    const myMock = jest.fn();
+    console.log(myMock());
   });
 });

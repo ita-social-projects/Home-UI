@@ -103,6 +103,7 @@
           </div>
 
           <Button
+            id="add-contact"
             @click="addContact"
             :disabled="v$.$invalid || typeContact === String"
             type="submit"
@@ -123,6 +124,7 @@
                 <td>{{ contact.type === 'email' ? contact.email : contact.phone }}</td>
                 <td class="td__del">
                   <Button
+                    id="delete-contact"
                     @click="deleteContact(contact.id)"
                     label="Видалити"
                     type="submit"
@@ -144,6 +146,7 @@
           class="btn p-button-secondary p-button-outlined p-button-sm"
         />
         <Button
+          id="submit-btn"
           :disabled="v$.$invalid"
           @click="onSubmit"
           label="Зберегти"
@@ -219,14 +222,11 @@ export default defineComponent({
     };
   },
   async mounted() {
-    const user: string | null = localStorage.getItem('user');
-    if (user !== null) {
-      const userData: UserCredentialInterface = JSON.parse(user);
-      await this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.GET_DATA}`, userData.id);
-      this.firstName = this.userInfo.firstName;
-      this.middleName = this.userInfo.middleName;
-      this.lastName = this.userInfo.lastName;
-    }
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
+    this.firstName = this.userInfo.firstName;
+    this.middleName = this.userInfo.middleName;
+    this.lastName = this.userInfo.lastName;
   },
   validations() {
     return {
