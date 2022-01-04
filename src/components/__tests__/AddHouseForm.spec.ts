@@ -10,14 +10,6 @@ const setup = async (id: string, value: string | number, wrapper: VueWrapper<Com
 };
 
 describe('AddHouseForm.vue', () => {
-  const actions = {
-    ADD_HOUSE: jest.fn(),
-  };
-
-  const store = new Vuex.Store({
-    actions,
-  });
-
   it('should exist', () => {
     const wrapper = shallowMount(AddHouseForm);
 
@@ -272,7 +264,7 @@ describe('AddHouseForm.vue', () => {
 
   it('tests method addNewHouse', async () => {
     const addNewHouse = jest.spyOn(AddHouseForm.methods, 'addNewHouse');
-    const wrapper = shallowMount(AddHouseForm, { global: { plugins: [store] } });
+    const wrapper = mount(AddHouseForm);
 
     wrapper.find('#add-new-house-btn').trigger('click');
     wrapper.find('#house_data_form').trigger('submit', {
