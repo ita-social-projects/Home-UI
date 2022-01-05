@@ -43,7 +43,7 @@ export default defineComponent({
   },
   computed: {
     cooperationPolls(): Array<PollModel> {
-      return this.$store.state.pollsStore.cooperationPolls;
+      return this.$store.getters[`${StoreModuleEnum.pollsStore}/getPolls`];
     },
   },
 });
