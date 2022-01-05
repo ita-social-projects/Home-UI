@@ -24,7 +24,7 @@ describe('Register user', () => {
     it('should initialize correctly', () => {
       expect(wrapper.exists()).toBeTruthy();
     });
-    it('shuold call dispatch in mount', async () => {
+    it('shuold call dispatch in mount', () => {
       expect(mockStore.dispatch).toHaveBeenCalledWith('pollsStore/SET_COOPERATION_POLLS');
     });
   });
@@ -61,8 +61,8 @@ describe('Register user', () => {
       },
     });
 
-    it('testing polls getter', async () => {
-      const state = {
+    it('testing polls getter', () => {
+      const data = {
         cooperationPolls: [
           {
             id: 1,
@@ -86,10 +86,10 @@ describe('Register user', () => {
         selectedPoll: null,
         displayModal: false,
       };
-      const actual = getters.getPolls(state);
-      expect(actual).toEqual(state.cooperationPolls);
+      const actual = getters.getPolls(data);
+      expect(actual).toEqual(data.cooperationPolls);
     });
-    it('length of rendered list of polls should be equal to length of state.cooperationPolls', async () => {
+    it('length of rendered list of polls should be equal to length of state.cooperationPolls', () => {
       const wrapper = mount(CooperationPolls, {
         global: {
           plugins: [store],
@@ -98,7 +98,7 @@ describe('Register user', () => {
       const pollsListLength = store.state.cooperationPolls.length;
       expect(wrapper.findAll('.poll')).toHaveLength(pollsListLength);
     });
-    it('polls should render correct on page', async () => {
+    it('polls should render correct on page', () => {
       const wrapper = mount(CooperationPolls, {
         global: {
           plugins: [store],
