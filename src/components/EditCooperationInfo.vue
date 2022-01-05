@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form id="edit-coop-form">
     <div>
       <label for="coopName">Назва : </label>
       <div class="input-block">
@@ -198,6 +198,7 @@
       @click="editCooperationInfo"
       autofocus
       class="p-button-info"
+      id="edit-coop-btn"
     />
 
     <Button
@@ -205,6 +206,7 @@
       icon="pi pi-times"
       @click="cancelCooperationEdit"
       class="p-button-outlined p-button-info"
+      id="cancel-edit-coop-btn"
     />
   </div>
 </template>
@@ -297,8 +299,12 @@ export default defineComponent({
     };
   },
   async mounted() {
-    this.initData();
-    this.$emit('isLoadedMode');
+    try {
+      this.initData();
+      this.$emit('isLoadedMode');
+    } catch {
+      console.log('error was caught during mounting');
+    }
   },
   methods: {
     initData() {
@@ -324,7 +330,7 @@ export default defineComponent({
     },
     editCooperationInfo(): void {
       const payload = {
-        id: this.$props.cooperationId,
+        id: this.cooperationId,
         name: this.cooperationData.name,
         edrpou: this.cooperationData.edrpou,
         iban: this.cooperationData.iban,
@@ -339,6 +345,7 @@ export default defineComponent({
         payload
       );
       this.$emit('cancel-editCoopInfo');
+      console.log('id', this.cooperationId);
     },
     cancelCooperationEdit() {
       this.initData();
