@@ -59,6 +59,7 @@ import {
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { StoreModuleEnum } from '@/store/types';
+import { CooperationActionEnum } from '@/store/cooperation/types';
 import { RoutesEnum } from '@/router/types';
 
 export default defineComponent({
@@ -141,7 +142,10 @@ export default defineComponent({
           this.showErrorToast();
         },
       };
-      await this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/CREATE_COOPERATION`, payload);
+      await this.$store.dispatch(
+        `${StoreModuleEnum.cooperationStore}/${CooperationActionEnum.CREATE_COOPERATION}`,
+        payload
+      );
     },
     redirectToMainPage() {
       this.$router.push({ path: RoutesEnum.StartPage });
