@@ -2,7 +2,7 @@ import { VueWrapper, mount, shallowMount } from '@vue/test-utils';
 import { ComponentPublicInstance } from 'vue';
 import EditCooperationInfo from '@/components/EditCooperationInfo.vue';
 import { CooperationAddressInterface } from './../../store/cooperation/types';
-import createStore from './../../store/index';
+import { createStore } from 'vuex';
 
 const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
   const el = wrapper.find(id);
@@ -24,7 +24,7 @@ describe('EditCooperationInfo.vue', () => {
     data() {
       return {
         cooperationData: {
-          id: 0,
+          id: 1,
           name: '',
           edrpou: '',
           iban: '',
@@ -38,6 +38,7 @@ describe('EditCooperationInfo.vue', () => {
       cooperationId: 1,
     },
   });
+
   describe('right render with mockStore', () => {
     it('should exist', () => {
       const wrapper = mount(EditCooperationInfo);
@@ -50,11 +51,12 @@ describe('EditCooperationInfo.vue', () => {
           cooperationId: 1,
         },
       });
+
       expect(wrapper.props().cooperationId).toBe(1);
       expect(wrapper.props('cooperationId')).toBe(1);
     });
 
-    it('should call initData() and emit in mounted', async () => {
+    it('initData should be called and event should emit in mounted hook', async () => {
       const initDataSpy = jest.spyOn(EditCooperationInfo.methods, 'initData');
       const wrapper = mount(EditCooperationInfo);
       wrapper.vm.$emit('isLoadedMode');
@@ -68,164 +70,203 @@ describe('EditCooperationInfo.vue', () => {
   describe('testing store, action, getters', () => {
     const store = createStore({
       state: {
-        userCooperations: [
-          {
-            id: 1,
-            name: 'Крила ночі',
-            edrpou: 12345678,
-            iban: 'UA122115518961158112111881111',
-            address: ' Дніпро, Задовський, 12345',
-            contacts: [
-              { type: 'email', main: true, email: 'admin@email.com' },
-              { type: 'phone', main: true, phone: '+380509912832' },
-            ],
+        userCooperations: {
+          id: 1,
+          name: 'Крила ночі',
+          edrpou: '12345678',
+          iban: 'UA122115518961158112111881111',
+          address: {
+            region: 'Дніпропетровський',
+            city: 'Дніпро',
+            district: 'Задовський',
+            street: 'Моторна',
+            houseBlock: '11',
+            houseNumber: '12',
+            zipCode: '12345',
           },
-        ],
+          contacts: [
+            { type: 'email', main: true, email: 'admin@email.com' },
+            { type: 'phone', main: true, phone: '+380509912832' },
+          ],
+        },
         selectedCooperation: 1,
       },
       getters: {
-        'cooperationStore/getSelectedCooperation': (state: any) => state.userCooperations,
+        'cooperationStore/getSelectedCooperation': (state) => state.userCooperations,
       },
       actions: {
         'cooperationStore/SET_COOPERATION_UPDATE': () => jest.fn(),
       },
-      dispatch: jest.fn(),
     });
 
     it('should test editCooperationInfo method and dispatch', async () => {
-      const editCooperationSpy = jest.spyOn(EditCooperationInfo.methods, 'editCooperationInfo');
-      const wrapper = mount(EditCooperationInfo);
+      store.dispatch = jest.fn();
+      const editCooperationInfoSpy = jest.spyOn(EditCooperationInfo.methods, 'editCooperationInfo');
+      const wrapper = mount(EditCooperationInfo, {
+        global: {
+          plugins: [store],
+        },
+      });
 
       wrapper.find('#edit-coop-btn').trigger('click');
-      await wrapper.vm.$nextTick();
-
-      expect(editCooperationSpy).toBeCalled();
+      wrapper.find('#edit-coop-form').trigger('submit', {
+        preventDefault: () => {},
+      });
 
       const data = {
-        userCooperations: [
-          {
-            id: 1,
-            name: 'Крила ночі',
-            edrpou: 12345678,
-            iban: 'UA122115518961158112111881111',
-            address: ' Дніпро, Задовський, 12345',
-            contacts: [
-              { type: 'email', main: true, email: 'admin@email.com' },
-              { type: 'phone', main: true, phone: '+380509912832' },
-            ],
+        userCooperations: {
+          id: 1,
+          name: 'Крила ночі',
+          edrpou: '12345678',
+          iban: 'UA122115518961158112111881111',
+          address: {
+            region: 'Дніпропетровський',
+            city: 'Дніпро',
+            district: 'Задовський',
+            street: 'Моторна',
+            houseBlock: '11',
+            houseNumber: '12',
+            zipCode: '12345',
           },
-        ],
+          contacts: [
+            { type: 'email', main: true, email: 'admin@email.com' },
+            { type: 'phone', main: true, phone: '+380509912832' },
+          ],
+        },
+        selectedCooperation: 1,
       };
+      await wrapper.vm.$nextTick();
 
-      expect(store.dispatch).toHaveBeenLastCalledWith('cooperationStore/SET_COOPERATION_UPDATE', data.userCooperations);
+      expect(editCooperationInfoSpy).toBeCalled();
+      expect(store.dispatch).toHaveBeenLastCalledWith('cooperationStore/SET_COOPERATION_UPDATE', data);
     });
 
     it('testing cooperationInfo getter', async () => {
-      const wrapper = mount(EditCooperationInfo);
       const data = {
-        userCooperations: [
-          {
-            id: wrapper.props('cooperationId'),
-            name: 'Крила ночі',
-            edrpou: 12345678,
-            iban: 'UA122115518961158112111881111',
-            address: ' Дніпро, Задовський, 12345',
-            contacts: [
-              { type: 'email', main: true, email: 'admin@email.com' },
-              { type: 'phone', main: true, phone: '+380509912832' },
-            ],
+        userCooperations: {
+          id: 1,
+          name: 'Крила ночі',
+          edrpou: '12345678',
+          iban: 'UA122115518961158112111881111',
+          address: {
+            region: 'Дніпропетровський',
+            city: 'Дніпро',
+            district: 'Задовський',
+            street: 'Моторна',
+            houseBlock: '11',
+            houseNumber: '12',
+            zipCode: '12345',
           },
-        ],
+          contacts: [
+            { type: 'email', main: true, email: 'admin@email.com' },
+            { type: 'phone', main: true, phone: '+380509912832' },
+          ],
+        },
         selectedCooperation: 1,
       };
 
-      const actual = store.getters['cooperationStore/getSelectedCooperation'](data);
+      const actual = store.getters['cooperationStore/getSelectedCooperation'];
       expect(actual).toEqual(data.userCooperations);
     });
 
-    it('cancelCooperationEdit method should be called', async () => {
-      const cancelCooperationEditSpy = jest.spyOn(EditCooperationInfo.methods, 'cancelCooperationEdit');
-      const wrapper = mount(EditCooperationInfo);
+    describe('testing methods', () => {
+      it('cancelCooperationEdit method should be called', async () => {
+        const cancelCooperationEditSpy = jest.spyOn(EditCooperationInfo.methods, 'cancelCooperationEdit');
+        const wrapper = mount(EditCooperationInfo);
 
-      wrapper.find('#cancel-edit-coop-btn').trigger('click');
-      await wrapper.vm.$nextTick();
+        wrapper.find('#cancel-edit-coop-btn').trigger('click');
+        await wrapper.vm.$nextTick();
 
-      expect(cancelCooperationEditSpy).toHaveBeenCalled();
-    });
+        expect(cancelCooperationEditSpy).toHaveBeenCalled();
+      });
 
-    it('test cancelCooperationEdit method', async () => {
-      const initDataSpy = jest.spyOn(EditCooperationInfo.methods, 'initData');
-      const wrapper = mount(EditCooperationInfo);
-      wrapper.vm.$emit('cancel-editCoopInfo');
+      it('test cancelCooperationEdit method', async () => {
+        const initDataSpy = jest.spyOn(EditCooperationInfo.methods, 'initData');
+        const wrapper = mount(EditCooperationInfo);
 
-      wrapper.find('#cancel-edit-coop-btn').trigger('click');
-      await wrapper.vm.$nextTick();
+        wrapper.vm.$emit('cancel-editCoopInfo');
+        wrapper.find('#cancel-edit-coop-btn').trigger('click');
+        await wrapper.vm.$nextTick();
 
-      expect(initDataSpy).toHaveBeenCalled();
-
-      expect(wrapper.emitted('cancel-editCoopInfo')).toBeTruthy();
+        expect(initDataSpy).toHaveBeenCalled();
+        expect(wrapper.emitted('cancel-editCoopInfo')).toBeTruthy();
+      });
     });
   });
 
-  //   describe('editing cooperationform', () => {
-  //     it('editCoopInfo method should be called', async () => {
-  //       const editCooperationSpy = jest.spyOn(EditCooperationInfo.methods, 'editCooperationInfo');
-  //       const wrapper = mount(EditCooperationInfo);
+  describe('testing validatots', () => {
+    describe('testing required fields', () => {
+      it('should fail the validation - coop name field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#coopName', '', wrapper);
+        expect(wrapper.find('small#coopName-help').text()).toBe("Це обов'язкове поле");
+      });
 
-  //       wrapper.find('#edit-coop-btn').trigger('click');
-  //       await wrapper.vm.$nextTick();
+      it('should fail the validation - coop Iban field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#coopIban', '', wrapper);
+        expect(wrapper.find('small#coopIban-help').text()).toBe("Це обов'язкове поле");
+      });
 
-  //       expect(editCooperationSpy).toHaveBeenCalled();
-  //     });
-  //   });
+      it('should fail the validation - coop email field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#coopEmail', '', wrapper);
+        expect(wrapper.find('small#coopEmail-help').text()).toBe("Це обов'язкове поле");
+      });
+
+      it('should fail the validation - edrpou field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#edrpou', '', wrapper);
+        expect(wrapper.find('small#edrpou-help').text()).toBe("Це обов'язкове поле");
+      });
+
+      it('should fail the validation - coop phone field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#coopPhone', '', wrapper);
+        expect(wrapper.find('small#coopPhone-help').text()).toBe("Це обов'язкове поле");
+      });
+
+      it('should fail the validation - coop region field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#coopRegion', '', wrapper);
+        expect(wrapper.find('small#coopRegion-help').text()).toBe("Це обов'язкове поле");
+      });
+
+      it('should fail the validation - coop city field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#coopCity', '', wrapper);
+        expect(wrapper.find('small#coopCity-help').text()).toBe("Це обов'язкове поле");
+      });
+
+      it('should fail the validation - coop district field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#coopDistrict', '', wrapper);
+        expect(wrapper.find('small#coopDistrict-help').text()).toBe("Це обов'язкове поле");
+      });
+
+      it('should fail the validation - coop street field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#coopStreet', '', wrapper);
+        expect(wrapper.find('small#coopStreet-help').text()).toBe("Це обов'язкове поле");
+      });
+
+      it('should fail the validation - coop house field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#coopHouse', '', wrapper);
+        expect(wrapper.find('small#coopHouse-help').text()).toBe("Це обов'язкове поле");
+      });
+
+      it('should fail the validation - coop block field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#coopBlock', '', wrapper);
+        expect(wrapper.find('small#coopBlock-help').text()).toBe("Це обов'язкове поле");
+      });
+
+      it('should fail the validation - coop zipcode field [is required]', async () => {
+        const wrapper = mount(EditCooperationInfo);
+        await setup('#coopZipCode', '', wrapper);
+        expect(wrapper.find('small#coopZipCode-help').text()).toBe("Це обов'язкове поле");
+      });
+    });
+  });
 });
-
-// it('should call the init method and emit', async () => {
-//   const initSpy = jest.spyOn(EditCooperationInfo.methods, 'initData');
-//   const wrapper = shallowMount(EditCooperationInfo);
-//   wrapper.vm.$emit('isLoadedMode');
-
-//   expect(initSpy).toBeCalled();
-//   await wrapper.vm.$nextTick();
-
-//   expect(wrapper.emitted('isLoadedMode')).toBeTruthy();
-// });
-
-// it('tests editCooperationInfo method', async () => {
-//   expect(mockStore.dispatch).toHaveBeenCalledWith('cooperationStore/SET_COOPERATION_UPDATE');
-//   wrapper.vm.$emit('isLoadedMode');
-//   await wrapper.vm.$nextTick();
-
-//   expect(wrapper.emitted('isLoadedMode')).toBeTruthy();
-// });
-
-// it('tests initData method', () => {
-//     const wrapper = mount(EditCooperationInfo, {
-//       data() {
-//         return {
-//           cooperationData: {
-//             id: 0,
-//             name: '',
-//             edrpou: '',
-//             iban: '',
-//             phone: '',
-//             email: '',
-//             address: {} as CooperationAddressInterface,
-//           },
-//         };
-//       },
-//     });
-
-//     wrapper.find('#coopName').text();
-//     wrapper.find('#coopIban').text();
-//     wrapper.find('#coopEmail').text();
-//     wrapper.find('#edrpou').text();
-//     wrapper.find('#coopPhone').text();
-//     wrapper.find('#coopRegion').text();
-//     wrapper.find('#coopCity').text();
-//     wrapper.find('#coopStreet').text();
-//     wrapper.find('#coopDistrict').text();
-//     wrapper.find('#coopHouse').text();
-//     wrapper.find('#coopBlock').text();
-//     wrapper.find('#coopZipCode').text();
-//   });

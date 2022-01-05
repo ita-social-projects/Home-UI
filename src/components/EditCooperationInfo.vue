@@ -1,9 +1,9 @@
 <template>
-  <form id="edit-coop-form">
+  <form @submit.prevent="editCooperationInfo" id="edit-coop-form">
     <div>
       <label for="coopName">Назва : </label>
       <div class="input-block">
-        <small v-if="v$.cooperationData.name.$error" class="p-error">{{
+        <small v-if="v$.cooperationData.name.$error" class="p-error" id="coopName-help">{{
           v$.cooperationData.name.$errors[0].$message
         }}</small>
         <InputText
@@ -18,7 +18,7 @@
     <div>
       <label for="coopIban">Iban номер : </label>
       <div class="input-block">
-        <small v-if="v$.cooperationData.iban.$error" class="p-error">{{
+        <small v-if="v$.cooperationData.iban.$error" class="p-error" id="coopIban-help">{{
           v$.cooperationData.iban.$errors[0].$message
         }}</small>
         <InputText
@@ -34,7 +34,7 @@
     <div>
       <label for="coopEmail">Електронна адреса : </label>
       <div class="input-block">
-        <small v-if="v$.cooperationData.email.$error" class="p-error">{{
+        <small v-if="v$.cooperationData.email.$error" class="p-error" id="coopEmail-help">{{
           v$.cooperationData.email.$errors[0].$message
         }}</small>
         <InputText
@@ -50,7 +50,7 @@
     <div>
       <label for="edrpou">Код реєстрації : </label>
       <div class="input-block">
-        <small v-if="v$.cooperationData.edrpou.$error" class="p-error">{{
+        <small v-if="v$.cooperationData.edrpou.$error" class="p-error" id="edrpou-help">{{
           v$.cooperationData.edrpou.$errors[0].$message
         }}</small>
         <InputText
@@ -66,7 +66,7 @@
     <div>
       <label for="coopPhone">Номер телефону : </label>
       <div class="input-block">
-        <small v-if="v$.cooperationData.phone.$error" class="p-error">{{
+        <small v-if="v$.cooperationData.phone.$error" class="p-error" id="coopPhone-help">{{
           v$.cooperationData.phone.$errors[0].$message
         }}</small>
         <InputText
@@ -85,7 +85,7 @@
         <div>
           <label for="coopRegion">Регіон : </label>
           <div class="input-block">
-            <small v-if="v$.cooperationData.address.region.$error" class="p-error">{{
+            <small v-if="v$.cooperationData.address.region.$error" class="p-error" id="coopRegion-help">{{
               v$.cooperationData.address.region.$errors[0].$message
             }}</small>
             <InputText
@@ -100,7 +100,7 @@
         <div>
           <label for="coopCity">Місто : </label>
           <div class="input-block">
-            <small v-if="v$.cooperationData.address.city.$error" class="p-error">{{
+            <small v-if="v$.cooperationData.address.city.$error" class="p-error" id="coopCity-help">{{
               v$.cooperationData.address.city.$errors[0].$message
             }}</small>
             <InputText
@@ -115,7 +115,7 @@
         <div>
           <label for="coopDistrict">Район : </label>
           <div class="input-block">
-            <small v-if="v$.cooperationData.address.district.$error" class="p-error">{{
+            <small v-if="v$.cooperationData.address.district.$error" class="p-error" id="coopDistrict-help">{{
               v$.cooperationData.address.district.$errors[0].$message
             }}</small>
             <InputText
@@ -130,7 +130,7 @@
         <div>
           <label for="coopStreet">Вулиця : </label>
           <div class="input-block">
-            <small v-if="v$.cooperationData.address.street.$error" class="p-error">{{
+            <small v-if="v$.cooperationData.address.street.$error" class="p-error" id="coopStreet-help">{{
               v$.cooperationData.address.street.$errors[0].$message
             }}</small>
             <InputText
@@ -145,7 +145,7 @@
         <div>
           <label for="coopHouse">Номер будинку : </label>
           <div class="input-block">
-            <small v-if="v$.cooperationData.address.houseNumber.$error" class="p-error">{{
+            <small v-if="v$.cooperationData.address.houseNumber.$error" class="p-error" id="coopHouse-help">{{
               v$.cooperationData.address.houseNumber.$errors[0].$message
             }}</small>
             <InputText
@@ -160,7 +160,7 @@
         <div>
           <label for="coopBlock">Блок : </label>
           <div class="input-block">
-            <small v-if="v$.cooperationData.address.houseBlock.$error" class="p-error">{{
+            <small v-if="v$.cooperationData.address.houseBlock.$error" class="p-error" id="coopBlock-help">{{
               v$.cooperationData.address.houseBlock.$errors[0].$message
             }}</small>
             <InputText
@@ -175,7 +175,7 @@
         <div>
           <label for="coopZipCode">Індекс : </label>
           <div class="input-block">
-            <small v-if="v$.cooperationData.address.zipCode.$error" class="p-error">{{
+            <small v-if="v$.cooperationData.address.zipCode.$error" class="p-error" id="coopZipCode-help">{{
               v$.cooperationData.address.zipCode.$errors[0].$message
             }}</small>
             <InputText
@@ -195,6 +195,7 @@
       :disabled="v$.cooperationData.$invalid"
       label="Редагувати"
       icon="pi pi-check"
+      type="submit"
       @click="editCooperationInfo"
       autofocus
       class="p-button-info"
@@ -330,7 +331,7 @@ export default defineComponent({
     },
     editCooperationInfo(): void {
       const payload = {
-        id: this.cooperationId,
+        id: this.$props.cooperationId,
         name: this.cooperationData.name,
         edrpou: this.cooperationData.edrpou,
         iban: this.cooperationData.iban,
@@ -345,7 +346,6 @@ export default defineComponent({
         payload
       );
       this.$emit('cancel-editCoopInfo');
-      console.log('id', this.cooperationId);
     },
     cancelCooperationEdit() {
       this.initData();
