@@ -3,7 +3,7 @@ import { mount, shallowMount, VueWrapper } from '@vue/test-utils';
 import ManageApartments from '@/views/ManageApartments.vue';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddApartmentForm from '@/components/AddApartmentForm.vue';
-import { ComponentPublicInstance } from 'vue';
+import { ComponentPublicInstance, nextTick } from 'vue';
 
 const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
   const el = wrapper.find(id);
@@ -72,7 +72,7 @@ describe('Manage apartments', () => {
       },
       stubs: {
         Breadcrumb: true,
-        AddApartmentForm,
+        // AddApartmentForm,
       },
       mocks: {
         route: mockRoute,
@@ -88,6 +88,10 @@ describe('Manage apartments', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
+  it('should exist component Breadcrumb', () => {
+    expect(wrapper.findComponent(Breadcrumb).exists()).toBe(true);
+  });
+
   it('props check', () => {
     expect(wrapper.props('id')).toBe('4567');
   });
@@ -98,7 +102,7 @@ describe('Manage apartments', () => {
   });
 
   it('add house button testing', async () => {
-    expect(wrapper.findComponent(Breadcrumb).exists()).toBe(true);
+    console.log(wrapper.html())
     // expect(wrapper.findComponent(AddApartmentForm).exists()).toBe(true);
     // const button = {
     //   click() {
@@ -113,7 +117,7 @@ describe('Manage apartments', () => {
     
     // const spy = jest.spyOn(ManageApartments, 'openApartmentModal');
     // await wrapper.find('.add-btn button').trigger('click');
-    // await wrapper.vm.$nextTick();3
+    // await wrapper.vm.$nextTick();
 
     // expect(spy).toBeCalled();
     
@@ -133,6 +137,7 @@ describe('Manage apartments', () => {
   // });
   it('click add apartment', async () => {
     await wrapper.find('.add-btn>button').trigger('click');
+    await wrapper.vm.$nextTick();
     expect(wrapper.find('#apartment_data_form').exists()).toBe(true);
     // expect(openApartmentModal).toHaveBeenCalled();
     // router.push('/main/cooperation/:id/:apartment');
