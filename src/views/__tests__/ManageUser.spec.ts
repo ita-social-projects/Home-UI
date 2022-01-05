@@ -1,9 +1,8 @@
-import { flushPromises, mount, shallowMount, VueWrapper } from '@vue/test-utils';
+import { mount, VueWrapper } from '@vue/test-utils';
 import ManageUser from '@/views/ManageUser.vue';
 import store from '@/store';
 import { ComponentPublicInstance, nextTick } from 'vue';
 import { getters } from '@/store/authorization/getters';
-import axios from 'axios';
 
 const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
   const el = wrapper.find(id);
@@ -116,4 +115,67 @@ describe('ManageUser', () => {
     wrapper.vm.addContact();
     expect(spy).toBeCalled();
   });
+
+  describe('Mock store', () => {
+    const mockStore = {
+      state: {
+        user: {
+          first_name: 'Alex',
+          middle_name: 'Petrovich',
+          last_name: 'Petrov',
+          email: 'admin@ukr.net',
+          id: 1,
+          contacts: [
+            {
+              type: 'email',
+              main: true,
+              email: 'admin@ukr.net',
+              phone: 'number',
+              id: 4,
+            },
+            {
+              type: 'phone',
+              main: true,
+              email: '+380678889900',
+              phone: 'number',
+              id: 4,
+            },
+          ],
+        },
+      },
+      getters: {
+        'authorizationStore/userData': (state: any) => {
+          return state.user;
+        },
+      },
+      dispatch: jest.fn(),
+    };
+
+    const wrapper = mount(ManageUser, {
+      global: {
+        mocks: {
+          $store: mockStore,
+        },
+      },
+    });
+    it('initial with mock state', () => {
+      expect(wrapper.exists()).toBeTruthy();
+    });
+
+    it('test for checking getter', () => {
+      const data = {
+        user: {
+          firstName: 'Alex',
+          middleName: 'Alex',
+          lastName: 'Alex',
+          email: 'fff@jj.ff',
+          id: 0,
+          contacts: [],
+        },
+      };
+      const actual = getters.userData(data);
+      expect(actual).toBe(data.user);
+    });
+  });
 });
+//
