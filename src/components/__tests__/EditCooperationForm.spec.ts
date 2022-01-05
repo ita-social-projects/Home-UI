@@ -1,4 +1,4 @@
-import { VueWrapper, mount, shallowMount } from '@vue/test-utils';
+import { VueWrapper, mount } from '@vue/test-utils';
 import { ComponentPublicInstance } from 'vue';
 import EditCooperationInfo from '@/components/EditCooperationInfo.vue';
 import { CooperationAddressInterface } from './../../store/cooperation/types';
@@ -41,17 +41,10 @@ describe('EditCooperationInfo.vue', () => {
 
   describe('right render with mockStore', () => {
     it('should exist', () => {
-      const wrapper = mount(EditCooperationInfo);
       expect(wrapper.exists()).toBeTruthy();
     });
 
     it('should get required props', () => {
-      const wrapper = mount(EditCooperationInfo, {
-        propsData: {
-          cooperationId: 1,
-        },
-      });
-
       expect(wrapper.props().cooperationId).toBe(1);
       expect(wrapper.props('cooperationId')).toBe(1);
     });
@@ -182,7 +175,6 @@ describe('EditCooperationInfo.vue', () => {
 
       it('test cancelCooperationEdit method', async () => {
         const initDataSpy = jest.spyOn(EditCooperationInfo.methods, 'initData');
-        const wrapper = mount(EditCooperationInfo);
 
         wrapper.vm.$emit('cancel-editCoopInfo');
         wrapper.find('#cancel-edit-coop-btn').trigger('click');
@@ -197,73 +189,61 @@ describe('EditCooperationInfo.vue', () => {
   describe('testing validatots', () => {
     describe('testing required fields', () => {
       it('should fail the validation - coop name field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#coopName', '', wrapper);
         expect(wrapper.find('small#coopName-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop Iban field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#coopIban', '', wrapper);
         expect(wrapper.find('small#coopIban-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop email field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#coopEmail', '', wrapper);
         expect(wrapper.find('small#coopEmail-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - edrpou field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#edrpou', '', wrapper);
         expect(wrapper.find('small#edrpou-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop phone field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#coopPhone', '', wrapper);
         expect(wrapper.find('small#coopPhone-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop region field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#coopRegion', '', wrapper);
         expect(wrapper.find('small#coopRegion-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop city field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#coopCity', '', wrapper);
         expect(wrapper.find('small#coopCity-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop district field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#coopDistrict', '', wrapper);
         expect(wrapper.find('small#coopDistrict-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop street field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#coopStreet', '', wrapper);
         expect(wrapper.find('small#coopStreet-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop house field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#coopHouse', '', wrapper);
         expect(wrapper.find('small#coopHouse-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop block field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#coopBlock', '', wrapper);
         expect(wrapper.find('small#coopBlock-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop zipcode field [is required]', async () => {
-        const wrapper = mount(EditCooperationInfo);
         await setup('#coopZipCode', '', wrapper);
         expect(wrapper.find('small#coopZipCode-help').text()).toBe("Це обов'язкове поле");
       });
