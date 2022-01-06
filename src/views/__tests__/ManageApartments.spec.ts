@@ -106,27 +106,6 @@ describe('Manage apartments', () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.vm.displayApartmentModal).toBe(true);
   });
-
-  // it('click add apartment', async () => {
-  //   await wrapper.find('.add-btn>button').trigger('click');
-  //   await wrapper.vm.$nextTick();
-  //   console.log(wrapper.vm.displayApartmentModal);
-  //   // expect(wrapper.find('#apartment_data_form').exists()).toBe(true);
-  //   // expect(openApartmentModal).toHaveBeenCalled();
-  //   // router.push('/main/cooperation/:id/:apartment');
-  //   // await router.isReady();
-
-  // });
-
-  // it('routing', async () => {
-  //   const row = await wrapper.findAll('.p-selectable-row')[0];
-  //   console.log('rows', row);
-  //   row.trigger('click');
-  //   // const apartmentId = 3256;
-  //   await wrapper.vm.$nextTick();
-  //   // expect(wrapper.html()).toContain('Кількість голосів свіввласника');
-  //   // expect(mockRoutes).toEqual('/main/cooperation/4567/3256');
-  // });
 });
 
 describe('In mount shoul be called set apartments dispatch', () => {
