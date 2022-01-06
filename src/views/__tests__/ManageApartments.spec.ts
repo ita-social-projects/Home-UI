@@ -1,9 +1,10 @@
 import { createStore } from 'vuex';
-import { mount } from '@vue/test-utils';
+import { mount, VueWrapper } from '@vue/test-utils';
+import { MountingOptions } from '@vue/test-utils/dist/types';
 import ManageApartments from '@/views/ManageApartments.vue';
 import ApartmentInfo from '@/views/ApartmentInfo.vue';
-import Breadcrumb from '@/components/Breadcrumb.vue';
-import AddApartmentForm from '@/components/AddApartmentForm.vue';
+// import Breadcrumb from '@/components/Breadcrumb.vue';
+// import AddApartmentForm from '@/components/AddApartmentForm.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const store = createStore({
@@ -41,7 +42,6 @@ const store = createStore({
       },
     ],
   },
-
   getters: {
     'apartmentsStore/getApartmentsData': (state) => state.apartments,
     'cooperationStore/getSelectedCooperationId': () => 1,
@@ -64,27 +64,29 @@ const router = createRouter({
   routes,
 });
 
-const factory = (id: any) => {
-  return mount(ManageApartments, {
-    props: {
-      id
+const mountingOptions: MountingOptions<any> = {
+  global: {
+    provide: {
+      store,
     },
-    global: {
-      provide: {
-        store,
-      },
-      plugins: [router],
-      stubs: {
-        Breadcrumb: true,
-        AddApartmentForm: true,
-        Dialog: true,
-      },
+    plugins: [router],
+    stubs: {
+      Breadcrumb: true,
+      AddApartmentForm: true,
+      Dialog: true,
     },
-  });
+  },
+  props: {
+    id: '4567',
+  },
 };
 
-describe('Manage apartments', () => {
-  const wrapper = factory('4567');
+describe('Manage apartments page', () => {
+  let wrapper: VueWrapper<ManageApartments>;
+
+  beforeEach(() => {
+    wrapper = mount(ManageApartments, mountingOptions);
+  });
 
   it('should initialize correctly', () => {
     expect(wrapper.exists()).toBeTruthy();
@@ -96,29 +98,30 @@ describe('Manage apartments', () => {
 
   it('length of rendered list of apartments should be equal to length of state.apartments', async () => {
     const apartmentsListLength = store.state.apartments.length;
+
     expect(wrapper.findAll('.p-selectable-row')).toHaveLength(apartmentsListLength);
   });
 
   it('should open AddApartment modal', async () => {
     const btn = wrapper.find('.add-btn button');
     wrapper.vm.displayApartmentModal = false;
-    btn.trigger('click');
+
+    await btn.trigger('click');
     await wrapper.vm.$nextTick();
+
     expect(wrapper.vm.displayApartmentModal).toBe(true);
   });
 
-  describe('Checking dispatch in mounting', () => {
-    it('shoul be called set apartments dispatch', () => {
+  describe('mounted lifecycle hook', () => {
+    it('should call set apartments action', () => {
       store.dispatch = jest.fn();
-      const wrapper = factory('4567');
+      const wrapper = mount(ManageApartments, mountingOptions);
 
       expect(store.dispatch).toHaveBeenCalledWith('apartmentsStore/SET_APARTMENTS', wrapper.props('id'));
     });
   });
 
   describe('click on row in table', () => {
-    const wrapper = factory('4567');
-
     it('should push user to page with apartment info', async () => {
       const rows = wrapper.findAll('.p-selectable-row');
       await rows[0].trigger('click');

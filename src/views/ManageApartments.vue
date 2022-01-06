@@ -201,7 +201,7 @@ export default defineComponent({
     const submitted = ref(false);
     const displayApartmentModal = ref(false);
 
-    const toggle = (event: any, data: ApartmentModel) => {
+    const toggle = (event: KeyboardEvent, data: ApartmentModel) => {
       menu.value.toggle(event);
       item.value = data;
       submitted.value = false;
@@ -253,7 +253,7 @@ export default defineComponent({
       return store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`];
     });
 
-    const onRowSelect = (event: any) => {
+    const onRowSelect = (event: KeyboardEvent) => {
       const apartmentId = event.data.id;
       router.push({
         name: 'apartment-info',

@@ -186,7 +186,7 @@ import {
   zeroValidator,
   regionCityDistrictMaxLength,
   streetMaxLength,
-  houseBlockAndNumberMaxLength,
+  houseBlockHouseNumberMaxLength,
   houseAreaValidator,
   flatQuantityAndAdjoiningAreaValidator,
   houseDecimalValidator,
@@ -250,8 +250,16 @@ export default defineComponent({
           city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           district: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           street: { requiredValidator, ukrLangTitleValidator, streetMaxLength },
-          houseBlock: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
-          houseNumber: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
+          houseBlock: {
+            requiredValidator,
+            houseNumAndHouseBlockValidator,
+            houseBlockAndNumberMaxLength: houseBlockHouseNumberMaxLength,
+          },
+          houseNumber: {
+            requiredValidator,
+            houseNumAndHouseBlockValidator,
+            houseBlockAndNumberMaxLength: houseBlockHouseNumberMaxLength,
+          },
           zipCode: { requiredValidator, zipCodeValidator },
         },
       },
@@ -272,8 +280,7 @@ export default defineComponent({
 
       await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.ADD_HOUSE}`, payload);
 
-      this.resetHouseDataFields(this.houseData);
-      this.$emit('cancel-addHouseModal');
+      this.closeAddHouseModal();
     },
     resetHouseDataFields(houseData: any) {
       for (let field in houseData) {
