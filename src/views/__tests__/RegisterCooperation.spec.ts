@@ -1,12 +1,6 @@
 import { mount, VueWrapper } from '@vue/test-utils';
 import RegisterCooperation from '@/views/RegisterCooperation.vue';
-import { ComponentPublicInstance } from 'vue';
-
-const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
-  const el = wrapper.find(id);
-  await el.setValue(value);
-  await el.trigger('blur');
-};
+import { inputSetValueHandler } from '@/utils/test-utils';
 
 const validationMessages: { [key: string]: any } = {
   required: "Це обов'язкове поле",
@@ -46,7 +40,7 @@ describe('RegisterCooperation.vue', () => {
       ['edrpou', 'required', ''],
       ['edrpou', 'edrpou', '1234567'],
     ])('should display `%s` validation message', async (fieldName: string, message: string, value: string) => {
-      await setup(`#${fieldName}`, value, wrapper);
+      await inputSetValueHandler(null, value, `#${fieldName}`, wrapper);
 
       expect(wrapper.find(`small#${fieldName}-help`).text()).toBe(validationMessages[message]);
     });

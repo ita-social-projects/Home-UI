@@ -1,30 +1,8 @@
-import { VueWrapper, mount, DOMWrapper } from '@vue/test-utils';
-import { ComponentPublicInstance } from 'vue';
-import AddHouseForm from '@/components/AddHouseForm.vue';
 import { createStore } from 'vuex';
+import { VueWrapper, mount, DOMWrapper } from '@vue/test-utils';
 import { RootStateInterface } from '@/store/types';
-
-const setup = async (
-  element: DOMWrapper<HTMLElement> | null,
-  selector: string,
-  value: string | number,
-  wrapper?: VueWrapper<ComponentPublicInstance>
-) => {
-  if (!element && wrapper) {
-    const el = wrapper.find(selector);
-    await el.setValue(value);
-    await el.trigger('blur');
-
-    return;
-  }
-
-  if (element) {
-    await element.setValue(value);
-    await element.trigger('blur');
-
-    return;
-  }
-};
+import { inputSetValueHandler } from '@/utils/test-utils';
+import AddHouseForm from '@/components/AddHouseForm.vue';
 
 type InputValueType = string | number;
 
@@ -100,7 +78,7 @@ describe('AddHouseForm.vue', () => {
     const requiredCases = Object.keys(mockFieldValues).map((fieldName: string) => [fieldName]);
 
     it.each(requiredCases)('%s field should display required validation message', async (fieldName: string) => {
-      await setup(fields[fieldName], '', '');
+      await inputSetValueHandler(fields[fieldName], '');
 
       expect(wrapper.find(`small#${fieldName}-help`).text()).toBe(validationMessages.required());
     });
@@ -115,7 +93,7 @@ describe('AddHouseForm.vue', () => {
     ])(
       '%s field should display max (%s) length validation message',
       async (fieldName: string, max: number, longString: string) => {
-        await setup(fields[fieldName], '', longString);
+        await inputSetValueHandler(fields[fieldName], longString);
 
         expect(wrapper.find(`small#${fieldName}-help`).text()).toBe(validationMessages.maxSymbols(max));
       }
@@ -135,7 +113,7 @@ describe('AddHouseForm.vue', () => {
     ])(
       '%s field should display `%s` validation message',
       async (fieldName: string, message: string, value: InputValueType) => {
-        await setup(fields[fieldName], '', value);
+        await inputSetValueHandler(fields[fieldName], value);
 
         expect(wrapper.find(`small#${fieldName}-help`).text()).toBe(validationMessages[message]());
       }
