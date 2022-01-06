@@ -1,15 +1,9 @@
 import { createStore } from 'vuex';
-import { mount, shallowMount, VueWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import ManageApartments from '@/views/ManageApartments.vue';
+import ApartmentInfo from '@/views/ApartmentInfo.vue';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddApartmentForm from '@/components/AddApartmentForm.vue';
-import { ComponentPublicInstance, nextTick } from 'vue';
-
-const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
-  const el = wrapper.find(id);
-  await el.setValue(value);
-  await el.trigger('blur');
-};
 
 const store = createStore({
   state: {
@@ -49,22 +43,25 @@ const store = createStore({
 
   getters: {
     'apartmentsStore/getApartmentsData': (state) => state.apartments,
+    'cooperationStore/getSelectedCooperationId': () => 1,
   },
   actions: {
-    'housesStore/GET_HOUSE_BY_ID': () => jest.fn(),
-    'apartmentsStore/SET_APARTMENTS': () => jest.fn(),
+    'housesStore/GET_HOUSE_BY_ID': jest.fn(),
+    'apartmentsStore/SET_APARTMENTS': jest.fn(),
   },
 });
+const routes = {
+  path: '/main/cooperation/:id/:apartment',
+  params: {
+    id: 1,
+    apartment: 3256,
+  },
+};
+const mockRouter = {
+  push: jest.fn(),
+};
 
 describe('Manage apartments', () => {
-  const mockRoute = {
-    params: {
-      id: 1,
-    },
-  };
-  const mockRouter = {
-    push: jest.fn(),
-  };
   const wrapper = mount(ManageApartments, {
     global: {
       provide: {
@@ -72,10 +69,11 @@ describe('Manage apartments', () => {
       },
       stubs: {
         Breadcrumb: true,
-        // AddApartmentForm,
+        AddApartmentForm: true,
+        Dialog: true,
       },
       mocks: {
-        route: mockRoute,
+        routes,
         router: mockRouter,
       },
     },
@@ -101,47 +99,58 @@ describe('Manage apartments', () => {
     expect(wrapper.findAll('.p-selectable-row')).toHaveLength(apartmentsListLength);
   });
 
-  it('add house button testing', async () => {
-    console.log(wrapper.html())
-    // expect(wrapper.findComponent(AddApartmentForm).exists()).toBe(true);
-    // const button = {
-    //   click() {
-    //     return true;
-    //   }
-    // }
-    // const openApartmentModal = jest.spyOn(button, 'click');
-    // const clicked = button.click();
-    // await wrapper.vm.$nextTick();
-    // expect(openApartmentModal).toHaveBeenCalled();
-
-    
-    // const spy = jest.spyOn(ManageApartments, 'openApartmentModal');
-    // await wrapper.find('.add-btn button').trigger('click');
-    // await wrapper.vm.$nextTick();
-
-    // expect(spy).toBeCalled();
-    
-    
-  
-    // expect(store.dispatch).toHaveBeenCalledWith('housesStore/GET_HOUSE_BY_ID', {
-    //   cooperationID: 1,
-    //   houseID: 1,
-    // });
+  it('should open AddApartment modal', async () => {
+    const btn = wrapper.find('.add-btn button');
+    wrapper.vm.displayApartmentModal = false;
+    btn.trigger('click');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.vm.displayApartmentModal).toBe(true);
   });
+
+  // it('click add apartment', async () => {
+  //   await wrapper.find('.add-btn>button').trigger('click');
+  //   await wrapper.vm.$nextTick();
+  //   console.log(wrapper.vm.displayApartmentModal);
+  //   // expect(wrapper.find('#apartment_data_form').exists()).toBe(true);
+  //   // expect(openApartmentModal).toHaveBeenCalled();
+  //   // router.push('/main/cooperation/:id/:apartment');
+  //   // await router.isReady();
+
+  // });
 
   // it('routing', async () => {
   //   const row = await wrapper.findAll('.p-selectable-row')[0];
   //   console.log('rows', row);
   //   row.trigger('click');
-  //   expect(mockRouter.push).toHaveBeenCalledTimes(1);
+  //   // const apartmentId = 3256;
+  //   await wrapper.vm.$nextTick();
+  //   // expect(wrapper.html()).toContain('Кількість голосів свіввласника');
+  //   // expect(mockRoutes).toEqual('/main/cooperation/4567/3256');
   // });
-  it('click add apartment', async () => {
-    await wrapper.find('.add-btn>button').trigger('click');
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find('#apartment_data_form').exists()).toBe(true);
-    // expect(openApartmentModal).toHaveBeenCalled();
-    // router.push('/main/cooperation/:id/:apartment');
-    // await router.isReady();
+});
 
+describe('In mount shoul be called set apartments dispatch', () => {
+  it('', () => {
+    store.dispatch = jest.fn();
+    const wrapper = mount(ManageApartments, {
+      global: {
+        provide: {
+          store,
+        },
+        stubs: {
+          Breadcrumb: true,
+          AddApartmentForm: true,
+          Dialog: true,
+        },
+        mocks: {
+          routes,
+          router: mockRouter,
+        },
+      },
+      props: {
+        id: '4567',
+      },
+    });
+    expect(store.dispatch).toHaveBeenCalledWith('apartmentsStore/SET_APARTMENTS', wrapper.props('id'));
   });
 });

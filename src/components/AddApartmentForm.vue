@@ -92,7 +92,7 @@ export default defineComponent({
     };
   },
   methods: {
-    async saveApartment() {
+    async saveApartment(): Promise<void> {
       const isValid = await this.v$.$validate();
       if (!isValid) {
         return;
