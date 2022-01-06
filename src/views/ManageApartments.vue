@@ -78,7 +78,7 @@
               <template #body="slotProps">
                 <Button
                   icon="pi pi-pencil"
-                  class="p-button p-button-info p-button-text"
+                  class="col-btn p-button p-button-info p-button-text"
                   type="button"
                   @click="toggle($event, slotProps.data)"
                   aria-haspopup="true"

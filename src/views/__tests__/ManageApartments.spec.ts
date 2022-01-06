@@ -4,6 +4,7 @@ import ManageApartments from '@/views/ManageApartments.vue';
 import ApartmentInfo from '@/views/ApartmentInfo.vue';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddApartmentForm from '@/components/AddApartmentForm.vue';
+import { createRouter, createWebHistory } from 'vue-router';
 
 const store = createStore({
   state: {
@@ -50,44 +51,43 @@ const store = createStore({
     'apartmentsStore/SET_APARTMENTS': jest.fn(),
   },
 });
-const routes = {
-  path: '/main/cooperation/:id/:apartment',
-  params: {
-    id: 1,
-    apartment: 3256,
-  },
-};
-const mockRouter = {
-  push: jest.fn(),
-};
 
-describe('Manage apartments', () => {
-  const wrapper = mount(ManageApartments, {
+const routes = [
+  {
+    name: 'apartment-info',
+    path: '/main/cooperation/34/67',
+    component: ApartmentInfo,
+  },
+];
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
+});
+
+const factory = (id: any) => {
+  return mount(ManageApartments, {
+    props: {
+      id
+    },
     global: {
       provide: {
-        store: store,
+        store,
       },
+      plugins: [router],
       stubs: {
         Breadcrumb: true,
         AddApartmentForm: true,
         Dialog: true,
       },
-      mocks: {
-        routes,
-        router: mockRouter,
-      },
-    },
-    props: {
-      id: '4567',
     },
   });
+};
+
+describe('Manage apartments', () => {
+  const wrapper = factory('4567');
 
   it('should initialize correctly', () => {
     expect(wrapper.exists()).toBeTruthy();
-  });
-
-  it('should exist component Breadcrumb', () => {
-    expect(wrapper.findComponent(Breadcrumb).exists()).toBe(true);
   });
 
   it('props check', () => {
@@ -106,30 +106,24 @@ describe('Manage apartments', () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.vm.displayApartmentModal).toBe(true);
   });
-});
 
-describe('In mount shoul be called set apartments dispatch', () => {
-  it('', () => {
-    store.dispatch = jest.fn();
-    const wrapper = mount(ManageApartments, {
-      global: {
-        provide: {
-          store,
-        },
-        stubs: {
-          Breadcrumb: true,
-          AddApartmentForm: true,
-          Dialog: true,
-        },
-        mocks: {
-          routes,
-          router: mockRouter,
-        },
-      },
-      props: {
-        id: '4567',
-      },
+  describe('Checking dispatch in mounting', () => {
+    it('shoul be called set apartments dispatch', () => {
+      store.dispatch = jest.fn();
+      const wrapper = factory('4567');
+
+      expect(store.dispatch).toHaveBeenCalledWith('apartmentsStore/SET_APARTMENTS', wrapper.props('id'));
     });
-    expect(store.dispatch).toHaveBeenCalledWith('apartmentsStore/SET_APARTMENTS', wrapper.props('id'));
+  });
+
+  describe('click on row in table', () => {
+    const wrapper = factory('4567');
+
+    it('should push user to page with apartment info', async () => {
+      const rows = wrapper.findAll('.p-selectable-row');
+      await rows[0].trigger('click');
+      await router.isReady();
+      console.log('pushed');
+    });
   });
 });
