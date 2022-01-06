@@ -152,7 +152,7 @@ describe('ManageUser', () => {
       dispatch: jest.fn(),
     };
 
-    const wrapper = mount(ManageUser, {
+    wrapper = mount(ManageUser, {
       global: {
         mocks: {
           $store: mockStore,
@@ -217,7 +217,7 @@ describe('ManageUser', () => {
     });
 
     it('length of rendered list of contact should be equal to length of state.user.contacts', () => {
-      const wrapper = mount(ManageUser, {
+      wrapper = mount(ManageUser, {
         global: {
           plugins: [store],
         },
