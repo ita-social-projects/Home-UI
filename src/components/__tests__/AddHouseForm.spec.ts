@@ -123,7 +123,14 @@ describe('AddHouseForm.vue', () => {
   describe('addNewHouse method', () => {
     let addNewHouseBtn: DOMWrapper<HTMLElement>;
     let houseForm: DOMWrapper<HTMLElement>;
-    const submitEvent: [string, { preventDefault: () => void }] = ['submit', { preventDefault: () => {} }];
+    const submitEvent: [string, { preventDefault: () => void }] = [
+      'submit',
+      {
+        preventDefault: () => {
+          return;
+        },
+      },
+    ];
 
     beforeEach(() => {
       addNewHouseBtn = wrapper.find('#add-new-house-btn');
@@ -158,7 +165,7 @@ describe('AddHouseForm.vue', () => {
     });
 
     it('should clear fields after submit', async () => {
-      Object.keys(fields).forEach(async (field: string) => await fields[field].setValue(mockFieldValues[field]));
+      Object.keys(fields).forEach((field: string) => fields[field].setValue(mockFieldValues[field]));
 
       await houseForm.trigger(...submitEvent);
 

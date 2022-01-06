@@ -4,33 +4,63 @@ import { inputSetValueHandler } from '@/utils/test-utils';
 import EditCooperationInfo from '@/components/EditCooperationInfo.vue';
 import { CooperationAddressInterface } from '@/store/cooperation/types';
 
-describe('EditCooperationInfo.vue', () => {
-  const mockStore = {
-    getters: jest.fn(),
-    dispatch: jest.fn(),
-  };
-  const wrapper = mount(EditCooperationInfo, {
-    global: {
-      mocks: {
-        $store: mockStore,
+const store = createStore({
+  state: {
+    userCooperations: {
+      id: 1,
+      name: 'Крила ночі',
+      edrpou: '12345678',
+      iban: 'UA122115518961158112111881111',
+      address: {
+        region: 'Дніпропетровський',
+        city: 'Дніпро',
+        district: 'Задовський',
+        street: 'Моторна',
+        houseBlock: '11',
+        houseNumber: '12',
+        zipCode: '12345',
       },
+      contacts: [
+        { type: 'email', main: true, email: 'admin@email.com' },
+        { type: 'phone', main: true, phone: '+380509912832' },
+      ],
     },
-    data() {
-      return {
-        cooperationData: {
-          id: 1,
-          name: '',
-          edrpou: '',
-          iban: '',
-          phone: '',
-          email: '',
-          address: {} as CooperationAddressInterface,
+    selectedCooperation: 1,
+  },
+  getters: {
+    'cooperationStore/getSelectedCooperation': (state) => state.userCooperations,
+  },
+  actions: {
+    'cooperationStore/SET_COOPERATION_UPDATE': () => jest.fn(),
+  },
+});
+
+describe('EditCooperationInfo.vue', () => {
+  let wrapper: VueWrapper<any>;
+  beforeEach(() => {
+    wrapper = mount(EditCooperationInfo, {
+      global: {
+        mocks: {
+          store,
         },
-      };
-    },
-    propsData: {
-      cooperationId: 1,
-    },
+      },
+      data() {
+        return {
+          cooperationData: {
+            id: 1,
+            name: '',
+            edrpou: '',
+            iban: '',
+            phone: '',
+            email: '',
+            address: {} as CooperationAddressInterface,
+          },
+        };
+      },
+      propsData: {
+        cooperationId: 1,
+      },
+    });
   });
 
   describe('right render with mockStore', () => {
@@ -44,8 +74,7 @@ describe('EditCooperationInfo.vue', () => {
     });
 
     it('initData should be called and event should emit in mounted hook', async () => {
-      const initDataSpy = jest.spyOn(EditCooperationInfo.methods, 'initData');
-      const wrapper = mount(EditCooperationInfo);
+      const initDataSpy = jest.spyOn(wrapper.vm, 'initData');
       wrapper.vm.$emit('isLoadedMode');
 
       expect(initDataSpy).toBeCalled();
@@ -55,49 +84,15 @@ describe('EditCooperationInfo.vue', () => {
   });
 
   describe('testing store, action, getters', () => {
-    const store = createStore({
-      state: {
-        userCooperations: {
-          id: 1,
-          name: 'Крила ночі',
-          edrpou: '12345678',
-          iban: 'UA122115518961158112111881111',
-          address: {
-            region: 'Дніпропетровський',
-            city: 'Дніпро',
-            district: 'Задовський',
-            street: 'Моторна',
-            houseBlock: '11',
-            houseNumber: '12',
-            zipCode: '12345',
-          },
-          contacts: [
-            { type: 'email', main: true, email: 'admin@email.com' },
-            { type: 'phone', main: true, phone: '+380509912832' },
-          ],
-        },
-        selectedCooperation: 1,
-      },
-      getters: {
-        'cooperationStore/getSelectedCooperation': (state) => state.userCooperations,
-      },
-      actions: {
-        'cooperationStore/SET_COOPERATION_UPDATE': () => jest.fn(),
-      },
-    });
-
     it('should test editCooperationInfo method and dispatch', async () => {
       store.dispatch = jest.fn();
-      const editCooperationInfoSpy = jest.spyOn(EditCooperationInfo.methods, 'editCooperationInfo');
-      const wrapper = mount(EditCooperationInfo, {
-        global: {
-          plugins: [store],
-        },
-      });
+      const editCooperationInfoSpy = jest.spyOn(wrapper.vm, 'editCooperationInfo');
 
-      wrapper.find('#edit-coop-btn').trigger('click');
-      wrapper.find('#edit-coop-form').trigger('submit', {
-        preventDefault: () => {},
+      await wrapper.find('#edit-coop-btn').trigger('click');
+      await wrapper.find('#edit-coop-form').trigger('submit', {
+        preventDefault: () => {
+          return;
+        },
       });
 
       const data = {
@@ -158,20 +153,19 @@ describe('EditCooperationInfo.vue', () => {
 
     describe('testing methods', () => {
       it('cancelCooperationEdit method should be called', async () => {
-        const cancelCooperationEditSpy = jest.spyOn(EditCooperationInfo.methods, 'cancelCooperationEdit');
-        const wrapper = mount(EditCooperationInfo);
+        const cancelCooperationEditSpy = jest.spyOn(wrapper.vm, 'cancelCooperationEdit');
 
-        wrapper.find('#cancel-edit-coop-btn').trigger('click');
+        await wrapper.find('#cancel-edit-coop-btn').trigger('click');
         await wrapper.vm.$nextTick();
 
         expect(cancelCooperationEditSpy).toHaveBeenCalled();
       });
 
       it('test cancelCooperationEdit method', async () => {
-        const initDataSpy = jest.spyOn(EditCooperationInfo.methods, 'initData');
+        const initDataSpy = jest.spyOn(wrapper.vm, 'initData');
 
-        wrapper.vm.$emit('cancel-editCoopInfo');
-        wrapper.find('#cancel-edit-coop-btn').trigger('click');
+        await wrapper.vm.$emit('cancel-editCoopInfo');
+        await wrapper.find('#cancel-edit-coop-btn').trigger('click');
         await wrapper.vm.$nextTick();
 
         expect(initDataSpy).toHaveBeenCalled();
@@ -180,7 +174,7 @@ describe('EditCooperationInfo.vue', () => {
     });
   });
 
-  describe('testing validatots', () => {
+  describe('testing validators', () => {
     //TODO: refactor tests to it.each
     describe('testing required fields', () => {
       it('should fail the validation - coop name field [is required]', async () => {
