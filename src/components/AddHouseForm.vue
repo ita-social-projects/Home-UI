@@ -178,25 +178,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import {
-  requiredValidator,
-  ukrLangTitleValidator,
-  houseNumAndHouseBlockValidator,
-  zipCodeValidator,
-  zeroValidator,
-  regionCityDistrictMaxLength,
-  streetMaxLength,
-  houseBlockHouseNumberMaxLength,
-  houseAreaValidator,
-  flatQuantityAndAdjoiningAreaValidator,
-  houseDecimalValidator,
-} from '@/utils/validators';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum } from '@/store/houses/types';
 import { AddressModel } from '@/shared/models/address.model';
 import { HouseModel } from '@/shared/models/house.model';
+import { houseValidations } from '@/utils/house-validations';
 
 export default defineComponent({
   name: 'AddHouseForm',
@@ -231,38 +219,7 @@ export default defineComponent({
   },
   validations() {
     return {
-      houseData: {
-        flatQuantity: {
-          requiredValidator,
-          zeroValidator,
-          flatQuantityAndAdjoiningAreaValidator,
-          houseDecimalValidator,
-        },
-        houseArea: { requiredValidator, zeroValidator, houseAreaValidator, houseDecimalValidator },
-        adjoiningArea: {
-          requiredValidator,
-          zeroValidator,
-          flatQuantityAndAdjoiningAreaValidator,
-          houseDecimalValidator,
-        },
-        address: {
-          region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
-          city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
-          district: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
-          street: { requiredValidator, ukrLangTitleValidator, streetMaxLength },
-          houseBlock: {
-            requiredValidator,
-            houseNumAndHouseBlockValidator,
-            houseBlockAndNumberMaxLength: houseBlockHouseNumberMaxLength,
-          },
-          houseNumber: {
-            requiredValidator,
-            houseNumAndHouseBlockValidator,
-            houseBlockAndNumberMaxLength: houseBlockHouseNumberMaxLength,
-          },
-          zipCode: { requiredValidator, zipCodeValidator },
-        },
-      },
+      houseData: houseValidations,
     };
   },
   methods: {
