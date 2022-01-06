@@ -180,7 +180,7 @@ describe('ManageUser', () => {
   });
 
   describe('Create store', () => {
-    const store = createStore({
+    const storeNew = createStore({
       state: {
         user: {
           first_name: 'Alex',
@@ -219,10 +219,10 @@ describe('ManageUser', () => {
     it('length of rendered list of contact should be equal to length of state.user.contacts', () => {
       wrapper = mount(ManageUser, {
         global: {
-          plugins: [store],
+          plugins: [storeNew],
         },
       });
-      const contactListLength = store.state.user.contacts.length;
+      const contactListLength = storeNew.state.user.contacts.length;
       expect(wrapper.findAll('.contact-tr')).toHaveLength(contactListLength);
     });
   });
