@@ -222,8 +222,8 @@ describe('ManageUser', () => {
           plugins: [store],
         },
       });
-      const pollsListLength = store.state.user.contacts.length;
-      expect(wrapper.findAll('.contact-tr')).toHaveLength(pollsListLength);
+      const contactListLength = store.state.user.contacts.length;
+      expect(wrapper.findAll('.contact-tr')).toHaveLength(contactListLength);
     });
   });
 });

@@ -119,7 +119,7 @@
               <td class="td__phone">{{ userInfo.email }}</td>
             </tr>
             <template v-if="userInfo.contacts">
-              <tr v-for="contact in userInfo.contacts" :key="contact.id">
+              <tr class="contact-tr" v-for="contact in userInfo.contacts" :key="contact.id">
                 <td>{{ contact.type === 'email' ? 'Пошта' : 'Телефон' }}</td>
                 <td>{{ contact.main === false ? 'Додатковий' : 'Основний' }}</td>
                 <td>{{ contact.type === 'email' ? contact.email : contact.phone }}</td>
