@@ -3,6 +3,7 @@ import ManageUser from '@/views/ManageUser.vue';
 import store from '@/store';
 import { ComponentPublicInstance, nextTick } from 'vue';
 import { getters } from '@/store/authorization/getters';
+import { createStore } from 'vuex';
 
 const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
   const el = wrapper.find(id);
@@ -177,5 +178,52 @@ describe('ManageUser', () => {
       expect(actual).toBe(data.user);
     });
   });
+
+  describe('Create store', () => {
+    const store = createStore({
+      state: {
+        user: {
+          first_name: 'Alex',
+          middle_name: 'Petrovich',
+          last_name: 'Petrov',
+          email: 'admin@ukr.net',
+          id: 1,
+          contacts: [
+            {
+              type: 'email',
+              main: true,
+              email: 'admin@ukr.net',
+              phone: 'number',
+              id: 4,
+            },
+            {
+              type: 'phone',
+              main: true,
+              email: '+380678889900',
+              phone: 'number',
+              id: 4,
+            },
+          ],
+        },
+      },
+      getters: {
+        'authorizationStore/userData': (state: any) => {
+          return state.user;
+        },
+      },
+      actions: {
+        'authorizationStore/GET_DATA': () => jest.fn(),
+      },
+    });
+
+    it('length of rendered list of contact should be equal to length of state.user.contacts', () => {
+      const wrapper = mount(ManageUser, {
+        global: {
+          plugins: [store],
+        },
+      });
+      const pollsListLength = store.state.user.contacts.length;
+      expect(wrapper.findAll('.contact-tr')).toHaveLength(pollsListLength);
+    });
+  });
 });
-//
