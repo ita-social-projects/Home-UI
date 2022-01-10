@@ -253,7 +253,7 @@ export default defineComponent({
       return store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`];
     });
 
-    const onRowSelect = (event: KeyboardEvent) => {
+    const onRowSelect = (event: any) => {
       const apartmentId = event.data.id;
       router.push({
         name: 'apartment-info',
