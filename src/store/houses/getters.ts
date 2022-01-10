@@ -8,5 +8,5 @@ export const getters: GetterTree<HousesStateInterface, RootStateInterface> & Get
   },
   getHouseInfo: (state) => {
     return state.houseInfo;
-  }
+  },
 };

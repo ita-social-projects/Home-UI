@@ -6,7 +6,7 @@ import { mutations } from '@/store/ownerships/mutations';
 import { OwnershipsStateInterface } from './types';
 
 export const state: OwnershipsStateInterface = {
-  ownerships: null,
+  ownerships: [],
 };
 
 export const ownershipsStore: Module<OwnershipsStateInterface, RootStateInterface> = {

@@ -4,7 +4,7 @@ import { ApartmentModel } from '@/store/apartments/models/apartment.model';
 import { AddApartmentModel } from '@/store/apartments/models/add-apartment.model';
 
 export interface ApartmentsStateInterface {
-  apartments: Array<ApartmentModel> | null;
+  apartments: Array<ApartmentModel>;
   apartmentInfo: ApartmentModel | null;
 }
 
@@ -24,6 +24,11 @@ export enum ApartmentsActionsEnum {
   ADD_APARTMENT = 'ADD_APARTMENT',
 }
 
+export enum ApartmentsGettersEnum {
+  getApartmentsData = 'getApartmentsData',
+  getApartmentInfo = 'getApartmentInfo',
+}
+
 export type Mutations<S = ApartmentsStateInterface> = {
   [ApartmentsMutationsEnum.SET_APARTMENTS](state: S, payload: Array<ApartmentModel>): void;
   [ApartmentsMutationsEnum.GET_APARTMENT_BY_ID](state: S, payload: ApartmentModel): void;
@@ -40,8 +45,8 @@ export interface Actions {
 }
 
 export type Getters<S = ApartmentsStateInterface> = {
-  getApartmentsData(state: S): Array<ApartmentModel> | null;
-  getApartmentInfo(state: S): ApartmentModel | null;
+  [ApartmentsGettersEnum.getApartmentsData](state: S): Array<ApartmentModel> | [];
+  [ApartmentsGettersEnum.getApartmentInfo](state: S): ApartmentModel | null;
 };
 
 export type AugmentedActionContext = {

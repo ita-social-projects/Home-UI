@@ -8,6 +8,10 @@ export enum OwnershipsActionEnum {
   DELETE_OWNER = 'DELETE_OWNER',
 }
 
+export enum OwnershipsGettersEnum {
+  getOwnershipsData = 'getOwnershipsData',
+}
+
 export enum OwnershipsMutationEnum {
   SET_OWNERSHIPS = 'SET_OWNERSHIPS',
   EDIT_OWNER = 'EDIT_OWNER',
@@ -15,7 +19,7 @@ export enum OwnershipsMutationEnum {
 }
 
 export interface OwnershipsStateInterface {
-  ownerships: Array<OwnershipsModel> | null;
+  ownerships: Array<OwnershipsModel> | [];
 }
 
 export interface Actions {
@@ -31,7 +35,7 @@ export type Mutations<S = OwnershipsStateInterface> = {
 };
 
 export type Getters<S = OwnershipsStateInterface> = {
-  getOwnershipsData(state: S): Array<OwnershipsModel> | null;
+  [OwnershipsGettersEnum.getOwnershipsData](state: S): Array<OwnershipsModel> | [];
 };
 
 export type AugmentedActionContext = {

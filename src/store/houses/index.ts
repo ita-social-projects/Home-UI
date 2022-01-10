@@ -4,11 +4,12 @@ import { HousesStateInterface } from '@/store/houses/types';
 import { getters } from '@/store/houses/getters';
 import { actions } from '@/store/houses/actions';
 import { mutations } from '@/store/houses/mutations';
+import { HouseModel } from '@/shared/models/house.model';
 
 export const state: HousesStateInterface = {
-  houses: null,
+  houses: [],
   displayModal: false,
-  houseInfo: null,
+  houseInfo: {} as HouseModel,
 };
 
 export const housesStore: Module<HousesStateInterface, RootStateInterface> = {

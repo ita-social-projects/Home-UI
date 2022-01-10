@@ -78,7 +78,7 @@
               <template #body="slotProps">
                 <Button
                   icon="pi pi-pencil"
-                  class="p-button p-button-info p-button-text"
+                  class="col-btn p-button p-button-info p-button-text"
                   type="button"
                   @click="toggle($event, slotProps.data)"
                   aria-haspopup="true"
@@ -91,8 +91,8 @@
         </div>
         <Dialog v-model:visible="deleteApartmentDialog" :style="{ width: '450px' }" header="Попередження" :modal="true">
           <div class="confirmation-content">
-            <span v-if="deleteData">
-              Видалити квартиру № <strong>{{ deleteData.apartmentNumber }}</strong
+            <span v-if="item">
+              Видалити квартиру № <strong>{{ item.apartmentNumber }}</strong
               >?</span
             >
           </div>
@@ -116,23 +116,23 @@
             <label for="name" class="dialog_item-label">Номер квартири: </label>
             <InputText
               id="name"
-              v-model.trim="editData.apartmentNumber"
+              v-model.trim="item.apartmentNumber"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !editData.apartmentNumber }"
+              :class="{ 'p-invalid': submitted && !item.apartmentNumber }"
             />
-            <small class="p-error" v-if="submitted && !editData.apartmentNumber">Введіть номер квартири</small>
+            <small class="p-error" v-if="submitted && !item.apartmentNumber">Введіть номер квартири</small>
           </div>
           <div class="p-field dialog_item">
             <label for="name" class="dialog_item-label">Площа квартири: </label>
             <InputText
               id="name"
-              v-model.trim="editData.apartmentArea"
+              v-model.trim="item.apartmentArea"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !editData.apartmentArea }"
+              :class="{ 'p-invalid': submitted && !item.apartmentArea }"
             />
-            <small class="p-error" v-if="submitted && !editData.apartmentArea">Введіть площу квартири</small>
+            <small class="p-error" v-if="submitted && !item.apartmentArea">Введіть площу квартири</small>
           </div>
           <template #footer>
             <Button
@@ -153,7 +153,6 @@
 import { toRefs, ref, computed, defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ApartmentModel } from '@/store/apartments/models/apartment.model';
-import { HousesActionsEnum } from '@/store/houses/types';
 import { useStore } from 'vuex';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
@@ -162,9 +161,13 @@ import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import { StoreModuleEnum } from '@/store/types';
-import { ApartmentsActionsEnum } from '@/store/apartments/types';
 import AddApartmentForm from '@/components/AddApartmentForm.vue';
+
+import { StoreModuleEnum } from '@/store/types';
+import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
+
 import { HouseModel } from '@/shared/models/house.model';
 
 export default defineComponent({
@@ -193,14 +196,12 @@ export default defineComponent({
     const { id } = toRefs(props);
     const menu = ref();
     const deleteApartmentDialog = ref(false);
-    const deleteData = ref({});
     const editApartmentDialog = ref(false);
-    const editData = ref({});
     const item = ref({});
     const submitted = ref(false);
     const displayApartmentModal = ref(false);
 
-    const toggle = (event: any, data: ApartmentModel) => {
+    const toggle = (event: KeyboardEvent, data: ApartmentModel) => {
       menu.value.toggle(event);
       item.value = data;
       submitted.value = false;
@@ -212,7 +213,6 @@ export default defineComponent({
           label: 'Видалити',
           icon: 'pi pi-times',
           command: () => {
-            deleteData.value = item.value;
             deleteApartmentDialog.value = true;
           },
         },
@@ -221,14 +221,13 @@ export default defineComponent({
           icon: 'pi pi-refresh',
           command: () => {
             editApartmentDialog.value = true;
-            editData.value = item.value;
           },
         },
       ];
     };
 
     const cooperationId = computed(() => {
-      return store.getters[`${StoreModuleEnum.cooperationStore}/getSelectedCooperationId`];
+      return store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
     });
 
     function openApartmentModal() {
@@ -251,13 +250,14 @@ export default defineComponent({
     };
 
     const apartmentsData = computed((): Array<ApartmentModel> => {
-      return store.getters[`${StoreModuleEnum.apartmentsStore}/getApartmentsData`];
+      return store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`];
     });
 
-    const onRowSelect = () => {
+    const onRowSelect = (event: any) => {
+      const apartmentId = event.data.id;
       router.push({
         name: 'apartment-info',
-        params: { apartment: selectedApartment.value.id },
+        params: { apartment: apartmentId },
       });
     };
 
@@ -270,7 +270,7 @@ export default defineComponent({
     };
 
     const houseInfo = computed((): HouseModel => {
-      return store.getters['housesStore/getHouseInfo'];
+      return store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`];
     });
 
     onMounted(() => {
@@ -289,10 +289,8 @@ export default defineComponent({
       selectedApartment,
       onRowSelect,
       deleteApartmentDialog,
-      deleteData,
       deleteApartment,
       editApartmentDialog,
-      editData,
       editApartment,
       submitted,
       item,

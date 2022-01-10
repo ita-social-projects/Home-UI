@@ -3,7 +3,7 @@
     <section class="info">
       <div>
         <p class="name-hint">Ви зайшли як</p>
-        <h3 class="user-fullname">{{ userData?.first_name }} {{ userData?.last_name }}</h3>
+        <h3 class="user-fullname">{{ userData?.firstName }} {{ userData?.lastName }}</h3>
       </div>
     </section>
 
@@ -31,7 +31,8 @@
 import { defineComponent } from 'vue';
 import BaseSidebarNavButton from '@/components/base/BaseSidebarNavButton.vue';
 import { RoutesEnum } from '@/router/types';
-import { UserInterface } from '@/store/authorization/types';
+import { UserInterface, AuthGettersEnum } from '@/store/authorization/types';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'Sidebar',
@@ -53,7 +54,7 @@ export default defineComponent({
       return RoutesEnum.Polls;
     },
     userData(): UserInterface | null {
-      return this.$store.getters['authorizationStore/userData'];
+      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
     },
   },
 });

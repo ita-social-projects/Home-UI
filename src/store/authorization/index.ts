@@ -6,7 +6,14 @@ import { mutations } from '@/store/authorization/mutations';
 import { actions } from '@/store/authorization/actions';
 
 export const state: AuthorizationStateInterface = {
-  user: null,
+  user: {
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    email: '',
+    id: 0,
+    contacts: [],
+  },
 };
 
 export const authorizationStore: Module<AuthorizationStateInterface, RootStateInterface> = {

@@ -9,7 +9,7 @@
         :class="{ 'p-invalid': v$.apartmentData.apartmentNumber.$error }"
         @blur="v$.apartmentData.apartmentNumber.$touch"
       />
-      <small v-if="v$.apartmentData.apartmentNumber.$error" class="p-error">{{
+      <small v-if="v$.apartmentData.apartmentNumber.$error" id="apartment_number_help" class="p-error">{{
         v$.apartmentData.apartmentNumber.$errors[0].$message
       }}</small>
       <br />
@@ -21,12 +21,13 @@
         :class="{ 'p-invalid': v$.apartmentData.apartmentArea.$error }"
         @blur="v$.apartmentData.apartmentArea.$touch"
       />
-      <small v-if="v$.apartmentData.apartmentArea.$error" class="p-error">{{
+      <small v-if="v$.apartmentData.apartmentArea.$error" id="apartment_area_help" class="p-error">{{
         v$.apartmentData.apartmentArea.$errors[0].$message
       }}</small>
     </p>
     <div class="button-div">
       <Button
+        id="save-button"
         label="Додати квартиру"
         icon="pi pi-check"
         @click="saveApartment"
@@ -35,7 +36,13 @@
         type="button"
         value="Submit"
       />
-      <Button label="Відмінити" icon="pi pi-times" @click="cancelEditing" class="p-button-outlined p-button-info" />
+      <Button
+        id="cancel-button"
+        label="Відмінити"
+        icon="pi pi-times"
+        @click="cancelEditing"
+        class="p-button-outlined p-button-info"
+      />
     </div>
   </form>
 </template>
@@ -51,6 +58,8 @@ import {
 } from '@/utils/validators';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
+import { StoreModuleEnum } from '@/store/types';
+import { ApartmentsActionsEnum } from '@/store/apartments/types';
 
 export default defineComponent({
   name: 'AddApartment',
@@ -83,9 +92,8 @@ export default defineComponent({
     };
   },
   methods: {
-    async saveApartment() {
+    async saveApartment(): Promise<void> {
       const isValid = await this.v$.$validate();
-      console.log(this.v$.$validate);
       if (!isValid) {
         return;
       }
@@ -94,10 +102,10 @@ export default defineComponent({
         number: this.apartmentData.apartmentNumber.toString(),
         area: this.apartmentData.apartmentArea,
       };
-      this.$store.dispatch(`apartmentsStore/ADD_APARTMENT`, payload);
       this.resetApartmentDataFields(this.apartmentData);
       this.v$.$reset();
       this.$emit('apartment-saved');
+      this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.ADD_APARTMENT}`, payload);
     },
     cancelEditing() {
       this.resetApartmentDataFields(this.apartmentData);
@@ -105,11 +113,7 @@ export default defineComponent({
     },
     resetApartmentDataFields(apartmentData: any) {
       for (let field in apartmentData) {
-        if (typeof apartmentData[field] === 'object') {
-          this.resetApartmentDataFields(apartmentData[field]);
-        } else {
-          apartmentData[field] = '';
-        }
+        apartmentData[field] = '';
       }
     },
   },

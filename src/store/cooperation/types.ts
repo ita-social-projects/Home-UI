@@ -17,6 +17,12 @@ export enum CooperationActionEnum {
   SET_COOPERATION_UPDATE = 'SET_COOPERATION_UPDATE',
 }
 
+export enum CooperationGettersEnum {
+  getCooperationNameAndEdrpou = 'getCooperationNameAndEdrpou',
+  getSelectedCooperationId = 'getSelectedCooperationId',
+  getSelectedCooperation = 'getSelectedCooperation',
+}
+
 export interface CooperationStateInterface {
   userCooperations: Array<CooperationModel>;
   selectedCooperation: null | CooperationModel;
@@ -39,8 +45,8 @@ export interface Actions {
 }
 
 export type Getters<S = CooperationStateInterface> = {
-  getCooperationNameAndEdrpou(state: S): string;
-  getSelectedCooperationId(state: S): number;
+  [CooperationGettersEnum.getCooperationNameAndEdrpou](state: S): string;
+  [CooperationGettersEnum.getSelectedCooperationId](state: S): number;
 };
 
 export type AugmentedActionContext = {

@@ -9,9 +9,9 @@
         :class="{
           'p-invalid': v$.houseData.flatQuantity.$error,
         }"
-        @blur="v$.houseData.flatQuantity.$touch;"
+        @blur="v$.houseData.flatQuantity.$touch"
       />
-      <small v-if="v$.houseData.flatQuantity.$error" class="p-error">{{
+      <small v-if="v$.houseData.flatQuantity.$error" class="p-error" id="flatQuantity-help">{{
         v$.houseData.flatQuantity.$errors[0].$message
       }}</small>
     </p>
@@ -26,7 +26,7 @@
         }"
         @blur="v$.houseData.houseArea.$touch"
       />
-      <small v-if="v$.houseData.houseArea.$error" class="p-error">{{
+      <small v-if="v$.houseData.houseArea.$error" class="p-error" id="houseArea-help">{{
         v$.houseData.houseArea.$errors[0].$message
       }}</small>
     </p>
@@ -41,7 +41,7 @@
         }"
         @blur="v$.houseData.adjoiningArea.$touch"
       />
-      <small v-if="v$.houseData.adjoiningArea.$error" class="p-error">{{
+      <small v-if="v$.houseData.adjoiningArea.$error" class="p-error" id="adjoiningArea-help">{{
         v$.houseData.adjoiningArea.$errors[0].$message
       }}</small>
     </p>
@@ -59,7 +59,7 @@
           }"
           @blur="v$.houseData.address.region.$touch"
         />
-        <small v-if="v$.houseData.address.region.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.region.$error" class="p-error" id="region-help">{{
           v$.houseData.address.region.$errors[0].$message
         }}</small>
       </p>
@@ -74,7 +74,7 @@
           }"
           @blur="v$.houseData.address.city.$touch"
         />
-        <small v-if="v$.houseData.address.city.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.city.$error" class="p-error" id="city-help">{{
           v$.houseData.address.city.$errors[0].$message
         }}</small>
       </p>
@@ -89,7 +89,7 @@
           }"
           @blur="v$.houseData.address.district.$touch"
         />
-        <small v-if="v$.houseData.address.district.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.district.$error" class="p-error" id="district-help">{{
           v$.houseData.address.district.$errors[0].$message
         }}</small>
       </p>
@@ -104,7 +104,7 @@
           }"
           @blur="v$.houseData.address.street.$touch"
         />
-        <small v-if="v$.houseData.address.street.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.street.$error" class="p-error" id="street-help">{{
           v$.houseData.address.street.$errors[0].$message
         }}</small>
       </p>
@@ -119,7 +119,7 @@
           }"
           @blur="v$.houseData.address.houseBlock.$touch"
         />
-        <small v-if="v$.houseData.address.houseBlock.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.houseBlock.$error" class="p-error" id="houseBlock-help">{{
           v$.houseData.address.houseBlock.$errors[0].$message
         }}</small>
       </p>
@@ -134,7 +134,7 @@
           }"
           @blur="v$.houseData.address.houseNumber.$touch"
         />
-        <small v-if="v$.houseData.address.houseNumber.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.houseNumber.$error" class="p-error" id="houseNumber-help">{{
           v$.houseData.address.houseNumber.$errors[0].$message
         }}</small>
       </p>
@@ -149,7 +149,7 @@
           }"
           @blur="v$.houseData.address.zipCode.$touch"
         />
-        <small v-if="v$.houseData.address.zipCode.$error" class="p-error">{{
+        <small v-if="v$.houseData.address.zipCode.$error" class="p-error" id="zipCode-help">{{
           v$.houseData.address.zipCode.$errors[0].$message
         }}</small>
       </p>
@@ -158,18 +158,18 @@
       <Button
         label="Зберегти зміни"
         icon="pi pi-check"
-        @click="addNewHouse"
         autofocus
         class="p-button-info"
-        type="button"
-        value="Submit"
+        type="submit"
         :disabled="v$.houseData.$invalid"
+        id="add-new-house-btn"
       />
       <Button
         label="Скасувати зміни"
         icon="pi pi-times"
         @click="closeAddHouseModal"
         class="p-button-outlined p-button-info"
+        id="cancel-btn"
       />
     </div>
   </form>
@@ -178,30 +178,17 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import {
-  requiredValidator,
-  ukrLangTitleValidator,
-  houseNumAndHouseBlockValidator,
-  zipCodeValidator,
-  zeroValidator,
-  regionCityDistrictMaxLength,
-  streetMaxLength,
-  houseBlockAndNumberMaxLength,
-  quantityAndAreaValidator,
-  houseAreaValidator,
-} from '@/utils/validators';
 import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum } from '@/store/houses/types';
 import { AddressModel } from '@/shared/models/address.model';
 import { HouseModel } from '@/shared/models/house.model';
+import { houseValidations } from '@/utils/house-validations';
 
 export default defineComponent({
   name: 'AddHouseForm',
   components: {
-    Dialog,
     Button,
     InputText,
   },
@@ -232,20 +219,7 @@ export default defineComponent({
   },
   validations() {
     return {
-      houseData: {
-        flatQuantity: { requiredValidator, zeroValidator, quantityAndAreaValidator },
-        houseArea: { requiredValidator, zeroValidator, houseAreaValidator },
-        adjoiningArea: { requiredValidator, zeroValidator, quantityAndAreaValidator },
-        address: {
-          region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
-          city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
-          district: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
-          street: { requiredValidator, ukrLangTitleValidator, streetMaxLength },
-          houseBlock: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
-          houseNumber: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
-          zipCode: { requiredValidator, zipCodeValidator },
-        },
-      },
+      houseData: houseValidations,
     };
   },
   methods: {
@@ -263,15 +237,12 @@ export default defineComponent({
 
       await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.ADD_HOUSE}`, payload);
 
-      this.resetHouseDataFields(this.houseData);
-      this.$emit('cancel-addHouseModal');
+      this.closeAddHouseModal();
     },
     resetHouseDataFields(houseData: any) {
       for (let field in houseData) {
         if (typeof houseData[field] === 'object') {
           this.resetHouseDataFields(houseData[field]);
-        } else if (typeof houseData[field] === 'number') {
-          houseData[field] = 0;
         } else {
           houseData[field] = '';
         }
@@ -287,7 +258,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 %error-message {
-  margin: 0.4em 0.5rem;
+  margin: 0.2em 0.9rem;
   width: 80%;
 }
 

@@ -203,9 +203,9 @@ import { ApartmentModel } from '@/store/apartments/models/apartment.model';
 import { OwnershipsModel } from '@/shared/models/ownerships.model';
 import { UpdateApartmentDTOModel } from '@/store/apartments/models/update-upartmentDTO.model';
 import { UpdateOwnershipsDTOModel } from '@/shared/models/update-ownershipsDTO.model';
-import { ApartmentsActionsEnum } from '@/store/apartments/types';
-import { OwnershipsActionEnum } from '@/store/ownerships/types';
-import { HousesActionsEnum } from '@/store/houses/types';
+import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
+import { OwnershipsActionEnum, OwnershipsGettersEnum } from '@/store/ownerships/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { useVuelidate } from '@vuelidate/core';
 import {
   requiredValidator,
@@ -213,6 +213,7 @@ import {
   apartmentAreaValidator,
   ownershipPartValidator,
 } from '@/utils/validators';
+import { CooperationGettersEnum } from '@/store/cooperation/types';
 
 export default defineComponent({
   name: 'ApartmentInfo',
@@ -305,7 +306,7 @@ export default defineComponent({
     };
 
     const cooperationId = computed(() => {
-      return store.getters[`${StoreModuleEnum.cooperationStore}/getSelectedCooperationId`];
+      return store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
     });
 
     const setHouseInfo = async () => {
@@ -317,7 +318,7 @@ export default defineComponent({
     };
 
     const houseInfo = computed((): any => {
-      return store.getters[`${StoreModuleEnum.housesStore}/getHouseInfo`];
+      return store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`];
     });
 
     const setApartmentInfo = () => {
@@ -330,7 +331,7 @@ export default defineComponent({
     };
 
     const apartmentInfo = computed((): ApartmentModel => {
-      return store.getters[`${StoreModuleEnum.apartmentsStore}/getApartmentInfo`];
+      return store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentInfo}`];
     });
 
     const setOwnerships = async () => {
@@ -342,7 +343,7 @@ export default defineComponent({
     };
 
     const ownershipsData = computed(() => {
-      return store.getters[`${StoreModuleEnum.ownershipsStore}/getOwnershipsData`];
+      return store.getters[`${StoreModuleEnum.ownershipsStore}/${OwnershipsGettersEnum.getOwnershipsData}`];
     });
 
     const initDataTable = () => {
@@ -403,7 +404,7 @@ export default defineComponent({
         data: new UpdateOwnershipsDTOModel({
           ownershipPart: selectedOwner.value.ownershipPart,
         }),
-        number: editOwnershipData.ownershipPart,//for testing
+        number: editOwnershipData.ownershipPart, //for testing
       };
       store.dispatch(`${StoreModuleEnum.ownershipsStore}/${OwnershipsActionEnum.EDIT_OWNER}`, payload);
       editOwnerDialog.value = false;
