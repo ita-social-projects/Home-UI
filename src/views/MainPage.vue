@@ -13,6 +13,7 @@ import { defineComponent } from 'vue';
 import { StoreModuleEnum } from '@/store/types';
 import { AuthActionEnum, AuthGettersEnum } from '@/store/authorization/types';
 import { UserModel } from '@/store/authorization/models/user.model';
+import { RoutesEnum } from '@/router/types';
 
 export default defineComponent({
   name: 'MainPage',
@@ -30,6 +31,7 @@ export default defineComponent({
       const userData: UserModel = JSON.parse(user);
       this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.GET_DATA}`, userData.id);
     }
+    this.$router.push(RoutesEnum.Cooperation);
   },
   computed: {
     userData() {
