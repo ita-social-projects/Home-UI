@@ -3,7 +3,7 @@ import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
 import { MountingOptions } from '@vue/test-utils/dist/types';
 import ManageApartments from '@/views/ManageApartments.vue';
 import ApartmentInfo from '@/views/ApartmentInfo.vue';
-import { createRouter, createWebHistory, useRoute, useRouter } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import MainPage from '@/views/MainPage.vue';
 import Sidebar from '@/components/Sidebar.vue';
 
