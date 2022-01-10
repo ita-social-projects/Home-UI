@@ -58,7 +58,7 @@ export const passwordValidator = helpers.withMessage(
 export const passwordMaxLenght = helpers.withMessage(lengthMessage(128, 'max'), maxLength(128));
 export const passwordMinLenght = helpers.withMessage(lengthMessage(8, 'min'), minLength(8));
 
-export const edrpouValidator = helpers.withMessage('Код ЄДРПОУ складається з 8 цифр', validEdrpou);
+export const edrpouValidator = helpers.withMessage(lengthMessage(8, 'max'), validEdrpou);
 export const ibanValidator = helpers.withMessage('Складається з літр UA та 27 цифр', validIban);
 export const zipCodeValidator = helpers.withMessage(correctNumberMessage('5'), validZipCode);
 

@@ -12,6 +12,7 @@
           @blur="v$.cooperationData.name.$touch"
           placeholder="Назва"
           v-model.trim="cooperationData.name"
+          @input="disabled = false"
         />
       </div>
     </div>
@@ -28,6 +29,7 @@
           :class="{ 'p-invalid': v$.cooperationData.iban.$error }"
           @blur="v$.cooperationData.iban.$touch"
           maxlength="29"
+          @input="disabled = false"
         />
       </div>
     </div>
@@ -44,6 +46,7 @@
           :class="{ 'p-invalid': v$.cooperationData.email.$error }"
           @blur="v$.cooperationData.email.$touch"
           maxlength="320"
+          @input="disabled = false"
         />
       </div>
     </div>
@@ -60,6 +63,7 @@
           :class="{ 'p-invalid': v$.cooperationData.edrpou.$error }"
           @blur="v$.cooperationData.edrpou.$touch"
           maxlength="8"
+          @input="disabled = false"
         />
       </div>
     </div>
@@ -76,6 +80,7 @@
           :class="{ 'p-invalid': v$.cooperationData.phone.$error }"
           @blur="v$.cooperationData.phone.$touch"
           maxlength="13"
+          @input="disabled = false"
         />
       </div>
     </div>
@@ -94,6 +99,7 @@
               v-model.trim="cooperationData.address.region"
               :class="{ 'p-invalid': v$.cooperationData.address.region.$error }"
               @blur="v$.cooperationData.address.region.$touch"
+              @input="disabled = false"
             />
           </div>
         </div>
@@ -109,6 +115,7 @@
               v-model.trim="cooperationData.address.city"
               :class="{ 'p-invalid': v$.cooperationData.address.city.$error }"
               @blur="v$.cooperationData.address.city.$touch"
+              @input="disabled = false"
             />
           </div>
         </div>
@@ -124,6 +131,7 @@
               v-model.trim="cooperationData.address.district"
               :class="{ 'p-invalid': v$.cooperationData.address.district.$error }"
               @blur="v$.cooperationData.address.district.$touch"
+              @input="disabled = false"
             />
           </div>
         </div>
@@ -139,6 +147,7 @@
               v-model.trim="cooperationData.address.street"
               :class="{ 'p-invalid': v$.cooperationData.address.street.$error }"
               @blur="v$.cooperationData.address.street.$touch"
+              @input="disabled = false"
             />
           </div>
         </div>
@@ -154,6 +163,7 @@
               v-model.trim="cooperationData.address.houseNumber"
               :class="{ 'p-invalid': v$.cooperationData.address.houseNumber.$error }"
               @blur="v$.cooperationData.address.houseNumber.$touch"
+              @input="disabled = false"
             />
           </div>
         </div>
@@ -169,6 +179,7 @@
               v-model.trim="cooperationData.address.houseBlock"
               :class="{ 'p-invalid': v$.cooperationData.address.houseBlock.$error }"
               @blur="v$.cooperationData.address.houseBlock.$touch"
+              @input="disabled = false"
             />
           </div>
         </div>
@@ -184,6 +195,7 @@
               v-model.trim="cooperationData.address.zipCode"
               :class="{ 'p-invalid': v$.cooperationData.address.zipCode.$error }"
               @blur="v$.cooperationData.address.zipCode.$touch"
+              @input="disabled = false"
             />
           </div>
         </div>
@@ -192,7 +204,7 @@
   </form>
   <div class="buttons-container">
     <Button
-      :disabled="v$.cooperationData.$invalid"
+      :disabled="disabled || v$.cooperationData.$invalid"
       label="Редагувати"
       icon="pi pi-check"
       type="submit"
@@ -260,6 +272,7 @@ export default defineComponent({
         email: '',
         address: {} as CooperationAddressInterface,
       },
+      disabled: true,
       v$: useVuelidate(),
     };
   },
