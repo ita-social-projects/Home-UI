@@ -79,7 +79,7 @@ export const houseNumAndHouseBlockValidator = helpers.withMessage(
 );
 export const regionCityDistrictMaxLength = helpers.withMessage(lengthMessage(50, 'max'), maxLength(50));
 export const streetMaxLength = helpers.withMessage(lengthMessage(25, 'max'), maxLength(25));
-export const houseBlockAndNumberMaxLength = helpers.withMessage(lengthMessage(10, 'max'), maxLength(10));
+export const houseBlockHouseNumberMaxLength = helpers.withMessage(lengthMessage(10, 'max'), maxLength(10));
 
 export const apartmentAreaValidator = helpers.withMessage('Площа має бути від 10 до 1000 м.кв', validApartmentArea);
 export const apartmentDecimalValidator = helpers.withMessage('Не більше 2 значень після крапки', validApartmentDecimal);

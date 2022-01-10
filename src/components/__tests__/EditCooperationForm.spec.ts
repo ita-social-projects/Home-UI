@@ -1,42 +1,66 @@
 import { VueWrapper, mount } from '@vue/test-utils';
-import { ComponentPublicInstance } from 'vue';
-import EditCooperationInfo from '@/components/EditCooperationInfo.vue';
-import { CooperationAddressInterface } from './../../store/cooperation/types';
 import { createStore } from 'vuex';
+import { inputSetValueHandler } from '@/utils/test-utils';
+import EditCooperationInfo from '@/components/EditCooperationInfo.vue';
+import { CooperationAddressInterface } from '@/store/cooperation/types';
 
-const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
-  const el = wrapper.find(id);
-  await el.setValue(value);
-  await el.trigger('blur');
-};
+const store = createStore({
+  state: {
+    userCooperations: {
+      id: 1,
+      name: 'Крила ночі',
+      edrpou: '12345678',
+      iban: 'UA122115518961158112111881111',
+      address: {
+        region: 'Дніпропетровський',
+        city: 'Дніпро',
+        district: 'Задовський',
+        street: 'Моторна',
+        houseBlock: '11',
+        houseNumber: '12',
+        zipCode: '12345',
+      },
+      contacts: [
+        { type: 'email', main: true, email: 'admin@email.com' },
+        { type: 'phone', main: true, phone: '+380509912832' },
+      ],
+    },
+    selectedCooperation: 1,
+  },
+  getters: {
+    'cooperationStore/getSelectedCooperation': (state) => state.userCooperations,
+  },
+  actions: {
+    'cooperationStore/SET_COOPERATION_UPDATE': () => jest.fn(),
+  },
+});
 
 describe('EditCooperationInfo.vue', () => {
-  const mockStore = {
-    getters: jest.fn(),
-    dispatch: jest.fn(),
-  };
-  const wrapper = mount(EditCooperationInfo, {
-    global: {
-      mocks: {
-        $store: mockStore,
-      },
-    },
-    data() {
-      return {
-        cooperationData: {
-          id: 1,
-          name: '',
-          edrpou: '',
-          iban: '',
-          phone: '',
-          email: '',
-          address: {} as CooperationAddressInterface,
+  let wrapper: VueWrapper<any>;
+  beforeEach(() => {
+    wrapper = mount(EditCooperationInfo, {
+      global: {
+        mocks: {
+          store,
         },
-      };
-    },
-    propsData: {
-      cooperationId: 1,
-    },
+      },
+      data() {
+        return {
+          cooperationData: {
+            id: 1,
+            name: '',
+            edrpou: '',
+            iban: '',
+            phone: '',
+            email: '',
+            address: {} as CooperationAddressInterface,
+          },
+        };
+      },
+      propsData: {
+        cooperationId: 1,
+      },
+    });
   });
 
   describe('right render with mockStore', () => {
@@ -50,8 +74,7 @@ describe('EditCooperationInfo.vue', () => {
     });
 
     it('initData should be called and event should emit in mounted hook', async () => {
-      const initDataSpy = jest.spyOn(EditCooperationInfo.methods, 'initData');
-      const wrapper = mount(EditCooperationInfo);
+      const initDataSpy = jest.spyOn(wrapper.vm, 'initData');
       wrapper.vm.$emit('isLoadedMode');
 
       expect(initDataSpy).toBeCalled();
@@ -61,49 +84,15 @@ describe('EditCooperationInfo.vue', () => {
   });
 
   describe('testing store, action, getters', () => {
-    const store = createStore({
-      state: {
-        userCooperations: {
-          id: 1,
-          name: 'Крила ночі',
-          edrpou: '12345678',
-          iban: 'UA122115518961158112111881111',
-          address: {
-            region: 'Дніпропетровський',
-            city: 'Дніпро',
-            district: 'Задовський',
-            street: 'Моторна',
-            houseBlock: '11',
-            houseNumber: '12',
-            zipCode: '12345',
-          },
-          contacts: [
-            { type: 'email', main: true, email: 'admin@email.com' },
-            { type: 'phone', main: true, phone: '+380509912832' },
-          ],
-        },
-        selectedCooperation: 1,
-      },
-      getters: {
-        'cooperationStore/getSelectedCooperation': (state) => state.userCooperations,
-      },
-      actions: {
-        'cooperationStore/SET_COOPERATION_UPDATE': () => jest.fn(),
-      },
-    });
-
     it('should test editCooperationInfo method and dispatch', async () => {
       store.dispatch = jest.fn();
-      const editCooperationInfoSpy = jest.spyOn(EditCooperationInfo.methods, 'editCooperationInfo');
-      const wrapper = mount(EditCooperationInfo, {
-        global: {
-          plugins: [store],
-        },
-      });
+      const editCooperationInfoSpy = jest.spyOn(wrapper.vm, 'editCooperationInfo');
 
-      wrapper.find('#edit-coop-btn').trigger('click');
-      wrapper.find('#edit-coop-form').trigger('submit', {
-        preventDefault: () => {},
+      await wrapper.find('#edit-coop-btn').trigger('click');
+      await wrapper.find('#edit-coop-form').trigger('submit', {
+        preventDefault: () => {
+          return;
+        },
       });
 
       const data = {
@@ -164,20 +153,19 @@ describe('EditCooperationInfo.vue', () => {
 
     describe('testing methods', () => {
       it('cancelCooperationEdit method should be called', async () => {
-        const cancelCooperationEditSpy = jest.spyOn(EditCooperationInfo.methods, 'cancelCooperationEdit');
-        const wrapper = mount(EditCooperationInfo);
+        const cancelCooperationEditSpy = jest.spyOn(wrapper.vm, 'cancelCooperationEdit');
 
-        wrapper.find('#cancel-edit-coop-btn').trigger('click');
+        await wrapper.find('#cancel-edit-coop-btn').trigger('click');
         await wrapper.vm.$nextTick();
 
         expect(cancelCooperationEditSpy).toHaveBeenCalled();
       });
 
       it('test cancelCooperationEdit method', async () => {
-        const initDataSpy = jest.spyOn(EditCooperationInfo.methods, 'initData');
+        const initDataSpy = jest.spyOn(wrapper.vm, 'initData');
 
-        wrapper.vm.$emit('cancel-editCoopInfo');
-        wrapper.find('#cancel-edit-coop-btn').trigger('click');
+        await wrapper.vm.$emit('cancel-editCoopInfo');
+        await wrapper.find('#cancel-edit-coop-btn').trigger('click');
         await wrapper.vm.$nextTick();
 
         expect(initDataSpy).toHaveBeenCalled();
@@ -186,65 +174,66 @@ describe('EditCooperationInfo.vue', () => {
     });
   });
 
-  describe('testing validatots', () => {
+  describe('testing validators', () => {
+    //TODO: refactor tests to it.each
     describe('testing required fields', () => {
       it('should fail the validation - coop name field [is required]', async () => {
-        await setup('#coopName', '', wrapper);
+        await inputSetValueHandler(null, '', '#coopName', wrapper);
         expect(wrapper.find('small#coopName-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop Iban field [is required]', async () => {
-        await setup('#coopIban', '', wrapper);
+        await inputSetValueHandler(null, '', '#coopIban', wrapper);
         expect(wrapper.find('small#coopIban-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop email field [is required]', async () => {
-        await setup('#coopEmail', '', wrapper);
+        await inputSetValueHandler(null, '', '#coopEmail', wrapper);
         expect(wrapper.find('small#coopEmail-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - edrpou field [is required]', async () => {
-        await setup('#edrpou', '', wrapper);
+        await inputSetValueHandler(null, '', '#edrpou', wrapper);
         expect(wrapper.find('small#edrpou-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop phone field [is required]', async () => {
-        await setup('#coopPhone', '', wrapper);
+        await inputSetValueHandler(null, '', '#coopPhone', wrapper);
         expect(wrapper.find('small#coopPhone-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop region field [is required]', async () => {
-        await setup('#coopRegion', '', wrapper);
+        await inputSetValueHandler(null, '', '#coopRegion', wrapper);
         expect(wrapper.find('small#coopRegion-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop city field [is required]', async () => {
-        await setup('#coopCity', '', wrapper);
+        await inputSetValueHandler(null, '', '#coopCity', wrapper);
         expect(wrapper.find('small#coopCity-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop district field [is required]', async () => {
-        await setup('#coopDistrict', '', wrapper);
+        await inputSetValueHandler(null, '', '#coopDistrict', wrapper);
         expect(wrapper.find('small#coopDistrict-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop street field [is required]', async () => {
-        await setup('#coopStreet', '', wrapper);
+        await inputSetValueHandler(null, '', '#coopStreet', wrapper);
         expect(wrapper.find('small#coopStreet-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop house field [is required]', async () => {
-        await setup('#coopHouse', '', wrapper);
+        await inputSetValueHandler(null, '', '#coopHouse', wrapper);
         expect(wrapper.find('small#coopHouse-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop block field [is required]', async () => {
-        await setup('#coopBlock', '', wrapper);
+        await inputSetValueHandler(null, '', '#coopBlock', wrapper);
         expect(wrapper.find('small#coopBlock-help').text()).toBe("Це обов'язкове поле");
       });
 
       it('should fail the validation - coop zipcode field [is required]', async () => {
-        await setup('#coopZipCode', '', wrapper);
+        await inputSetValueHandler(null, '', '#coopZipCode', wrapper);
         expect(wrapper.find('small#coopZipCode-help').text()).toBe("Це обов'язкове поле");
       });
     });

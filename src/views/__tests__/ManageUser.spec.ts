@@ -1,22 +1,17 @@
-import { mount, VueWrapper } from '@vue/test-utils';
-import ManageUser from '@/views/ManageUser.vue';
-import store from '@/store';
-import { ComponentPublicInstance, nextTick } from 'vue';
-import { getters } from '@/store/authorization/getters';
+import { nextTick } from 'vue';
 import { createStore } from 'vuex';
-
-const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
-  const el = wrapper.find(id);
-  await el.setValue(value);
-  await el.trigger('blur');
-};
+import { mount, VueWrapper } from '@vue/test-utils';
+import store from '@/store';
+import { getters } from '@/store/authorization/getters';
+import { inputSetValueHandler } from '@/utils/test-utils';
+import ManageUser from '@/views/ManageUser.vue';
 
 const mockRouter = {
   push: jest.fn(),
 };
 
 describe('ManageUser', () => {
-  let wrapper: any;
+  let wrapper: VueWrapper<ManageUser>;
   beforeEach(async () => {
     wrapper = mount(ManageUser, {
       global: {
@@ -32,36 +27,18 @@ describe('ManageUser', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  it('should set the value in the input firstname', async () => {
-    const input = await wrapper.find('#firstName');
-    await input.setValue('Alex');
-    expect(input.element.value).toBe('Alex');
-  });
-
-  it('should set the value in the input middleName', async () => {
-    const input = await wrapper.find('#middleName');
-    await input.setValue('Alex');
-    expect(input.element.value).toBe('Alex');
-  });
-
-  it('should set the value in the input lastname', async () => {
-    const input = await wrapper.find('#lastname');
-    await input.setValue('Alex');
-    expect(input.element.value).toBe('Alex');
-  });
-
   it('should fail the validation - firstName field [is required]', async () => {
-    await setup('#firstName', '', wrapper);
+    await inputSetValueHandler(null, '', '#firstName', wrapper);
     expect(wrapper.find('small#firstName-help').text()).toBe("Це обов'язкове поле");
   });
 
   it('should fail the validation - middleName field [is required]', async () => {
-    await setup('#middleName', '', wrapper);
+    await inputSetValueHandler(null, '', '#middleName', wrapper);
     expect(wrapper.find('small#middleName-help').text()).toBe("Це обов'язкове поле");
   });
 
   it('should fail the validation - lastname field [is required]', async () => {
-    await setup('#lastname', '', wrapper);
+    await inputSetValueHandler(null, '', '#lastname', wrapper);
     expect(wrapper.find('small#lastname-help').text()).toBe("Це обов'язкове поле");
   });
 

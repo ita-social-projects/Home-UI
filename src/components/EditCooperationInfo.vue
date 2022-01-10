@@ -237,7 +237,7 @@ import {
   zipCodeValidator,
   regionCityDistrictMaxLength,
   streetMaxLength,
-  houseBlockAndNumberMaxLength,
+  houseBlockHouseNumberMaxLength,
 } from '@/utils/validators';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -292,8 +292,16 @@ export default defineComponent({
           city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           district: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
           street: { requiredValidator, ukrLangTitleValidator, streetMaxLength },
-          houseBlock: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
-          houseNumber: { requiredValidator, houseNumAndHouseBlockValidator, houseBlockAndNumberMaxLength },
+          houseBlock: {
+            requiredValidator,
+            houseNumAndHouseBlockValidator,
+            houseBlockAndNumberMaxLength: houseBlockHouseNumberMaxLength,
+          },
+          houseNumber: {
+            requiredValidator,
+            houseNumAndHouseBlockValidator,
+            houseBlockAndNumberMaxLength: houseBlockHouseNumberMaxLength,
+          },
           zipCode: { requiredValidator, zipCodeValidator },
         },
       },

@@ -1,317 +1,200 @@
-import { shallowMount, VueWrapper, mount } from '@vue/test-utils';
+import { createStore } from 'vuex';
+import { VueWrapper, mount, DOMWrapper } from '@vue/test-utils';
+import { RootStateInterface } from '@/store/types';
+import { inputSetValueHandler } from '@/utils/test-utils';
 import AddHouseForm from '@/components/AddHouseForm.vue';
-import { ComponentPublicInstance } from 'vue';
 
-const setup = async (id: string, value: string | number, wrapper: VueWrapper<ComponentPublicInstance>) => {
-  const el = wrapper.find(id);
-  await el.setValue(value);
-  await el.trigger('blur');
+type InputValueType = string | number;
+
+const mockFieldValues: { [key: string]: InputValueType } = {
+  flatQuantity: 111,
+  houseArea: 111.11,
+  adjoiningArea: 56,
+  region: 'Дніпропетровський',
+  city: 'Дніпро',
+  district: 'Сонячний',
+  street: 'Воронцова',
+  houseBlock: 'Н/2',
+  houseNumber: '5',
+  zipCode: '12345',
 };
 
-describe('AddHouseForm.vue', () => {
-  it('should exist', () => {
-    const wrapper = shallowMount(AddHouseForm);
+const longStrings = {
+  num11: '12345678901',
+  num18: '123456789012345678',
+  num30: '123456789012345678901234567890',
+  num55: '1234567890123456789012345678901234567890123456789012345',
+  ukr11: 'йцукенгшщз',
+  ukr30: 'йцукенгшщзйцукенгшщзйцукенгшщз',
+  ukr60: 'йцукенгшщзйцукенгшщзйцукенгшщзйцукенгшщзйцукенгшщзйцукенгшщз',
+};
 
+const validationMessages: { [key: string]: any } = {
+  required: () => "Це обов'язкове поле",
+  firstDigitNonZero: () => 'Перша цифра не може бути 0',
+  ukrSymbols: () => 'Це поле має містити українські літери',
+  zipCode: () => 'В полі мають бути 5 цифри від 0 до 9',
+  house: () => 'Це поле має містити українські літери або цифри від 0 до 9',
+  maxSymbols: (max: number) => `Максимальна кількість символів - ${max}`,
+};
+
+const store = createStore<RootStateInterface>({});
+
+describe('AddHouseForm.vue', () => {
+  let wrapper: VueWrapper<any>;
+  let fields: { [key: string]: DOMWrapper<HTMLElement> };
+
+  beforeEach(() => {
+    wrapper = mount(AddHouseForm, {
+      global: {
+        provide: {
+          store: store,
+        },
+      },
+      props: {
+        id: 2,
+      },
+    });
+
+    fields = {
+      flatQuantity: wrapper.find('#flatQuantity'),
+      houseArea: wrapper.find('#houseArea'),
+      adjoiningArea: wrapper.find('#adjoiningArea'),
+      region: wrapper.find('#region'),
+      city: wrapper.find('#city'),
+      district: wrapper.find('#district'),
+      street: wrapper.find('#street'),
+      houseBlock: wrapper.find('#houseBlock'),
+      houseNumber: wrapper.find('#houseNumber'),
+      zipCode: wrapper.find('#zipCode'),
+    };
+  });
+
+  it('should exist', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  it('should set the value in the quantity flat field', async () => {
-    const wrapper = mount(AddHouseForm);
-    const input = wrapper.find('#flatQuantity');
-    await input.setValue('314');
-    expect(input.element._value).toBe('314');
-  });
+  describe('input fields validation rules', () => {
+    const requiredCases = Object.keys(mockFieldValues).map((fieldName: string) => [fieldName]);
 
-  it('should set the value in the house area field', async () => {
-    const wrapper = mount(AddHouseForm);
-    const input = wrapper.find('#houseArea');
-    await input.setValue('244.12');
-    expect(input.element._value).toBe('244.12');
-  });
+    it.each(requiredCases)('%s field should display required validation message', async (fieldName: string) => {
+      await inputSetValueHandler(fields[fieldName], '');
 
-  it('should set the value in the adjoining area field', async () => {
-    const wrapper = mount(AddHouseForm);
-    const input = wrapper.find('#adjoiningArea');
-    await input.setValue('26');
-    expect(input.element._value).toBe('26');
-  });
+      expect(wrapper.find(`small#${fieldName}-help`).text()).toBe(validationMessages.required());
+    });
 
-  it('should set the value in the region field', async () => {
-    const wrapper = mount(AddHouseForm);
-    const input = wrapper.find('#region');
-    await input.setValue('Дніпропетровський');
-    expect(input.element._value).toBe('Дніпропетровський');
-  });
+    it.each([
+      ['region', 50, longStrings.ukr60],
+      ['city', 50, longStrings.ukr60],
+      ['district', 50, longStrings.ukr60],
+      ['street', 25, longStrings.ukr30],
+      ['houseBlock', 10, longStrings.num11],
+      ['houseNumber', 10, longStrings.num11],
+    ])(
+      '%s field should display max (%s) length validation message',
+      async (fieldName: string, max: number, longString: string) => {
+        await inputSetValueHandler(fields[fieldName], longString);
 
-  it('should set the value in the city field', async () => {
-    const wrapper = mount(AddHouseForm);
-    const input = wrapper.find('#city');
-    await input.setValue('Дніпро');
-    expect(input.element._value).toBe('Дніпро');
-  });
+        expect(wrapper.find(`small#${fieldName}-help`).text()).toBe(validationMessages.maxSymbols(max));
+      }
+    );
 
-  it('should set the value in the district field', async () => {
-    const wrapper = mount(AddHouseForm);
-    const input = wrapper.find('#district');
-    await input.setValue('Задовський');
-    expect(input.element._value).toBe('Задовський');
-  });
+    it.each([
+      ['flatQuantity', 'firstDigitNonZero', 0],
+      ['houseArea', 'firstDigitNonZero', 0],
+      ['adjoiningArea', 'firstDigitNonZero', 0],
+      ['region', 'ukrSymbols', 'Рырыры'],
+      ['city', 'ukrSymbols', 'Рырыры'],
+      ['district', 'ukrSymbols', 'Рырыры'],
+      ['street', 'ukrSymbols', 'Рырыры'],
+      ['houseBlock', 'house', 'S/3'],
+      ['houseNumber', 'house', 'R-1'],
+      ['zipCode', 'zipCode', 1234],
+    ])(
+      '%s field should display `%s` validation message',
+      async (fieldName: string, message: string, value: InputValueType) => {
+        await inputSetValueHandler(fields[fieldName], value);
 
-  it('should set the value in the street field', async () => {
-    const wrapper = mount(AddHouseForm);
-    const input = wrapper.find('#street');
-    await input.setValue('Воронцова');
-    expect(input.element._value).toBe('Воронцова');
-  });
-
-  it('should set the value in the house block field', async () => {
-    const wrapper = mount(AddHouseForm);
-    const input = wrapper.find('#houseBlock');
-    await input.setValue('Воронцова');
-    expect(input.element._value).toBe('Воронцова');
-  });
-
-  it('should set the value in the street field', async () => {
-    const wrapper = mount(AddHouseForm);
-    const input = wrapper.find('#street');
-    await input.setValue('9/Н');
-    expect(input.element._value).toBe('9/Н');
-  });
-
-  it('should set the value in the house number field', async () => {
-    const wrapper = mount(AddHouseForm);
-    const input = wrapper.find('#houseNumber');
-    await input.setValue('2-П');
-    expect(input.element._value).toBe('2-П');
-  });
-
-  it('should set the value in the zip code field', async () => {
-    const wrapper = mount(AddHouseForm);
-    const input = wrapper.find('#zipCode');
-    await input.setValue('52956');
-    expect(input.element._value).toBe('52956');
-  });
-
-  it('should fail the validation - flat quantity field [is required]', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#flatQuantity', '', wrapper);
-    expect(wrapper.find('small#flatQuantity-help').text()).toBe("Це обов'язкове поле");
-  });
-
-  it('should fail the validation - house area field [is required]', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#houseArea', '', wrapper);
-    expect(wrapper.find('small#houseArea-help').text()).toBe("Це обов'язкове поле");
-  });
-
-  it('should fail the validation - adjoining area field [is required]', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#adjoiningArea', '', wrapper);
-    expect(wrapper.find('small#adjoiningArea-help').text()).toBe("Це обов'язкове поле");
-  });
-
-  it('should fail the validation - region field [is required]', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#region', '', wrapper);
-    expect(wrapper.find('small#region-help').text()).toBe("Це обов'язкове поле");
-  });
-
-  it('should fail the validation - city field [is required]', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#city', '', wrapper);
-    expect(wrapper.find('small#city-help').text()).toBe("Це обов'язкове поле");
-  });
-
-  it('should fail the validation - district field [is required]', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#district', '', wrapper);
-    expect(wrapper.find('small#district-help').text()).toBe("Це обов'язкове поле");
-  });
-
-  it('should fail the validation - street field [is required]', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#street', '', wrapper);
-    expect(wrapper.find('small#street-help').text()).toBe("Це обов'язкове поле");
-  });
-
-  it('should fail the validation - house block field [is required]', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#houseBlock', '', wrapper);
-    expect(wrapper.find('small#houseBlock-help').text()).toBe("Це обов'язкове поле");
-  });
-
-  it('should fail the validation - house number field [is required]', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#houseNumber', '', wrapper);
-    expect(wrapper.find('small#houseNumber-help').text()).toBe("Це обов'язкове поле");
-  });
-
-  it('should fail the validation - zipCode field [is required]', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#zipCode', '', wrapper);
-    expect(wrapper.find('small#zipCode-help').text()).toBe("Це обов'язкове поле");
-  });
-
-  it("should fail the validation - flat quantity field mustn't be zero", async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#flatQuantity', 0, wrapper);
-    expect(wrapper.find('small#flatQuantity-help').text()).toBe('Перша цифра не може бути 0');
-  });
-
-  it("should fail the validation - house area field mustn't be zero", async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#houseArea', 0, wrapper);
-    expect(wrapper.find('small#houseArea-help').text()).toBe('Перша цифра не може бути 0');
-  });
-
-  it("should fail the validation - adjoining area field mustn't be zero", async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#adjoiningArea', 0, wrapper);
-    expect(wrapper.find('small#adjoiningArea-help').text()).toBe('Перша цифра не може бути 0');
-  });
-
-  it('should fail the validation - region field should contain ukr letters', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#region', 'Рырыры', wrapper);
-    expect(wrapper.find('small#region-help').text()).toBe('Це поле має містити українські літери');
-  });
-
-  it('should fail the validation - city field should contain ukr letters', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#city', 'Рырыры', wrapper);
-    expect(wrapper.find('small#city-help').text()).toBe('Це поле має містити українські літери');
-  });
-
-  it('should fail the validation - district field should contain ukr letters', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#district', 'Рырыры', wrapper);
-    expect(wrapper.find('small#district-help').text()).toBe('Це поле має містити українські літери');
-  });
-
-  it('should fail the validation - street field should contain ukr letters', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#street', 'Рырыры', wrapper);
-    expect(wrapper.find('small#street-help').text()).toBe('Це поле має містити українські літери');
-  });
-
-  it('should fail the validation - zipCode field should contain 5 integer symbols ', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#zipCode', 1234, wrapper);
-    expect(wrapper.find('small#zipCode-help').text()).toBe('В назві мають бути 5 цифр від 0 до 9');
-  });
-
-  it('should fail the validation - house block field should contain ukr letters and integers', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#houseBlock', 'S/3', wrapper);
-    expect(wrapper.find('small#houseBlock-help').text()).toBe(
-      'Це поле має містити українські літери або цифри від 0 до 9'
+        expect(wrapper.find(`small#${fieldName}-help`).text()).toBe(validationMessages[message]());
+      }
     );
   });
 
-  it('should fail the validation - house number field should contain ukr letters and integers', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#houseNumber', 'R-1', wrapper);
-    expect(wrapper.find('small#houseNumber-help').text()).toBe(
-      'Це поле має містити українські літери або цифри від 0 до 9'
-    );
-  });
-
-  it('should fail the validation - max house block length is 10 ', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#houseBlock', 'Пррррррррррр2р', wrapper);
-    expect(wrapper.find('small#houseBlock-help').text()).toBe('Максимальна кількість символів - 10');
-  });
-
-  it('should fail the validation - max house number length is 10', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#houseNumber', 'Прррррррррррр1', wrapper);
-    expect(wrapper.find('small#houseNumber-help').text()).toBe('Максимальна кількість символів - 10');
-  });
-
-  it('should fail the validation - max region field length is 50', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#region', 'Сссссссссссссссссссссссссссссссссссссссссссссссссссссссссссс', wrapper);
-    expect(wrapper.find('small#region-help').text()).toBe('Максимальна кількість символів - 50');
-  });
-
-  it('should fail the validation - max city field length is 50', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#city', 'Сссссссссссссссссссссссссссссссссссссссссссссссссссссссссссс', wrapper);
-    expect(wrapper.find('small#city-help').text()).toBe('Максимальна кількість символів - 50');
-  });
-
-  it('should fail the validation - max district field length is 50', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#district', 'Сссссссссссссссссссссссссссссссссссссссссссссссссссссссссссс', wrapper);
-    expect(wrapper.find('small#district-help').text()).toBe('Максимальна кількість символів - 50');
-  });
-
-  it('should fail the validation - max street field length is 25', async () => {
-    const wrapper = mount(AddHouseForm);
-    await setup('#street', 'Аааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааа', wrapper);
-    expect(wrapper.find('small#street-help').text()).toBe('Максимальна кількість символів - 25');
-  });
-
-  it('props', () => {
-    const wrapper = mount(AddHouseForm, {
-      propsData: {
-        id: 918,
+  describe('addNewHouse method', () => {
+    let addNewHouseBtn: DOMWrapper<HTMLElement>;
+    let houseForm: DOMWrapper<HTMLElement>;
+    const submitEvent: [string, { preventDefault: () => void }] = [
+      'submit',
+      {
+        preventDefault: () => {
+          return;
+        },
       },
-    });
-    expect(wrapper.props().id).toBe(918);
-  });
+    ];
 
-  it('tests method addNewHouse', async () => {
-    const addNewHouse = jest.spyOn(AddHouseForm.methods, 'addNewHouse');
-    const wrapper = mount(AddHouseForm);
-
-    wrapper.find('#add-new-house-btn').trigger('click');
-    wrapper.find('#house_data_form').trigger('submit', {
-      preventDefault: () => {},
+    beforeEach(() => {
+      addNewHouseBtn = wrapper.find('#add-new-house-btn');
+      houseForm = wrapper.find('#house_data_form');
+      wrapper.vm.closeAddHouseModal = jest.fn();
+      store.dispatch = jest.fn();
     });
 
-    wrapper.vm.$emit('cancel-addHouseModal');
-    await wrapper.vm.$nextTick();
+    it('should call addNewHouse method on add house button click', async () => {
+      const addNewHouseSpy = jest.spyOn(wrapper.vm, 'addNewHouse');
+      await addNewHouseBtn.trigger('click');
+      await houseForm.trigger(...submitEvent);
+      await wrapper.vm.$nextTick();
 
-    expect(addNewHouse).toBeCalled();
-    expect(wrapper.emitted('cancel-addHouseModal')).toBeTruthy();
-  });
-
-  it('should make fields clear after sumbit', async () => {
-    const wrapper = mount(AddHouseForm);
-
-    wrapper.find('#flatQuantity').setValue(111);
-    wrapper.find('#houseArea').setValue(111.11);
-    wrapper.find('#adjoiningArea').setValue(56);
-    wrapper.find('#region').setValue('Дніпропетровський');
-    wrapper.find('#city').setValue('Дніпро');
-    wrapper.find('#district').setValue('Сонячний');
-    wrapper.find('#street').setValue('Воронцова');
-    wrapper.find('#houseBlock').setValue('Н/2');
-    wrapper.find('#houseNumber').setValue('5');
-    wrapper.find('#zipCode').setValue('12345');
-
-    wrapper.find('#house_data_form').trigger('submit', {
-      preventDefault: () => {},
+      expect(addNewHouseSpy).toBeCalled();
     });
 
-    expect(wrapper.find('#flatQuantity').text()).toBe('');
-    expect(wrapper.find('#houseArea').text()).toBe('');
-    expect(wrapper.find('#adjoiningArea').text()).toBe('');
-    expect(wrapper.find('#region').text()).toBe('');
-    expect(wrapper.find('#city').text()).toBe('');
-    expect(wrapper.find('#district').text()).toBe('');
-    expect(wrapper.find('#houseBlock').text()).toBe('');
-    expect(wrapper.find('#houseNumber').text()).toBe('');
-    expect(wrapper.find('#zipCode').text()).toBe('');
+    it('should dispatch action', async () => {
+      await addNewHouseBtn.trigger('click');
+      await houseForm.trigger(...submitEvent);
+      await wrapper.vm.$nextTick();
+
+      expect(store.dispatch).toBeCalled();
+    });
+
+    it('should call closeAddHouseModal method', async () => {
+      await addNewHouseBtn.trigger('click');
+      await houseForm.trigger(...submitEvent);
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.vm.closeAddHouseModal).toBeCalled();
+    });
+
+    it('should clear fields after submit', async () => {
+      Object.keys(fields).forEach((field: string) => fields[field].setValue(mockFieldValues[field]));
+
+      await houseForm.trigger(...submitEvent);
+
+      const isAllFieldsEmpty = !Object.values(fields).some((field) => field.text() !== '');
+
+      expect(isAllFieldsEmpty).toBe(true);
+    });
   });
 
-  it('tests closeAddHouseModal method', async () => {
-    const wrapper = mount(AddHouseForm);
-    wrapper.vm.$emit('cancel-addHouseModal');
-    await wrapper.find('#cancel-btn').trigger('click');
+  describe('closeAddHouseModal method', () => {
+    let cancelBtn: DOMWrapper<HTMLElement>;
 
-    await wrapper.vm.$nextTick();
-    expect(wrapper.emitted('cancel-addHouseModal')).toBeTruthy();
+    beforeEach(() => {
+      cancelBtn = wrapper.find('#cancel-btn');
+    });
+
+    it('should emit event on cancel btn click', async () => {
+      await cancelBtn.trigger('click');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.emitted('cancel-addHouseModal')).toBeTruthy();
+    });
+
+    it('should call resetHouseDataFields method', async () => {
+      wrapper.vm.resetHouseDataFields = jest.fn();
+      await cancelBtn.trigger('click');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.vm.resetHouseDataFields).toBeCalled();
+    });
   });
 });

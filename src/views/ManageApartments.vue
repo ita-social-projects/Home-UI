@@ -78,7 +78,7 @@
               <template #body="slotProps">
                 <Button
                   icon="pi pi-pencil"
-                  class="p-button p-button-info p-button-text"
+                  class="col-btn p-button p-button-info p-button-text"
                   type="button"
                   @click="toggle($event, slotProps.data)"
                   aria-haspopup="true"
@@ -91,8 +91,8 @@
         </div>
         <Dialog v-model:visible="deleteApartmentDialog" :style="{ width: '450px' }" header="Попередження" :modal="true">
           <div class="confirmation-content">
-            <span v-if="deleteData">
-              Видалити квартиру № <strong>{{ deleteData.apartmentNumber }}</strong
+            <span v-if="item">
+              Видалити квартиру № <strong>{{ item.apartmentNumber }}</strong
               >?</span
             >
           </div>
@@ -116,23 +116,23 @@
             <label for="name" class="dialog_item-label">Номер квартири: </label>
             <InputText
               id="name"
-              v-model.trim="editData.apartmentNumber"
+              v-model.trim="item.apartmentNumber"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !editData.apartmentNumber }"
+              :class="{ 'p-invalid': submitted && !item.apartmentNumber }"
             />
-            <small class="p-error" v-if="submitted && !editData.apartmentNumber">Введіть номер квартири</small>
+            <small class="p-error" v-if="submitted && !item.apartmentNumber">Введіть номер квартири</small>
           </div>
           <div class="p-field dialog_item">
             <label for="name" class="dialog_item-label">Площа квартири: </label>
             <InputText
               id="name"
-              v-model.trim="editData.apartmentArea"
+              v-model.trim="item.apartmentArea"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !editData.apartmentArea }"
+              :class="{ 'p-invalid': submitted && !item.apartmentArea }"
             />
-            <small class="p-error" v-if="submitted && !editData.apartmentArea">Введіть площу квартири</small>
+            <small class="p-error" v-if="submitted && !item.apartmentArea">Введіть площу квартири</small>
           </div>
           <template #footer>
             <Button
@@ -196,14 +196,12 @@ export default defineComponent({
     const { id } = toRefs(props);
     const menu = ref();
     const deleteApartmentDialog = ref(false);
-    const deleteData = ref({});
     const editApartmentDialog = ref(false);
-    const editData = ref({});
     const item = ref({});
     const submitted = ref(false);
     const displayApartmentModal = ref(false);
 
-    const toggle = (event: any, data: ApartmentModel) => {
+    const toggle = (event: KeyboardEvent, data: ApartmentModel) => {
       menu.value.toggle(event);
       item.value = data;
       submitted.value = false;
@@ -215,7 +213,6 @@ export default defineComponent({
           label: 'Видалити',
           icon: 'pi pi-times',
           command: () => {
-            deleteData.value = item.value;
             deleteApartmentDialog.value = true;
           },
         },
@@ -224,7 +221,6 @@ export default defineComponent({
           icon: 'pi pi-refresh',
           command: () => {
             editApartmentDialog.value = true;
-            editData.value = item.value;
           },
         },
       ];
@@ -234,7 +230,7 @@ export default defineComponent({
       displayApartmentModal.value = true;
     }
 
-    const cooperationID = computed(() => {
+    const cooperationId = computed(() => {
       return store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
     });
 
@@ -257,21 +253,18 @@ export default defineComponent({
       return store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`];
     });
 
-    const onRowSelect = (event: any) => {
-      moveToApartment(event.data.id);
-    };
-
-    function moveToApartment(apartmentID: number) {
+    const onRowSelect = (event: KeyboardEvent) => {
+      const apartmentId = event.data.id;
       router.push({
         name: 'apartment-info',
-        params: { apartment: apartmentID },
+        params: { apartment: apartmentId },
       });
-    }
+    };
 
     const setHouseInfo = async () => {
       const payload = {
-        cooperationID: cooperationID.value,
-        houseID: id.value,
+        cooperationId: cooperationId.value,
+        houseId: id.value,
       };
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
     };
@@ -286,7 +279,7 @@ export default defineComponent({
     });
 
     return {
-      cooperationID,
+      cooperationId,
       menu,
       menuActions,
       houseInfo,
@@ -294,13 +287,10 @@ export default defineComponent({
       loading,
       apartmentsData,
       selectedApartment,
-      moveToApartment,
       onRowSelect,
       deleteApartmentDialog,
-      deleteData,
       deleteApartment,
       editApartmentDialog,
-      editData,
       editApartment,
       submitted,
       item,
