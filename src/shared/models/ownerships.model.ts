@@ -4,7 +4,7 @@ import { OwnerModel } from '@/shared/models/owner.model';
 export class OwnershipsModel {
   public id: number;
   public owner: OwnerModel;
-  public ownershipPart: number;
+  public ownershipPart: string;
 
   constructor(polledOwner: OwnershipsDTOModel) {
     this.id = polledOwner.id;
