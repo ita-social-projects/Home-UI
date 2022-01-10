@@ -2,11 +2,12 @@ import { AddressModel } from '@/shared/models/address.model';
 import { HouseDTOModel } from '@/shared/models/houseDTO.model';
 
 export class HouseModel {
-  public flatQuantity: number;
-  public houseArea: number;
-  public adjoiningArea: number;
+  public flatQuantity: number | null;
+  public houseArea: number | null;
+  public adjoiningArea: number | null;
   public id?: number;
   public address: AddressModel;
+  public cooperationId?: number;
 
   constructor(polledHouse: HouseDTOModel) {
     this.flatQuantity = polledHouse.quantity_flat;

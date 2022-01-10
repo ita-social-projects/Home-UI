@@ -1,62 +1,93 @@
 import { helpers, required, minLength, maxLength } from '@vuelidate/validators';
 
-const email = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-\/=?^_`{|().,:;<>@[\]]+@[a-z\d.-]+\.[\w-]{2,4}$/i);
-const emailLastChars = helpers.regex(/^[a-z\d].*[a-z]$/i);
-const password = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
-const validKey = helpers.regex(/^[a-zA-Z0-9]{36}$/);
-const validName = helpers.regex(/^[a-zA-Z0-9!#$%&'*+\-/=?^_`{|(),:;<>@[\]]*$/);
-const ukranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]{1,50}$/);
-const ukrLangMessage = 'В назві мають бути українські літери';
+const ukrLangMessage = 'Це поле має містити українські літери';
 
-const edrpou = helpers.regex(/^\d{8}$/);
+const validEmail = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-\/=?^_`{|().,:;<>@[\]]+@[a-z\d.-]+\.[\w-]{2,4}$/i);
+const validEmailLastChars = helpers.regex(/^[a-z\d].*[a-z]$/i);
+const validPassword = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
+
+const validUserName = helpers.regex(/^[a-zA-Z0-9!#$%&'*+\-/=?^_`{|(),:;<>@[\]]*$/);
+const validUkranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]*$/);
+
+const validEdrpou = helpers.regex(/^\d{8}$/);
 const validIban = helpers.regex(/^UA\d{27}$/);
-const validZipCpde = helpers.regex(/^\d{5}$/);
-const validPhoneNumber = helpers.regex(/^\+38(0\d{9})$/);
-const validHouseNumAndHouseBlock = helpers.regex(/^[/0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ-]{1,10}$/);
+
+const validHouseNumAndHouseBlock = helpers.regex(/^[/0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ-]*$/);
+const validQuantityAndArea = helpers.regex(/^(?<![-.])\b[\d]+\b(?!\.[\d])/);
+const validHouseArea = helpers.regex(/^[-+]?[\d]*[.,]?[\d]+(?:[eE][-+]?[\d]+)?$/);
+const validZipCode = helpers.regex(/^\d{5}$/);
+
+const validPhoneNumber = helpers.regex(/^\+380\d{3}\d{2}\d{2}\d{2}$/);
+
+const validApartmentArea = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,9})?$)|(1000$)/);
+const validApartmentDecimal = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|(1000$)/);
+const validApartmentNumber = helpers.regex(/^(?!(0))\d{1,4}(\-[a-zа-я])?$/);
+const validHouseDecimal = helpers.regex(/(^(\d{1,100}){1}(\.\d{1,3})?$)/);
+
+const validNonZeroFields = helpers.regex(/^[^0]/);
+
+const lengthMessage = (number: number, description: string): string => {
+  const max = `Максимальна кількість символів - ${number}`;
+  const min = `Мінімальна кількість символів - ${number}`;
+  return description === 'max' ? max : min;
+};
+const correctNumberMessage = (additionalInfo: string) => {
+  return `В полі мають бути ${additionalInfo} цифри від 0 до 9`;
+};
+const validFlatQuantityAndAdjoiningArea = helpers.regex(/^\d+$/);
+
+export const requiredValidator = helpers.withMessage("Це обов'язкове поле", required);
+export const someTitleLenghtValidator = helpers.withMessage(lengthMessage(50, 'max'), maxLength(50));
+export const ukrLangTitleValidator = helpers.withMessage(`${ukrLangMessage}`, validUkranianLan);
+export const zeroValidator = helpers.withMessage('Перша цифра не може бути 0', validNonZeroFields);
 
 export const emailValidator = helpers.withMessage(
   'Електронна пошта містить латинські букви, цифри, та спеціальні символи',
-  email
+  validEmail
 );
-export const emailMinLength = helpers.withMessage('Мінімальна довжина електронної пошти - 5 символів', minLength(5));
-export const emailMaxLength = helpers.withMessage(
-  'Максимальна довжина електронної пошти - 320 символів',
-  maxLength(320)
-);
+export const emailMinLength = helpers.withMessage(lengthMessage(5, 'min'), minLength(5));
+export const emailMaxLength = helpers.withMessage(lengthMessage(320, 'max'), maxLength(320));
 export const emailLastCharsValidator = helpers.withMessage(
   'Перший та останній символи не можуть бути спеціальними',
-  emailLastChars
+  validEmailLastChars
 );
-export const requiredValidator = helpers.withMessage("Це обов'язкове поле", required);
-export const edrpouValidator = helpers.withMessage('Код ЄДРПОУ складається з 8 цифр', edrpou);
 export const passwordValidator = helpers.withMessage(
   'Пароль повинен містити латинські великі та маленькі літери, цифри',
-  password
+  validPassword
 );
-export const passwordMaxLenght = helpers.withMessage('Максимальна кількість символів - 128', maxLength(128));
-export const passwordMinLenght = helpers.withMessage('Мінімальна кількість символів - 8', minLength(8));
-export const keyValidator = helpers.withMessage('Ключ з E-mail, 36 символів', validKey);
-export const nameValidator = helpers.withMessage('Латинські літери, цифри та спец.символи', validName);
+export const passwordMaxLenght = helpers.withMessage(lengthMessage(128, 'max'), maxLength(128));
+export const passwordMinLenght = helpers.withMessage(lengthMessage(8, 'min'), minLength(8));
 
-export const nameLenghtValidator = helpers.withMessage('Максимальна кількість символів - 50', maxLength(50));
-export const ukrLangTitleValidator = helpers.withMessage('В назві мають бути українські літери', ukranianLan);
+export const edrpouValidator = helpers.withMessage(lengthMessage(8, 'max'), validEdrpou);
 export const ibanValidator = helpers.withMessage('Складається з літр UA та 27 цифр', validIban);
-export const zipCodeValidator = helpers.withMessage('5 цифр від 0 до 9', validZipCpde);
-export const phoneNumberValidator = helpers.withMessage('Введіть номер коректно.', validPhoneNumber);
+export const zipCodeValidator = helpers.withMessage(correctNumberMessage('5'), validZipCode);
 
+export const userNameValidator = helpers.withMessage('Латинські літери, цифри та спец.символи', validUserName);
+export const userPhoneValidator = helpers.withMessage(
+  'Номер повинен починатися з + 38, а далi цифри від 0 до 9',
+  validPhoneNumber
+);
+
+export const quantityAndResidentialAreasValidator = helpers.withMessage(
+  correctNumberMessage('цілі'),
+  validQuantityAndArea
+);
+export const houseAreaValidator = helpers.withMessage(correctNumberMessage(''), validHouseArea);
 export const houseNumAndHouseBlockValidator = helpers.withMessage(
   `${ukrLangMessage} або цифри від 0 до 9`,
   validHouseNumAndHouseBlock
 );
+export const regionCityDistrictMaxLength = helpers.withMessage(lengthMessage(50, 'max'), maxLength(50));
+export const streetMaxLength = helpers.withMessage(lengthMessage(25, 'max'), maxLength(25));
+export const houseBlockHouseNumberMaxLength = helpers.withMessage(lengthMessage(10, 'max'), maxLength(10));
 
-const validFlatQuantity = helpers.regex(/^\d+$/);
-export const flatQuantityValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validFlatQuantity);
+export const apartmentAreaValidator = helpers.withMessage('Площа має бути від 10 до 1000 м.кв', validApartmentArea);
+export const apartmentDecimalValidator = helpers.withMessage('Не більше 2 значень після крапки', validApartmentDecimal);
+export const apartmentNumberValidator = helpers.withMessage('1-6 цифр, літера через дефіс', validApartmentNumber);
 
-const validHouseArea = helpers.regex(/^\d+$/);
-export const houseAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validHouseArea);
+export const houseDecimalValidator = helpers.withMessage('Не більше 3 значень після крапки', validHouseDecimal);
 
-const validAdjoiningArea = helpers.regex(/^\d+$/);
-export const adjoiningAreaValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validAdjoiningArea);
-
-const validMainHouseInfo = helpers.regex(/^\d+$/);
-export const mainHouseInfoValidator = helpers.withMessage('В назві мають бути цифри від 0 до 9', validMainHouseInfo);
+export const flatQuantityAndAdjoiningAreaValidator = helpers.withMessage(
+  'Це поле має містити цілі цифри',
+  validFlatQuantityAndAdjoiningArea
+);

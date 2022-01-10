@@ -10,4 +10,7 @@ export const getters: GetterTree<CooperationStateInterface, RootStateInterface> 
   getSelectedCooperationId: (state) => {
     return state.selectedCooperation?.id ?? 1;
   },
+  getSelectedCooperation: (state) => {
+    return state.selectedCooperation;
+  },
 };

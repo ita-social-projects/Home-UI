@@ -1,5 +1,6 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
+import { ContactTypeEnum } from '../authorization/types';
 
 export enum UserMutationEnum {
   SET_ERROR = 'SET_ERROR',
@@ -12,6 +13,12 @@ export enum UserActionEnum {
   RESET_ERROR_ACTION = 'RESET_ERROR_ACTION',
 }
 
+export enum UserGettersEnum {
+  getErrorMessage = 'getErrorMessage',
+  getSuccessMessage = 'getSuccessMessage',
+  getUserInfo = 'getUserInfo',
+}
+
 export interface UserDataInterface {
   registrationToken: string;
   firstName: string;
@@ -19,7 +26,7 @@ export interface UserDataInterface {
   lastName: string;
   email: string;
   password: string;
-  contacts: ContactInterface[];
+  contacts: UserContactInterface[];
 }
 
 export interface UserStateInterface {
@@ -28,10 +35,12 @@ export interface UserStateInterface {
   success: string;
 }
 
-export interface ContactInterface {
-  type: string;
+export interface UserContactInterface {
+  type: ContactTypeEnum;
   main: boolean;
-  email: string;
+  email?: string;
+  phone?: number;
+  id?: number;
 }
 
 export type Mutations<S = UserStateInterface> = {
@@ -46,9 +55,9 @@ export interface Actions {
 }
 
 export type Getters<S = UserStateInterface> = {
-  getErrorMessage(state: S): string | null;
-  getSuccessMessage(state: S): string;
-  getUserInfo(state: S): UserDataInterface | null;
+  [UserGettersEnum.getErrorMessage](state: S): string | null;
+  [UserGettersEnum.getSuccessMessage](state: S): string;
+  [UserGettersEnum.getUserInfo](state: S): UserDataInterface | null;
 };
 
 export type AugmentedActionContext = {

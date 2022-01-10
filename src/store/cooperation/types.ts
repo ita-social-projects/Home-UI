@@ -4,7 +4,6 @@ import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
 import { HouseModel } from '../../shared/models/house.model';
 
 export enum CooperationMutationEnum {
-  SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
   SET_USER_COOPERATIONS = 'SET_USER_COOPERATIONS',
   SET_SELECTED_COOPERATION = 'SET_SELECTED_COOPERATION',
   SET_COOPERATION_UPDATE = 'SET_COOPERATION_UPDATE',
@@ -12,24 +11,27 @@ export enum CooperationMutationEnum {
 }
 
 export enum CooperationActionEnum {
-  SET_MODAL_DISPLAY = 'SET_MODAL_DISPLAY',
   SET_USER_COOPERATIONS = 'SET_USER_COOPERATIONS',
   SET_SELECTED_COOPERATION = 'SET_SELECTED_COOPERATION',
   CREATE_COOPERATION = 'CREATE_COOPERATION',
   SET_COOPERATION_UPDATE = 'SET_COOPERATION_UPDATE',
 }
 
+export enum CooperationGettersEnum {
+  getCooperationNameAndEdrpou = 'getCooperationNameAndEdrpou',
+  getSelectedCooperationId = 'getSelectedCooperationId',
+  getSelectedCooperation = 'getSelectedCooperation',
+}
+
 export interface CooperationStateInterface {
   userCooperations: Array<CooperationModel>;
   selectedCooperation: null | CooperationModel;
-  displayModal: boolean;
 }
 
 export type Mutations<S = CooperationStateInterface> = {
-  [CooperationMutationEnum.SET_MODAL_DISPLAY](state: S, payload: boolean): void;
-
   [CooperationMutationEnum.SET_USER_COOPERATIONS](state: S, payload: Array<CooperationModel>): void;
   [CooperationMutationEnum.SET_SELECTED_COOPERATION](state: S, payload: number): void;
+  [CooperationMutationEnum.SET_COOPERATION_UPDATE](state: S, payload: CooperationModel): void;
 };
 
 export interface Actions {
@@ -37,15 +39,14 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: requestPayload<CooperationRegistrationInterface>
   ): void;
-  [CooperationActionEnum.SET_MODAL_DISPLAY]({ commit }: AugmentedActionContext, payload: boolean): void;
   [CooperationActionEnum.SET_USER_COOPERATIONS]({ commit }: AugmentedActionContext): void;
   [CooperationActionEnum.SET_SELECTED_COOPERATION]({ commit }: AugmentedActionContext, payload: number): void;
   [CooperationActionEnum.SET_COOPERATION_UPDATE]({ commit }: AugmentedActionContext, payload: CooperationModel): void;
 }
 
 export type Getters<S = CooperationStateInterface> = {
-  getCooperationNameAndEdrpou(state: S): string;
-  getSelectedCooperationId(state: S): number;
+  [CooperationGettersEnum.getCooperationNameAndEdrpou](state: S): string;
+  [CooperationGettersEnum.getSelectedCooperationId](state: S): number;
 };
 
 export type AugmentedActionContext = {
