@@ -1,11 +1,11 @@
 import { createStore } from 'vuex';
-import { mount, VueWrapper } from '@vue/test-utils';
+import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
 import { MountingOptions } from '@vue/test-utils/dist/types';
 import ManageApartments from '@/views/ManageApartments.vue';
 import ApartmentInfo from '@/views/ApartmentInfo.vue';
-// import Breadcrumb from '@/components/Breadcrumb.vue';
-// import AddApartmentForm from '@/components/AddApartmentForm.vue';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, useRoute, useRouter } from 'vue-router';
+import MainPage from '@/views/MainPage.vue';
+import Sidebar from '@/components/Sidebar.vue';
 
 const store = createStore({
   state: {
@@ -54,11 +54,28 @@ const store = createStore({
 
 const routes = [
   {
+    path: '/main',
+    component: MainPage,
+  },
+  {
+    path: '/main/cooperation/:id',
+    component: ManageApartments,
+    params: {
+      id: '2',
+    },
+  },
+  {
     name: 'apartment-info',
-    path: '/main/cooperation/34/67',
+    path: '/main/cooperation/:id/:apartment',
     component: ApartmentInfo,
+    props: true,
+    params: {
+      id: '2',
+      apartment: '56',
+    },
   },
 ];
+
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
@@ -121,12 +138,46 @@ describe('Manage apartments page', () => {
     });
   });
 
-  describe('click on row in table', () => {
-    it('should push user to page with apartment info', async () => {
-      const rows = wrapper.findAll('.p-selectable-row');
-      await rows[0].trigger('click');
+  describe('router testing from MainPage component', () => {
+    const mockStore = {
+      getters: jest.fn(),
+      dispatch: jest.fn(),
+    };
+    const mountingOptionsMainPage: MountingOptions<any> = {
+      global: {
+        provide: {
+          store,
+        },
+        mocks: {
+          $store: mockStore,
+        },
+        plugins: [router],
+        stubs: {
+          Sidebar,
+        },
+      },
+      props: {
+        id: '12',
+      },
+    };
+
+    const wrapperMainPage = mount(MainPage, mountingOptionsMainPage);
+
+    it('shoud render MainPage component by path /main ', async () => {
+      router.push('/main');
       await router.isReady();
-      console.log('pushed');
+      expect(wrapperMainPage.html()).toContain('main-page');
+    });
+    it('shoul render ManageApartment component by path /main/cooperation/:id', async () => {
+      router.push('/main/cooperation/:id');
+      await flushPromises();
+      expect(wrapperMainPage.html()).toContain('manage-apartments');
+    });
+    it('click on row in table should push to page with apartment info', async () => {
+      const rows = wrapperMainPage.findAll('.p-selectable-row');
+      await rows[0].trigger('click');
+      await flushPromises();
+      expect(wrapperMainPage.html()).toContain('apartment-info');
     });
   });
 });
