@@ -66,6 +66,9 @@ export default defineComponent({
       invitationInfo: {},
     };
   },
+  mounted() {
+    this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/GET_ALL_INVITATIONS`);
+  },
   methods: {
     toggle(event: any, data: any): void {
       this.invitationInfo = data;
@@ -73,7 +76,7 @@ export default defineComponent({
     },
 
     deleteInvitation() {
-      this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/DEL_INVITATION`, this.invitationInfo)
+      this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/DEL_INVITATION`, this.invitationInfo);
     },
   },
   computed: {
