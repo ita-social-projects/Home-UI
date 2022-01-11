@@ -18,6 +18,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
       await HTTP.put(`/cooperations/${payload.cooperationId}/houses/${payload.id}`, payloadToSend);
 
       commit(HousesMutationsEnum.EDIT_HOUSE, payload);
+      commit(HousesMutationsEnum.GET_HOUSE_BY_ID, payload);
     } catch (err: any) {
       console.log('error EDIT_HOUSE', err);
     }
