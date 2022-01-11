@@ -296,7 +296,7 @@ export default defineComponent({
       return store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`];
     });
 
-    const openEditHouseModal = () => {
+    function openEditHouseModal() {
       displayModalForEditHouse.value = true;
     };
 
