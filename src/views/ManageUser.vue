@@ -166,13 +166,13 @@ import { mapGetters } from 'vuex';
 import { RoutesEnum } from '@/router/types';
 import {
   requiredValidator,
-  userNameValidator,
+  ukrLangTitleValidator,
   someTitleLenghtValidator,
   emailValidator,
   emailMinLength,
   emailMaxLength,
-  userPhoneValidator,
-} from '@/utils/validators';
+  userPhoneValidator
+} from "@/utils/validators";
 import useVuelidate from '@vuelidate/core';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -224,17 +224,17 @@ export default defineComponent({
     return {
       firstName: {
         requiredValidator,
-        userNameValidator,
+        ukrLangTitleValidator,
         someTitleLenghtValidator,
       },
       middleName: {
         requiredValidator,
-        userNameValidator,
+        ukrLangTitleValidator,
         someTitleLenghtValidator,
       },
       lastName: {
         requiredValidator,
-        userNameValidator,
+        ukrLangTitleValidator,
         someTitleLenghtValidator,
       },
       inputValue: {
