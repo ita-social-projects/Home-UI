@@ -10,17 +10,17 @@
             <div class="detailed-info">
               <div>
                 <span>Номер будинку: </span>
-                <span>{{ houseInfo?.address.house_number }}</span>
+                <span>{{ houseInfo?.address.houseNumber }}</span>
               </div>
               <div>
                 <span>Кількість квартир: </span>
-                <span>{{ houseInfo?.quantity_flat }}</span>
+                <span>{{ houseInfo?.flatQuantity }}</span>
               </div>
               <div>
                 <span>Адреса: </span>
                 <span>
                   місто {{ houseInfo?.address.city }}, вулиця {{ houseInfo?.address.street }}, будинок
-                  {{ houseInfo?.address.house_number }}, {{ houseInfo?.address.house_block }} блок.
+                  {{ houseInfo?.address.houseNumber }}, {{ houseInfo?.address.houseBlock }} блок.
                 </span>
               </div>
             </div>
@@ -30,9 +30,27 @@
           </div>
         </div>
         <div class="add-btn">
-          <Button label="Додати квартиру" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
+          <Button
+            label="Додати квартиру"
+            icon="pi pi-pencil"
+            class="p-button-outlined p-button-info"
+            @click="openApartmentModal"
+          />
+          <Dialog
+            header="Додати квартиру"
+            v-model:visible="displayApartmentModal"
+            :modal="true"
+            :closable="false"
+            :dismissableMask="true"
+          >
+            <AddApartmentForm
+              :houseId="id"
+              @apartment-saved="displayApartmentModal = false"
+              @cancel-editing="displayApartmentModal = false"
+            >
+            </AddApartmentForm>
+          </Dialog>
         </div>
-
         <div class="container">
           <DataTable
             :value="apartmentsData"
@@ -54,12 +72,13 @@
               style="width: 40em"
               showGridlines
             ></Column>
-            <Column style="width: 50rem" />
+            <Column field="apartmentArea" header="Площа квартири" :sortable="true" showGridlines style="width: 50rem">
+            </Column>
             <Column style="width: 10em">
               <template #body="slotProps">
                 <Button
                   icon="pi pi-pencil"
-                  class="p-button p-button-info p-button-text"
+                  class="col-btn p-button p-button-info p-button-text"
                   type="button"
                   @click="toggle($event, slotProps.data)"
                   aria-haspopup="true"
@@ -72,8 +91,8 @@
         </div>
         <Dialog v-model:visible="deleteApartmentDialog" :style="{ width: '450px' }" header="Попередження" :modal="true">
           <div class="confirmation-content">
-            <span v-if="deleteData">
-              Видалити квартиру № <strong>{{ deleteData.apartmentNumber }}</strong
+            <span v-if="item">
+              Видалити квартиру № <strong>{{ item.apartmentNumber }}</strong
               >?</span
             >
           </div>
@@ -97,23 +116,23 @@
             <label for="name" class="dialog_item-label">Номер квартири: </label>
             <InputText
               id="name"
-              v-model.trim="editData.apartmentNumber"
+              v-model.trim="item.apartmentNumber"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !editData.apartmentNumber }"
+              :class="{ 'p-invalid': submitted && !item.apartmentNumber }"
             />
-            <small class="p-error" v-if="submitted && !editData.apartmentNumber">Введіть номер квартири</small>
+            <small class="p-error" v-if="submitted && !item.apartmentNumber">Введіть номер квартири</small>
           </div>
           <div class="p-field dialog_item">
             <label for="name" class="dialog_item-label">Площа квартири: </label>
             <InputText
               id="name"
-              v-model.trim="editData.apartmentArea"
+              v-model.trim="item.apartmentArea"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !editData.apartmentArea }"
+              :class="{ 'p-invalid': submitted && !item.apartmentArea }"
             />
-            <small class="p-error" v-if="submitted && !editData.apartmentArea">Введіть площу квартири</small>
+            <small class="p-error" v-if="submitted && !item.apartmentArea">Введіть площу квартири</small>
           </div>
           <template #footer>
             <Button
@@ -134,7 +153,6 @@
 import { toRefs, ref, computed, defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ApartmentModel } from '@/store/apartments/models/apartment.model';
-import { HouseInterface } from '@/store/houses/types';
 import { useStore } from 'vuex';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
@@ -143,6 +161,14 @@ import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import AddApartmentForm from '@/components/AddApartmentForm.vue';
+
+import { StoreModuleEnum } from '@/store/types';
+import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
+
+import { HouseModel } from '@/shared/models/house.model';
 
 export default defineComponent({
   name: 'ManageApartments',
@@ -154,10 +180,11 @@ export default defineComponent({
     Menu,
     Dialog,
     InputText,
+    AddApartmentForm,
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
@@ -169,13 +196,12 @@ export default defineComponent({
     const { id } = toRefs(props);
     const menu = ref();
     const deleteApartmentDialog = ref(false);
-    const deleteData = ref({});
     const editApartmentDialog = ref(false);
-    const editData = ref({});
     const item = ref({});
     const submitted = ref(false);
+    const displayApartmentModal = ref(false);
 
-    const toggle = (event: any, data: ApartmentModel) => {
+    const toggle = (event: KeyboardEvent, data: ApartmentModel) => {
       menu.value.toggle(event);
       item.value = data;
       submitted.value = false;
@@ -187,7 +213,6 @@ export default defineComponent({
           label: 'Видалити',
           icon: 'pi pi-times',
           command: () => {
-            deleteData.value = item.value;
             deleteApartmentDialog.value = true;
           },
         },
@@ -196,14 +221,17 @@ export default defineComponent({
           icon: 'pi pi-refresh',
           command: () => {
             editApartmentDialog.value = true;
-            editData.value = item.value;
           },
         },
       ];
     };
 
-    const cooperationID = computed(() => {
-      return store.getters['cooperationStore/getSelectedCooperationId'];
+    function openApartmentModal() {
+      displayApartmentModal.value = true;
+    }
+
+    const cooperationId = computed(() => {
+      return store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
     });
 
     const deleteApartment = () => {
@@ -217,35 +245,32 @@ export default defineComponent({
     };
 
     const setApartments = async () => {
-      await store.dispatch('apartmentsStore/SET_APARTMENTS', id.value);
+      await store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENTS}`, id.value);
       loading.value = false;
     };
 
     const apartmentsData = computed((): Array<ApartmentModel> => {
-      return store.getters['apartmentsStore/getApartmentsData'];
+      return store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`];
     });
 
     const onRowSelect = (event: any) => {
-      moveToApartment(event.data.id);
-    };
-
-    function moveToApartment(apartmentID: number) {
+      const apartmentId = event.data.id;
       router.push({
         name: 'apartment-info',
-        params: { apartment: apartmentID },
+        params: { apartment: apartmentId },
       });
-    }
+    };
 
     const setHouseInfo = async () => {
       const payload = {
-        cooperationID: cooperationID.value,
-        houseID: id.value,
+        cooperationId: cooperationId.value,
+        houseId: id.value,
       };
-      await store.dispatch('housesStore/GET_HOUSE_BY_ID', payload);
+      await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
     };
 
-    const houseInfo = computed((): HouseInterface => {
-      return store.getters['housesStore/getHouseInfo'];
+    const houseInfo = computed((): HouseModel => {
+      return store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`];
     });
 
     onMounted(() => {
@@ -254,7 +279,7 @@ export default defineComponent({
     });
 
     return {
-      cooperationID,
+      cooperationId,
       menu,
       menuActions,
       houseInfo,
@@ -262,16 +287,15 @@ export default defineComponent({
       loading,
       apartmentsData,
       selectedApartment,
-      moveToApartment,
       onRowSelect,
       deleteApartmentDialog,
-      deleteData,
       deleteApartment,
       editApartmentDialog,
-      editData,
       editApartment,
       submitted,
       item,
+      displayApartmentModal,
+      openApartmentModal,
     };
   },
 });
@@ -343,5 +367,28 @@ export default defineComponent({
 
 .p-field {
   margin-bottom: 20px;
+}
+%error-message {
+  margin: 0.4em 0.5rem;
+  width: 100%;
+}
+
+.address-details {
+  margin-left: 2rem;
+  .dialog-item-address {
+    margin-right: -2rem;
+  }
+}
+.dialog-item {
+  display: inline-block;
+  width: 260px;
+  margin-top: 30px;
+}
+.p-error {
+  display: flex;
+  justify-content: right;
+  margin-bottom: -30px;
+  margin-top: 0;
+  @extend %error-message;
 }
 </style>

@@ -21,12 +21,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { StoreModuleEnum } from '@/store/types';
+import { AuthGettersEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'PageNotFound',
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/loggedIn`];
+      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.loggedIn}`];
     },
   },
 });

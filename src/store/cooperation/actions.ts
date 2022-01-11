@@ -24,9 +24,6 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
       payload.errorCallback();
     }
   },
-  [CooperationActionEnum.SET_MODAL_DISPLAY]: ({ commit }, payload) => {
-    commit(CooperationMutationEnum.SET_MODAL_DISPLAY, payload);
-  },
 
   [CooperationActionEnum.SET_USER_COOPERATIONS]: async ({ commit }) => {
     try {
@@ -53,6 +50,7 @@ export const actions: ActionTree<CooperationStateInterface, RootStateInterface> 
     try {
       const payloadData = new CooperationPutDTOModel(payload);
       await HTTP.put(`/cooperations/${payloadData.id}`, payloadData);
+      commit(CooperationMutationEnum.SET_COOPERATION_UPDATE, payload);
     } catch (err: any) {
       console.log('error SET_COOPERATION_UPDATE', err);
     }
