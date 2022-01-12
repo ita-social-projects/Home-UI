@@ -1,20 +1,28 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
+import { InvitationModel } from '@/store/invitations/models/invitations.model';
 
 export enum InvitationsMutationsEnum {
+  CREATE_INVITATION = 'CREATE_INVITATION',
   GET_ALL_INVITATIONS = 'GET_ALL_INVITATIONS',
   DEL_INVITATION = 'DEL_INVITATION',
   SET_APARTMENT_INVITATIONS = 'SET_APARTMENT_INVITATIONS',
 }
 
 export enum InvitationsActionsEnum {
+  CREATE_INVITATION = 'CREATE_INVITATION',
   SET_APARTMENT_INVITATIONS = 'SET_APARTMENT_INVITATIONS',
   GET_ALL_INVITATIONS = 'GET_ALL_INVITATIONS',
-  DEL_INVITATION = 'DEL_INVITATION'
+  DEL_INVITATION = 'DEL_INVITATION',
 }
 
 export enum InvitationsGettersEnum {
   getInvitations = 'getInvitations',
+}
+
+export enum InvitationTypesEnum {
+  cooperation = 'cooperation',
+  apartment = 'apartment',
 }
 
 export interface InvitationInterface {
@@ -39,26 +47,36 @@ export interface AddressInterface {
   houseNumber: string;
   zipCode: string;
 }
-
 export interface InvitationsStateInterface {
-  invitations: Array<InvitationInterface>;
+  invitations: Array<InvitationModel> | null;
+}
+export interface PostInvitationInterface {
+  type: string;
+  email: string;
+  status: string;
+  id: number;
+  role: string;
+  cooperationId: number;
+  apartmentId: number;
 }
 
 export type Mutations<S = InvitationsStateInterface> = {
   [InvitationsMutationsEnum.GET_ALL_INVITATIONS](state: S, payload: Array<InvitationInterface>): void;
   [InvitationsMutationsEnum.DEL_INVITATION](state: S, payload: number): void;
-  [InvitationsMutationsEnum.SET_APARTMENT_INVITATIONS](state: S, payload: Array<InvitationInterface>): void;
+  [InvitationsMutationsEnum.SET_APARTMENT_INVITATIONS](state: S, payload: Array<InvitationModel>): void;
+  // [InvitationsMutationsEnum.CREATE_INVITATION](state: S, payload: any): void;
 };
 
 export interface Actions {
   [InvitationsActionsEnum.SET_APARTMENT_INVITATIONS](
     { commit }: AugmentedActionContext,
-    payload: Array<InvitationInterface>
+    payload: Array<InvitationModel>
   ): void;
+  [InvitationsActionsEnum.CREATE_INVITATION]({ commit }: AugmentedActionContext, payload: any): void;
 }
 
 export type Getters<S = InvitationsStateInterface> = {
-  [InvitationsGettersEnum.getInvitations](state: S): Array<InvitationInterface> | null;
+  [InvitationsGettersEnum.getInvitations](state: S): Array<InvitationModel> | null;
 };
 
 export type AugmentedActionContext = {

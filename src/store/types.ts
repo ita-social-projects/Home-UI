@@ -17,7 +17,6 @@ export interface RootStateInterface {
   housesStore: HousesStateInterface;
   invitationsStore: InvitationsStateInterface;
   apartmentsStore: ApartmentsStateInterface;
-
 }
 
 export enum StoreModuleEnum {
