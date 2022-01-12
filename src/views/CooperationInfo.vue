@@ -7,7 +7,7 @@
       <div class="coop_info">
         <div>
           <span>Назва ОСББ : </span>
-          <span>{{ cooperationData.name }}</span>
+          <span>{{ cooperationInfo.name }}</span>
         </div>
         <div>
           <span>Адреса : </span>
@@ -15,19 +15,19 @@
         </div>
         <div>
           <span>IBAN номер : </span>
-          <span>{{ cooperationData.iban }}</span>
+          <span>{{ cooperationInfo.iban }}</span>
         </div>
-        <div v-if="cooperationData.email">
+        <div v-if="cooperationInfo.contacts[0].email">
           <span>Електрона адреса : </span>
-          <span>{{ cooperationData.email }}</span>
+          <span>{{ cooperationInfo.contacts[0].email }}</span>
         </div>
         <div>
-          <span>Код реєстрации : </span>
-          <span>{{ cooperationData.edrpou }}</span>
+          <span>Код реєстрації : </span>
+          <span>{{ cooperationInfo.edrpou }}</span>
         </div>
-        <div v-if="cooperationData.phone">
+        <div v-if="cooperationInfo.contacts[1].phone">
           <span>Номер телефону : </span>
-          <span>{{ cooperationData.phone }}</span>
+          <span>{{ cooperationInfo.contacts[1].phone }}</span>
         </div>
       </div>
 
@@ -35,143 +35,67 @@
         <Button
           label="Редагувати"
           icon="pi pi-pencil"
-          @click="openCooperationModal"
+          @click="this.displayModalForCooperation = true"
           class="p-button-outlined p-button-info"
         />
         <Dialog
           header="Редагувати ОСББ"
           v-model:visible="displayCooperationModal"
-          :style="{ width: '550px' }"
+          :style="{ width: '580px' }"
           :modal="true"
           :closable="false"
           :dismissableMask="true"
         >
-          <form @submit.prevent="editCoopInfo">
-            <p>
-              <label for="coopName">Назва : </label>
-              <InputText id="coopName" placeholder="Назва" v-model="cooperationData.name" />
-            </p>
-            <p>
-              <label for="iban">Iban номер : </label>
-              <InputText id="coopIban" placeholder="iban номер" v-model="cooperationData.iban" />
-            </p>
-            <p>
-              <label for="coopEmail">Електронна адреса : </label>
-              <InputText id="coopEmail" placeholder="Електрона адреса" v-model.trim="cooperationData.email" />
-            </p>
-            <p>
-              <label for="edrpou">Код реєстрації : </label>
-              <InputText id="edrpou" placeholder="ОСББ номер" v-model="cooperationData.edrpou" maxlength="8" />
-            </p>
-            <p>
-              <label for="coopPhone">Номер телефону : </label>
-              <InputText
-                id="coopPhone"
-                placeholder="+38 000 000 00 00"
-                v-model="cooperationData.phone"
-                maxlength="13"
-              />
-            </p>
-            <div>
-              Адреса
-              <p>
-                <label for="coopAddress">регіон : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="регіон"
-                  v-model="cooperationData.address.region"
-                  maxlength="50"
-                />
-              </p>
-              <p>
-                <label for="coopAddress">місто : </label>
-                <InputText id="coopAddress" placeholder="місто" v-model="cooperationData.address.city" maxlength="50" />
-              </p>
-              <p>
-                <label for="coopAddress">район : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="район"
-                  v-model="cooperationData.address.district"
-                  maxlength="50"
-                />
-              </p>
-              <p>
-                <label for="coopAddress">вулиця : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="вулиця"
-                  v-model="cooperationData.address.street"
-                  maxlength="50"
-                />
-              </p>
-              <p>
-                <label for="coopAddress">номер будинку : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="номер будинку"
-                  v-model="cooperationData.address.houseNumber"
-                  maxlength="10"
-                />
-              </p>
-              <p>
-                <label for="coopAddress">блок : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="блок"
-                  v-model="cooperationData.address.houseBlock"
-                  maxlength="10"
-                />
-              </p>
-              <p>
-                <label for="coopAddress">індекс : </label>
-                <InputText
-                  id="coopAddress"
-                  placeholder="індекс"
-                  v-model="cooperationData.address.zipCode"
-                  maxlength="5"
-                />
-              </p>
-            </div>
-          </form>
-
-          <template #footer>
-            <Button label="Редагувати" icon="pi pi-check" autofocus class="p-button-info" />
-            <Button
-              label="Скасувати"
-              icon="pi pi-times"
-              @click="cancelCooperationEdit"
-              class="p-button-outlined p-button-info"
-            />
-          </template>
+          <EditCooperationForm
+            @cancel-editCoopInfo="displayModalForCooperation = false"
+            @isLoadedMode="isLoaded = true"
+            :cooperationId="cooperationData.id"
+          ></EditCooperationForm>
         </Dialog>
       </div>
     </div>
 
     <div class="add_btn">
-      <AddHouseButton :id="cooperationData.id"></AddHouseButton>
+      <Button
+        label="Додати будинок"
+        icon="pi pi-pencil"
+        class="p-button-outlined p-button-info"
+        @click="this.displayModalForAddHouse = true"
+      />
+      <Dialog
+        header="Додати будинок"
+        v-model:visible="displayAddHouseModal"
+        :style="{ width: '580px' }"
+        :modal="true"
+        :closable="false"
+        :dismissableMask="true"
+      >
+        <AddHouseForm :id="cooperationData.id" @cancel-addHouseModal="displayModalForAddHouse = false"></AddHouseForm>
+      </Dialog>
     </div>
+
     <div class="container container-houses">
       <DataTable
         ref="dt"
-        :value="isLoaded ? houses : []"
+        :value="isLoaded ? housesInfo : []"
         selectionMode="single"
         v-model:selection="selectedHouse"
         dataKey="houses.id"
         @rowSelect="onRowSelect"
+        responsiveLayout="scroll"
       >
         <template #header>
           <h4>Будинки в цьому ОСББ</h4>
         </template>
-        <Column field="quantity_flat" style="min-width: 20rem" header="Кількість квартир в будинку" :sortable="true" />
-        <Column field="house_area" style="min-width: 20rem" header="Площа будинку" :sortable="true" />
-        <Column field="adjoining_area" style="min-width: 20rem" header="Прибудинкової теріторії" :sortable="true" />
+        <Column field="flatQuantity" style="min-width: 15rem" header="Кількість квартир в будинку" :sortable="true" />
+        <Column field="houseArea" style="min-width: 15rem" header="Площа будинку" :sortable="true" />
+        <Column field="adjoiningArea" style="min-width: 15rem" header="Прибудинкової теріторії" :sortable="true" />
         <Column field="address" style="min-width: 20rem" header="Адреса" :sortable="true">
           <template #body="slotProps">
             {{ slotProps.data.address.region }}, {{ slotProps.data.address.city }},
             {{ slotProps.data.address.district }}, {{ slotProps.data.address.street }},
-            {{ slotProps.data.address.house_block }}, {{ slotProps.data.address.house_number }},
-            {{ slotProps.data.address.zip_code }}
+            {{ slotProps.data.address.houseBlock }}, {{ slotProps.data.address.houseNumber }},
+            {{ slotProps.data.address.zipCode }}
           </template>
         </Column>
 
@@ -181,223 +105,73 @@
               icon="pi pi-pencil"
               class="p-button p-button-info p-button-text"
               type="button"
-              @click="toggle($event, slotProps.data)"
+              @click="toggleOptions($event, slotProps.data)"
               aria-haspopup="true"
               aria-controls="overlay_menu"
               ref="button"
             />
-            <Menu :model="houseActions(house)" id="overlay_menu" ref="menu" :popup="true" />
+            <Menu :model="houseActions()" id="overlay_menu" ref="menu" :popup="true" />
 
             <ConfirmPopup></ConfirmPopup>
-
-            <Dialog
-              header="Редагувати будинок"
-              v-model:visible="displayHouseModal"
-              :style="{ width: '50vw' }"
-              :modal="true"
-              :closable="false"
-              :dismissableMask="true"
-            >
-              <form>
-                <p>
-                  <label class="dialog-item" for="coopName">Кількість квартир в будинку : </label>
-                  <InputText
-                    id="quantityFlat"
-                    placeholder="Кількість квартир в будинку"
-                    v-model.trim="house.quantity_flat"
-                    :class="{ 'p-invalid': v$.house.quantity_flat.$error }"
-                    @blur="v$.house.quantity_flat.$touch"
-                  />
-                  <small v-if="v$.house.quantity_flat.$error" class="p-error">{{
-                    v$.house.quantity_flat.$errors[0].$message
-                  }}</small>
-                </p>
-                <p>
-                  <label class="dialog-item" for="coopAddress">Площа будинку : </label>
-                  <InputText
-                    id="houseArea"
-                    placeholder="Площа будинку"
-                    v-model="house.house_area"
-                    :class="{ 'p-invalid': v$.house.house_area.$error }"
-                    @blur="v$.house.house_area.$touch"
-                  />
-                  <small v-if="v$.house.house_area.$error" class="p-error">{{
-                    v$.house.house_area.$errors[0].$message
-                  }}</small>
-                </p>
-                <p>
-                  <label class="dialog-item" for="iban">Прибудинкової теріторії : </label>
-                  <InputText
-                    id="adjoiningArea"
-                    v-model="house.adjoining_area"
-                    :class="{ 'p-invalid': v$.house.adjoining_area.$error }"
-                    @blur="v$.house.adjoining_area.$touch"
-                  />
-                  <small v-if="v$.house.adjoining_area.$error" class="p-error">{{
-                    v$.house.adjoining_area.$errors[0].$message
-                  }}</small>
-                </p>
-
-                <label class="dialog-item" for="address-details-id">Адреса : </label>
-                <div class="address-details" id="address-details-id">
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Регіон : </label>
-                    <InputText
-                      id="address-region"
-                      placeholder="Регіон"
-                      v-model="house.address.region"
-                      :class="{ 'p-invalid': v$.house.address.region.$error }"
-                      @blur="v$.house.address.region.$touch"
-                    />
-                    <small v-if="v$.house.address.region.$error" class="p-error">{{
-                      v$.house.address.region.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Місто : </label>
-                    <InputText
-                      id="address-city"
-                      placeholder="Регіон"
-                      v-model="house.address.city"
-                      :class="{ 'p-invalid': v$.house.address.city.$error }"
-                      @blur="v$.house.address.city.$touch"
-                    />
-                    <small v-if="v$.house.address.city.$error" class="p-error">{{
-                      v$.house.address.city.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Район : </label>
-                    <InputText
-                      id="address-region"
-                      placeholder="Регіон"
-                      v-model="house.address.district"
-                      :class="{ 'p-invalid': v$.house.address.district.$error }"
-                      @blur="v$.house.address.district.$touch"
-                    />
-                    <small v-if="v$.house.address.district.$error" class="p-error">{{
-                      v$.house.address.district.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Вулиця : </label>
-                    <InputText
-                      id="address-street"
-                      placeholder="Регіон"
-                      v-model="house.address.street"
-                      :class="{ 'p-invalid': v$.house.address.street.$error }"
-                      @blur="v$.house.address.street.$touch"
-                    />
-                    <small v-if="v$.house.address.street.$error" class="p-error">{{
-                      v$.house.address.street.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Блок : </label>
-                    <InputText
-                      id="address-block"
-                      placeholder="Регіон"
-                      v-model="house.address.house_block"
-                      :class="{ 'p-invalid': v$.house.address.house_block.$error }"
-                      @blur="v$.house.address.house_block.$touch"
-                    />
-                    <small v-if="v$.house.address.house_block.$error" class="p-error">{{
-                      v$.house.address.house_block.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Номер будинку : </label>
-                    <InputText
-                      id="address-housenumber"
-                      placeholder="Регіон"
-                      v-model="house.address.house_number"
-                      :class="{ 'p-invalid': v$.house.address.house_number.$error }"
-                      @blur="v$.house.address.house_number.$touch"
-                    />
-                    <small v-if="v$.house.address.house_number.$error" class="p-error">{{
-                      v$.house.address.house_number.$errors[0].$message
-                    }}</small>
-                  </p>
-                  <p>
-                    <label class="dialog-item dialog-item-address" for="coopEmail">Код : </label>
-                    <InputText
-                      id="address-zipcode"
-                      placeholder="Регіон"
-                      v-model="house.address.zip_code"
-                      :class="{ 'p-invalid': v$.house.address.zip_code.$error }"
-                      @blur="v$.house.address.zip_code.$touch"
-                    />
-                    <small v-if="v$.house.address.zip_code.$error" class="p-error">{{
-                      v$.house.address.zip_code.$errors[0].$message
-                    }}</small>
-                  </p>
-                </div>
-              </form>
-
-              <template #footer>
-                <Button
-                  label="Зберегти зміни"
-                  icon="pi pi-check"
-                  @click="editHouseInfo(house)"
-                  autofocus
-                  class="p-button-info"
-                />
-                <Button
-                  label="Скасувати"
-                  icon="pi pi-times"
-                  @click="closeEditHouseModal"
-                  class="p-button-outlined p-button-info"
-                />
-              </template>
-            </Dialog>
           </template>
         </Column>
       </DataTable>
     </div>
+    <Dialog
+      header="Редагувати будинок"
+      v-model:visible="displayEditHouseModal"
+      :style="{ width: '580px' }"
+      :modal="true"
+      :closable="false"
+      :dismissableMask="true"
+    >
+      <EditHouseForm
+        :cooperationId="cooperationData.id"
+        :propsHouseData="this.house"
+        @house-saved="displayModalForEditHouse = false"
+        @cancel-editing="displayModalForEditHouse = false"
+      ></EditHouseForm
+    ></Dialog>
   </div>
 </template>
 
 <script lang="ts">
-import useVuelidate from '@vuelidate/core';
-import {
-  requiredValidator,
-  mainHouseInfoValidator,
-  addressValidator,
-  houseNumAndHouseBlockValidator,
-  zipCodeValidator,
-} from '@/utils/validators';
 import { defineComponent, ref } from 'vue';
 import { mapGetters } from 'vuex';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import InputText from 'primevue/inputtext';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
-import Breadcrumb from '@/components/Breadcrumb.vue';
-import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
-import { CooperationAddressInterface, CooperationContactsInterface } from '@/store/cooperation/types';
-import { AddressInterface, HouseInterface } from '@/store/houses/types';
 import ConfirmPopup from 'primevue/confirmpopup';
-import AddHouseButton from '@/components/AddHouseButton.vue';
+import Breadcrumb from '@/components/Breadcrumb.vue';
+import AddHouseForm from '@/components/AddHouseForm.vue';
+import EditCooperationForm from '@/components/EditCooperationInfo.vue';
+import EditHouseForm from '@/components/EditHouseForm.vue';
+import { CooperationActionEnum, CooperationGettersEnum } from '@/store/cooperation/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
+import useVuelidate from '@vuelidate/core';
+import { HouseModel } from '@/shared/models/house.model';
+import { AddressModel } from '@/shared/models/address.model';
 
 export default defineComponent({
   name: 'CooperationInfo',
   components: {
     Dialog,
     Button,
-    InputText,
     Breadcrumb,
     DataTable,
     Column,
     Menu,
     ConfirmPopup,
-    AddHouseButton,
+    AddHouseForm,
+    EditCooperationForm,
+    EditHouseForm,
   },
   data() {
     return {
-      houseActions: (house: HouseInterface) => {
+      houseActions: () => {
         return [
           {
             label: 'Видалити',
@@ -412,100 +186,51 @@ export default defineComponent({
             icon: 'pi pi-user-edit',
             command: () => {
               this.openEditHouseModal();
-              this.showSuccessEdit(house);
             },
           },
         ];
       },
       selectedHouse: ref(),
-      houses: [] as Array<HouseInterface>,
-      id: 0,
-      name: '',
-      edrpou: '',
-      iban: '',
-      phone: '',
-      email: '',
-      address: {},
       cooperationData: {
         id: 0,
-        name: '',
-        edrpou: '',
-        iban: '',
-        phone: '',
-        email: '',
-        address: {} as CooperationAddressInterface,
       },
       isLoaded: false,
       house: {
-        quantity_flat: 0,
-        house_area: 0,
-        adjoining_area: 0,
+        id: 0,
+        flatQuantity: 0,
+        houseArea: 0,
+        adjoiningArea: 0,
         address: {
           region: '',
           city: '',
           district: '',
           street: '',
-          house_block: '',
-          house_number: '',
-          zip_code: '',
-        } as AddressInterface,
-      } as HouseInterface,
+          houseBlock: '',
+          houseNumber: '',
+          zipCode: '',
+        } as AddressModel,
+      } as HouseModel,
+      displayModalForEditHouse: false,
+      displayModalForCooperation: false,
+      displayModalForAddHouse: false,
       v$: useVuelidate(),
     };
   },
-  validations() {
-    return {
-      house: {
-        quantity_flat: { requiredValidator, mainHouseInfoValidator },
-        house_area: { requiredValidator, mainHouseInfoValidator },
-        adjoining_area: { requiredValidator, mainHouseInfoValidator },
-        address: {
-          region: { requiredValidator, addressValidator },
-          city: { requiredValidator, addressValidator },
-          district: { requiredValidator, addressValidator },
-          street: { requiredValidator, addressValidator },
-          house_block: { requiredValidator, houseNumAndHouseBlockValidator },
-          house_number: { requiredValidator, houseNumAndHouseBlockValidator },
-          zip_code: { requiredValidator, zipCodeValidator },
-        },
-      },
-    };
-  },
+
   async mounted() {
+    this.cooperationData.id = this.cooperationInfo?.id ?? 1;
     await Promise.all([
-      this.$store.dispatch('cooperationStore/SET_USER_COOPERATIONS'),
-      this.$store.dispatch('housesStore/SET_HOUSES'),
+      this.$store.dispatch(
+        `${StoreModuleEnum.cooperationStore}/${CooperationActionEnum.SET_USER_COOPERATIONS}`,
+        this.cooperationData.id
+      ),
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationData.id),
     ]).then(() => {
-      this.initData();
       this.isLoaded = true;
     });
     this.houses = Object.assign({}, this.housesInfo);
   },
-
   methods: {
-    initData() {
-      let cooperationInfo: CooperationModel | null = this.$store.state.cooperationStore.selectedCooperation;
-      this.cooperationData.id = cooperationInfo?.id ?? 1;
-      this.cooperationData.name = cooperationInfo?.name ?? '';
-      this.cooperationData.edrpou = cooperationInfo?.edrpou ?? '';
-      this.cooperationData.iban = cooperationInfo?.iban ?? '';
-      this.cooperationData.address = JSON.parse(
-        JSON.stringify(cooperationInfo?.address ?? ({} as CooperationAddressInterface))
-      );
-      cooperationInfo?.contacts.forEach((el) => this.mapContact(el));
-    },
-    mapContact(el: CooperationContactsInterface) {
-      if (el.main) {
-        for (let key in el) {
-          if (key === 'email') {
-            this.cooperationData.email = el[key];
-          }
-          if (key === 'phone') {
-            this.cooperationData.phone = el[key];
-          }
-        }
-      }
-    },
     onRowSelect() {
       this.choosenHouse();
     },
@@ -521,75 +246,26 @@ export default defineComponent({
             cooperationId: this.cooperationData.id,
             id: this.house.id,
           };
-          await this.$store.dispatch('housesStore/DELETE_HOUSE', payload);
+          await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.DELETE_HOUSE}`, payload);
           this.showSuccessDelete();
-          this.houses = Object.assign({}, this.housesInfo);
         },
         reject: () => {
           console.log('rejected delete');
         },
       });
     },
-    setHouse() {
-      this.houses = this.$store.state.housesStore.houses as HouseInterface[];
-    },
-    openCooperationModal() {
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, true);
-    },
-    closeCooperationModal() {
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_MODAL_DISPLAY`, false);
-    },
     openEditHouseModal() {
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, true);
+      this.displayModalForEditHouse = true;
     },
-    closeEditHouseModal() {
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/SET_MODAL_DISPLAY`, false);
-    },
-    cancelCooperationEdit() {
-      this.initData();
-      this.closeCooperationModal();
-    },
-    editCoopInfo() {
-      const payload = {
-        id: this.cooperationData.id,
-        name: this.cooperationData.name,
-        edrpou: this.cooperationData.edrpou,
-        iban: this.cooperationData.iban,
-        address: this.cooperationData.address,
-        contacts: [
-          { type: 'email', main: true, email: this.cooperationData.email },
-          { type: 'phone', main: true, phone: this.cooperationData.phone },
-        ],
-      };
-      this.$store.dispatch(`${StoreModuleEnum.cooperationStore}/SET_COOPERATION_UPDATE`, payload);
-      this.closeCooperationModal();
-    },
-    async editHouseInfo(house: HouseInterface) {
-      const payload = {
-        cooperationId: this.cooperationData.id,
-        id: house.id,
-        quantity_flat: house.quantity_flat,
-        house_area: house.house_area,
-        adjoining_area: house.adjoining_area,
-
-        address: {
-          region: house.address.region,
-          city: house.address.city,
-          district: house.address.district,
-          street: house.address.street,
-          house_block: house.address.house_block,
-          house_number: house.address.house_number,
-          zip_code: house.address.zip_code,
-        },
-      };
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/EDIT_HOUSE`, payload);
-      this.closeEditHouseModal();
-    },
-    toggle(event: any, slotProps: any) {
-      this.house = slotProps;
+    toggleOptions(event: any, slotProps: any) {
+      const { id, flatQuantity, houseArea, adjoiningArea, address } = slotProps;
+      this.house.id = id;
+      this.house.flatQuantity = flatQuantity;
+      this.house.houseArea = houseArea;
+      this.house.adjoiningArea = adjoiningArea;
+      this.house.address = { ...address };
       (this.$refs.menu as any).toggle(event);
     },
-
     showSuccessDelete() {
       this.$toast.add({
         severity: 'success',
@@ -598,15 +274,6 @@ export default defineComponent({
         life: 3000,
       });
     },
-    showSuccessEdit(house: HouseInterface) {
-      this.$toast.add({
-        severity: 'success',
-        summary: 'Успішно',
-        detail: `Дані про будинок з ID ${house.id} змінено`,
-        life: 3000,
-      });
-    },
-
     choosenHouse() {
       this.$router.push({
         name: 'manage-apartment',
@@ -614,25 +281,28 @@ export default defineComponent({
       });
     },
   },
-
   computed: {
     fillAddress(): string {
-      return `${this.cooperationData.address.street},
-      ${this.cooperationData.address.houseNumber},
-      ${this.cooperationData.address.houseBlock},
-      ${this.cooperationData.address.district},
-      ${this.cooperationData.address.city},
-      ${this.cooperationData.address.region},
-      ${this.cooperationData.address.zipCode} `;
+      return `${this.cooperationInfo.address.street},
+      ${this.cooperationInfo.address.houseNumber},
+      ${this.cooperationInfo.address.houseBlock},
+      ${this.cooperationInfo.address.district},
+      ${this.cooperationInfo.address.city},
+      ${this.cooperationInfo.address.region},
+      ${this.cooperationInfo.address.zipCode} `;
     },
     displayCooperationModal(): boolean {
-      return this.$store.state.cooperationStore.displayModal;
+      return this.displayModalForCooperation;
     },
-    displayHouseModal(): boolean {
-      return this.$store.state.housesStore.displayModal;
+    displayEditHouseModal(): boolean {
+      return this.displayModalForEditHouse;
+    },
+    displayAddHouseModal(): boolean {
+      return this.displayModalForAddHouse;
     },
     ...mapGetters({
-      housesInfo: `${StoreModuleEnum.housesStore}/getHousesData`,
+      housesInfo: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
+      cooperationInfo: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperation}`,
     }),
   },
 });
@@ -642,7 +312,6 @@ export default defineComponent({
 .wrapper {
   display: flex;
   flex-direction: column;
-
   .breadcrumb {
     margin: 0 0 1em 0;
   }
@@ -689,10 +358,22 @@ export default defineComponent({
 }
 .dialog-item {
   display: inline-block;
-  width: 260px;
+  width: 240px;
 }
 label {
   display: inline-block;
-  width: 260px;
+  width: 240px;
+}
+.address-wrapper label {
+  margin-left: 25px;
+  width: 215px;
+}
+.input-block {
+  display: inline-block;
+  margin-bottom: 15px;
+}
+small {
+  display: block;
+  width: 280px;
 }
 </style>

@@ -13,6 +13,11 @@ export enum LocalStorageActionEnum {
   REMOVE = 'REMOVE',
 }
 
+export enum LocalStorageGettersEnum {
+  isTokenExist = 'isTokenExist',
+  getToken = 'getToken',
+}
+
 export interface TokenInterface {
   id: number;
   email: string;
@@ -30,8 +35,8 @@ export type Mutations<S = LocalStorageStateInterface> = {
 };
 
 export type Getters<S = LocalStorageStateInterface> = {
-  isTokenExist(): boolean;
-  getToken(state: S): TokenInterface | null;
+  [LocalStorageGettersEnum.isTokenExist](): boolean;
+  [LocalStorageGettersEnum.getToken](state: S): TokenInterface | null;
 };
 
 export interface Actions {

@@ -9,14 +9,16 @@
     </div>
 
     <div class="header__btn">
+      <Dropdown
+        v-show="isLoggedIn"
+        class="drop-menu"
+        v-model="typeContact"
+        :options="contactsType"
+        optionLabel="name"
+        placeholder="Обрати ОСББ"
+      />
       <div>
-        <Button
-          v-if="!isLoggedIn"
-          v-show="$route.name !== '/login'"
-          label="Увійти"
-          @click="redirectToLogin"
-          class="p-button-info"
-        />
+        <Button v-if="!isLoggedIn" label="Увійти" @click="redirectToLogin" class="p-button-info" />
         <Button
           label="Info"
           v-else
@@ -42,6 +44,10 @@ import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 
+import Dropdown from 'primevue/dropdown';
+import { UserCredentialInterface, AuthActionEnum, AuthGettersEnum } from '@/store/authorization/types';
+import { StoreModuleEnum } from '@/store/types';
+
 export default defineComponent({
   name: 'baseHeader',
   data() {
@@ -63,26 +69,45 @@ export default defineComponent({
           label: 'Вийти',
           icon: 'pi pi-fw pi-power-off',
           command: () => {
-            this.$store.dispatch('authorizationStore/SIGN_OUT', null);
+            const payload = {
+              firstName: '',
+              middleName: '',
+              lastName: '',
+              email: '',
+              id: 0,
+              contacts: [],
+            };
+            this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.SIGN_OUT}`, payload);
             this.$router.push(RoutesEnum.StartPage);
           },
         },
       ],
+
+      typeContact: null,
+      contactsType: [{ name: 'Авіатор-1' }, { name: 'Дубовий гай' }, { name: 'Добробут' }],
     };
   },
   components: {
     Avatar,
     Button,
     Menu,
+    Dropdown,
   },
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters['authorizationStore/loggedIn'];
+      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.loggedIn}`];
     },
     getNameFromStore(): any {
-      const dataFromStore = this.$store.getters['authorizationStore/userData'];
-      return `${dataFromStore['first_name']} ${dataFromStore['last_name']}`;
+      const dataFromStore = this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
+      return `${dataFromStore['firstName']} ${dataFromStore['lastName']}`;
     },
+  },
+  async mounted() {
+    const user: string | null = localStorage.getItem('user');
+    if (user !== null) {
+      const userData: UserCredentialInterface = JSON.parse(user);
+      await this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/GET_DATA`, userData.id);
+    }
   },
   methods: {
     redirectToMain() {
@@ -91,10 +116,7 @@ export default defineComponent({
     redirectToLogin() {
       this.$router.push(RoutesEnum.UserLogin);
     },
-    userLogout() {
-      this.$store.dispatch('authorizationStore/SIGN_OUT', null);
-      this.$router.push(RoutesEnum.StartPage);
-    },
+
     toggle(event: any) {
       (this.$refs.menu as Menu).toggle(event);
     },
@@ -109,6 +131,7 @@ export default defineComponent({
   background-color: $main-background-color;
   box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px, rgba(0, 0, 0, 0.06) 0 1px 2px;
   display: flex;
+  align-items: center;
   padding: 20px;
   color: #495057;
   user-select: none;
@@ -136,17 +159,24 @@ export default defineComponent({
   width: 100%;
   flex: 1 1 auto;
 }
+
 .header__btn {
   @include flex-custom(flex-end);
-  padding-left: 15px;
-  padding-right: 65px;
+  align-items: center;
   width: 100%;
   flex: 1 1 auto;
+  .drop-menu {
+    width: 200px;
+    background-color: $main-background-color;
+    display: flex;
+    align-items: center;
+    box-shadow: none;
+  }
   .p-avatar {
     margin-right: 10px;
   }
   button {
-    margin-top: -5px;
+    margin: 0 65px;
   }
 }
 </style>

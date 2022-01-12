@@ -15,8 +15,9 @@ export interface RootStateInterface {
   pollsStore: PollsStateInterface;
   localStorageStore: LocalStorageStateInterface;
   housesStore: HousesStateInterface;
-  apartments: ApartmentsStateInterface;
   invitationsStore: InvitationsStateInterface;
+  apartmentsStore: ApartmentsStateInterface;
+
 }
 
 export enum StoreModuleEnum {
@@ -27,6 +28,7 @@ export enum StoreModuleEnum {
   localStorageStore = 'localStorageStore',
   housesStore = 'housesStore',
   invitationsStore = 'invitationsStore',
+  apartmentsStore = 'apartmentsStore',
 }
 
 export type requestPayload<T> = {

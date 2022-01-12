@@ -10,8 +10,10 @@
 <script lang="ts">
 import Sidebar from '@/components/Sidebar.vue';
 import { defineComponent } from 'vue';
-import { UserInterface } from '@/store/authorization/types';
 import { StoreModuleEnum } from '@/store/types';
+import { AuthActionEnum, AuthGettersEnum } from '@/store/authorization/types';
+import { UserModel } from '@/store/authorization/models/user.model';
+import { RoutesEnum } from '@/router/types';
 
 export default defineComponent({
   name: 'MainPage',
@@ -26,13 +28,14 @@ export default defineComponent({
   mounted() {
     const user: string | null = localStorage.getItem('user');
     if (user !== null && !this.userData) {
-      const userData: UserInterface = JSON.parse(user);
-      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/GET_DATA`, userData.id);
+      const userData: UserModel = JSON.parse(user);
+      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.GET_DATA}`, userData.id);
     }
+    this.$router.push(RoutesEnum.Cooperation);
   },
   computed: {
     userData() {
-      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/userData`];
+      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
     },
   },
 });

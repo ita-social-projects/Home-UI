@@ -1,7 +1,10 @@
 import { MutationTree } from 'vuex';
-import { InvitationsMutationsEnum, InvitationsStateInterface, Mutations } from '@/store/invitations/types';
+import { InvitationsStateInterface, InvitationsMutationsEnum, Mutations } from '@/store/invitations/types';
 
 export const mutations: MutationTree<InvitationsStateInterface> & Mutations = {
+  [InvitationsMutationsEnum.SET_APARTMENT_INVITATIONS]: (state, payload) => {
+    state.invitations = payload;
+  },
   [InvitationsMutationsEnum.GET_ALL_INVITATIONS]: (state, payload) => {
     state.invitations = payload;
   },

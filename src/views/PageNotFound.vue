@@ -12,6 +12,7 @@
 import { defineComponent } from 'vue';
 import { StoreModuleEnum } from '@/store/types';
 import ErrorPage from '@/components/ErrorPage.vue';
+import { AuthGettersEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'PageNotFound',
@@ -25,7 +26,7 @@ export default defineComponent({
   },
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/loggedIn`];
+      return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.loggedIn}`];
     },
   },
 });
