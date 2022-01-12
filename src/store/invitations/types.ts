@@ -18,11 +18,6 @@ export interface InvitationInterface {
   id: number;
 }
 
-// export interface AddressInterface {
-//   street: string;
-//   houseBlock: string;
-//   houseNumber: string;
-// }
 
 export interface InvitationsStateInterface {
   invitations: Array<InvitationInterface> | null;
