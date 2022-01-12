@@ -61,6 +61,7 @@ export default defineComponent({
   data() {
     return {
       title: 'Список запрошень',
+      deleteApartmentDialog: false,
       invitationActions: () => {
         return [
           {
@@ -91,7 +92,7 @@ export default defineComponent({
     },
 
     deleteInvitation() {
-      this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/DEL_INVITATION`, this.invitationInfo)
+      this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/DEL_INVITATION`, this.invitationInfo);
     },
   },
   computed: {
