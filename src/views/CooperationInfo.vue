@@ -228,7 +228,6 @@ export default defineComponent({
     ]).then(() => {
       this.isLoaded = true;
     });
-    // this.houses = Object.assign({}, this.housesInfo);
   },
   methods: {
     onRowSelect() {

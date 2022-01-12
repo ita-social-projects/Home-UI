@@ -61,7 +61,6 @@ export default defineComponent({
   data() {
     return {
       title: 'Список запрошень',
-      deleteApartmentDialog: false,
       invitationActions: () => {
         return [
           {
