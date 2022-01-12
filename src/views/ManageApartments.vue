@@ -26,7 +26,27 @@
             </div>
           </div>
           <div class="edit-btn">
-            <Button label="Редагувати" icon="pi pi-pencil" class="p-button-outlined p-button-info" />
+            <Button
+              label="Редагувати"
+              icon="pi pi-pencil"
+              class="p-button-outlined p-button-info"
+              @click="openEditHouseModal"
+            />
+            <Dialog
+              header="Редагувати будинок"
+              v-model:visible="displayModalForEditHouse"
+              :style="{ width: '580px' }"
+              :modal="true"
+              :closable="false"
+              :dismissableMask="true"
+            >
+              <EditHouseForm
+                :cooperationId="cooperationId"
+                :propsHouseData="houseInfo"
+                @house-saved="displayModalForEditHouse = false"
+                @cancel-editing="displayModalForEditHouse = false"
+              ></EditHouseForm>
+            </Dialog>
           </div>
         </div>
         <div class="add-btn">
@@ -162,6 +182,7 @@ import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddApartmentForm from '@/components/AddApartmentForm.vue';
+import EditHouseForm from '@/components/EditHouseForm.vue';
 
 import { StoreModuleEnum } from '@/store/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
@@ -181,6 +202,7 @@ export default defineComponent({
     Dialog,
     InputText,
     AddApartmentForm,
+    EditHouseForm,
   },
   props: {
     id: {
@@ -200,6 +222,7 @@ export default defineComponent({
     const item = ref({});
     const submitted = ref(false);
     const displayApartmentModal = ref(false);
+    const displayModalForEditHouse = ref(false);
 
     const toggle = (event: KeyboardEvent, data: ApartmentModel) => {
       menu.value.toggle(event);
@@ -273,6 +296,10 @@ export default defineComponent({
       return store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`];
     });
 
+    function openEditHouseModal() {
+      displayModalForEditHouse.value = true;
+    };
+
     onMounted(() => {
       setHouseInfo();
       setApartments();
@@ -296,6 +323,8 @@ export default defineComponent({
       item,
       displayApartmentModal,
       openApartmentModal,
+      openEditHouseModal,
+      displayModalForEditHouse,
     };
   },
 });
