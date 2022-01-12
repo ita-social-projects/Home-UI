@@ -31,18 +31,11 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
       console.log('error DELETE_HOUSE', err);
     }
   },
-<<<<<<< HEAD
-  [HousesActionsEnum.GET_HOUSE_BY_ID]: ({ commit }, payload) => {
-    HTTP.get(`/cooperations/${payload.cooperationID}/houses/${payload.houseID}`).then((r) => {
-      commit(HousesMutationsEnum.GET_HOUSE_BY_ID, r.data);
-    });
-=======
   [HousesActionsEnum.GET_HOUSE_BY_ID]: async ({ commit }, payload) => {
     const { data } = await HTTP.get(`/cooperations/${payload.cooperationId}/houses/${payload.houseId}`);
     const house: HouseModel = new HouseModel(data);
 
     commit(HousesMutationsEnum.GET_HOUSE_BY_ID, house);
->>>>>>> feature_121/invitation_section
   },
   [HousesActionsEnum.ADD_HOUSE]: async ({ commit }, payload) => {
     try {
