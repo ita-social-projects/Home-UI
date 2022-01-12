@@ -6,7 +6,7 @@ import {
   InvitationsMutationsEnum,
   InvitationsStateInterface,
 } from '@/store/invitations/types';
-// import { HTTP } from '@/core/api/http-common';
+import { HTTP } from '@/core/api/http-common';
 import { InvitationDTOModel } from './models/invitationDTO.model';
 import { InvitationModel } from './models/invitation.model';
 
@@ -14,17 +14,13 @@ export const actions: ActionTree<InvitationsStateInterface, RootStateInterface> 
   [InvitationsActionsEnum.CREATE_INVITATION]: async ({ commit }, payload) => {
     try {
       const payloadToSend = new InvitationDTOModel(payload);
-      //   const { data } = await HTTP.post(`/invitations/`, payloadToSend);
-      // Mock data
-      const receivedData: InvitationDTOModel = {
-        id: 1300,
-        email: payload.email,
-        status: 'запрошення створено',
-        address: payload.address,
-        invitation_type: payload.invitationType,
-      };
-      const data = new InvitationModel(receivedData);
-      commit(InvitationsMutationsEnum.CREATE_INVITATION, data);
+      console.log('payloadToSend', payloadToSend);
+      const { data } = await HTTP.post(`/invitations/create-invitation`, payloadToSend);
+
+      console.log('data', data);
+      const receivedData = new InvitationModel(data);
+      console.log('receivedData', receivedData);
+      commit(InvitationsMutationsEnum.CREATE_INVITATION, receivedData);
     } catch (e: any) {
       console.log(e.response);
     }

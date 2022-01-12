@@ -140,7 +140,7 @@ export default defineComponent({
   data() {
     return {
       invitationData: {
-        invitationType: ['Ми запрошуємо власника квартири', 'Ми запрошуємо власника ОСББ'],
+        invitationType: ['apartment', 'cooperation'],
         email: '',
         listOfHouses: [],
         listOfApartments: [],
@@ -188,7 +188,9 @@ export default defineComponent({
       const payload = {
         invitationType: this.selectedData.selectedType,
         email: this.invitationData.email,
-        address: `${this.houseAddress}, ${this.apartmentNumber}`,
+        cooperationId: this.cooperationId,
+        // address: `${this.houseAddress}, ${this.apartmentNumber}`,
+        role: 'user',
       };
 
       await this.$store.dispatch(

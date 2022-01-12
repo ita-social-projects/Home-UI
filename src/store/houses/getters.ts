@@ -11,7 +11,7 @@ export const getters: GetterTree<HousesStateInterface, RootStateInterface> & Get
   },
   getListOfHouses: (state) => {
     return state.houses?.map((house) => {
-      const houseData = `вул. ${house.address.street}, будинок ${house.address.house_number}`;
+      const houseData = `вул. ${house.address.street}, будинок ${house.address.houseNumber}`;
       const houseId = house.id;
       return { houseData, houseId };
     });
