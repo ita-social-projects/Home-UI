@@ -42,7 +42,7 @@
               icon="pi pi-cog"
               class="p-button p-button-info p-button-text"
               type="button"
-              @click="toggle"
+              @click="toggle($event, slotProps.data)"
               aria-haspopup="true"
               aria-controls="overlay_menu"
             />
@@ -56,7 +56,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -87,6 +86,9 @@ export default defineComponent({
           {
             label: 'Видалити запрошення',
             icon: 'pi pi-times',
+            command: () => {
+              this.deleteInvitation();
+            },
           },
           {
             label: 'Використати як шаблон',
@@ -95,6 +97,7 @@ export default defineComponent({
         ];
       },
       displayCreateInvitModal: false,
+      invitationInfo: {},
     };
   },
   async mounted() {
@@ -103,8 +106,13 @@ export default defineComponent({
     );
   },
   methods: {
-    toggle(event: Event) {
+    toggle(event: any, data: any): void {
+      this.invitationInfo = data;
       (this.$refs.menu as any).toggle(event);
+    },
+
+    deleteInvitation() {
+      this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/DEL_INVITATION`, this.invitationInfo);
     },
   },
   computed: {

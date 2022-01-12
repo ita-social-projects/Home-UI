@@ -4,12 +4,16 @@ import { InvitationModel } from '@/store/invitations/models/invitations.model';
 
 export enum InvitationsMutationsEnum {
   CREATE_INVITATION = 'CREATE_INVITATION',
+  GET_ALL_INVITATIONS = 'GET_ALL_INVITATIONS',
+  DEL_INVITATION = 'DEL_INVITATION',
   SET_APARTMENT_INVITATIONS = 'SET_APARTMENT_INVITATIONS',
 }
 
 export enum InvitationsActionsEnum {
   CREATE_INVITATION = 'CREATE_INVITATION',
   SET_APARTMENT_INVITATIONS = 'SET_APARTMENT_INVITATIONS',
+  GET_ALL_INVITATIONS = 'GET_ALL_INVITATIONS',
+  DEL_INVITATION = 'DEL_INVITATION',
 }
 
 export enum InvitationsGettersEnum {
@@ -59,8 +63,10 @@ export interface PostInvitationInterface {
 }
 
 export type Mutations<S = InvitationsStateInterface> = {
-  [InvitationsMutationsEnum.CREATE_INVITATION](state: S, payload: any): void;
+  [InvitationsMutationsEnum.GET_ALL_INVITATIONS](state: S, payload: Array<InvitationInterface>): void;
+  [InvitationsMutationsEnum.DEL_INVITATION](state: S, payload: number): void;
   [InvitationsMutationsEnum.SET_APARTMENT_INVITATIONS](state: S, payload: Array<InvitationModel>): void;
+  [InvitationsMutationsEnum.CREATE_INVITATION](state: S, payload: any): void;
 };
 
 export interface Actions {
