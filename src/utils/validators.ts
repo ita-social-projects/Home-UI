@@ -58,7 +58,7 @@ export const passwordValidator = helpers.withMessage(
 export const passwordMaxLenght = helpers.withMessage(lengthMessage(128, 'max'), maxLength(128));
 export const passwordMinLenght = helpers.withMessage(lengthMessage(8, 'min'), minLength(8));
 
-export const edrpouValidator = helpers.withMessage('Код ЄДРПОУ складається з 8 цифр', validEdrpou);
+export const edrpouValidator = helpers.withMessage(lengthMessage(8, 'max'), validEdrpou);
 export const ibanValidator = helpers.withMessage('Складається з літр UA та 27 цифр', validIban);
 export const zipCodeValidator = helpers.withMessage(correctNumberMessage('5'), validZipCode);
 
@@ -79,7 +79,7 @@ export const houseNumAndHouseBlockValidator = helpers.withMessage(
 );
 export const regionCityDistrictMaxLength = helpers.withMessage(lengthMessage(50, 'max'), maxLength(50));
 export const streetMaxLength = helpers.withMessage(lengthMessage(25, 'max'), maxLength(25));
-export const houseBlockAndNumberMaxLength = helpers.withMessage(lengthMessage(10, 'max'), maxLength(10));
+export const houseBlockHouseNumberMaxLength = helpers.withMessage(lengthMessage(10, 'max'), maxLength(10));
 
 export const apartmentAreaValidator = helpers.withMessage('Площа має бути від 10 до 1000 м.кв', validApartmentArea);
 export const apartmentDecimalValidator = helpers.withMessage('Не більше 2 значень після крапки', validApartmentDecimal);

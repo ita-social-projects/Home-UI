@@ -59,6 +59,7 @@
           <form @submit.prevent class="add__contact">
             <input-text class="phone-input" disabled v-if="typeContact === String" :placeholder="placeholderValue" />
             <input-text
+              id="phone-input"
               class="phone-input"
               v-else-if="typeContact.name === 'Телефон'"
               placeholder="Телефон"
@@ -117,8 +118,8 @@
               <td>Основний</td>
               <td class="td__phone">{{ userInfo.email }}</td>
             </tr>
-            <template v-if="userInfo.contacts.length">
-              <tr v-for="contact in userInfo.contacts" :key="contact.id">
+            <template v-if="userInfo.contacts">
+              <tr class="contact-tr" v-for="contact in userInfo.contacts" :key="contact.id">
                 <td>{{ contact.type === 'email' ? 'Пошта' : 'Телефон' }}</td>
                 <td>{{ contact.main === false ? 'Додатковий' : 'Основний' }}</td>
                 <td>{{ contact.type === 'email' ? contact.email : contact.phone }}</td>
@@ -165,13 +166,13 @@ import { mapGetters } from 'vuex';
 import { RoutesEnum } from '@/router/types';
 import {
   requiredValidator,
-  userNameValidator,
+  ukrLangTitleValidator,
   someTitleLenghtValidator,
   emailValidator,
   emailMinLength,
   emailMaxLength,
-  userPhoneValidator,
-} from '@/utils/validators';
+  userPhoneValidator
+} from "@/utils/validators";
 import useVuelidate from '@vuelidate/core';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -179,11 +180,7 @@ import Dropdown from 'primevue/dropdown';
 import { helpers, requiredIf } from '@vuelidate/validators';
 
 import { StoreModuleEnum } from '@/store/types';
-import {
-  AuthActionEnum,
-  AuthMutationEnum,
-  AuthGettersEnum,
-} from '@/store/authorization/types';
+import { AuthActionEnum, AuthMutationEnum, AuthGettersEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
@@ -220,28 +217,24 @@ export default defineComponent({
       userContacts: [] as any,
     };
   },
-  async mounted() {
-    const userData = JSON.parse(localStorage.getItem('user') || '{}');
-    await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
-    this.firstName = this.userInfo.firstName;
-    this.middleName = this.userInfo.middleName;
-    this.lastName = this.userInfo.lastName;
+  mounted() {
+    this.setData();
   },
   validations() {
     return {
       firstName: {
         requiredValidator,
-        userNameValidator,
+        ukrLangTitleValidator,
         someTitleLenghtValidator,
       },
       middleName: {
         requiredValidator,
-        userNameValidator,
+        ukrLangTitleValidator,
         someTitleLenghtValidator,
       },
       lastName: {
         requiredValidator,
-        userNameValidator,
+        ukrLangTitleValidator,
         someTitleLenghtValidator,
       },
       inputValue: {
@@ -269,6 +262,13 @@ export default defineComponent({
     };
   },
   methods: {
+    async setData() {
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
+      this.firstName = this.userInfo.firstName;
+      this.middleName = this.userInfo.middleName;
+      this.lastName = this.userInfo.lastName;
+    },
     updateName(e: any) {
       this.newUpdateData = { ...this.newUpdateData, firstName: e.target.value };
     },
