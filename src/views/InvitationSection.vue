@@ -2,6 +2,7 @@
   <div class="add_btn">
     <CreateInvitation></CreateInvitation>
   </div>
+
   <div class="container">
     <h1 class="page-title">{{ title }}</h1>
     <div class="container-invitations">
@@ -16,7 +17,7 @@
         <Column field="address" style="min-width: 25rem" header="Адреса" :sortable="true">
           <template #body="slotProps">
             {{ slotProps.data.apartment.address.street }}, {{ slotProps.data.apartment.address.houseBlock }},
-            {{ slotProps.data.apartment.address.houseNumber }},
+            {{ slotProps.data.apartment.address.houseNumber }}
           </template>
         </Column>
         <Column field="status" style="min-width: 15rem" header="Статус" :sortable="true" />

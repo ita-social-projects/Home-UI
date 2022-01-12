@@ -118,7 +118,7 @@ import Dropdown from 'primevue/dropdown';
 import useVuelidate from '@vuelidate/core';
 import { StoreModuleEnum } from '@/store/types';
 import { mapGetters } from 'vuex';
-import { ApartmentsActionsEnum } from '@/store/apartments/types';
+import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
 import {
   requiredValidator,
   emailValidator,
@@ -126,8 +126,9 @@ import {
   emailMaxLength,
   emailLastCharsValidator,
 } from '@/utils/validators';
-import { InvitationsActionsEnum } from '@/store/invitations/types';
-import { HousesActionsEnum } from '@/store/houses/types';
+import { InvitationsActionsEnum, InvitationTypesEnum } from '@/store/invitations/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
+import { CooperationGettersEnum } from '@/store/cooperation/types';
 
 export default defineComponent({
   name: 'CreateInvitationButton',
@@ -140,21 +141,21 @@ export default defineComponent({
   data() {
     return {
       invitationData: {
-        invitationType: ['apartment', 'cooperation'],
+        invitationType: [`${InvitationTypesEnum.cooperation}`, `${InvitationTypesEnum.apartment}`],
         email: '',
         listOfHouses: [],
         listOfApartments: [],
       },
       selectedData: {
-        selectedHouse: '',
         selectedType: '',
+        selectedHouse: '',
         selectedApartment: '',
       },
       displayCreateInvitModal: false,
 
-      houseAddress: '',
-      apartmentNumber: '',
       apartmentId: 0,
+      apartmentData: '',
+      houseAddress: '',
 
       v$: useVuelidate(),
     };
@@ -165,9 +166,9 @@ export default defineComponent({
         email: { requiredValidator, emailValidator, emailMinLength, emailMaxLength, emailLastCharsValidator },
       },
       selectedData: {
-        selectedApartment: { requiredValidator },
         selectedHouse: { requiredValidator },
         selectedType: { requiredValidator },
+        selectedApartment: { requiredValidator },
       },
     };
   },
@@ -186,16 +187,19 @@ export default defineComponent({
     },
     async createInvitation(): Promise<void> {
       const payload = {
-        invitationType: this.selectedData.selectedType,
+        type: this.selectedData.selectedType,
         email: this.invitationData.email,
         cooperationId: this.cooperationId,
-        // address: `${this.houseAddress}, ${this.apartmentNumber}`,
+        apartmentId: this.apartmentId,
         role: 'user',
       };
 
       await this.$store.dispatch(
         `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`,
         payload
+      );
+      await this.$store.dispatch(
+        `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.SET_APARTMENT_INVITATIONS}`
       );
 
       this.resetHouseDataFields(this.selectedData);
@@ -207,15 +211,15 @@ export default defineComponent({
         data[field] = '';
       }
     },
-    async onChangeHouse(houseId: number, houseData: string): Promise<void> {
-      this.houseAddress = houseData;
+    async onChangeHouse(houseId: number, houseData: any): Promise<void> {
       this.selectedData.selectedApartment = '';
+      this.houseAddress = houseData;
 
       await this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENTS}`, houseId);
     },
-    onChangeApartment(apartmentId: number, apartmentData: string): void {
+    onChangeApartment(apartmentId: number, apartmentData: any): void {
       this.apartmentId = apartmentId;
-      this.apartmentNumber = apartmentData;
+      this.apartmentData = apartmentData;
     },
   },
   computed: {
@@ -223,10 +227,18 @@ export default defineComponent({
       return this.displayCreateInvitModal;
     },
     ...mapGetters({
-      listOfHouses: `${StoreModuleEnum.housesStore}/getListOfHouses`,
-      listOfApartments: `${StoreModuleEnum.apartmentsStore}/getListOfApartments`,
-      cooperationId: `${StoreModuleEnum.cooperationStore}/getSelectedCooperationId`,
+      listOfHouses: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getListOfHouses}`,
+      listOfApartments: `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getListOfApartments}`,
+      cooperationId: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`,
     }),
+  },
+  created() {
+    this.$store.watch(
+      (state) => state.invitationsStore.invitations,
+      () => {
+        console.log('(component) links changed!');
+      }
+    );
   },
 });
 </script>
