@@ -112,7 +112,10 @@ export default defineComponent({
     },
 
     deleteInvitation() {
-      this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/DEL_INVITATION`, this.invitationInfo);
+      this.$store.dispatch(
+        `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.DEL_INVITATION}`,
+        this.invitationInfo
+      );
     },
   },
   computed: {
