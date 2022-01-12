@@ -15,9 +15,7 @@
         :badge-counter="notifications"
       />
       <BaseSidebarNavButton :link="cooperationInfoPath" btn-text="Управління ОСББ" icon="pi-inbox" />
-      <BaseSidebarNavButton :link="cooperationInfoPath + 'select'" btn-text="Вибір ОСББ" icon="pi-bookmark" />
       <BaseSidebarNavButton :link="invitationsPath" btn-text="Запрошення" icon="pi-globe" />
-
       <BaseSidebarNavButton
         :link="pollsPath"
         btn-text="Опитування"

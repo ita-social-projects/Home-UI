@@ -1,7 +1,7 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { InvitationsStateInterface } from '@/store/invitations/types';
-// import { getters } from '@/store/invitations/getters';
+import { getters } from '@/store/invitations/getters';
 import { actions } from '@/store/invitations/actions';
 import { mutations } from '@/store/invitations/mutations';
 
@@ -14,5 +14,5 @@ export const invitationsStore: Module<InvitationsStateInterface, RootStateInterf
   state,
   actions,
   mutations,
-  // getters,
+  getters,
 };
