@@ -9,12 +9,17 @@
         <template #header>
           <span class="p-input-icon-right search-field">
             <i class="pi pi-search" />
-            <InputText placeholder="Введіть номер квартири" />
+            <InputText placeholder="Введіть електронну адресу" />
           </span>
         </template>
         <Column field="email" style="min-width: 20rem" header="Email" :sortable="true" />
-        <Column field="address" style="min-width: 25rem" header="Адреса" :sortable="true" />
-        <Column field="invitationStatus" style="min-width: 15rem" header="Статус" :sortable="true" />
+        <Column field="address" style="min-width: 25rem" header="Адреса" :sortable="true">
+          <template #body="slotProps">
+            {{ slotProps.data.apartment.address.street }}, {{ slotProps.data.apartment.address.houseBlock }},
+            {{ slotProps.data.apartment.address.houseNumber }},
+          </template>
+        </Column>
+        <Column field="status" style="min-width: 15rem" header="Статус" :sortable="true" />
         <Column style="min-width: 10rem" header="Опції">
           <template #body="slotProps">
             <Button
@@ -42,7 +47,8 @@ import Column from 'primevue/column';
 import Menu from 'primevue/menu';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
-import { InvitationsStateInterface, InvitationsGettersEnum } from '@/store/invitations/types';
+import { InvitationsGettersEnum, InvitationsActionsEnum } from '@/store/invitations/types';
+import { mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'InvitationSection',
@@ -56,7 +62,6 @@ export default defineComponent({
   data() {
     return {
       title: 'Список запрошень',
-      invitations: [] as Array<InvitationsStateInterface>,
       invitationActions: () => {
         return [
           {
@@ -71,17 +76,20 @@ export default defineComponent({
       },
     };
   },
-  created() {
-    this.getInvitations();
+  async mounted() {
+    await this.$store.dispatch(
+      `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.SET_APARTMENT_INVITATIONS}`
+    );
   },
   methods: {
     toggle(event: Event) {
       (this.$refs.menu as any).toggle(event);
     },
-    getInvitations() {
-      this.invitations =
-        this.$store.getters[`${StoreModuleEnum.invitationsStore}/${InvitationsGettersEnum.getInvitations}`];
-    },
+  },
+  computed: {
+    ...mapGetters({
+      invitations: `${StoreModuleEnum.invitationsStore}/${InvitationsGettersEnum.getInvitations}`,
+    }),
   },
 });
 </script>

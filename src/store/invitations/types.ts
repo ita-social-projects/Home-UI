@@ -2,11 +2,11 @@ import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 
 export enum InvitationsMutationsEnum {
-  GET_ALL_INVITATIONS = 'GET_ALL_INVITATIONS',
+  SET_APARTMENT_INVITATIONS = 'SET_APARTMENT_INVITATIONS',
 }
 
 export enum InvitationsActionsEnum {
-  GET_ALL_INVITATIONS = 'GET_ALL_INVITATIONS',
+  SET_APARTMENT_INVITATIONS = 'SET_APARTMENT_INVITATIONS',
 }
 
 export enum InvitationsGettersEnum {
@@ -14,28 +14,38 @@ export enum InvitationsGettersEnum {
 }
 
 export interface InvitationInterface {
+  type: string;
   email: string;
-  address: string;
   status: string;
   id: number;
+  apartment: ApartmentInterface;
 }
 
-// export interface AddressInterface {
-//   street: string;
-//   houseBlock: string;
-//   houseNumber: string;
-// }
+export interface ApartmentInterface {
+  apartmentNumber: string;
+  address: AddressInterface;
+  id: number;
+}
+export interface AddressInterface {
+  region: string;
+  city: string;
+  district: string;
+  street: string;
+  houseBlock: string;
+  houseNumber: string;
+  zipCode: string;
+}
 
 export interface InvitationsStateInterface {
   invitations: Array<InvitationInterface>;
 }
 
 export type Mutations<S = InvitationsStateInterface> = {
-  [InvitationsMutationsEnum.GET_ALL_INVITATIONS](state: S, payload: Array<InvitationInterface>): void;
+  [InvitationsMutationsEnum.SET_APARTMENT_INVITATIONS](state: S, payload: Array<InvitationInterface>): void;
 };
 
 export interface Actions {
-  [InvitationsActionsEnum.GET_ALL_INVITATIONS](
+  [InvitationsActionsEnum.SET_APARTMENT_INVITATIONS](
     { commit }: AugmentedActionContext,
     payload: Array<InvitationInterface>
   ): void;
