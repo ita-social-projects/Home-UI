@@ -49,6 +49,7 @@ export interface UpdateUserInterface {
   contacts: UserContactInterface[];
 }
 
+
 export interface UpdateUserFullNameInterface {
   firstName: string;
   middleName: string;

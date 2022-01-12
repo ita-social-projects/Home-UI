@@ -10,6 +10,7 @@ export enum RoutesEnum {
   ApartmentInfo = '/main/cooperation/:id/:apartment',
   Polls = '/main/polls',
   InvitationSection = '/main/invitations',
+  PageErrorInvintation = '/broken-link',
 
   NotFound = '/:catchAll(.*)',
 }

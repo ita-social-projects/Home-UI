@@ -1,30 +1,29 @@
 <template>
-  <div class="page-wrap">
-    <div class="logo"></div>
-    <main>
-      <div class="message">
-        <h1>404</h1>
-        <h3>За вашим запитом не знайдено жодної сторінки :(</h3>
-        <h4>Будь ласка, скористайтеся посиланнями для навігації</h4>
-      </div>
-      <nav>
-        <router-link to="/main">Головна <span class="pi pi-arrow-right" /></router-link>
-        <router-link v-if="!isLoggedIn" to="/login">Увійти <span class="pi pi-arrow-right" /></router-link>
-        <router-link to="/register-cooperation"
-          >Зареєструвати об'єднання <span class="pi pi-arrow-right"
-        /></router-link>
-      </nav>
-    </main>
-  </div>
+  <ErrorPage :errorNumber="errorNumber" :errorMessage="errorMessage" :decision="decision">
+    <nav>
+      <router-link to="/main">Головна <span class="pi pi-arrow-right" /></router-link>
+      <router-link v-if="!isLoggedIn" to="/login">Увійти <span class="pi pi-arrow-right" /></router-link>
+      <router-link to="/register-cooperation">Зареєструвати об'єднання <span class="pi pi-arrow-right" /></router-link>
+    </nav>
+  </ErrorPage>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { StoreModuleEnum } from '@/store/types';
+import ErrorPage from '@/components/ErrorPage.vue';
 import { AuthGettersEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'PageNotFound',
+  components: { ErrorPage },
+  data() {
+    return {
+      errorNumber: '404',
+      errorMessage: 'За вашим запитом не знайдено жодної сторінки :(',
+      decision: 'Будь ласка, скористайтеся посиланнями для навігації',
+    };
+  },
   computed: {
     isLoggedIn(): boolean {
       return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.loggedIn}`];
@@ -34,76 +33,34 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.page-wrap {
-  position: relative;
-  @include flex-custom(center);
-  width: 100%;
-  height: 100%;
-  padding: 0 3em;
+nav {
+  @include flex-custom(center, flex-start, column nowrap);
+  padding: 1em 0;
 
-  .logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.06;
-    background: url('../assets/logo.svg') no-repeat center/90%;
-    filter: hue-rotate(90deg) grayscale(60%) blur(4px);
-    z-index: -1;
-  }
-}
+  a {
+    @include flex-center-all();
+    font-size: 2em;
+    font-weight: 300;
+    color: $main-btn-background-color;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    transition: color 0.6s;
+    user-select: none;
+    -webkit-user-drag: none;
 
-.page-wrap main {
-  background-color: #00000016;
-  padding: 0 3em 3em;
-  margin: 2em;
-  border-radius: 1em;
-  box-shadow: 2px 2px 3px #00000030;
-
-  nav {
-    @include flex-custom(center, flex-start, column nowrap);
-    padding: 1em 0;
-
-    a {
-      @include flex-center-all();
-      font-size: 2em;
-      font-weight: 300;
-      color: $main-btn-background-color;
-      text-decoration: none;
-      border-bottom: 3px solid transparent;
-      transition: color 0.6s;
-      user-select: none;
-      -webkit-user-drag: none;
-
-      span {
-        margin: 0 0 0 1em;
-        transition: all 0.6s;
-      }
-
-      &:hover {
-        color: $hover-btn-background-color;
-        border-bottom: 3px solid;
-      }
-
-      &:active span {
-        transform: translateX(2em);
-      }
+    span {
+      margin: 0 0 0 1em;
+      transition: all 0.6s;
     }
-  }
-}
 
-.message {
-  @include flex-center-all-column();
+    &:hover {
+      color: $hover-btn-background-color;
+      border-bottom: 3px solid;
+    }
 
-  h1 {
-    font-size: 18rem;
-    margin: 0;
-  }
-
-  h3,
-  h4 {
-    margin: 0.5em;
+    &:active span {
+      transform: translateX(2em);
+    }
   }
 }
 </style>
