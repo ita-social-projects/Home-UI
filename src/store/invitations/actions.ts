@@ -16,9 +16,14 @@ export const actions: ActionTree<InvitationsStateInterface, RootStateInterface> 
     try {
       const payloadToSend = new PostInvitationDTOModel(payload);
       const { data } = await HTTP.post(`/invitations/create-invitation`, payloadToSend);
-      const receivedData = new InvitationModel(data);
+      // const receivedData = new InvitationModel(data);
 
-      commit(InvitationsMutationsEnum.CREATE_INVITATION, receivedData);
+      // const newInvintation = {
+      //   ...receivedData,
+      //   ...payload[1],
+      // };
+
+      // commit(InvitationsMutationsEnum.CREATE_INVITATION, newInvintation);
     } catch (err: any) {
       console.log('error CREATE_INVITATION', err);
     }

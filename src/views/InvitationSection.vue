@@ -1,6 +1,21 @@
 <template>
-  <div class="add_btn">
-    <CreateInvitation></CreateInvitation>
+  <div class="create_btn">
+    <Button
+      label="Створити запрошення"
+      icon="pi pi-pencil"
+      class="p-button-outlined p-button-info"
+      @click="this.displayCreateInvitModal = true"
+    />
+    <Dialog
+      header="Створити запрошення"
+      v-model:visible="displayModal"
+      :style="{ width: '600px' }"
+      :modal="true"
+      :closable="false"
+      :dismissableMask="true"
+    >
+      <CreateInvitationForm @close-invit-model="this.displayCreateInvitModal = false"></CreateInvitationForm>
+    </Dialog>
   </div>
 
   <div class="container">
@@ -46,7 +61,8 @@ import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
-import CreateInvitation from '@/components/CreateInvitation.vue';
+import Dialog from 'primevue/dialog';
+import CreateInvitationForm from '@/components/CreateInvitationForm.vue';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
 import { InvitationsGettersEnum, InvitationsActionsEnum } from '@/store/invitations/types';
@@ -59,8 +75,9 @@ export default defineComponent({
     DataTable,
     Column,
     Menu,
-    CreateInvitation,
+    CreateInvitationForm,
     InputText,
+    Dialog,
   },
   data() {
     return {
@@ -77,6 +94,7 @@ export default defineComponent({
           },
         ];
       },
+      displayCreateInvitModal: false,
     };
   },
   async mounted() {
@@ -93,6 +111,9 @@ export default defineComponent({
     ...mapGetters({
       invitations: `${StoreModuleEnum.invitationsStore}/${InvitationsGettersEnum.getInvitations}`,
     }),
+    displayModal(): boolean {
+      return this.displayCreateInvitModal;
+    },
   },
 });
 </script>
@@ -111,7 +132,7 @@ export default defineComponent({
     margin: 10px;
   }
 }
-.add_btn {
+.create_btn {
   display: flex;
   margin: 15px;
   justify-content: flex-end;

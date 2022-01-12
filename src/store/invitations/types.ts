@@ -59,7 +59,7 @@ export interface PostInvitationInterface {
 }
 
 export type Mutations<S = InvitationsStateInterface> = {
-  [InvitationsMutationsEnum.CREATE_INVITATION](state: S, payload: InvitationModel): void;
+  [InvitationsMutationsEnum.CREATE_INVITATION](state: S, payload: any): void;
   [InvitationsMutationsEnum.SET_APARTMENT_INVITATIONS](state: S, payload: Array<InvitationModel>): void;
 };
 
@@ -68,10 +68,7 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: Array<InvitationModel>
   ): void;
-  [InvitationsActionsEnum.CREATE_INVITATION](
-    { commit }: AugmentedActionContext,
-    payload: PostInvitationInterface
-  ): void;
+  [InvitationsActionsEnum.CREATE_INVITATION]({ commit }: AugmentedActionContext, payload: any): void;
 }
 
 export type Getters<S = InvitationsStateInterface> = {
