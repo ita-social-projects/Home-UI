@@ -35,13 +35,9 @@ export interface UserInterface {
   lastName: string;
   email: string;
   id: number;
-<<<<<<< HEAD
-  contacts: ContactInterface[];
-=======
   contacts?: UserContactInterface[];
   error?: string | null;
   success?: string;
->>>>>>> feature_121/invitation_section
 }
 
 export interface UpdateUserInterface {
@@ -53,19 +49,11 @@ export interface UpdateUserInterface {
   contacts: UserContactInterface[];
 }
 
-<<<<<<< HEAD
-export interface ContactInterface {
-  type: ContactTypeEnum;
-  main: boolean;
-  email?: string;
-  phone?: number;
-  id?: number;
-=======
+
 export interface UpdateUserFullNameInterface {
   firstName: string;
   middleName: string;
   lastName: string;
->>>>>>> feature_121/invitation_section
 }
 
 export interface UserCredentialInterface {
