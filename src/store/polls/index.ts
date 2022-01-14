@@ -5,19 +5,18 @@ import { getters } from '@/store/polls/getters';
 import { mutations } from '@/store/polls/mutations';
 import { actions } from '@/store/polls/actions';
 
-//{
-//     id: 5,
-//     header: '',
-//     creationDate: '',
-//     completionDate: '',
-//     polledHouses: [],
-//     status: 'active',
-//     type: '',
-//   },
-
 export const state: PollsStateInterface = {
   cooperationPolls: [],
   selectedPoll: null,
+  getPollById: {
+    id: 0,
+    header: '',
+    creationDate: '',
+    completionDate: '',
+    polledHouses: [],
+    status: 'noStatus',
+    type: '',
+  },
   displayModal: false,
 };
 

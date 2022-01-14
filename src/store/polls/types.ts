@@ -17,6 +17,7 @@ export enum PollsActionEnum {
 export interface PollsStateInterface {
   cooperationPolls: Array<PollModel>;
   selectedPoll: null | PollModel;
+  getPollById: PollModel;
   displayModal: boolean;
 }
 
@@ -33,9 +34,10 @@ export interface Actions {
 export type Getters<S = PollsStateInterface> = {
   getPolls(state: S): Array<PollModel>;
   getSelectedPoll(state: S): null | PollModel;
+  getPollByID(state: S): PollModel;
 };
 
-export type PollStatusType = 'draft' | 'active' | 'completed' | 'suspended';
+export type PollStatusType = 'draft' | 'active' | 'completed' | 'suspended' | 'noStatus';
 
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;

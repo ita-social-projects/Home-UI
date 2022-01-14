@@ -67,10 +67,6 @@ export default defineComponent({
     },
   },
   async mounted() {
-    // await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_COOPERATION_POLLS}`);
-    // const data = this.$store.state.pollsStore.cooperationPolls;
-    // this.selectedPoll = data.filter((el: any) => el.id == this.id)[0];
-
     await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.GET_POll_BY_ID}`, this.id);
   },
   methods: {
@@ -80,7 +76,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      pollInfo: `${StoreModuleEnum.pollsStore}/getPolls`,
+      pollInfo: `${StoreModuleEnum.pollsStore}/getPollByID`,
     }),
     pollReadableStatus(): string {
       const statusMap: any = {

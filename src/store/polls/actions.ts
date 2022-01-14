@@ -26,8 +26,8 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
     try {
       const url = `/polls/${payload}`;
       const { data } = await HTTP.get(url);
-      console.log(data);
-      commit(PollsMutationEnum.GET_POll_BY_ID, data);
+      const pollByID = new PollModel(data);
+      commit(PollsMutationEnum.GET_POll_BY_ID, pollByID);
     } catch (e: any) {
       console.log(e.response);
     }

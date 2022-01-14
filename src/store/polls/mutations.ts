@@ -11,6 +11,6 @@ export const mutations: MutationTree<PollsStateInterface> & Mutations = {
   },
 
   [PollsMutationEnum.GET_POll_BY_ID]: (state, payload) => {
-    state.cooperationPolls = payload
+    state.getPollById = payload
   },
 };

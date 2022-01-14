@@ -12,6 +12,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { StoreModuleEnum } from "@/store/types";
+import { PollsActionEnum } from "@/store/polls/types";
 
 export default defineComponent({
   name: 'BaseSidebarNavButton',
