@@ -39,10 +39,6 @@ export default defineComponent({
   methods: {
     async setSelectedPoll(id: number) {
       await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_SELECTED_POLL}`, id);
-      await this.$router.push({
-        name: 'poll-info',
-        params: { id: this.cooperationPolls[0].id },
-      });
     },
   },
   computed: {

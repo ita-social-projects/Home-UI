@@ -1,5 +1,5 @@
 <template>
-  <article class="poll">
+  <article @click="openPageWithPollInfo(poll.id)" class="poll">
     <div class="header">{{ poll.header }}</div>
     <div class="poll-content">
       <div class="poll-field">
@@ -30,6 +30,14 @@ export default defineComponent({
     poll: {
       type: PollModel,
       required: true,
+    },
+  },
+  methods: {
+    openPageWithPollInfo(id: any) {
+      this.$router.push({
+        name: 'poll-info',
+        params: { id: id },
+      });
     },
   },
   computed: {

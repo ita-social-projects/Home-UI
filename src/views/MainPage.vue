@@ -31,7 +31,7 @@ export default defineComponent({
       const userData: UserModel = JSON.parse(user);
       this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.GET_DATA}`, userData.id);
     }
-    this.$router.push(RoutesEnum.Cooperation);
+    // this.$router.push(RoutesEnum.Cooperation);
   },
   computed: {
     userData() {

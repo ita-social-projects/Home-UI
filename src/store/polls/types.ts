@@ -5,11 +5,13 @@ import { PollModel } from '@/store/polls/models/poll.model';
 export enum PollsMutationEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',
   SET_SELECTED_POLL = 'SET_SELECTED_POLL',
+  GET_POll_BY_ID = 'GET_POll_BY_ID'
 }
 
 export enum PollsActionEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',
   SET_SELECTED_POLL = 'SET_SELECTED_POLL',
+  GET_POll_BY_ID = 'GET_POll_BY_ID'
 }
 
 export interface PollsStateInterface {

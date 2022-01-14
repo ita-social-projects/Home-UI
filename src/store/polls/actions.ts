@@ -21,4 +21,15 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
   [PollsActionEnum.SET_SELECTED_POLL]: ({ commit }, payload) => {
     commit(PollsMutationEnum.SET_SELECTED_POLL, payload);
   },
+
+  [PollsActionEnum.GET_POll_BY_ID]: async ({ commit }, payload) => {
+    try {
+      const url = `/polls/${payload}`;
+      const { data } = await HTTP.get(url);
+      console.log(data);
+      commit(PollsMutationEnum.GET_POll_BY_ID, data);
+    } catch (e: any) {
+      console.log(e.response);
+    }
+  },
 };
