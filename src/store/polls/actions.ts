@@ -7,9 +7,9 @@ import { PollModel } from '@/store/polls/models/poll.model';
 import { PollDTOModel } from '@/store/polls/models/pollDTO.model';
 
 export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Actions = {
-  [PollsActionEnum.SET_COOPERATION_POLLS]: async ({ commit }) => {
+  [PollsActionEnum.SET_COOPERATION_POLLS]: async ({ commit }, payload) => {
     try {
-      const url = `/cooperations/1/polls`;
+      const url = `/cooperations/${payload}/polls`;
 
       const { data } = await HTTP.get(url, { params: { page_size: 10, sort: 'id,asc' } });
       const cooperationPolls: Array<PollModel> = data.map((el: PollDTOModel) => new PollModel(el));

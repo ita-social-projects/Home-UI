@@ -12,6 +12,10 @@ export enum PollsActionEnum {
   SET_SELECTED_POLL = 'SET_SELECTED_POLL',
 }
 
+export enum PollsGettersEnum {
+  getPolls = 'getPolls',
+}
+
 export interface PollsStateInterface {
   cooperationPolls: Array<PollModel>;
   selectedPoll: null | PollModel;
@@ -24,12 +28,12 @@ export type Mutations<S = PollsStateInterface> = {
 };
 
 export interface Actions {
-  [PollsActionEnum.SET_COOPERATION_POLLS]({ commit }: AugmentedActionContext): void;
+  [PollsActionEnum.SET_COOPERATION_POLLS]({ commit }: AugmentedActionContext, payload: number): void;
   [PollsActionEnum.SET_SELECTED_POLL]({ commit }: AugmentedActionContext, payload: number): void;
 }
 
 export type Getters<S = PollsStateInterface> = {
-  getPolls(state: S): Array<PollModel>;
+  [PollsGettersEnum.getPolls](state: S): Array<PollModel>;
 };
 
 export type PollStatusType = 'draft' | 'active' | 'completed' | 'suspended';
