@@ -30,6 +30,7 @@ export interface Actions {
 
 export type Getters<S = PollsStateInterface> = {
   getPolls(state: S): Array<PollModel>;
+  getSelectedPoll(state: S): null | PollModel;
 };
 
 export type PollStatusType = 'draft' | 'active' | 'completed' | 'suspended';

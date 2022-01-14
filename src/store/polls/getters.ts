@@ -7,4 +7,7 @@ export const getters: GetterTree<PollsStateInterface, RootStateInterface> & Gett
   getPolls: (state) => {
     return state.cooperationPolls;
   },
+  getSelectedPoll: (state) => {
+    return state.selectedPoll;
+  },
 };
