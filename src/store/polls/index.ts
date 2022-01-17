@@ -8,7 +8,7 @@ import { actions } from '@/store/polls/actions';
 export const state: PollsStateInterface = {
   cooperationPolls: [],
   selectedPoll: null,
-  getPollById: {
+  pollById: {
     id: 0,
     header: '',
     creationDate: '',

@@ -11,11 +11,11 @@ export const mutations: MutationTree<PollsStateInterface> & Mutations = {
   },
 
   [PollsMutationEnum.GET_POll_BY_ID]: (state, payload) => {
-    state.getPollById = payload;
+    state.pollById = payload;
   },
 
   [PollsMutationEnum.CLEAR_POll_BY_ID]: (state) => {
-    state.getPollById = {
+    state.pollById = {
       id: 0,
       header: '',
       creationDate: '',

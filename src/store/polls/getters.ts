@@ -11,6 +11,6 @@ export const getters: GetterTree<PollsStateInterface, RootStateInterface> & Gett
     return state.selectedPoll;
   },
   getPollByID: (state) => {
-    return state.getPollById;
+    return state.pollById;
   },
 };

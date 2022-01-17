@@ -18,7 +18,7 @@ export enum PollsActionEnum {
 export interface PollsStateInterface {
   cooperationPolls: Array<PollModel>;
   selectedPoll: null | PollModel;
-  getPollById: PollModel;
+  pollById: PollModel;
   displayModal: boolean;
 }
 
