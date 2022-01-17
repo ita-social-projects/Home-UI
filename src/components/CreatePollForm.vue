@@ -1,49 +1,82 @@
 <template>
-  <form @submit.prevent="savePoll" id="poll_data_form">
+  <form @submit.prevent="createPoll()" id="poll_data_form">
     <div class="input-section">
       <label class="dialog-item" for="poll_title">Заголовок: </label>
-      <InputText class="input-poll" id="poll_title" placeholder="Заголовок" v-model="pollData.title" max="100" />
+      <InputText
+        class="input-poll"
+        id="poll_title"
+        placeholder="Заголовок"
+        v-model.trim="pollData.title"
+        :class="{
+          'p-invalid': v$.pollData.title.$error,
+        }"
+        @input="v$.pollData.title.$touch"
+      />
+      <small v-if="v$.pollData.title.$error" id="poll_title" class="p-error">{{
+        v$.pollData.title.$errors[0].$message
+      }}</small>
     </div>
     <div class="input-section">
-      <!-- <small v-if="v$.pollData.title.$error" id="apartment_number_help" class="p-error">{{
-        v$.pollData.title.$errors[0].$message
-      }}</small> -->
       <label class="dialog-item" for="poll_description">Опис: </label>
-      <Textarea id="poll_description" placeholder="Детальний опис" v-model="pollData.description" rows="8" max="1000" />
-      <!-- <small v-if="v$.pollData.description.$error" id="apartment_area_help" class="p-error">{{
+      <Textarea
+        id="poll_description"
+        placeholder="Детальний опис"
+        v-model.trim="pollData.description"
+        rows="8"
+        :class="{
+          'p-invalid': v$.pollData.description.$error,
+        }"
+        @input="v$.pollData.description.$touch"
+      />
+      <small v-if="v$.pollData.description.$error" id="poll_description" class="p-error">{{
         v$.pollData.description.$errors[0].$message
-      }}</small> -->
+      }}</small>
     </div>
     <div class="input-section">
       <label class="dialog-item" for="poll_question">Запитання: </label>
-      <Textarea id="poll_question" placeholder="Запитання" v-model="pollData.question" rows="4" />
-      <!-- <small v-if="v$.pollData.question.$error" id="apartment_area_help" class="p-error">{{
+      <Textarea
+        id="poll_question"
+        placeholder="Запитання"
+        v-model.trim="pollData.question"
+        rows="4"
+        :class="{
+          'p-invalid': v$.pollData.question.$error,
+        }"
+        @input="v$.pollData.question.$touch"
+      />
+      <small v-if="v$.pollData.question.$error" id="poll_question" class="p-error">{{
         v$.pollData.question.$errors[0].$message
-      }}</small> -->
+      }}</small>
     </div>
     <div class="input-section">
       <label class="dialog-item" for="poll_polledHouses">Список будинків: </label>
       <div class="checkbox-section">
         <div v-for="house of houses" :key="house.id" class="p-field-checkbox">
           <Checkbox :id="house.id" name="category" :value="house" v-model="pollData.polledHouses" />
-          <label class="house-label" :for="house?.address?.houseNumber">
+          <label class="house-label" :for="house.id">
             {{ house.address?.houseNumber }}, {{ house.address?.houseBlock }}, {{ house.address?.district }},
             {{ house.address?.street }}
           </label>
         </div>
       </div>
-      <!-- <small v-if="v$.pollData.description.$error" id="apartment_area_help" class="p-error">{{
-        v$.pollData.description.$errors[0].$message
-      }}</small> -->
+      <small v-if="v$.pollData.polledHouses.$error" id="poll_polledHouses" class="p-error">{{
+        v$.pollData.polledHouses.$errors[0].$message
+      }}</small>
     </div>
     <div class="input-section">
       <label class="dialog-item" for="caledar-begin">Дата початку:</label>
-      <Calendar id="caledar-begin" v-model="date3" :showIcon="true" />
+      <Calendar
+        id="caledar-begin"
+        v-model="pollData.creationDate"
+        :showIcon="true"
+        :minDate="minDate"
+        dateFormat="dd.mm.yy"
+      />
     </div>
     <div class="input-section">
       <label class="dialog-item" for="calendar-finish">Дата закінчення:</label>
       <!-- <small id="apartment_area_help" class="p-error">(виставляється автоматично на 15 днів)</small> -->
-      <Calendar id="calendar-finish" v-model="date3" :showIcon="true" />
+      <Calendar id="calendar-finish" v-model="pollData.completionDate" :showIcon="true" dateFormat="dd.mm.yy" />
     </div>
     <div class="button-div">
       <Button
@@ -52,8 +85,9 @@
         icon="pi pi-check"
         autofocus
         class="p-button-info"
-        type="button"
+        type="submit"
         value="Submit"
+        :disabled="v$.$invalid"
       />
       <Button
         id="cancel-button"
@@ -71,6 +105,10 @@ import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import {
   requiredValidator,
+  pollTitleLenghtValidator,
+  pollDescriptionLenghtValidator,
+  pollQuestionLenghtValidator,
+  cyrillicLangTitleValidator,
 } from '@/utils/validators';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -80,6 +118,7 @@ import Calendar from 'primevue/calendar';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { HouseModel } from '@/shared/models/house.model';
+import { PollsActionEnum } from '@/store/polls/types';
 
 export default defineComponent({
   name: 'CreatePollForm',
@@ -91,7 +130,7 @@ export default defineComponent({
     Calendar,
   },
   props: {
-    id: {
+    cooperationId: {
       type: Number,
       required: true,
     },
@@ -103,32 +142,65 @@ export default defineComponent({
         description: '',
         question: '',
         polledHouses: [],
+        creationDate: new Date(),
+        completionDate: new Date(),
       },
-      // selectedHouses: [],
       displayCreatePollModal: false,
+      minDate: new Date(),
+      submitted: false,
       v$: useVuelidate(),
     };
   },
   validations() {
     return {
       pollData: {
-        title: { requiredValidator },
-        description: { requiredValidator },
-        question: { requiredValidator },
+        title: { requiredValidator, pollTitleLenghtValidator, cyrillicLangTitleValidator },
+        description: { requiredValidator, pollDescriptionLenghtValidator, cyrillicLangTitleValidator },
+        question: { requiredValidator, pollQuestionLenghtValidator, cyrillicLangTitleValidator },
         polledHouses: { requiredValidator },
+        creationDate: { requiredValidator },
+        completionDate: { requiredValidator },
       },
     };
   },
+  created() {
+    this.$watch(
+      () => this.pollData.creationDate,
+      (newVal: Date) => {
+        this.pollData.completionDate = new Date();
+        this.pollData.completionDate.setDate(newVal.getDate() + 14);
+      }
+    );
+    this.minDate.setDate(this.minDate.getDate() + 1);
+  },
   methods: {
     cancelEditing() {
-      this.resetPollDataFields(this.pollData);
-      console.log(this.$props.id);
-      this.$emit('cancel-createPoll');
+      this.resetPollDataFields();
+      this.$emit('cancel-creating-poll');
     },
-    resetPollDataFields(pollData: any) {
-      for (let field in pollData) {
-        pollData[field] = '';
+    resetPollDataFields() {
+      this.pollData.title = '';
+      this.pollData.description = '';
+      this.pollData.question = '';
+      this.pollData.polledHouses = [];
+      this.pollData.creationDate = new Date();
+      this.pollData.completionDate = new Date();
+    },
+    async createPoll() {
+      const isFormValid = await this.v$.$validate();
+      console.log(isFormValid);
+      if (!isFormValid) {
+        return;
       }
+      const payload = {
+        cooperationId: this.$props.cooperationId,
+        ...this.pollData,
+      };
+      console.log(payload);
+      this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.ADD_COOPERATION_POLL}`, payload);
+      this.resetPollDataFields();
+      this.v$.$reset();
+      this.$emit('create-poll');
     },
   },
   computed: {
@@ -137,7 +209,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.$props.id);
+    this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.$props.cooperationId);
   },
 });
 </script>
@@ -162,7 +234,7 @@ export default defineComponent({
 .input-section {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 .checkbox-section {
   border: 1px solid #d4d4d8;

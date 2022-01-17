@@ -9,4 +9,7 @@ export const mutations: MutationTree<PollsStateInterface> & Mutations = {
     const index = state.cooperationPolls.findIndex((el) => el.id === payload);
     state.selectedPoll = state.cooperationPolls[index];
   },
+  [PollsMutationEnum.ADD_COOPERATION_POLL]: (state, payload) => {
+    state.cooperationPolls = [...state.cooperationPolls, payload];
+  },
 };

@@ -21,4 +21,15 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
   [PollsActionEnum.SET_SELECTED_POLL]: ({ commit }, payload) => {
     commit(PollsMutationEnum.SET_SELECTED_POLL, payload);
   },
+  [PollsActionEnum.ADD_COOPERATION_POLL]: async ({ commit }, payload) => {
+    try {
+      const body = new PollDTOModel(payload);
+      const url = `/cooperations/${payload.cooperationId}/polls`;
+
+      const { data } = await HTTP.post(url, body);
+      commit(PollsMutationEnum.ADD_COOPERATION_POLL, data);
+    } catch (e: any) {
+      console.log(e.response);
+    }
+  },
 };

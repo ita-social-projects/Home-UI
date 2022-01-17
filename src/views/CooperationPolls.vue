@@ -25,7 +25,11 @@
       :closable="false"
       :dismissableMask="true"
     >
-      <CreatePollForm :id="cooperationId" @cancel-createPoll="displayCreatePollForm = false" />
+      <CreatePollForm
+        :cooperationId="cooperationId"
+        @cancel-creating-poll="displayCreatePollForm = false"
+        @create-poll="displayCreatePollForm = false"
+      />
     </Dialog>
   </div>
 </template>
@@ -52,12 +56,12 @@ export default defineComponent({
   data() {
     return {
       displayCreatePollForm: false,
-    }
+    };
   },
   mounted() {
     this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_COOPERATION_POLLS}`, this.cooperationId);
   },
-  methods: {git 
+  methods: {
     setSelectedPoll(id: number) {
       this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_SELECTED_POLL}`, id);
     },

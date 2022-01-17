@@ -1,6 +1,7 @@
 import { helpers, required, minLength, maxLength } from '@vuelidate/validators';
 
 const ukrLangMessage = 'Це поле має містити українські літери';
+const cyrillicLangMessage = 'Це поле має містити літери кирилиці';
 
 const validEmail = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-\/=?^_`{|().,:;<>@[\]]+@[a-z\d.-]+\.[\w-]{2,4}$/i);
 const validEmailLastChars = helpers.regex(/^[a-z\d].*[a-z]$/i);
@@ -8,6 +9,7 @@ const validPassword = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8
 
 const validUserName = helpers.regex(/^[a-zA-Z0-9!#$%&'*+\-/=?^_`{|(),:;<>@[\]]*$/);
 const validUkranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]*$/);
+const validCyrillicLan = helpers.regex(/^[а-яА-Яа-щА-ЩЬьЮюЯяЇїІіЄєҐґ0-9!#$%&№'"*+\-/=?^_`{|(),:;.<>@[\]\\ ]*$/);
 
 const validEdrpou = helpers.regex(/^\d{8}$/);
 const validIban = helpers.regex(/^UA\d{27}$/);
@@ -91,3 +93,8 @@ export const flatQuantityAndAdjoiningAreaValidator = helpers.withMessage(
   'Це поле має містити цілі цифри',
   validFlatQuantityAndAdjoiningArea
 );
+
+export const pollTitleLenghtValidator = helpers.withMessage(lengthMessage(100, 'max'), maxLength(100));
+export const pollDescriptionLenghtValidator = helpers.withMessage(lengthMessage(1000, 'max'), maxLength(1000));
+export const pollQuestionLenghtValidator = helpers.withMessage(lengthMessage(250, 'max'), maxLength(250));
+export const cyrillicLangTitleValidator = helpers.withMessage(`${cyrillicLangMessage}`, validCyrillicLan);

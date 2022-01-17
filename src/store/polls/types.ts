@@ -5,11 +5,13 @@ import { PollModel } from '@/store/polls/models/poll.model';
 export enum PollsMutationEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',
   SET_SELECTED_POLL = 'SET_SELECTED_POLL',
+  ADD_COOPERATION_POLL = 'ADD_COOPERATION_POLL',
 }
 
 export enum PollsActionEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',
   SET_SELECTED_POLL = 'SET_SELECTED_POLL',
+  ADD_COOPERATION_POLL = 'ADD_COOPERATION_POLL',
 }
 
 export enum PollsGettersEnum {
@@ -25,11 +27,13 @@ export interface PollsStateInterface {
 export type Mutations<S = PollsStateInterface> = {
   [PollsMutationEnum.SET_COOPERATION_POLLS](state: S, payload: Array<PollModel>): void;
   [PollsMutationEnum.SET_SELECTED_POLL](state: S, payload: number): void;
+  [PollsMutationEnum.ADD_COOPERATION_POLL](state: S, payload: PollModel): void;
 };
 
 export interface Actions {
   [PollsActionEnum.SET_COOPERATION_POLLS]({ commit }: AugmentedActionContext, payload: number): void;
   [PollsActionEnum.SET_SELECTED_POLL]({ commit }: AugmentedActionContext, payload: number): void;
+  [PollsActionEnum.ADD_COOPERATION_POLL]({ commit }: AugmentedActionContext, payload: any): void;
 }
 
 export type Getters<S = PollsStateInterface> = {
