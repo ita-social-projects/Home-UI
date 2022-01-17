@@ -32,4 +32,24 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
       console.log(e.response);
     }
   },
+  [PollsActionEnum.DELETE_POLL]: async ({ commit }, payload) => {
+    try {
+      const url = `cooperations/${payload.cooperationId}/polls/${payload.pollId}`;
+      await HTTP.delete(url);
+      commit(PollsMutationEnum.DELETE_POLL, payload);
+    } catch (e: any) {
+      console.log(e.response);
+    }
+  },
+  [PollsActionEnum.UPDATE_POLL]: async ({ commit }, payload) => {
+    try {
+      console.log('data', payload);
+      const url = `cooperations/${payload.cooperationId}/polls/${payload.pollId}`;
+      const { data } = await HTTP.put(url);
+      console.log('data', data);
+      // commit(PollsMutationEnum.DELETE_POLL, data);
+    } catch (e: any) {
+      console.log(e.response);
+    }
+  },
 };
