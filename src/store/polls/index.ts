@@ -14,7 +14,7 @@ export const state: PollsStateInterface = {
     creationDate: '',
     completionDate: '',
     polledHouses: [],
-    status: 'noStatus',
+    status: 'active',
     type: '',
   },
   displayModal: false,

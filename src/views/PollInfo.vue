@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div v-show=pollInfo.header class="wrapper">
     <div class="container">
       <div class="card-poll">
         <div class="header">
@@ -54,7 +54,7 @@ import { defineComponent } from 'vue';
 import { StoreModuleEnum } from '@/store/types';
 import Button from 'primevue/button';
 import { RoutesEnum } from '@/router/types';
-import { PollsActionEnum } from '@/store/polls/types';
+import { PollsActionEnum, PollsMutationEnum } from "@/store/polls/types";
 import { mapGetters } from 'vuex';
 
 export default defineComponent({
@@ -74,6 +74,14 @@ export default defineComponent({
       this.$router.push(RoutesEnum.Polls);
     },
   },
+  watch: {
+    $route(to, from) {
+      if (to.path !== from.path) {
+        this.$store.commit(`${StoreModuleEnum.pollsStore}/${PollsMutationEnum.CLEAR_POll_BY_ID}`);
+      }
+    },
+  },
+
   computed: {
     ...mapGetters({
       pollInfo: `${StoreModuleEnum.pollsStore}/getPollByID`,

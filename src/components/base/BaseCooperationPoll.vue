@@ -47,7 +47,7 @@ export default defineComponent({
         active: 'Активне',
         completed: 'Завершене',
         suspended: 'sus pen ded',
-        noStatus: '',
+        // noStatus: '',
       };
       return statusMap[this.poll.status];
     },
