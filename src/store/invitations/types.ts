@@ -21,8 +21,8 @@ export enum InvitationsGettersEnum {
 }
 
 export enum InvitationTypesEnum {
-  cooperation = 'cooperation',
-  apartment = 'apartment',
+  cooperation = 'ОСББ',
+  apartment = 'Квартира',
 }
 
 export interface InvitationInterface {

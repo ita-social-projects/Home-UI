@@ -111,7 +111,7 @@ import {
   emailMaxLength,
   emailLastCharsValidator,
 } from '@/utils/validators';
-import { InvitationsActionsEnum, InvitationTypesEnum } from '@/store/invitations/types';
+import { InvitationsActionsEnum, InvitationTypesEnum, PostInvitationInterface } from '@/store/invitations/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 
@@ -171,12 +171,13 @@ export default defineComponent({
     },
     async createInvitation(): Promise<void> {
       const payload = {
-        type: this.selectedData.selectedType,
+        type: this.correctType(),
         email: this.invitationData.email,
         cooperationId: this.cooperationId,
         apartmentId: this.apartmentId,
         role: 'user',
-      };
+      } as PostInvitationInterface;
+
       const address = {
         houseAddress: this.getHousesData.filter((house: any) => house.id === this.houseId)[0].address,
       };
@@ -203,6 +204,13 @@ export default defineComponent({
     },
     onChangeApartment(apartmentId: number): void {
       this.apartmentId = apartmentId;
+    },
+    correctType() {
+      const statusMap: any = {
+        ОСББ: 'cooperation',
+        Квартира: 'apartment',
+      };
+      return statusMap[this.selectedData.selectedType];
     },
   },
   computed: {
