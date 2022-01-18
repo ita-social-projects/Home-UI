@@ -22,6 +22,15 @@
             {{ pollInfo.completionDate }}
           </div>
         </div>
+        <div v-if="pollInfo.status !== 'draft'" class="poll-content-data">
+          <div class="poll-content_name">
+            <strong>Кількість голосів:</strong>
+          </div>
+          <div class="poll-description">
+            <span class="poll-state yes">За: 10</span>
+            <span class="poll-state no">Проти: 7</span>
+          </div>
+        </div>
         <div class="poll-content-description">
           <div class="poll-content_name">
             <strong>Повний опис опитування:</strong>
@@ -122,21 +131,31 @@ export default defineComponent({
         font-weight: bold;
         margin-right: 15px;
       }
-      .poll-state {
-        padding: 0.4em 1em;
-        border-radius: 0.8em;
-        font-size: 15px;
-        &.draft {
-          background-color: rgba(122, 122, 125, 0.25);
-        }
+    }
+    .poll-state {
+      padding: 0.4em 1em;
+      border-radius: 0.8em;
+      font-size: 15px;
+      &.draft {
+        background-color: rgba(122, 122, 125, 0.25);
+      }
 
-        &.active {
-          background-color: rgba(59, 246, 78, 0.25);
-        }
+      &.active {
+        background-color: rgba(59, 246, 78, 0.25);
+      }
 
-        &.completed {
-          background-color: rgba(248, 157, 60, 0.25);
-        }
+      &.completed {
+        background-color: rgba(248, 157, 60, 0.25);
+      }
+      &.yes {
+        background-color: rgba(16, 197, 25, 0.85);
+        color: #fff;
+        margin-right: 20px;
+      }
+
+      &.no {
+        background-color: rgb(187, 13, 13);
+        color: #fff;
       }
     }
 
