@@ -6,6 +6,8 @@
         id="invitation_type"
         v-model="selectedData.selectedType"
         :options="invitationData.invitationType"
+        optionLabel="name"
+        optionValue="code"
         placeholder="Оберіть тип запрошення"
         :class="{
           'p-invalid': v$.selectedData.selectedType.$error,
@@ -126,7 +128,10 @@ export default defineComponent({
   data() {
     return {
       invitationData: {
-        invitationType: [`${InvitationTypesEnum.cooperation}`, `${InvitationTypesEnum.apartment}`],
+        invitationType: [
+          { name: `${InvitationTypesEnum.cooperation}`, code: 'cooperation' },
+          { name: `${InvitationTypesEnum.apartment}`, code: 'apartment' },
+        ],
         email: '',
         listOfHouses: [],
         listOfApartments: [],
@@ -171,12 +176,12 @@ export default defineComponent({
     },
     async createInvitation(): Promise<void> {
       const data = {
-        type: this.correctType(),
+        type: this.selectedData.selectedType,
         email: this.invitationData.email,
         cooperationId: this.cooperationId,
         apartmentId: this.apartmentId,
         role: 'admin',
-      } as PostInvitationInterface;
+      };
 
       const address = {
         houseAddress: this.getHousesData.filter((house: any) => house.id === this.houseId)[0].address,
@@ -204,19 +209,6 @@ export default defineComponent({
     },
     onChangeApartment(apartmentId: number): void {
       this.apartmentId = apartmentId;
-    },
-    correctType(): string {
-      const statusMap: any = {
-        cooperation: {
-          cooperationUkr: 'ОСББ',
-          cooperationEn: 'cooperation',
-        },
-        apartment: {
-          apartmentUkr: 'Квартира',
-          apartmentEn: 'apartment',
-        },
-      };
-      return statusMap[this.selectedData.selectedType];
     },
   },
   computed: {
