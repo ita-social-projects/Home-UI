@@ -170,7 +170,7 @@ export default defineComponent({
       this.$emit('close-invit-model');
     },
     async createInvitation(): Promise<void> {
-      const payload = {
+      const data = {
         type: this.correctType(),
         email: this.invitationData.email,
         cooperationId: this.cooperationId,
@@ -183,7 +183,7 @@ export default defineComponent({
       };
 
       await this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`, {
-        payload,
+        data,
         address,
       });
 
@@ -207,8 +207,14 @@ export default defineComponent({
     },
     correctType(): string {
       const statusMap: any = {
-        ОСББ: 'cooperation',
-        Квартира: 'apartment',
+        cooperation: {
+          cooperationUkr: 'ОСББ',
+          cooperationEn: 'cooperation',
+        },
+        apartment: {
+          apartmentUkr: 'Квартира',
+          apartmentEn: 'apartment',
+        },
       };
       return statusMap[this.selectedData.selectedType];
     },

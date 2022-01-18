@@ -25,6 +25,7 @@ export enum InvitationTypesEnum {
   apartment = 'Квартира',
 }
 
+export type InvintationType = 'cooperation' | 'apartment';
 export interface InvitationInterface {
   type: string;
   email: string;
