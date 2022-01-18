@@ -175,7 +175,7 @@ export default defineComponent({
         email: this.invitationData.email,
         cooperationId: this.cooperationId,
         apartmentId: this.apartmentId,
-        role: 'user',
+        role: 'admin',
       } as PostInvitationInterface;
 
       const address = {
