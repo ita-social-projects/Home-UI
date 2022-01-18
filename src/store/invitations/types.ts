@@ -19,8 +19,14 @@ export enum InvitationsGettersEnum {
 }
 
 export enum InvitationTypesEnum {
-  cooperation = 'cooperation',
-  apartment = 'apartment',
+  cooperation = 'ОСББ',
+  apartment = 'квартира',
+}
+
+export enum InvitationStatusEnum {
+  pending = 'очікує схвалення',
+  processing = 'запрошення створено',
+  accepted = 'запрошення прийнято',
 }
 
 export interface InvitationInterface {
