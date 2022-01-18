@@ -11,6 +11,7 @@ export const state: PollsStateInterface = {
   getPollById: {
     id: 0,
     header: '',
+    description: 'Full description',
     creationDate: '',
     completionDate: '',
     polledHouses: [],

@@ -5,6 +5,7 @@ import { PollsStateInterface, PollsActionEnum, PollsMutationEnum, Actions } from
 import { HTTP } from '@/core/api/http-common';
 import { PollModel } from '@/store/polls/models/poll.model';
 import { PollDTOModel } from '@/store/polls/models/pollDTO.model';
+import { PostPollDTOModel } from './models/put-pollDTO.model';
 
 export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Actions = {
   [PollsActionEnum.SET_COOPERATION_POLLS]: async ({ commit }) => {
@@ -43,11 +44,11 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
   },
   [PollsActionEnum.UPDATE_POLL]: async ({ commit }, payload) => {
     try {
-      console.log('data', payload);
-      const url = `cooperations/${payload.cooperationId}/polls/${payload.pollId}`;
-      const { data } = await HTTP.put(url);
-      console.log('data', data);
-      // commit(PollsMutationEnum.DELETE_POLL, data);
+      const pollToSend = new PostPollDTOModel(payload.payload);
+      const url = `cooperations/${payload.ids.cooperationId}/polls/${payload.ids.pollId}`;
+      const { data } = await HTTP.put(url, pollToSend);
+      const poll = new PollModel(data);
+      commit(PollsMutationEnum.DELETE_POLL, poll);
     } catch (e: any) {
       console.log(e.response);
     }
