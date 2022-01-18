@@ -29,6 +29,8 @@ export enum InvitationStatusEnum {
   accepted = 'запрошення прийнято',
 }
 
+export type InvitationStatusType = 'pending' | 'processing' | 'accepted';
+
 export interface InvitationInterface {
   type: string;
   email: string;
