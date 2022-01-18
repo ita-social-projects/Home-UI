@@ -205,7 +205,7 @@ export default defineComponent({
     onChangeApartment(apartmentId: number): void {
       this.apartmentId = apartmentId;
     },
-    correctType() {
+    correctType(): string {
       const statusMap: any = {
         ОСББ: 'cooperation',
         Квартира: 'apartment',
