@@ -51,6 +51,19 @@
         </Column>
       </DataTable>
     </div>
+    <Dialog
+      header="Шаблон запрошення"
+      v-model:visible="invitationTemplateModal"
+      :style="{ width: '600px' }"
+      :modal="true"
+      :closable="false"
+      :dismissableMask="true"
+    >
+      <InvitationTemplate
+        :propsInvitationData="this.invitationInfo"
+        @close-template-modal="this.invitationTemplateModal = false"
+      ></InvitationTemplate
+    ></Dialog>
   </div>
 </template>
 
@@ -64,8 +77,9 @@ import Dialog from 'primevue/dialog';
 import CreateInvitationForm from '@/components/CreateInvitationForm.vue';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
-import { InvitationsGettersEnum, InvitationsActionsEnum } from '@/store/invitations/types';
+import { InvitationsGettersEnum, InvitationsActionsEnum, InvitationInterface } from '@/store/invitations/types';
 import { mapGetters } from 'vuex';
+import InvitationTemplate from '@/components/InvitationTemplate.vue';
 
 export default defineComponent({
   name: 'InvitationSection',
@@ -77,6 +91,7 @@ export default defineComponent({
     CreateInvitationForm,
     InputText,
     Dialog,
+    InvitationTemplate,
   },
   data() {
     return {
@@ -93,10 +108,14 @@ export default defineComponent({
           {
             label: 'Використати як шаблон',
             icon: 'pi pi-user-edit',
+            command: () => {
+              this.displayInvitationTemplate();
+            },
           },
         ];
       },
       displayCreateInvitModal: false,
+      invitationTemplateModal: false,
       invitationInfo: {},
     };
   },
@@ -106,7 +125,7 @@ export default defineComponent({
     );
   },
   methods: {
-    toggle(event: any, data: any): void {
+    toggle(event: Event, data: InvitationInterface): void {
       this.invitationInfo = data;
       (this.$refs.menu as any).toggle(event);
     },
@@ -116,6 +135,9 @@ export default defineComponent({
         `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.DEL_INVITATION}`,
         this.invitationInfo
       );
+    },
+    displayInvitationTemplate() {
+      this.invitationTemplateModal = true;
     },
   },
   computed: {
