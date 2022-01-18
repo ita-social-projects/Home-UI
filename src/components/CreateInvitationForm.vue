@@ -116,7 +116,7 @@ import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 
 export default defineComponent({
-  name: 'CreateInvitationButton',
+  name: 'CreateInvitationForm',
   components: {
     Dialog,
     Button,
@@ -170,41 +170,20 @@ export default defineComponent({
       this.$emit('close-invit-model');
     },
     async createInvitation(): Promise<void> {
-      // how to do it better?
-
-      // To make a request to server to get house by id and share its as a payload to the first action
-
-      // const housePayload = {
-      //   cooperationId: this.cooperationId,
-      //   houseId: this.houseId,
-      // };
-
-      // await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, housePayload);
-
       const payload = {
         type: this.selectedData.selectedType,
         email: this.invitationData.email,
         cooperationId: this.cooperationId,
         apartmentId: this.apartmentId,
         role: 'user',
-      }; // which inteface the payload has? (disadvantage)
+      };
+      const address = {
+        houseAddress: this.getHousesData.filter((house: any) => house.id === this.houseId)[0].address,
+      };
 
-      // await this.$store.dispatch(
-      //   `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`,
-      //   payload
-      // );
-
-      // Or to dispatch action which gets all invitations (we have an error due to not being able to access fields (street, houseNumber and so on))
-      // but it works
-
-      await Promise.all([
-        this.$store.dispatch(
-          `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`,
-          payload
-        ),
-        this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.SET_APARTMENT_INVITATIONS}`),
-      ]).catch((e) => {
-        console.log('error: ', e);
+      await this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`, {
+        payload,
+        address,
       });
 
       this.resetHouseDataFields(this.selectedData);
@@ -216,7 +195,7 @@ export default defineComponent({
         data[field] = '';
       }
     },
-    async onChangeHouse(houseId: number, houseData: any): Promise<void> {
+    async onChangeHouse(houseId: number): Promise<void> {
       this.houseId = houseId;
       this.selectedData.selectedApartment = '';
 
@@ -231,7 +210,7 @@ export default defineComponent({
       listOfHouses: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getListOfHouses}`,
       listOfApartments: `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getListOfApartments}`,
       cooperationId: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`,
-      houseInfo: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`,
+      getHousesData: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
     }),
   },
 });

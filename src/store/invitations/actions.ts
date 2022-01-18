@@ -16,16 +16,16 @@ import { AxiosResponse } from 'axios';
 export const actions: ActionTree<InvitationsStateInterface, RootStateInterface> & Actions = {
   [InvitationsActionsEnum.CREATE_INVITATION]: async ({ commit }, payload) => {
     try {
-      const payloadToSend = new PostInvitationDTOModel(payload);
+      const payloadToSend = new PostInvitationDTOModel(payload.payload);
       const { data } = await HTTP.post(`/invitations/create-invitation`, payloadToSend);
-      // const receivedData = new InvitationModel(data);
+      const receivedData = new InvitationModel(data);
 
-      // const newInvintation = {
-      //   ...receivedData,
-      //   ...payload[1],
-      // };
+      const newInvintation = {
+        ...receivedData,
+        ...payload.address,
+      };
 
-      // commit(InvitationsMutationsEnum.CREATE_INVITATION, newInvintation);
+      commit(InvitationsMutationsEnum.CREATE_INVITATION, newInvintation);
     } catch (err: any) {
       console.log('error CREATE_INVITATION', err);
     }

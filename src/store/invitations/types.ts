@@ -64,7 +64,7 @@ export type Mutations<S = InvitationsStateInterface> = {
   [InvitationsMutationsEnum.GET_ALL_INVITATIONS](state: S, payload: Array<InvitationInterface>): void;
   [InvitationsMutationsEnum.DEL_INVITATION](state: S, payload: number): void;
   [InvitationsMutationsEnum.SET_APARTMENT_INVITATIONS](state: S, payload: Array<InvitationModel>): void;
-  // [InvitationsMutationsEnum.CREATE_INVITATION](state: S, payload: any): void;
+  [InvitationsMutationsEnum.CREATE_INVITATION](state: S, payload: any): void;
 };
 
 export interface Actions {
