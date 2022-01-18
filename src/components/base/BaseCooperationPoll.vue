@@ -23,6 +23,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { PollModel } from '@/store/polls/models/poll.model';
+import { PollStatusEnum, PollStatusType } from "@/store/polls/types";
 
 export default defineComponent({
   name: 'BaseCooperationPoll',
@@ -36,20 +37,14 @@ export default defineComponent({
     openPageWithPollInfo(id: any) {
       this.$router.push({
         name: 'poll-info',
-        params: { id: id },
+        params: { id },
       });
     },
   },
   computed: {
     pollReadableStatus(): string {
-      const statusMap = {
-        draft: 'Чернетка',
-        active: 'Активне',
-        completed: 'Завершене',
-        suspended: 'sus pen ded',
-        // noStatus: '',
-      };
-      return statusMap[this.poll.status];
+      const status: PollStatusType = this.poll.status;
+      return `${PollStatusEnum[status]}`;
     },
   },
 });

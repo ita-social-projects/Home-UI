@@ -41,6 +41,13 @@ export type Getters<S = PollsStateInterface> = {
   getPollByID(state: S): PollModel;
 };
 
+export enum PollStatusEnum {
+  draft = 'Чернетка',
+  active = 'Активне',
+  completed = 'Завершене',
+  suspended = 'sus pen ded',
+}
+
 export type PollStatusType = 'draft' | 'active' | 'completed' | 'suspended';
 
 export type AugmentedActionContext = {

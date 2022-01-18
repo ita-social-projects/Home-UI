@@ -1,4 +1,4 @@
-import { createLogger, MutationTree } from 'vuex';
+import { MutationTree } from 'vuex';
 import { PollsStateInterface, PollsMutationEnum, Mutations } from '@/store/polls/types';
 
 export const mutations: MutationTree<PollsStateInterface> & Mutations = {

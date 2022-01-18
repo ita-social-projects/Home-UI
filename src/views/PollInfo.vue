@@ -1,5 +1,5 @@
 <template>
-  <div v-show=pollInfo.header class="wrapper">
+  <div v-show="dataReady" class="wrapper">
     <div class="container">
       <div class="card-poll">
         <div class="header">
@@ -54,7 +54,7 @@ import { defineComponent } from 'vue';
 import { StoreModuleEnum } from '@/store/types';
 import Button from 'primevue/button';
 import { RoutesEnum } from '@/router/types';
-import { PollsActionEnum, PollsMutationEnum } from "@/store/polls/types";
+import { PollsActionEnum, PollsMutationEnum, PollStatusEnum, PollStatusType } from '@/store/polls/types';
 import { mapGetters } from 'vuex';
 
 export default defineComponent({
@@ -66,8 +66,14 @@ export default defineComponent({
       required: true,
     },
   },
+  data() {
+    return {
+      dataReady: false,
+    };
+  },
   async mounted() {
     await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.GET_POll_BY_ID}`, this.id);
+    this.dataReady = true;
   },
   methods: {
     returnAllPollsPage() {
@@ -87,13 +93,8 @@ export default defineComponent({
       pollInfo: `${StoreModuleEnum.pollsStore}/getPollByID`,
     }),
     pollReadableStatus(): string {
-      const statusMap: any = {
-        draft: 'Чернетка',
-        active: 'Активне',
-        completed: 'Завершене',
-        suspended: 'sus pen ded',
-      };
-      return statusMap[this.pollInfo.status];
+      const status: PollStatusType = this.pollInfo.status;
+      return `${PollStatusEnum[status]}`;
     },
   },
 });
