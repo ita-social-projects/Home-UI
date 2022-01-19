@@ -2,11 +2,12 @@
   <form @submit.prevent="createPoll()" id="poll_data_form">
     <div class="input-section">
       <label class="dialog-item" for="poll_title">Заголовок: </label>
-      <InputText
+      <Textarea
         class="input-poll"
         id="poll_title"
         placeholder="Заголовок"
         v-model.trim="pollData.title"
+        rows="3"
         :class="{
           'p-invalid': v$.pollData.title.$error,
         }"
@@ -33,22 +34,6 @@
       }}</small>
     </div>
     <div class="input-section">
-      <label class="dialog-item" for="poll_question">Запитання: </label>
-      <Textarea
-        id="poll_question"
-        placeholder="Запитання"
-        v-model.trim="pollData.question"
-        rows="4"
-        :class="{
-          'p-invalid': v$.pollData.question.$error,
-        }"
-        @input="v$.pollData.question.$touch"
-      />
-      <small v-if="v$.pollData.question.$error" id="poll_question" class="p-error">{{
-        v$.pollData.question.$errors[0].$message
-      }}</small>
-    </div>
-    <div class="input-section">
       <label class="dialog-item" for="poll_polledHouses">Список будинків: </label>
       <div class="checkbox-section">
         <div v-for="house of houses" :key="house.id" class="p-field-checkbox">
@@ -67,16 +52,20 @@
       <label class="dialog-item" for="caledar-begin">Дата початку:</label>
       <Calendar
         id="caledar-begin"
-        v-model="pollData.creationDate"
+        v-model="startDate"
         :showIcon="true"
         :minDate="minDate"
         dateFormat="dd.mm.yy"
+        @date-select="ChangeDate"
       />
+      <!-- <small v-if="v$.startDate.$error" id="caledar-begin" class="p-error">{{
+        v$.startDate.$errors[0].$message
+      }}</small> -->
     </div>
     <div class="input-section">
       <label class="dialog-item" for="calendar-finish">Дата закінчення:</label>
-      <!-- <small id="apartment_area_help" class="p-error">(виставляється автоматично на 15 днів)</small> -->
-      <Calendar id="calendar-finish" v-model="pollData.completionDate" :showIcon="true" dateFormat="dd.mm.yy" />
+      <InputText id="calendar-finish" :value="pollData.completionDate" disabled="true"></InputText>
+      <small id="apartment_area_help" class="p-warning">виставляється автоматично 15 днів з дати початку</small>
     </div>
     <div class="button-div">
       <Button
@@ -87,7 +76,6 @@
         class="p-button-info"
         type="submit"
         value="Submit"
-        :disabled="v$.$invalid"
       />
       <Button
         id="cancel-button"
@@ -107,11 +95,9 @@ import {
   requiredValidator,
   pollTitleLenghtValidator,
   pollDescriptionLenghtValidator,
-  pollQuestionLenghtValidator,
   cyrillicLangTitleValidator,
 } from '@/utils/validators';
 import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import Checkbox from 'primevue/checkbox';
 import Calendar from 'primevue/calendar';
@@ -119,15 +105,16 @@ import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { HouseModel } from '@/shared/models/house.model';
 import { PollsActionEnum } from '@/store/polls/types';
+import InputText from 'primevue/inputtext';
 
 export default defineComponent({
   name: 'CreatePollForm',
   components: {
     Button,
-    InputText,
     Textarea,
     Checkbox,
     Calendar,
+    InputText,
   },
   props: {
     cooperationId: {
@@ -140,11 +127,12 @@ export default defineComponent({
       pollData: {
         title: '',
         description: '',
-        question: '',
         polledHouses: [],
         creationDate: new Date(),
-        completionDate: new Date(),
+        completionDate: '',
       },
+      startDate: null,
+      finishDate: new Date(),
       displayCreatePollModal: false,
       minDate: new Date(),
       submitted: false,
@@ -156,22 +144,26 @@ export default defineComponent({
       pollData: {
         title: { requiredValidator, pollTitleLenghtValidator, cyrillicLangTitleValidator },
         description: { requiredValidator, pollDescriptionLenghtValidator, cyrillicLangTitleValidator },
-        question: { requiredValidator, pollQuestionLenghtValidator, cyrillicLangTitleValidator },
         polledHouses: { requiredValidator },
-        creationDate: { requiredValidator },
-        completionDate: { requiredValidator },
       },
     };
   },
   created() {
     this.$watch(
-      () => this.pollData.creationDate,
+      () => this.startDate,
       (newVal: Date) => {
-        this.pollData.completionDate = new Date();
-        this.pollData.completionDate.setDate(newVal.getDate() + 14);
+        if (newVal === null) {
+          this.pollData.completionDate = '';
+          return;
+        }
+        this.finishDate = new Date();
+        this.finishDate.setHours(0, 0, 0, 0);
+        this.finishDate.setDate(newVal.getDate() + 14);
+        this.pollData.completionDate = this.finishDate.toLocaleString('uk-UA').split(',')[0];
       }
     );
     this.minDate.setDate(this.minDate.getDate() + 1);
+    this.minDate.setHours(0, 0, 0, 0);
   },
   methods: {
     cancelEditing() {
@@ -181,10 +173,12 @@ export default defineComponent({
     resetPollDataFields() {
       this.pollData.title = '';
       this.pollData.description = '';
-      this.pollData.question = '';
       this.pollData.polledHouses = [];
       this.pollData.creationDate = new Date();
-      this.pollData.completionDate = new Date();
+      this.pollData.completionDate = '';
+    },
+    ChangeDate(value: any) {
+      this.pollData.creationDate = value;
     },
     async createPoll() {
       const isFormValid = await this.v$.$validate();
@@ -193,9 +187,24 @@ export default defineComponent({
         return;
       }
       const payload = {
-        cooperationId: this.$props.cooperationId,
-        ...this.pollData,
+        cooperationId: this.cooperationId,
+        body: {
+          polledHouses: this.pollData.polledHouses.reduce((acc: Array<any>, cur: HouseModel) => {
+            acc.push({
+              id: cur.id,
+            });
+            return acc;
+          }, []),
+          header: this.pollData.title,
+          description: this.pollData.description,
+          creationDate: '',
+          completionDate: '',
+        },
       };
+      if (this.startDate !== null) {
+        payload.body.creationDate = this.pollData.creationDate.toISOString();
+        payload.body.completionDate = this.finishDate.toISOString();
+      }
       console.log(payload);
       this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.ADD_COOPERATION_POLL}`, payload);
       this.resetPollDataFields();
@@ -218,6 +227,15 @@ export default defineComponent({
 %error-message {
   margin: 0.4em 0.5rem;
   width: 100%;
+}
+
+#calendar-finish {
+  width: 200px;
+}
+
+.p-disabled,
+.p-component:disabled {
+  opacity: 1;
 }
 
 .address-details {
@@ -256,6 +274,16 @@ export default defineComponent({
   @extend %error-message;
 }
 
+.p-warning {
+  display: flex;
+  position: absolute;
+  justify-content: left;
+  width: 200px;
+  color: #3B82F6;
+  margin: 25px 0 0 0;
+  @extend %error-message;
+}
+
 .house-label {
   padding-left: 10px;
 }
@@ -274,5 +302,8 @@ export default defineComponent({
 
 .p-calendar {
   width: 200px;
+}
+.p-monthpicker {
+  left: 590px;
 }
 </style>

@@ -23,11 +23,21 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
   },
   [PollsActionEnum.ADD_COOPERATION_POLL]: async ({ commit }, payload) => {
     try {
-      const body = new PollDTOModel(payload);
-      const url = `/cooperations/${payload.cooperationId}/polls`;
+      console.log(payload);
+      // const body = new PollDTOModel(payload.body);
 
+      //mock request
+      const body = {
+        header: payload.body.header,
+        completion_date: payload.body.completionDate,
+        houses: payload.body.polledHouses,
+        type: 'simple',
+      };
+      const url = `/cooperations/${payload.cooperationId}/polls`;
       const { data } = await HTTP.post(url, body);
-      commit(PollsMutationEnum.ADD_COOPERATION_POLL, data);
+
+      const newPoll: PollModel = new PollModel(data);
+      commit(PollsMutationEnum.ADD_COOPERATION_POLL, newPoll);
     } catch (e: any) {
       console.log(e.response);
     }
