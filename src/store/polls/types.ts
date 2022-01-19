@@ -35,6 +35,7 @@ export type Mutations<S = PollsStateInterface> = {
   [PollsMutationEnum.SET_COOPERATION_POLLS](state: S, payload: Array<PollModel>): void;
   [PollsMutationEnum.SET_SELECTED_POLL](state: S, payload: number): void;
   [PollsMutationEnum.DELETE_POLL](state: S, payload: any): void;
+  [PollsMutationEnum.UPDATE_POLL](state: S, payload: any): void;
 };
 
 export interface Actions {

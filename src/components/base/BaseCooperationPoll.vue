@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { callWithAsyncErrorHandling, defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 import { PollModel } from '@/store/polls/models/poll.model';
 import Button from 'primevue/button';
@@ -175,7 +175,11 @@ export default defineComponent({
     };
   },
   mounted() {
-    this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationId);
+    try {
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationId);
+    } catch {
+      console.log('error was caught during mounting BaseCooperationPoll');
+    }
   },
   methods: {
     async initData() {
@@ -197,15 +201,19 @@ export default defineComponent({
         params: { id: id },
       });
     },
+    checkStatus(status: string): boolean {
+      if (status === 'active') {
+        this.showFailOperation('видалено або редаговано');
+        return true;
+      }
+      return false;
+    },
     toggle(event: any): void {
       event.stopPropagation();
       (this.$refs.menu as any).toggle(event);
     },
     confirmDeletePoll(event: Event) {
-      if (this.$props.poll.status === 'active') {
-        this.showFailDelete();
-        return;
-      }
+      if (this.checkStatus(this.$props.poll.status)) return;
 
       this.$confirm.require({
         target: event.currentTarget,
@@ -219,8 +227,9 @@ export default defineComponent({
             cooperationId: this.cooperationId,
             pollId: this.$props.poll.id,
           };
+
           await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.DELETE_POLL}`, payload);
-          this.showSuccessDelete();
+          this.showSuccessOperation('видалено');
         },
         reject: () => {
           console.log('rejected delete', this.$props.poll.id);
@@ -228,17 +237,15 @@ export default defineComponent({
       });
     },
     openEditPollModal() {
-      if (this.$props.poll.status === 'active') {
-        this.showFailDelete();
-        return;
-      }
+      if (this.checkStatus(this.$props.poll.status)) return;
+
       this.displayEditPollModal = true;
       this.initData();
     },
     async editPoll() {
       const createDate = new Date('05 October 2022 14:48 UTC');
-      const compeDate = new Date('10 October 2022 14:48 UTC');
-      console.log('createDate', createDate);
+      const compeDate = new Date('12 October 2022 14:48 UTC');
+
       const payload = {
         header: this.pollData.title,
         description: this.pollData.description,
@@ -249,26 +256,26 @@ export default defineComponent({
       };
       const ids = { cooperationId: this.cooperationId, pollId: this.$props.poll.id };
 
-      console.log('payload', payload);
       await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.UPDATE_POLL}`, {
         payload,
         ids,
       });
+      this.showSuccessOperation('редаговано');
       this.displayEditPollModal = false;
     },
-    showSuccessDelete() {
+    showSuccessOperation(info: string) {
       this.$toast.add({
         severity: 'success',
         summary: 'Успішно',
-        detail: `Опитування успішно видалено!`,
+        detail: `Опитування успішно ${info}!`,
         life: 3000,
       });
     },
-    showFailDelete() {
+    showFailOperation(info: string) {
       this.$toast.add({
         severity: 'warn',
         summary: 'Запит відхилений',
-        detail: `На жаль, активне опитування не може бути видалено!`,
+        detail: `На жаль, активне опитування не може бути ${info}!`,
         life: 3000,
       });
     },

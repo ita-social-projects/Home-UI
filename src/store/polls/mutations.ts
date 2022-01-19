@@ -17,4 +17,15 @@ export const mutations: MutationTree<PollsStateInterface> & Mutations = {
     const updatePolls = state.cooperationPolls?.filter((el) => el.id !== payload.pollId);
     state.cooperationPolls = updatePolls;
   },
+  [PollsMutationEnum.UPDATE_POLL]: (state, payload) => {
+    state.cooperationPolls?.forEach((el) => {
+      if (el.id === payload.pollId) {
+        el.header = payload.poll.header;
+        el.description = payload.poll.description;
+        el.creationDate = payload.poll.creationDate;
+        el.completionDate = payload.poll.completionDate;
+        el.polledHouses = payload.poll.polledHouses;
+      }
+    });
+  },
 };
