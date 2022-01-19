@@ -47,9 +47,8 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
       const pollToSend = new PostPollDTOModel(payload.payload);
       const url = `cooperations/${payload.ids.cooperationId}/polls/${payload.ids.pollId}`;
       const { data } = await HTTP.put(url, pollToSend);
-      console.log('data', data);
       const poll = new PollModel(data);
-      console.log('poll', poll);
+
       commit(PollsMutationEnum.UPDATE_POLL, { poll, pollId: payload.ids.pollId });
     } catch (e: any) {
       console.log(e.response);

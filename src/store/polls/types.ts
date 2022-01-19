@@ -1,6 +1,7 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { PollModel } from '@/store/polls/models/poll.model';
+import { HouseModel } from '@/shared/models/house.model';
 
 export enum PollsMutationEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',
@@ -29,6 +30,15 @@ export interface PollsStateInterface {
   selectedPoll: null | PollModel;
   getPollById: PollModel;
   displayModal: boolean;
+}
+
+export interface PutPollInterface {
+  header: string;
+  description: string;
+  creationDate: string;
+  completionDate: string;
+  status: string;
+  polledHouses: Array<HouseModel>;
 }
 
 export type Mutations<S = PollsStateInterface> = {
