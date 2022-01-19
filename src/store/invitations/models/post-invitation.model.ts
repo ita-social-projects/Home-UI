@@ -1,4 +1,3 @@
-import { InvitationApartModel } from '@/store/invitations/models/invitationApart.model';
 import { PostInvitationDTOModel } from './post-invitation.DTOmodel';
 
 export class PostInvitationModel {

@@ -39,7 +39,7 @@
         :options="listOfHouses"
         optionLabel="houseData"
         placeholder="Оберіть дім"
-        @change="onChangeHouse(selectedData.selectedHouse.houseId, selectedData.selectedHouse.houseData)"
+        @change="onChangeHouse(selectedData.selectedHouse.houseId)"
         emptyMessage="В цьому ОСББ немає будинків"
         :class="{
           'p-invalid': v$.selectedData.selectedHouse.$error,
@@ -170,33 +170,13 @@ export default defineComponent({
       this.$emit('close-invit-model');
     },
     async createInvitation(): Promise<void> {
-      // how to do it better?
-
-      // To make a request to server to get house by id and share its as a payload to the first action
-
-      // const housePayload = {
-      //   cooperationId: this.cooperationId,
-      //   houseId: this.houseId,
-      // };
-
-      // await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, housePayload);
-
       const payload = {
         type: this.selectedData.selectedType,
         email: this.invitationData.email,
         cooperationId: this.cooperationId,
         apartmentId: this.apartmentId,
         role: 'user',
-      }; // which inteface the payload has? (disadvantage)
-
-      // await this.$store.dispatch(
-      //   `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`,
-      //   payload
-      // );
-
-      // Or to dispatch action which gets all invitations (we have an error due to not being able to access fields (street, houseNumber and so on))
-      // but it works
-
+      };
       await Promise.all([
         this.$store.dispatch(
           `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`,
@@ -216,7 +196,7 @@ export default defineComponent({
         data[field] = '';
       }
     },
-    async onChangeHouse(houseId: number, houseData: any): Promise<void> {
+    async onChangeHouse(houseId: number): Promise<void> {
       this.houseId = houseId;
       this.selectedData.selectedApartment = '';
 

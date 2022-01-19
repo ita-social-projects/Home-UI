@@ -1,12 +1,12 @@
 import { AddressDTOModel } from '@/shared/models/addressDTO.model';
-import { InvitationApartModel } from '@/store/invitations/models/invitationApart.model';
+import { InvitationApartmentModel } from '@/store/invitations/models/invitationApart.model';
 
-export class InvitationApartDTOModel {
+export class InvitationApartmentDTOModel {
   public apartment_number?: string;
   public address?: AddressDTOModel;
   public id: number;
 
-  constructor(apartment: InvitationApartModel) {
+  constructor(apartment: InvitationApartmentModel) {
     this.apartment_number = apartment.apartmentNumber;
     if (apartment.address) {
       this.address = new AddressDTOModel(apartment.address);
