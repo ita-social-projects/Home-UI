@@ -43,13 +43,12 @@
     :closable="false"
     :dismissableMask="true"
   >
-    <EditCooperationPoll
+    <EditCooperationPollForm
       :poll="$props.poll"
       :displayEditPollModal="displayEditPollModal"
-      @close-EditpollModal="displayEditPollModal = false"
+      @close-edit-poll="displayEditPollModal = false"
       :showSuccessOperation="showSuccessOperation"
-      :showFailOperation="showFailOperation"
-    ></EditCooperationPoll>
+    ></EditCooperationPollForm>
   </Dialog>
 </template>
 
@@ -64,7 +63,7 @@ import { PollsActionEnum } from '@/store/polls/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 import ConfirmPopup from 'primevue/confirmpopup';
 import Dialog from 'primevue/dialog';
-import EditCooperationPoll from '@/components/EditCooperationPoll.vue';
+import EditCooperationPollForm from '@/components/EditCooperationPollForm.vue';
 
 export default defineComponent({
   name: 'BaseCooperationPoll',
@@ -73,7 +72,7 @@ export default defineComponent({
     Menu,
     ConfirmPopup,
     Dialog,
-    EditCooperationPoll,
+    EditCooperationPollForm,
   },
   props: {
     poll: {
@@ -113,7 +112,7 @@ export default defineComponent({
       });
     },
     checkStatus(status: string): boolean {
-      if (status === 'active') {
+      if (status !== 'draft') {
         this.showFailOperation('видалено або редаговано');
         return true;
       }

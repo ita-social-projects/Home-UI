@@ -97,5 +97,4 @@ export const flatQuantityAndAdjoiningAreaValidator = helpers.withMessage(
 
 export const pollTitleLenghtValidator = helpers.withMessage(lengthMessage(100, 'max'), maxLength(100));
 export const pollDescriptionLenghtValidator = helpers.withMessage(lengthMessage(1000, 'max'), maxLength(1000));
-export const pollQuestionLenghtValidator = helpers.withMessage(lengthMessage(250, 'max'), maxLength(250));
 export const cyrillicLangTitleValidator = helpers.withMessage(`${cyrillicLangMessage}`, validCyrillicLan);
