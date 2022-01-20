@@ -6,6 +6,7 @@ import { LocalStorageStateInterface } from '@/store/localstorage/types';
 import { HousesStateInterface } from '@/store/houses/types';
 import { PollsStateInterface } from '@/store/polls/types';
 import { ApartmentsStateInterface } from '@/store/apartments/types';
+import { InvitationsStateInterface } from '@/store/invitations/types';
 
 export interface RootStateInterface {
   authorizationStore: AuthorizationStateInterface;
@@ -14,6 +15,7 @@ export interface RootStateInterface {
   pollsStore: PollsStateInterface;
   localStorageStore: LocalStorageStateInterface;
   housesStore: HousesStateInterface;
+  invitationsStore: InvitationsStateInterface;
   apartmentsStore: ApartmentsStateInterface;
 }
 
@@ -24,6 +26,7 @@ export enum StoreModuleEnum {
   pollsStore = 'pollsStore',
   localStorageStore = 'localStorageStore',
   housesStore = 'housesStore',
+  invitationsStore = 'invitationsStore',
   apartmentsStore = 'apartmentsStore',
 }
 

@@ -6,4 +6,11 @@ export const getters: GetterTree<ApartmentsStateInterface, RootStateInterface> &
   getApartmentsData: (state) => {
     return state.apartments;
   },
+  getListOfApartments: (state) => {
+    return state.apartments?.map((apartment) => {
+      const apartmentData = `кв. ${apartment.apartmentNumber}`;
+      const apartmentId = apartment.id;
+      return { apartmentData, apartmentId };
+    });
+  },
 };
