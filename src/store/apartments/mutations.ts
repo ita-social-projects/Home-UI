@@ -7,7 +7,7 @@ export const mutations: MutationTree<ApartmentsStateInterface> & Mutations = {
   [ApartmentsMutationsEnum.SET_APARTMENTS]: (state, payload) => {
     state.apartments = payload;
   },
-  [ApartmentsMutationsEnum.GET_APARTMENT_BY_ID]: (state, payload) => {
+  [ApartmentsMutationsEnum.SET_APARTMENT_BY_ID]: (state, payload) => {
     state.apartmentInfo = payload;
   },
   [ApartmentsMutationsEnum.EDIT_APARTMENT]: (state, payload) => {

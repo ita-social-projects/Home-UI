@@ -326,7 +326,7 @@ export default defineComponent({
         houseId: id.value,
         apartmentId: apartment.value,
       };
-      store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.GET_APARTMENT_BY_ID}`, payload);
+      store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENT_BY_ID}`, payload);
       loading.value = true;
     };
 

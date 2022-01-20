@@ -12,7 +12,7 @@ export enum ApartmentsMutationsEnum {
   SET_APARTMENTS = 'SET_APARTMENTS',
   EDIT_APARTMENT = 'EDIT_APARTMENT',
   DELETE_APARTMENT = 'DELETE_APARTMENT',
-  GET_APARTMENT_BY_ID = 'GET_APARTMENT_BY_ID',
+  SET_APARTMENT_BY_ID = 'SET_APARTMENT_BY_ID',
   ADD_APARTMENT = 'ADD_APARTMENT',
 }
 
@@ -20,7 +20,7 @@ export enum ApartmentsActionsEnum {
   SET_APARTMENTS = 'SET_APARTMENTS',
   EDIT_APARTMENT = 'EDIT_APARTMENT',
   DELETE_APARTMENT = 'DELETE_APARTMENT',
-  GET_APARTMENT_BY_ID = 'GET_APARTMENT_BY_ID',
+  SET_APARTMENT_BY_ID = 'SET_APARTMENT_BY_ID',
   ADD_APARTMENT = 'ADD_APARTMENT',
 }
 
@@ -32,13 +32,13 @@ export enum ApartmentsGettersEnum {
 
 export type Mutations<S = ApartmentsStateInterface> = {
   [ApartmentsMutationsEnum.SET_APARTMENTS](state: S, payload: Array<ApartmentModel>): void;
-  [ApartmentsMutationsEnum.GET_APARTMENT_BY_ID](state: S, payload: ApartmentModel): void;
+  [ApartmentsMutationsEnum.SET_APARTMENT_BY_ID](state: S, payload: ApartmentModel): void;
   [ApartmentsMutationsEnum.ADD_APARTMENT](state: S, payload: AddApartmentModel): void;
 };
 
 export interface Actions {
   [ApartmentsActionsEnum.SET_APARTMENTS]({ commit }: AugmentedActionContext, payload: number): void;
-  [ApartmentsActionsEnum.GET_APARTMENT_BY_ID](
+  [ApartmentsActionsEnum.SET_APARTMENT_BY_ID](
     { commit }: AugmentedActionContext,
     payload: Record<string, unknown>
   ): void;

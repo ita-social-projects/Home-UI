@@ -23,12 +23,12 @@ export const actions: ActionTree<ApartmentsStateInterface, RootStateInterface> &
     }
   },
 
-  [ApartmentsActionsEnum.GET_APARTMENT_BY_ID]: async ({ commit }, payload) => {
+  [ApartmentsActionsEnum.SET_APARTMENT_BY_ID]: async ({ commit }, payload) => {
     try {
       const url = `/houses/${payload.houseId}/apartments/${payload.apartmentId}`;
       const { data } = await HTTP.get(url);
       const apartment: ApartmentModel = new ApartmentModel(data);
-      commit(ApartmentsMutationsEnum.GET_APARTMENT_BY_ID, apartment);
+      commit(ApartmentsMutationsEnum.SET_APARTMENT_BY_ID, apartment);
     } catch (e: any) {
       console.log(e.response);
     }
