@@ -22,31 +22,13 @@
             {{ pollInfo.completionDate }}
           </div>
         </div>
-        <div v-if="pollInfo.status !== 'draft'" class="poll-content-data">
-          <div class="poll-content_name">
-            <strong>Кількість голосів:</strong>
-          </div>
-          <div class="poll-description">
-            <span class="poll-state yes">За: 10</span>
-            <span class="poll-state no">Проти: 7</span>
-          </div>
-        </div>
         <div class="poll-content-description">
           <div class="poll-content_name">
             <strong>Повний опис опитування:</strong>
           </div>
           <div class="poll-description">
             <p class="poll-description_text">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias amet aspernatur atque autem deserunt
-              distinctio, dolore doloribus eius fugiat illum, incidunt necessitatibus, non pariatur perferendis
-              praesentium quasi recusandae repellendus tempore.Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Alias amet aspernatur atque autem deserunt distinctio, dolore doloribus eius fugiat illum, incidunt
-              necessitatibus, non pariatur perferendis praesentium quasi recusandae repellendus tempore.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias amet aspernatur atque autem deserunt
-              distinctio, dolore doloribus eius fugiat illum, incidunt necessitatibus, non pariatur perferendis
-              praesentium quasi recusandae repellendus tempore.
+              {{ pollInfo.description }}
             </p>
           </div>
         </div>
