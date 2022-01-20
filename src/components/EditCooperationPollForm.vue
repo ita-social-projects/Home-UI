@@ -6,15 +6,15 @@
         class="input-poll"
         id="poll_title"
         placeholder="Заголовок"
-        v-model.trim="pollData.title"
+        v-model.trim="pollData.header"
         :class="{
-          'p-invalid': v$.pollData.title.$error,
+          'p-invalid': v$.pollData.header.$error,
         }"
-        @blur="v$.pollData.title.$touch"
+        @blur="v$.pollData.header.$touch"
         @input="disabled = false"
       />
-      <small v-if="v$.pollData.title.$error" id="poll_title" class="p-error">{{
-        v$.pollData.title.$errors[0].$message
+      <small v-if="v$.pollData.header.$error" id="poll_title" class="p-error">{{
+        v$.pollData.header.$errors[0].$message
       }}</small>
     </div>
 
@@ -65,9 +65,9 @@
         v-model="pollData.creationDate"
         :showIcon="true"
         dateFormat="dd.mm.yy"
-        @date-select="onCreationDateChange, (isSelected = true)"
+        @date-select="onChangeCreationDate(this.pollData.creationDate, this.pollData.completionDate)"
       />
-      <small v-if="isSelected" id="poll_creationDate" class="p-error">
+      <small v-if="disabled" id="poll_creationDate" class="p-error">
         Переконайтесь, що дата стоїть не раніше аніж завтра
       </small>
     </div>
@@ -80,6 +80,7 @@
         :showIcon="true"
         dateFormat="dd.mm.yy"
         @date-select="disabled = false"
+        :disabled="true"
       />
       <small id="apartment_area_help" class="p-warning">виставляється автоматично 15 днів з дати початку</small>
     </div>
@@ -136,14 +137,13 @@ export default defineComponent({
   data() {
     return {
       pollData: {
-        title: '',
-        description: '',
+        header: '',
+        description: 'Lorem lorem loerm lorem lioren hzagsh sjjxjxjx iiaxuxbc suhs',
         polledHouses: [],
         creationDate: new Date(),
         completionDate: new Date(),
       },
       disabled: true,
-      isSelected: false,
       v$: useVuelidate(),
     };
   },
@@ -164,7 +164,7 @@ export default defineComponent({
   validations() {
     return {
       pollData: {
-        title: { requiredValidator, pollTitleLenghtValidator, cyrillicLangTitleValidator },
+        header: { requiredValidator, pollTitleLenghtValidator, cyrillicLangTitleValidator },
         description: { requiredValidator, pollDescriptionLenghtValidator, cyrillicLangTitleValidator },
         polledHouses: { requiredValidator },
       },
@@ -185,22 +185,18 @@ export default defineComponent({
         this.$props.poll.id
       );
 
-      this.pollData.title = this.selectedPoll.header;
+      this.pollData.header = this.selectedPoll.header;
       // this.pollData.description = this.selectedPoll?.description;
-      this.pollData.description = 'Lorem lorem loerm lorem lioren hzagsh sjjxjxjx iiaxuxbc suhs';
       this.pollData.polledHouses = this.selectedPoll?.polledHouses;
       this.pollData.creationDate = this.selectedPoll?.creationDate;
       this.pollData.completionDate = this.selectedPoll?.completionDate;
     },
     async editPoll() {
-      const createDate = new Date('05 October 2022 14:48 UTC');
-      const compeDate = new Date('18 October 2022 14:48 UTC');
-
       const payload = {
-        header: this.pollData.title,
+        header: this.pollData.header,
         description: this.pollData.description,
-        creationDate: createDate.toISOString(),
-        completionDate: compeDate.toISOString(),
+        creationDate: this.pollData.creationDate.toISOString(),
+        completionDate: this.pollData.completionDate.toISOString(),
         status: this.$props.poll.status,
         polledHouses: this.pollData.polledHouses,
       } as PutPollInterface;
@@ -211,16 +207,24 @@ export default defineComponent({
         payload,
         ids,
       });
+
       this.$props.showSuccessOperation('редаговано');
       this.$emit('close-edit-poll');
     },
-    onCreationDateChange() {
-      // const dateTomorrow = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate() + 1);
-      // if (this.pollData.creationDate < now) {
-      //   this.disabled = true;
-      //   return;
-      // }
-      this.disabled = false;
+    onChangeCreationDate(creationDate: Date, completionDate: Date) {
+      const dateTomorrow = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1);
+
+      if (creationDate < dateTomorrow) {
+        this.disabled = true;
+      } else {
+        creationDate.setHours(0, 0, 0, 0);
+
+        completionDate = new Date();
+        completionDate.setDate(creationDate.getDate() + 14);
+        completionDate.setHours(23, 59, 59, 59);
+
+        this.disabled = false;
+      }
     },
   },
   computed: {
