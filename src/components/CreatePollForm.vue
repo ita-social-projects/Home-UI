@@ -58,9 +58,6 @@
         dateFormat="dd.mm.yy"
         @date-select="ChangeDate"
       />
-      <!-- <small v-if="v$.startDate.$error" id="caledar-begin" class="p-error">{{
-        v$.startDate.$errors[0].$message
-      }}</small> -->
     </div>
     <div class="input-section">
       <label class="dialog-item" for="calendar-finish">Дата закінчення:</label>
@@ -157,8 +154,8 @@ export default defineComponent({
           return;
         }
         this.finishDate = new Date();
-        this.finishDate.setHours(0, 0, 0, 0);
         this.finishDate.setDate(newVal.getDate() + 14);
+        this.finishDate.setHours(23, 59, 59, 59);
         this.pollData.completionDate = this.finishDate.toLocaleString('uk-UA').split(',')[0];
       }
     );
