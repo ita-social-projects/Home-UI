@@ -194,6 +194,7 @@ export default defineComponent({
 
       this.resetInvitationDataFields(this.selectedData);
       this.$emit('close-invitation-modal');
+      this.$emit('create-invitation');
     },
     resetInvitationDataFields(data: any): void {
       this.invitationData.email = '';

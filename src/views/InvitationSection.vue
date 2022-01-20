@@ -14,14 +14,17 @@
       :closable="false"
       :dismissableMask="true"
     >
-      <CreateInvitationForm @close-invitation-modal="this.displayCreateInvitModal = false"></CreateInvitationForm>
+      <CreateInvitationForm
+        @close-invitation-modal="this.displayCreateInvitModal = false"
+        @create-invitation="correctStatus"
+      ></CreateInvitationForm>
     </Dialog>
   </div>
 
   <div class="container">
     <h1 class="page-title">{{ title }}</h1>
     <div class="container-invitations">
-      <DataTable :value="invitations" responsiveLayout="scroll">
+      <DataTable :value="invitationsList" responsiveLayout="scroll">
         <template #header>
           <span class="p-input-icon-right search-field">
             <i class="pi pi-search" />
@@ -111,12 +114,6 @@ export default defineComponent({
     await this.$store.dispatch(
       `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.SET_APARTMENT_INVITATIONS}`
     );
-    this.invitations = this.invitationsList.map((invitation: any) => {
-      let invitationItem = Object.assign({}, invitation);
-      const status: InvitationStatusType = invitationItem.status;
-      invitationItem.status = `${InvitationStatusEnum[status]}`;
-      return invitationItem;
-    });
   },
   methods: {
     toggle(event: Event, data: InvitationModel): void {
@@ -129,6 +126,15 @@ export default defineComponent({
         `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.DEL_INVITATION}`,
         this.invitationInfo
       );
+    },
+
+    correctStatus() {
+      this.invitations = this.invitationsList.map((invitation: any) => {
+        let invitationItem = Object.assign({}, invitation);
+        const status: InvitationStatusType = invitationItem.status;
+        invitationItem.status = `${InvitationStatusEnum[status]}`;
+        return invitationItem;
+      });
     },
   },
   computed: {
