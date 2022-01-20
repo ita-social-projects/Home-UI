@@ -14,7 +14,7 @@
       :closable="false"
       :dismissableMask="true"
     >
-      <CreateInvitationForm @close-invit-model="this.displayCreateInvitModal = false"></CreateInvitationForm>
+      <CreateInvitationForm @close-invitation-modal="this.displayCreateInvitModal = false"></CreateInvitationForm>
     </Dialog>
   </div>
 
@@ -64,8 +64,14 @@ import Dialog from 'primevue/dialog';
 import CreateInvitationForm from '@/components/CreateInvitationForm.vue';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
-import { InvitationsGettersEnum, InvitationsActionsEnum } from '@/store/invitations/types';
+import {
+  InvitationsGettersEnum,
+  InvitationsActionsEnum,
+  InvitationStatusType,
+  InvitationStatusEnum,
+} from '@/store/invitations/types';
 import { mapGetters } from 'vuex';
+import { InvitationModel } from '@/store/invitations/models/invitations.model';
 
 export default defineComponent({
   name: 'InvitationSection',
@@ -97,6 +103,7 @@ export default defineComponent({
         ];
       },
       displayCreateInvitModal: false,
+      invitations: [] as Array<InvitationModel>,
       invitationInfo: {},
     };
   },
@@ -104,20 +111,29 @@ export default defineComponent({
     await this.$store.dispatch(
       `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.SET_APARTMENT_INVITATIONS}`
     );
+    this.invitations = this.invitationsList.map((invitation: any) => {
+      let invitationItem = Object.assign({}, invitation);
+      const status: InvitationStatusType = invitationItem.status;
+      invitationItem.status = `${InvitationStatusEnum[status]}`;
+      return invitationItem;
+    });
   },
   methods: {
-    toggle(event: any, data: any): void {
+    toggle(event: Event, data: InvitationModel): void {
       this.invitationInfo = data;
       (this.$refs.menu as any).toggle(event);
     },
 
     deleteInvitation() {
-      this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/DEL_INVITATION`, this.invitationInfo);
+      this.$store.dispatch(
+        `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.DEL_INVITATION}`,
+        this.invitationInfo
+      );
     },
   },
   computed: {
     ...mapGetters({
-      invitations: `${StoreModuleEnum.invitationsStore}/${InvitationsGettersEnum.getInvitations}`,
+      invitationsList: `${StoreModuleEnum.invitationsStore}/${InvitationsGettersEnum.getInvitations}`,
     }),
     displayModal(): boolean {
       return this.displayCreateInvitModal;

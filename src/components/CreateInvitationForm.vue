@@ -4,11 +4,11 @@
       <label class="dialog-item" for="invitation_type">Тип запрошення : </label>
       <Dropdown
         id="invitation_type"
-        v-model="selectedData.selectedType"
-        :options="invitationData.invitationType"
         optionLabel="name"
         optionValue="code"
         placeholder="Оберіть тип запрошення"
+        v-model="selectedData.selectedType"
+        :options="invitationData.invitationType"
         :class="{
           'p-invalid': v$.selectedData.selectedType.$error,
         }"
@@ -37,16 +37,16 @@
       <label class="dialog-item" for="list_of_houses">Список домів : </label>
       <Dropdown
         id="list_of_houses"
+        placeholder="Оберіть дім"
+        optionLabel="houseData"
+        emptyMessage="В цьому ОСББ немає будинків"
         v-model="selectedData.selectedHouse"
         :options="listOfHouses"
-        optionLabel="houseData"
-        placeholder="Оберіть дім"
-        @change="onChangeHouse(selectedData.selectedHouse.houseId, selectedData.selectedHouse.houseData)"
-        emptyMessage="В цьому ОСББ немає будинків"
         :class="{
           'p-invalid': v$.selectedData.selectedHouse.$error,
         }"
         @blur="v$.selectedData.selectedHouse.$touch"
+        @change="onChangeHouse(selectedData.selectedHouse.houseId)"
       />
       <small v-if="v$.selectedData.selectedHouse.$error" class="p-error">{{
         v$.selectedData.selectedHouse.$errors[0].$message
@@ -56,19 +56,19 @@
       <label class="dialog-item" for="list_of_apartments">Список квартир : </label>
       <Dropdown
         id="list_of_apartments"
+        placeholder="Оберіть квартиру"
         v-model="selectedData.selectedApartment"
         :options="listOfApartments"
         optionLabel="apartmentData"
-        placeholder="Оберіть квартиру"
         :disabled="v$.selectedData.selectedHouse.$invalid"
         emptyMessage="В цьому будинку немає квартир"
-        @change="
-          onChangeApartment(selectedData.selectedApartment.apartmentId, selectedData.selectedApartment.apartmentData)
-        "
         :class="{
           'p-invalid': v$.selectedData.selectedApartment.$error,
         }"
         @blur="v$.selectedData.selectedApartment.$touch"
+        @change="
+          onChangeApartment(selectedData.selectedApartment.apartmentId, selectedData.selectedApartment.apartmentData)
+        "
       />
     </p>
     <small v-if="v$.selectedData.selectedApartment.$error" class="p-error apartment">{{
@@ -78,18 +78,18 @@
       <Button
         label="Відправити"
         icon="pi pi-check"
-        @click="createInvitation"
         autofocus
         class="p-button-info"
         type="button"
         value="Submit"
         :disabled="v$.$invalid"
+        @click="createInvitation"
       />
       <Button
         label="Скасувати"
         icon="pi pi-times"
-        @click="closeCreatingInvitModel"
         class="p-button-outlined p-button-info"
+        @click="closeCreatingInviteModal"
       />
     </div>
   </form>
@@ -169,10 +169,10 @@ export default defineComponent({
     }
   },
   methods: {
-    closeCreatingInvitModel(): void {
+    closeCreatingInviteModal(): void {
       this.v$.$reset();
-      this.resetHouseDataFields(this.selectedData);
-      this.$emit('close-invit-model');
+      this.resetInvitationDataFields(this.selectedData);
+      this.$emit('close-invitation-modal');
     },
     async createInvitation(): Promise<void> {
       const data = {
@@ -181,7 +181,7 @@ export default defineComponent({
         cooperationId: this.cooperationId,
         apartmentId: this.apartmentId,
         role: 'admin',
-      };
+      } as PostInvitationInterface;
 
       const address = {
         houseAddress: this.getHousesData.filter((house: any) => house.id === this.houseId)[0].address,
@@ -192,10 +192,10 @@ export default defineComponent({
         address,
       });
 
-      this.resetHouseDataFields(this.selectedData);
-      this.$emit('close-invit-model');
+      this.resetInvitationDataFields(this.selectedData);
+      this.$emit('close-invitation-modal');
     },
-    resetHouseDataFields(data: any): void {
+    resetInvitationDataFields(data: any): void {
       this.invitationData.email = '';
       for (let field in data) {
         data[field] = '';

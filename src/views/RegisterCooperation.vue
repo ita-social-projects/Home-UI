@@ -105,7 +105,7 @@ export default defineComponent({
     showSuccessToast() {
       this.$toast.add({
         severity: 'success',
-        summary: 'Юхуууу!',
+        summary: 'Успішно!',
         detail: 'Будь ласка, перевірте пошту для завершення реєстрації',
       });
     },
