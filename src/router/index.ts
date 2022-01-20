@@ -9,8 +9,10 @@ import UserLogin from '@/views/UserLogin.vue';
 import MainPage from '@/views/MainPage.vue';
 import CooperationInfo from '@/views/CooperationInfo.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
+import PageErrorInvintation from '@/views/PageErrorInvintation.vue';
 import CooperationPolls from '@/views/CooperationPolls.vue';
-import PollInfo from "@/views/PollInfo.vue";
+import PollInfo from '@/views/PollInfo.vue';
+import InvitationSection from '@/views/InvitationSection.vue';
 
 import ManageApartments from '@/views/ManageApartments.vue';
 import ApartmentInfo from '@/views/ApartmentInfo.vue';
@@ -58,6 +60,10 @@ const routes: RouteRecordRaw[] = [
         component: CooperationPolls,
       },
       {
+        path: RoutesEnum.InvitationSection,
+        component: InvitationSection,
+      },
+      {
         path: RoutesEnum.ManageUser,
         component: ManageUser,
       },
@@ -72,6 +78,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: RoutesEnum.NotFound,
     component: PageNotFound,
+  },
+  {
+    path: RoutesEnum.PageErrorInvintation,
+    component: PageErrorInvintation,
   },
 ];
 

@@ -21,6 +21,7 @@ export enum HousesActionsEnum {
 export enum HousesGettersEnum {
   getHousesData = 'getHousesData',
   getHouseInfo = 'getHouseInfo',
+  getListOfHouses = 'getListOfHouses',
 }
 
 export interface AddressInterface {
