@@ -24,7 +24,7 @@
   <div class="container">
     <h1 class="page-title">{{ title }}</h1>
     <div class="container-invitations">
-      <DataTable :value="invitationsList" responsiveLayout="scroll">
+      <DataTable :value="invitations" responsiveLayout="scroll">
         <template #header>
           <span class="p-input-icon-right search-field">
             <i class="pi pi-search" />
@@ -114,6 +114,7 @@ export default defineComponent({
     await this.$store.dispatch(
       `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.SET_APARTMENT_INVITATIONS}`
     );
+    this.correctStatus();
   },
   methods: {
     toggle(event: Event, data: InvitationModel): void {
@@ -121,11 +122,12 @@ export default defineComponent({
       (this.$refs.menu as any).toggle(event);
     },
 
-    deleteInvitation() {
-      this.$store.dispatch(
+    async deleteInvitation() {
+      await this.$store.dispatch(
         `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.DEL_INVITATION}`,
         this.invitationInfo
       );
+      this.correctStatus();
     },
 
     correctStatus() {
