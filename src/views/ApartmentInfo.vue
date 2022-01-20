@@ -46,10 +46,10 @@
                 <InputText
                   id="apartmentNumber"
                   placeholder="Номер квартири"
+                  maxlength="6"
                   v-model="editApartmentInfo.apartmentNumber"
                   :class="{ 'p-invalid': v$.apartmentNumber.$error }"
                   @input="v$.apartmentNumber.$touch"
-                  maxlength="6"
                 />
               </div>
             </div>
@@ -60,10 +60,10 @@
                 <InputText
                   id="apartmentArea"
                   placeholder="Площа квартири"
+                  maxlength="7"
                   v-model="editApartmentInfo.apartmentArea"
                   :class="{ 'p-invalid': v$.apartmentArea.$error }"
                   @input="v$.apartmentArea.$touch"
-                  maxlength="7"
                 />
                 <span> кв.м.</span>
               </div>
@@ -82,19 +82,19 @@
             <Button
               label="Скасувати"
               icon="pi pi-times"
-              @click="visibleApartmentDialog = false"
               class="p-button-outlined p-button-info"
+              @click="visibleApartmentDialog = false"
             />
           </template>
         </Dialog>
 
         <div class="container">
           <DataTable
-            :value="ownershipsInfo"
             responsiveLayout="scroll"
             scrollHeight="400px"
-            :loading="loading"
             dataKey="id"
+            :value="ownershipsInfo"
+            :loading="loading"
           >
             <template #header>
               <h4>Інформація про власників та мешканців квартири</h4>
@@ -113,16 +113,16 @@
                   icon="pi pi-pencil"
                   class="p-button p-button-info p-button-text"
                   type="button"
-                  @click="toggle($event, slotProps.data)"
                   aria-haspopup="true"
                   aria-controls="overlay_menu"
+                  @click="toggle($event, slotProps.data)"
                 />
                 <Menu id="overlay_menu" ref="menu" :model="menuActions()" :popup="true" />
               </template>
             </Column>
           </DataTable>
         </div>
-        <Dialog v-model:visible="deleteOwnerDialog" :style="{ width: '450px' }" header="Попередження" :modal="true">
+        <Dialog header="Попередження" v-model:visible="deleteOwnerDialog" :style="{ width: '450px' }" :modal="true">
           <div class="confirmation-content">
             <span v-if="selectedOwner">
               Видалити власника <strong>{{ selectedOwner.fullName }}</strong
@@ -140,9 +140,9 @@
           </template>
         </Dialog>
         <Dialog
+          header="Редагувати частку власності"
           v-model:visible="editOwnerDialog"
           :style="{ width: '450px' }"
-          header="Редагувати частку власності"
           :modal="true"
         >
           <div class="p-field dialog">
@@ -155,13 +155,13 @@
             <label for="name" class="dialog_item-label">Частка власності: </label>
             <InputText
               id="name"
-              v-model.trim="editOwnershipData.ownershipPart"
               required="true"
+              maxlength="10"
               autofocus
+              v-model.trim="editOwnershipData.ownershipPart"
               :class="{ 'p-invalid': v$$.ownershipPart.$error }"
               @blur="checkSum(selectedOwner.id)"
               @input="v$$.ownershipPart.$touch"
-              maxlength="10"
             />
             <small v-if="v$$.ownershipPart.$error" class="p-error">{{ v$$.ownershipPart.$errors[0].$message }}</small>
             <small v-if="isErrorOwnershipSum" class="p-error">{{ errorSumText }}</small>
@@ -404,7 +404,6 @@ export default defineComponent({
         data: new UpdateOwnershipsDTOModel({
           ownershipPart: selectedOwner.value.ownershipPart,
         }),
-        number: editOwnershipData.ownershipPart, //for testing
       };
       store.dispatch(`${StoreModuleEnum.ownershipsStore}/${OwnershipsActionEnum.EDIT_OWNER}`, payload);
       editOwnerDialog.value = false;
