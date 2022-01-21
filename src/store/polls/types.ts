@@ -4,41 +4,33 @@ import { PollModel } from '@/store/polls/models/poll.model';
 
 export enum PollsMutationEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',
-  SET_SELECTED_POLL = 'SET_SELECTED_POLL',
-  GET_POll_BY_ID = 'GET_POll_BY_ID',
-  CLEAR_POll_BY_ID = 'CLEAR_POll_BY_ID',
+  SET_POll_BY_ID = 'SET_POll_BY_ID',
 }
 
 export enum PollsActionEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',
-  SET_SELECTED_POLL = 'SET_SELECTED_POLL',
-  GET_POll_BY_ID = 'GET_POll_BY_ID',
+  SET_POll_BY_ID = 'SET_POll_BY_ID',
 }
 
 export interface PollsStateInterface {
   cooperationPolls: Array<PollModel>;
-  selectedPoll: null | PollModel;
-  pollById: PollModel;
+  selectedPoll: PollModel;
   displayModal: boolean;
 }
 
 export type Mutations<S = PollsStateInterface> = {
   [PollsMutationEnum.SET_COOPERATION_POLLS](state: S, payload: Array<PollModel>): void;
-  [PollsMutationEnum.SET_SELECTED_POLL](state: S, payload: number): void;
-  [PollsMutationEnum.GET_POll_BY_ID](state: S, payload: PollModel): void;
-  [PollsMutationEnum.CLEAR_POll_BY_ID](state: S): void;
+  [PollsMutationEnum.SET_POll_BY_ID](state: S, payload: PollModel): void;
 };
 
 export interface Actions {
   [PollsActionEnum.SET_COOPERATION_POLLS]({ commit }: AugmentedActionContext): void;
-  [PollsActionEnum.SET_SELECTED_POLL]({ commit }: AugmentedActionContext, payload: number): void;
-  [PollsActionEnum.GET_POll_BY_ID]({ commit }: AugmentedActionContext, payload: number): void;
+  [PollsActionEnum.SET_POll_BY_ID]({ commit }: AugmentedActionContext, payload: number): void;
 }
 
 export type Getters<S = PollsStateInterface> = {
   getPolls(state: S): Array<PollModel>;
-  getSelectedPoll(state: S): null | PollModel;
-  getPollByID(state: S): PollModel;
+  getSelectedPoll(state: S): PollModel;
 };
 
 export enum PollStatusEnum {
