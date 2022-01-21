@@ -106,7 +106,7 @@
           <Button
             id="add-contact"
             @click="addContact"
-            :disabled="v$.$invalid || typeContact === String"
+            :disabled="v$.inputValue.$invalid || typeContact === String"
             type="submit"
             class="btn__add p-button-success p-button-sm p-button-outlined"
             >Додати контакт</Button

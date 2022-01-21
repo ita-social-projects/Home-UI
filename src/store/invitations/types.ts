@@ -20,8 +20,10 @@ export enum InvitationsGettersEnum {
 
 export enum InvitationTypesEnum {
   cooperation = 'ОСББ',
-  apartment = 'квартира',
+  apartment = 'Квартира',
 }
+
+export type InvintationType = 'cooperation' | 'apartment';
 
 export enum InvitationStatusEnum {
   pending = 'очікує схвалення',
@@ -69,7 +71,7 @@ export interface PostInvitationInterface {
 export type Mutations<S = InvitationsStateInterface> = {
   [InvitationsMutationsEnum.DEL_INVITATION](state: S, payload: number): void;
   [InvitationsMutationsEnum.SET_APARTMENT_INVITATIONS](state: S, payload: Array<InvitationModel>): void;
-  // [InvitationsMutationsEnum.CREATE_INVITATION](state: S, payload: any): void;
+  [InvitationsMutationsEnum.CREATE_INVITATION](state: S, payload: any): void;
 };
 
 export interface Actions {
