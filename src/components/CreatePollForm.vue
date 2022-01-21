@@ -6,8 +6,8 @@
         class="input-poll"
         id="poll_title"
         placeholder="Заголовок"
-        v-model.trim="pollData.title"
         rows="3"
+        v-model.trim="pollData.title"
         :class="{
           'p-invalid': v$.pollData.title.$error,
         }"
@@ -22,8 +22,8 @@
       <Textarea
         id="poll_description"
         placeholder="Детальний опис"
-        v-model.trim="pollData.description"
         rows="8"
+        v-model.trim="pollData.description"
         :class="{
           'p-invalid': v$.pollData.description.$error,
         }"
@@ -37,7 +37,7 @@
       <label class="dialog-item" for="poll_polledHouses">Список будинків: </label>
       <div class="checkbox-section">
         <div v-for="house of houses" :key="house.id" class="p-field-checkbox">
-          <Checkbox :id="house.id" name="category" :value="house" v-model="pollData.polledHouses" />
+          <Checkbox name="category" :id="house.id" :value="house" v-model="pollData.polledHouses" />
           <label class="house-label" :for="house.id">
             {{ house.address?.houseNumber }}, {{ house.address?.houseBlock }}, {{ house.address?.district }},
             {{ house.address?.street }}
@@ -52,16 +52,16 @@
       <label class="dialog-item" for="caledar-begin">Дата початку:</label>
       <Calendar
         id="caledar-begin"
+        dateFormat="dd.mm.yy"
         v-model="startDate"
         :showIcon="true"
         :minDate="minDate"
-        dateFormat="dd.mm.yy"
         @date-select="ChangeDate"
       />
     </div>
     <div class="input-section">
       <label class="dialog-item" for="calendar-finish">Дата закінчення:</label>
-      <InputText id="calendar-finish" :value="pollData.completionDate" disabled="true"></InputText>
+      <InputText id="calendar-finish" disabled="true" :value="pollData.completionDate"></InputText>
       <small id="apartment_area_help" class="p-warning">виставляється автоматично 15 днів з дати початку</small>
     </div>
     <div class="button-div">
@@ -78,8 +78,8 @@
         id="cancel-button"
         label="Відмінити"
         icon="pi pi-times"
-        @click="cancelEditing"
         class="p-button-outlined p-button-info"
+        @click="cancelEditing"
       />
     </div>
   </form>
@@ -179,7 +179,6 @@ export default defineComponent({
     },
     async createPoll() {
       const isFormValid = await this.v$.$validate();
-      console.log(isFormValid);
       if (!isFormValid) {
         return;
       }
@@ -202,7 +201,6 @@ export default defineComponent({
         payload.body.creationDate = this.pollData.creationDate.toISOString();
         payload.body.completionDate = this.finishDate.toISOString();
       }
-      console.log(payload);
       this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.ADD_COOPERATION_POLL}`, payload);
       this.resetPollDataFields();
       this.v$.$reset();
