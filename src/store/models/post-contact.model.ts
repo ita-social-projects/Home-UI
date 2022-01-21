@@ -1,8 +1,7 @@
-import { ContactTypeEnum } from '../authorization/types';
 import { UserContactInterface } from './../user/types';
 
 export class PostContactModel {
-  public type: ContactTypeEnum;
+  public type: string;
   public main: boolean;
   public email?: string;
   public phone?: number;
