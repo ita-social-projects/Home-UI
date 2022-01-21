@@ -4,9 +4,11 @@
       <label class="dialog-item" for="invitation_type">Тип запрошення : </label>
       <Dropdown
         id="invitation_type"
+        optionLabel="name"
+        optionValue="code"
+        placeholder="Оберіть тип запрошення"
         v-model="selectedData.selectedType"
         :options="invitationData.invitationType"
-        placeholder="Оберіть тип запрошення"
         :class="{
           'p-invalid': v$.selectedData.selectedType.$error,
         }"
@@ -35,16 +37,16 @@
       <label class="dialog-item" for="list_of_houses">Список домів : </label>
       <Dropdown
         id="list_of_houses"
+        placeholder="Оберіть дім"
+        optionLabel="houseData"
+        emptyMessage="В цьому ОСББ немає будинків"
         v-model="selectedData.selectedHouse"
         :options="listOfHouses"
-        optionLabel="houseData"
-        placeholder="Оберіть дім"
-        @change="onChangeHouse(selectedData.selectedHouse.houseId, selectedData.selectedHouse.houseData)"
-        emptyMessage="В цьому ОСББ немає будинків"
         :class="{
           'p-invalid': v$.selectedData.selectedHouse.$error,
         }"
         @blur="v$.selectedData.selectedHouse.$touch"
+        @change="onChangeHouse(selectedData.selectedHouse.houseId)"
       />
       <small v-if="v$.selectedData.selectedHouse.$error" class="p-error">{{
         v$.selectedData.selectedHouse.$errors[0].$message
@@ -54,19 +56,19 @@
       <label class="dialog-item" for="list_of_apartments">Список квартир : </label>
       <Dropdown
         id="list_of_apartments"
+        placeholder="Оберіть квартиру"
         v-model="selectedData.selectedApartment"
         :options="listOfApartments"
         optionLabel="apartmentData"
-        placeholder="Оберіть квартиру"
         :disabled="v$.selectedData.selectedHouse.$invalid"
         emptyMessage="В цьому будинку немає квартир"
-        @change="
-          onChangeApartment(selectedData.selectedApartment.apartmentId, selectedData.selectedApartment.apartmentData)
-        "
         :class="{
           'p-invalid': v$.selectedData.selectedApartment.$error,
         }"
         @blur="v$.selectedData.selectedApartment.$touch"
+        @change="
+          onChangeApartment(selectedData.selectedApartment.apartmentId, selectedData.selectedApartment.apartmentData)
+        "
       />
     </p>
     <small v-if="v$.selectedData.selectedApartment.$error" class="p-error apartment">{{
@@ -76,18 +78,18 @@
       <Button
         label="Відправити"
         icon="pi pi-check"
-        @click="createInvitation"
         autofocus
         class="p-button-info"
         type="button"
         value="Submit"
         :disabled="v$.$invalid"
+        @click="createInvitation"
       />
       <Button
         label="Скасувати"
         icon="pi pi-times"
-        @click="closeCreatingInvitModel"
         class="p-button-outlined p-button-info"
+        @click="closeCreatingInviteModal"
       />
     </div>
   </form>
@@ -111,12 +113,12 @@ import {
   emailMaxLength,
   emailLastCharsValidator,
 } from '@/utils/validators';
-import { InvitationsActionsEnum, InvitationTypesEnum } from '@/store/invitations/types';
+import { InvitationsActionsEnum, InvitationTypesEnum, PostInvitationInterface } from '@/store/invitations/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 
 export default defineComponent({
-  name: 'CreateInvitationButton',
+  name: 'CreateInvitationForm',
   components: {
     Dialog,
     Button,
@@ -126,7 +128,10 @@ export default defineComponent({
   data() {
     return {
       invitationData: {
-        invitationType: [`${InvitationTypesEnum.cooperation}`, `${InvitationTypesEnum.apartment}`],
+        invitationType: [
+          { name: `${InvitationTypesEnum.cooperation}`, code: 'cooperation' },
+          { name: `${InvitationTypesEnum.apartment}`, code: 'apartment' },
+        ],
         email: '',
         listOfHouses: [],
         listOfApartments: [],
@@ -164,59 +169,40 @@ export default defineComponent({
     }
   },
   methods: {
-    closeCreatingInvitModel(): void {
+    closeCreatingInviteModal(): void {
       this.v$.$reset();
-      this.resetHouseDataFields(this.selectedData);
-      this.$emit('close-invit-model');
+      this.resetInvitationDataFields(this.selectedData);
+      this.$emit('close-invitation-modal');
     },
     async createInvitation(): Promise<void> {
-      // how to do it better?
-
-      // To make a request to server to get house by id and share its as a payload to the first action
-
-      // const housePayload = {
-      //   cooperationId: this.cooperationId,
-      //   houseId: this.houseId,
-      // };
-
-      // await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, housePayload);
-
-      const payload = {
+      const data = {
         type: this.selectedData.selectedType,
         email: this.invitationData.email,
         cooperationId: this.cooperationId,
         apartmentId: this.apartmentId,
-        role: 'user',
-      }; // which inteface the payload has? (disadvantage)
+        role: 'admin',
+      } as PostInvitationInterface;
 
-      // await this.$store.dispatch(
-      //   `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`,
-      //   payload
-      // );
+      const address = {
+        houseAddress: this.getHousesData.filter((house: any) => house.id === this.houseId)[0].address,
+      };
 
-      // Or to dispatch action which gets all invitations (we have an error due to not being able to access fields (street, houseNumber and so on))
-      // but it works
-
-      await Promise.all([
-        this.$store.dispatch(
-          `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`,
-          payload
-        ),
-        this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.SET_APARTMENT_INVITATIONS}`),
-      ]).catch((e) => {
-        console.log('error: ', e);
+      await this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`, {
+        data,
+        address,
       });
 
-      this.resetHouseDataFields(this.selectedData);
-      this.$emit('close-invit-model');
+      this.resetInvitationDataFields(this.selectedData);
+      this.$emit('close-invitation-modal');
+      this.$emit('create-invitation');
     },
-    resetHouseDataFields(data: any): void {
+    resetInvitationDataFields(data: any): void {
       this.invitationData.email = '';
       for (let field in data) {
         data[field] = '';
       }
     },
-    async onChangeHouse(houseId: number, houseData: any): Promise<void> {
+    async onChangeHouse(houseId: number): Promise<void> {
       this.houseId = houseId;
       this.selectedData.selectedApartment = '';
 
@@ -231,7 +217,7 @@ export default defineComponent({
       listOfHouses: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getListOfHouses}`,
       listOfApartments: `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getListOfApartments}`,
       cooperationId: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`,
-      houseInfo: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`,
+      getHousesData: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
     }),
   },
 });

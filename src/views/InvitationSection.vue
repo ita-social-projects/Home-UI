@@ -14,7 +14,10 @@
       :closable="false"
       :dismissableMask="true"
     >
-      <CreateInvitationForm @close-invit-model="this.displayCreateInvitModal = false"></CreateInvitationForm>
+      <CreateInvitationForm
+        @close-invitation-modal="this.displayCreateInvitModal = false"
+        @create-invitation="correctStatus"
+      ></CreateInvitationForm>
     </Dialog>
   </div>
 
@@ -77,9 +80,15 @@ import Dialog from 'primevue/dialog';
 import CreateInvitationForm from '@/components/CreateInvitationForm.vue';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
-import { InvitationsGettersEnum, InvitationsActionsEnum, InvitationInterface } from '@/store/invitations/types';
-import { mapGetters } from 'vuex';
 import InvitationTemplate from '@/components/InvitationTemplate.vue';
+import {
+  InvitationsGettersEnum,
+  InvitationsActionsEnum,
+  InvitationStatusType,
+  InvitationStatusEnum,
+} from '@/store/invitations/types';
+import { mapGetters } from 'vuex';
+import { InvitationModel } from '@/store/invitations/models/invitations.model';
 
 export default defineComponent({
   name: 'InvitationSection',
@@ -116,6 +125,7 @@ export default defineComponent({
       },
       displayCreateInvitModal: false,
       invitationTemplateModal: false,
+      invitations: [] as Array<InvitationModel>,
       invitationInfo: {},
     };
   },
@@ -123,18 +133,29 @@ export default defineComponent({
     await this.$store.dispatch(
       `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.SET_APARTMENT_INVITATIONS}`
     );
+    this.correctStatus();
   },
   methods: {
-    toggle(event: Event, data: InvitationInterface): void {
+    toggle(event: Event, data: InvitationModel): void {
       this.invitationInfo = data;
       (this.$refs.menu as any).toggle(event);
     },
 
-    deleteInvitation() {
-      this.$store.dispatch(
+    async deleteInvitation() {
+      await this.$store.dispatch(
         `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.DEL_INVITATION}`,
         this.invitationInfo
       );
+      this.correctStatus();
+    },
+
+    correctStatus() {
+      this.invitations = this.invitationsList.map((invitation: any) => {
+        let invitationItem = Object.assign({}, invitation);
+        const status: InvitationStatusType = invitationItem.status;
+        invitationItem.status = `${InvitationStatusEnum[status]}`;
+        return invitationItem;
+      });
     },
     displayInvitationTemplate() {
       this.invitationTemplateModal = true;
@@ -142,7 +163,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      invitations: `${StoreModuleEnum.invitationsStore}/${InvitationsGettersEnum.getInvitations}`,
+      invitationsList: `${StoreModuleEnum.invitationsStore}/${InvitationsGettersEnum.getInvitations}`,
     }),
     displayModal(): boolean {
       return this.displayCreateInvitModal;
