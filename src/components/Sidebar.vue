@@ -15,7 +15,7 @@
         :badge-counter="notifications"
       />
       <BaseSidebarNavButton :link="cooperationInfoPath" btn-text="Управління ОСББ" icon="pi-inbox" />
-      <BaseSidebarNavButton link="invitation" btn-text="Запрошення" icon="pi-globe" />
+      <BaseSidebarNavButton :link="invitationsPath" btn-text="Запрошення" icon="pi-globe" />
       <BaseSidebarNavButton
         :link="pollsPath"
         btn-text="Опитування"
@@ -52,6 +52,9 @@ export default defineComponent({
     },
     pollsPath(): string {
       return RoutesEnum.Polls;
+    },
+    invitationsPath(): string {
+      return RoutesEnum.InvitationSection;
     },
     userData(): UserInterface | null {
       return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
