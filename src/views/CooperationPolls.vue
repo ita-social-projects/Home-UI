@@ -18,12 +18,12 @@
       />
     </div>
     <Dialog
-      header="Створити опитування"
       v-model:visible="displayCreatePollModal"
       :style="{ width: '580px' }"
       :modal="true"
       :closable="false"
       :dismissableMask="true"
+      header="Створити опитування"
     >
       <CreatePollForm
         :cooperationId="cooperationId"

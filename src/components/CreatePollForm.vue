@@ -3,14 +3,14 @@
     <div class="input-section">
       <label class="dialog-item" for="poll_title">Заголовок: </label>
       <Textarea
-        class="input-poll"
-        id="poll_title"
-        placeholder="Заголовок"
-        rows="3"
         v-model.trim="pollData.title"
         :class="{
           'p-invalid': v$.pollData.title.$error,
         }"
+        class="input-poll"
+        id="poll_title"
+        placeholder="Заголовок"
+        rows="3"
         @input="v$.pollData.title.$touch"
       />
       <small v-if="v$.pollData.title.$error" id="poll_title" class="p-error">{{
@@ -20,13 +20,13 @@
     <div class="input-section">
       <label class="dialog-item" for="poll_description">Опис: </label>
       <Textarea
-        id="poll_description"
-        placeholder="Детальний опис"
-        rows="8"
         v-model.trim="pollData.description"
         :class="{
           'p-invalid': v$.pollData.description.$error,
         }"
+        id="poll_description"
+        placeholder="Детальний опис"
+        rows="8"
         @input="v$.pollData.description.$touch"
       />
       <small v-if="v$.pollData.description.$error" id="poll_description" class="p-error">{{
@@ -37,8 +37,8 @@
       <label class="dialog-item" for="poll_polledHouses">Список будинків: </label>
       <div class="checkbox-section">
         <div v-for="house of houses" :key="house.id" class="p-field-checkbox">
-          <Checkbox name="category" :id="house.id" :value="house" v-model="pollData.polledHouses" />
-          <label class="house-label" :for="house.id">
+          <Checkbox v-model="pollData.polledHouses" :id="house.id" :value="house" name="category" />
+          <label :for="house.id" class="house-label">
             {{ house.address?.houseNumber }}, {{ house.address?.houseBlock }}, {{ house.address?.district }},
             {{ house.address?.street }}
           </label>
@@ -51,17 +51,17 @@
     <div class="input-section">
       <label class="dialog-item" for="caledar-begin">Дата початку:</label>
       <Calendar
-        id="caledar-begin"
-        dateFormat="dd.mm.yy"
         v-model="startDate"
         :showIcon="true"
         :minDate="minDate"
+        id="caledar-begin"
+        dateFormat="dd.mm.yy"
         @date-select="ChangeDate"
       />
     </div>
     <div class="input-section">
       <label class="dialog-item" for="calendar-finish">Дата закінчення:</label>
-      <InputText id="calendar-finish" disabled="true" :value="pollData.completionDate"></InputText>
+      <InputText :value="pollData.completionDate" id="calendar-finish" disabled="true"></InputText>
       <small id="apartment_area_help" class="p-warning">виставляється автоматично 15 днів з дати початку</small>
     </div>
     <div class="button-div">
@@ -87,22 +87,17 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import useVuelidate from '@vuelidate/core';
-import {
-  requiredValidator,
-  pollTitleLenghtValidator,
-  pollDescriptionLenghtValidator,
-  cyrillicLangTitleValidator,
-} from '@/utils/validators';
 import Button from 'primevue/button';
 import Textarea from 'primevue/textarea';
 import Checkbox from 'primevue/checkbox';
 import Calendar from 'primevue/calendar';
+import InputText from 'primevue/inputtext';
+import useVuelidate from '@vuelidate/core';
+import { pollValidations } from '@/utils/poll-validations';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { HouseModel } from '@/shared/models/house.model';
 import { PollsActionEnum } from '@/store/polls/types';
-import InputText from 'primevue/inputtext';
 
 export default defineComponent({
   name: 'CreatePollForm',
@@ -124,7 +119,7 @@ export default defineComponent({
       pollData: {
         title: '',
         description: '',
-        polledHouses: [],
+        polledHouses: [] as Array<HouseModel>,
         creationDate: new Date(),
         completionDate: '',
       },
@@ -138,11 +133,7 @@ export default defineComponent({
   },
   validations() {
     return {
-      pollData: {
-        title: { requiredValidator, pollTitleLenghtValidator, cyrillicLangTitleValidator },
-        description: { requiredValidator, pollDescriptionLenghtValidator, cyrillicLangTitleValidator },
-        polledHouses: { requiredValidator },
-      },
+      pollData: pollValidations,
     };
   },
   created() {
@@ -174,7 +165,7 @@ export default defineComponent({
       this.pollData.creationDate = new Date();
       this.pollData.completionDate = '';
     },
-    ChangeDate(value: any) {
+    ChangeDate(value: Date) {
       this.pollData.creationDate = value;
     },
     async createPoll() {
