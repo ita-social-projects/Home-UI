@@ -6,8 +6,8 @@ export class PollModel {
   public id: number;
   public header: string;
   public description: string;
-  public creationDate: string;
-  public completionDate: string;
+  public creationDate: any;
+  public completionDate: any;
   public polledHouses: HouseModel[];
   public status: PollStatusType;
   public type: string;
@@ -16,8 +16,8 @@ export class PollModel {
     this.id = poll.id;
     this.header = poll.header;
     this.description = poll.description;
-    this.creationDate = new Date(poll.creation_date).toLocaleString('uk-UA');
-    this.completionDate = new Date(poll.completion_date).toLocaleString('uk-UA');
+    this.creationDate = new Date(poll.creation_date);
+    this.completionDate = new Date(poll.completion_date);
     this.status = poll.status;
     this.type = poll.type;
     this.polledHouses = poll.polled_houses.map((el) => new HouseModel(el));

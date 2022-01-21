@@ -44,10 +44,22 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
   },
   [PollsActionEnum.UPDATE_POLL]: async ({ commit }, payload) => {
     try {
-      const pollToSend = new PostPollDTOModel(payload.payload);
+      const pollToSend = new PostPollDTOModel(payload.data);
       const url = `cooperations/${payload.ids.cooperationId}/polls/${payload.ids.pollId}`;
       const { data } = await HTTP.put(url, pollToSend);
-      const poll = new PollModel(data);
+
+      const mockData = {
+        id: data.id,
+        header: data.header,
+        description: payload.data.description,
+        creation_date: payload.data.creationDate,
+        completion_date: payload.data.completionDate,
+        status: data.status,
+        type: data.type,
+        polled_houses: payload.data.polledHouses,
+      };
+
+      const poll = new PollModel(mockData);
 
       commit(PollsMutationEnum.UPDATE_POLL, { poll, pollId: payload.ids.pollId });
     } catch (e: any) {

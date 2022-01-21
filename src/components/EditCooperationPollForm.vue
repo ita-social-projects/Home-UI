@@ -11,7 +11,7 @@
           'p-invalid': v$.pollData.header.$error,
         }"
         @blur="v$.pollData.header.$touch"
-        @input="disabled = false"
+        @input="isDisabled = false"
       />
       <small v-if="v$.pollData.header.$error" id="poll_title" class="p-error">{{
         v$.pollData.header.$errors[0].$message
@@ -29,7 +29,7 @@
           'p-invalid': v$.pollData.description.$error,
         }"
         @blur="v$.pollData.description.$touch"
-        @input="disabled = false"
+        @input="isDisabled = false"
       />
       <small v-if="v$.pollData.description.$error" id="poll_description" class="p-error">{{
         v$.pollData.description.$errors[0].$message
@@ -45,7 +45,7 @@
             name="category"
             :value="house"
             v-model="pollData.polledHouses"
-            @input="disabled = false"
+            @input="isDisabled = false"
           />
           <label class="house-label" :for="house.id">
             {{ house.address?.houseNumber }}, {{ house.address?.houseBlock }}, {{ house.address?.district }},
@@ -65,10 +65,10 @@
         v-model="pollData.creationDate"
         :showIcon="true"
         dateFormat="dd.mm.yy"
-        @date-select="onChangeCreationDate(this.pollData.creationDate, this.pollData.completionDate)"
+        @date-select="onChangeCreationDate"
       />
-      <small v-if="disabled" id="poll_creationDate" class="p-error">
-        Переконайтесь, що дата стоїть не раніше аніж завтра
+      <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error">
+        Переконайтесь, що дата стоїть не раніше, ніж завтра!
       </small>
     </div>
 
@@ -79,10 +79,10 @@
         v-model="pollData.completionDate"
         :showIcon="true"
         dateFormat="dd.mm.yy"
-        @date-select="disabled = false"
+        @date-select="isDisabled = false"
         :disabled="true"
       />
-      <small id="apartment_area_help" class="p-warning">виставляється автоматично 15 днів з дати початку</small>
+      <small id="apartment_area_help" class="p-warning">Виставляється автоматично 15 днів з дати початку</small>
     </div>
   </form>
 
@@ -93,7 +93,7 @@
       @click="editPoll"
       autofocus
       class="p-button-info"
-      :disabled="disabled || v$.pollData.$invalid"
+      :disabled="isDisabled || v$.pollData.$invalid"
     />
     <Button
       label="Скасувати"
@@ -124,6 +124,7 @@ import { CooperationGettersEnum } from '@/store/cooperation/types';
 import { PollsActionEnum, PollsGettersEnum, PutPollInterface } from '@/store/polls/types';
 import { PollModel } from '@/store/polls/models/poll.model';
 import useVuelidate from '@vuelidate/core';
+import { HouseModel } from '@/shared/models/house.model';
 
 export default defineComponent({
   name: 'EditCooperationPollForm',
@@ -138,12 +139,17 @@ export default defineComponent({
     return {
       pollData: {
         header: '',
-        description: 'Lorem lorem loerm lorem lioren hzagsh sjjxjxjx iiaxuxbc suhs',
-        polledHouses: [],
-        creationDate: new Date(),
-        completionDate: new Date(),
+        description: '',
+        polledHouses: [] as Array<HouseModel>,
+        creationDate: '' as any,
+        completionDate: '' as any,
       },
-      disabled: true,
+
+      isDisabled: true,
+      isCreationDateHelpActive: false,
+      beginDate: new Date(),
+      finishDate: new Date(),
+
       v$: useVuelidate(),
     };
   },
@@ -185,45 +191,51 @@ export default defineComponent({
         this.$props.poll.id
       );
 
-      this.pollData.header = this.selectedPoll.header;
-      // this.pollData.description = this.selectedPoll?.description;
-      this.pollData.polledHouses = this.selectedPoll?.polledHouses;
-      this.pollData.creationDate = this.selectedPoll?.creationDate;
-      this.pollData.completionDate = this.selectedPoll?.completionDate;
+      this.pollData.header = this.selectedPoll.header ?? '';
+      this.pollData.description = this.selectedPoll?.description ?? 'Повний опис опитування';
+      this.pollData.polledHouses = this.selectedPoll?.polledHouses ?? [];
+      this.pollData.creationDate = this.selectedPoll?.creationDate.toLocaleString('uk-UA');
+      this.pollData.completionDate = this.selectedPoll?.completionDate.toLocaleString('uk-UA');
+
+      this.beginDate = this.selectedPoll?.creationDate;
+      this.finishDate = this.selectedPoll?.completionDate;
     },
     async editPoll() {
-      const payload = {
+      const data = {
         header: this.pollData.header,
         description: this.pollData.description,
-        creationDate: this.pollData.creationDate.toISOString(),
-        completionDate: this.pollData.completionDate.toISOString(),
+        creationDate: new Date(this.beginDate.toLocaleString('en-US')).toISOString(),
+        completionDate: new Date(this.finishDate.toLocaleString('en-US')).toISOString(),
         status: this.$props.poll.status,
         polledHouses: this.pollData.polledHouses,
-      } as PutPollInterface;
+      };
 
       const ids = { cooperationId: this.cooperationId, pollId: this.$props.poll.id };
 
       await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.UPDATE_POLL}`, {
-        payload,
+        data,
         ids,
       });
 
       this.$props.showSuccessOperation('редаговано');
       this.$emit('close-edit-poll');
     },
-    onChangeCreationDate(creationDate: Date, completionDate: Date) {
+    onChangeCreationDate() {
       const dateTomorrow = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1);
 
-      if (creationDate < dateTomorrow) {
-        this.disabled = true;
+      if (this.pollData.creationDate < dateTomorrow) {
+        this.isDisabled = true;
+        this.isCreationDateHelpActive = true;
       } else {
-        creationDate.setHours(0, 0, 0, 0);
+        this.beginDate.setHours(0, 0, 0, 0);
 
-        completionDate = new Date();
-        completionDate.setDate(creationDate.getDate() + 14);
-        completionDate.setHours(23, 59, 59, 59);
+        this.finishDate = new Date();
+        this.finishDate.setDate(this.pollData.creationDate.getDate() + 14);
+        this.finishDate.setHours(23, 59, 59, 59);
+        this.pollData.completionDate = this.finishDate;
 
-        this.disabled = false;
+        this.isCreationDateHelpActive = false;
+        this.isDisabled = false;
       }
     },
   },

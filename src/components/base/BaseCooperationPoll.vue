@@ -25,12 +25,12 @@
 
       <div class="poll-field">
         <span>Дата початку:</span>
-        <div>{{ poll.creationDate }}</div>
+        <div>{{ poll.creationDate.toLocaleString('uk-UA') }}</div>
       </div>
 
       <div class="poll-field">
         <span>Дата завершення:</span>
-        <div>{{ poll.completionDate }}</div>
+        <div>{{ poll.completionDate.toLocaleString('uk-UA') }}</div>
       </div>
     </div>
   </article>
