@@ -9,7 +9,7 @@ const validPassword = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8
 
 const validUserName = helpers.regex(/^[a-zA-Z0-9!#$%&'*+\-/=?^_`{|(),:;<>@[\]]*$/);
 const validUkranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]*$/);
-const validCyrillicLan = helpers.regex(/^[а-яА-Яа-щА-ЩЬьЮюЇїІіЄєҐґ0-9!#$%&№'"*+\-/=?^_`{|(),:;.<>@[\]\\ ]*$/);
+const validCyrillicLan = helpers.regex(/^[а-яА-Яа-щА-ЩЬьЮюЇїІіЄєҐґЁёЪъЫы0-9!#$%&№'"*+\-/=?^_`{|(),:;.<>@[\]\\ ]*$/);
 
 const validEdrpou = helpers.regex(/^\d{8}$/);
 const validIban = helpers.regex(/^UA\d{27}$/);

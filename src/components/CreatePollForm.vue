@@ -36,11 +36,10 @@
     <div class="input-section">
       <label class="dialog-item" for="poll_polledHouses">Список будинків: </label>
       <div class="checkbox-section">
-        <div v-for="house of houses" :key="house.id" class="p-field-checkbox">
+        <div v-for="(house, index) of houses" :key="house.id" class="p-field-checkbox">
           <Checkbox v-model="pollData.polledHouses" :id="house.id" :value="house" name="category" />
           <label :for="house.id" class="house-label">
-            {{ house.address?.houseNumber }}, {{ house.address?.houseBlock }}, {{ house.address?.district }},
-            {{ house.address?.street }}
+            {{ houseAddresses[index] }}
           </label>
         </div>
       </div>
@@ -201,6 +200,14 @@ export default defineComponent({
   computed: {
     houses(): Array<HouseModel> {
       return this.$store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
+    },
+    houseAddresses(): Array<string> {
+      return this.houses.reduce((acc: Array<string>, cur) => {
+        acc.push(
+          `${cur.address?.houseNumber}, ${cur.address?.houseBlock}, ${cur.address?.district},${cur.address?.street}`
+        );
+        return acc;
+      }, []);
     },
   },
   mounted() {
