@@ -21,12 +21,23 @@ export default defineComponent({
   components: {
     Breadcrumb,
   },
+  props: {
+    houseId: {
+      type: Number,
+      required: true,
+    },
+    apartmentId: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
+      testid: 2485,
       home: { label: 'ОСББ', to: RoutesEnum.Cooperation },
       items: [
-        { label: 'Квартири', to: RoutesEnum.ManageApartments },
-        { label: 'Інформація про квартиру', to: RoutesEnum.ApartmentInfo },
+        { label: 'Квартири', to: `/main/cooperation/${this.houseId}` },
+        { label: 'Інформація про квартиру', to: `/main/cooperation/${this.houseId}/${this.apartmentId}` },
       ],
     };
   },

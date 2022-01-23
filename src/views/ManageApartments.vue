@@ -2,7 +2,7 @@
   <div class="manage-apartments">
     <div class="wrapper">
       <div class="breadcrumb">
-        <Breadcrumb />
+        <Breadcrumb :houseId="id"> </Breadcrumb>
       </div>
       <div class="wrapper-container">
         <div class="container" v-if="!loading">
@@ -298,7 +298,7 @@ export default defineComponent({
 
     function openEditHouseModal() {
       displayModalForEditHouse.value = true;
-    };
+    }
 
     onMounted(() => {
       setHouseInfo();
