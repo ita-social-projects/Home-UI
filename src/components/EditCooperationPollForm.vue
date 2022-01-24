@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form @submit.prevent="editPoll()" id="edit_poll_form">
     <div class="input-section">
       <label class="dialog-item" for="poll_title">Заголовок: </label>
       <InputText
@@ -39,17 +39,20 @@
     <div class="input-section">
       <label class="dialog-item" for="poll_polledHouses">Список будинків: </label>
       <div class="checkbox-section">
-        <div v-for="house of houses" :key="house.id" class="p-field-checkbox">
+        <div v-for="(house, index) of houses" :key="house.id" class="p-field-checkbox">
           <Checkbox
             v-model="pollData.polledHouses"
             :value="house"
             :id="house.id"
+            :class="{
+              'p-invalid': v$.pollData.polledHouses.$error,
+            }"
             name="category"
             @input="isDisabled = false"
+            @blur="v$.pollData.polledHouses.$touch"
           />
           <label class="house-label" :for="house.id">
-            {{ house.address?.houseNumber }}, {{ house.address?.houseBlock }}, {{ house.address?.district }},
-            {{ house.address?.street }}
+            {{ houseAddresses[index] }}
           </label>
         </div>
       </div>
@@ -63,11 +66,15 @@
       <Calendar
         v-model="pollData.creationDate"
         :showIcon="true"
+        :class="{
+          'p-invalid': v$.pollData.creationDate.$error,
+        }"
         id="caledar-begin"
         dateFormat="dd.mm.yy"
         @date-select="onChangeCreationDate"
+        @blur="v$.pollData.creationDate.$touch"
       />
-      <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error">
+      <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error сreationDate-рelp">
         Переконайтесь, що дата стоїть не раніше, ніж завтра!
       </small>
       <small v-if="v$.pollData.creationDate.$error" id="poll_creationDate" class="p-error">{{
@@ -85,26 +92,27 @@
         dateFormat="dd.mm.yy"
         @date-select="isDisabled = false"
       />
-      <small id="apartment_area_help" class="p-warning">Виставляється автоматично 15 днів з дати початку</small>
+      <small id="apartment_area_help" class="p-warning">Виставляється автоматично 15 днів з дати початку.</small>
+    </div>
+
+    <div class="buttons-container">
+      <Button
+        :disabled="isDisabled || v$.pollData.$invalid"
+        label="Зберегти зміни"
+        icon="pi pi-check"
+        autofocus
+        class="p-button-info"
+        type="submit"
+        value="Submit"
+      />
+      <Button
+        label="Скасувати"
+        icon="pi pi-times"
+        class="p-button-outlined p-button-info"
+        @click="this.$emit('close-edit-poll')"
+      />
     </div>
   </form>
-
-  <div class="buttons-container">
-    <Button
-      :disabled="isDisabled || v$.pollData.$invalid"
-      label="Зберегти зміни"
-      icon="pi pi-check"
-      autofocus
-      class="p-button-info"
-      @click="editPoll"
-    />
-    <Button
-      label="Скасувати"
-      icon="pi pi-times"
-      class="p-button-outlined p-button-info"
-      @click="this.$emit('close-edit-poll')"
-    />
-  </div>
 </template>
 
 <script lang="ts">
@@ -124,7 +132,7 @@ import {
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
-import { EditPollPayloadInterface, PollsActionEnum, PollsGettersEnum, PutPollInterface } from '@/store/polls/types';
+import { PollsActionEnum, PollsGettersEnum, PutPollInterface } from '@/store/polls/types';
 import { PollModel } from '@/store/polls/models/poll.model';
 import useVuelidate from '@vuelidate/core';
 import { HouseModel } from '@/shared/models/house.model';
@@ -220,7 +228,7 @@ export default defineComponent({
       await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.UPDATE_POLL}`, {
         data,
         ids,
-      } as EditPollPayloadInterface);
+      });
 
       this.$props.showSuccessOperation('редаговано');
       this.$emit('close-edit-poll');
@@ -228,6 +236,7 @@ export default defineComponent({
     onChangeCreationDate() {
       const dateTomorrow = new Date();
       dateTomorrow.setDate(dateTomorrow.getDate() + 1);
+      dateTomorrow.setHours(0, 0, 0, 0);
 
       if (this.pollData.creationDate < dateTomorrow) {
         this.isDisabled = true;
@@ -251,6 +260,14 @@ export default defineComponent({
       selectedPoll: `${StoreModuleEnum.pollsStore}/${PollsGettersEnum.getSelectedPoll}`,
       houses: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
     }),
+    houseAddresses(): Array<string> {
+      return this.houses.reduce((acc: Array<string>, cur: HouseModel) => {
+        acc.push(
+          `${cur.address?.houseNumber}, ${cur.address?.houseBlock}, ${cur.address?.district}, ${cur.address?.street}`
+        );
+        return acc;
+      }, []);
+    },
   },
 });
 </script>
@@ -261,42 +278,67 @@ export default defineComponent({
   margin: 0.2em 0.9rem;
   width: 80%;
 }
-.buttons-container {
-  float: right;
-  .p-button-outlined {
-    margin-left: 20px;
-  }
-}
-.input-section {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
-}
-.checkbox-section {
-  border: 1px solid #d4d4d8;
-  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
-  border-radius: 5px;
-  padding: 15px;
-  width: 400px;
-  height: 140px;
-  overflow: auto;
-}
-.p-field-checkbox {
-  height: 30px;
-}
-.p-calendar {
-  width: 200px;
-}
-.dialog-item {
-  display: inline-block;
-  width: 260px;
-}
+form {
+  .input-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
 
-.p-inputtext.p-component {
-  width: 400px;
-}
-.p-error,
-.p-warning {
-  @extend %error-message;
+    .dialog-item {
+      display: inline-block;
+      width: 260px;
+    }
+    .checkbox-section {
+      border: 1px solid #d4d4d8;
+      box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+      border-radius: 5px;
+      padding: 15px;
+      width: 400px;
+      height: 140px;
+      overflow: auto;
+
+      .p-field-checkbox {
+        height: 30px;
+        .house-label {
+          padding-left: 10px;
+        }
+      }
+    }
+    .p-error {
+      display: flex;
+      position: absolute;
+      justify-content: right;
+      margin: -35px -25px 0 -50px;
+      @extend %error-message;
+    }
+    .p-warning {
+      display: flex;
+      position: absolute;
+      justify-content: right;
+      width: 400px;
+      color: #3b82f6;
+      margin: 3em 0 0 8rem;
+      @extend %error-message;
+    }
+    .сreationDate-рelp {
+      display: flex;
+      justify-content: right;
+      width: 400px;
+      color: #f63b3b;
+      margin: 3em 0 0 8rem;
+      @extend %error-message;
+    }
+  }
+
+  .p-inputtext.p-component {
+    width: 400px;
+  }
+  .buttons-container {
+    margin: 1rem 0 0 0;
+    float: right;
+    .p-button-outlined {
+      margin-left: 20px;
+    }
+  }
 }
 </style>
