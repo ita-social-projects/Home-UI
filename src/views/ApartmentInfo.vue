@@ -198,7 +198,6 @@ import Breadcrumb from '@/components/Breadcrumb.vue';
 import { computed, defineComponent, onMounted, reactive, ref, toRefs, watch } from 'vue';
 import { useStore } from 'vuex';
 import { StoreModuleEnum } from '@/store/types';
-import { ContactsModel } from '@/shared/models/contacts.modal';
 import { ApartmentModel } from '@/store/apartments/models/apartment.model';
 import { OwnershipsModel } from '@/shared/models/ownerships.model';
 import { UpdateApartmentDTOModel } from '@/store/apartments/models/update-upartmentDTO.model';
@@ -214,6 +213,8 @@ import {
   ownershipPartValidator,
 } from '@/utils/validators';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { UserContactInterface } from '@/store/user/types';
+import { ContactTypeEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'ApartmentInfo',
@@ -241,8 +242,7 @@ export default defineComponent({
     const isErrorOwnershipSum = ref(false);
     const errorSumText =
       'Перевірте усі поля "Частка власності, сумма усіх часток власності повинна бути рівна чи менше 1';
-    const { apartment } = toRefs(props);
-    const { id } = toRefs(props);
+    const { id, apartment } = toRefs(props);
     const store = useStore();
     const loading = ref(true);
     const submitted = ref(false);
@@ -300,7 +300,7 @@ export default defineComponent({
       ];
     };
 
-    const toggle = (event: any, data: any) => {
+    const toggle = (event: Event, data: any) => {
       menu.value.toggle(event);
       selectedOwner.value = data;
     };
@@ -350,7 +350,7 @@ export default defineComponent({
       ownershipsInfo.value = [];
       ownershipsData.value.map((el: any) => {
         const currentContact = el?.owner.contacts.find(
-          (contact: ContactsModel) => !!contact.main && contact.type === 'email'
+          (contact: UserContactInterface) => !!contact.main && contact.type === ContactTypeEnum.email
         );
 
         const newElem = {

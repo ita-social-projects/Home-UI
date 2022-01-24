@@ -4,7 +4,7 @@ export class PostContactModel {
   public type: string;
   public main: boolean;
   public email?: string;
-  public phone?: number;
+  public phone?: string;
   public id?: number;
   constructor(contacts: UserContactInterface) {
     this.type = contacts.type;
