@@ -1,4 +1,4 @@
-import { createLogger, MutationTree } from 'vuex';
+import { MutationTree } from 'vuex';
 import { PollsStateInterface, PollsMutationEnum, Mutations } from '@/store/polls/types';
 
 export const mutations: MutationTree<PollsStateInterface> & Mutations = {
@@ -14,7 +14,7 @@ export const mutations: MutationTree<PollsStateInterface> & Mutations = {
     state.getPollById = payload;
   },
   [PollsMutationEnum.DELETE_POLL]: (state, payload) => {
-    const updatePolls = state.cooperationPolls?.filter((el) => el.id !== payload.pollId);
+    const updatePolls = state.cooperationPolls?.filter((el) => el.id !== payload);
     state.cooperationPolls = updatePolls;
   },
   [PollsMutationEnum.UPDATE_POLL]: (state, payload) => {

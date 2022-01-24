@@ -8,9 +8,9 @@
           icon="pi pi-cog"
           class="p-button p-button-info p-button-text"
           type="button"
-          @click="toggle($event)"
           aria-haspopup="true"
           aria-controls="overlay_menu"
+          @click="toggle($event)"
         />
         <Menu :model="pollActions()" id="overlay_menu" ref="menu" :popup="true" />
       </div>
@@ -53,13 +53,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, VueElement } from 'vue';
 import { mapGetters } from 'vuex';
 import { PollModel } from '@/store/polls/models/poll.model';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 import { StoreModuleEnum } from '@/store/types';
-import { PollsActionEnum } from '@/store/polls/types';
+import { deletePollPayloadInterface, PollsActionEnum } from '@/store/polls/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 import ConfirmPopup from 'primevue/confirmpopup';
 import Dialog from 'primevue/dialog';
@@ -89,7 +89,7 @@ export default defineComponent({
             icon: 'pi pi-times',
             type: 'Submit',
             command: () => {
-              this.confirmDeletePoll(event);
+              this.confirmDeletePoll(event as Event);
             },
           },
           {
@@ -118,9 +118,9 @@ export default defineComponent({
       }
       return false;
     },
-    toggle(event: any): void {
+    toggle(event: Event): void {
       event.stopPropagation();
-      (this.$refs.menu as any).toggle(event);
+      (this.$refs.menu as VueElement & { toggle: (event: Event) => void }).toggle(event);
     },
     confirmDeletePoll(event: Event) {
       if (this.checkStatus(this.$props.poll.status)) return;
@@ -136,7 +136,7 @@ export default defineComponent({
           const payload = {
             cooperationId: this.cooperationId,
             pollId: this.$props.poll.id,
-          };
+          } as deletePollPayloadInterface;
 
           await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.DELETE_POLL}`, payload);
           this.showSuccessOperation('видалено');

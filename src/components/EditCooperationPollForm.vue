@@ -3,13 +3,13 @@
     <div class="input-section">
       <label class="dialog-item" for="poll_title">Заголовок: </label>
       <InputText
-        class="input-poll"
-        id="poll_title"
-        placeholder="Заголовок"
         v-model.trim="pollData.header"
         :class="{
           'p-invalid': v$.pollData.header.$error,
         }"
+        class="input-poll"
+        id="poll_title"
+        placeholder="Заголовок"
         @blur="v$.pollData.header.$touch"
         @input="isDisabled = false"
       />
@@ -21,13 +21,13 @@
     <div class="input-section">
       <label class="dialog-item" for="poll_description">Опис: </label>
       <Textarea
-        id="poll_description"
-        placeholder="Детальний опис"
         v-model.trim="pollData.description"
-        rows="8"
         :class="{
           'p-invalid': v$.pollData.description.$error,
         }"
+        id="poll_description"
+        placeholder="Детальний опис"
+        rows="8"
         @blur="v$.pollData.description.$touch"
         @input="isDisabled = false"
       />
@@ -41,10 +41,10 @@
       <div class="checkbox-section">
         <div v-for="house of houses" :key="house.id" class="p-field-checkbox">
           <Checkbox
+            v-model="pollData.polledHouses"
+            :value="house"
             :id="house.id"
             name="category"
-            :value="house"
-            v-model="pollData.polledHouses"
             @input="isDisabled = false"
           />
           <label class="house-label" :for="house.id">
@@ -61,26 +61,29 @@
     <div class="input-section">
       <label class="dialog-item" for="caledar-begin">Дата початку:</label>
       <Calendar
-        id="caledar-begin"
         v-model="pollData.creationDate"
         :showIcon="true"
+        id="caledar-begin"
         dateFormat="dd.mm.yy"
         @date-select="onChangeCreationDate"
       />
       <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error">
         Переконайтесь, що дата стоїть не раніше, ніж завтра!
       </small>
+      <small v-if="v$.pollData.creationDate.$error" id="poll_creationDate" class="p-error">{{
+        v$.pollData.creationDate.$errors[0].$message
+      }}</small>
     </div>
 
     <div class="input-section">
       <label class="dialog-item" for="calendar-finish">Дата закінчення:</label>
       <Calendar
-        id="calendar-finish"
         v-model="pollData.completionDate"
         :showIcon="true"
+        :disabled="true"
+        id="calendar-finish"
         dateFormat="dd.mm.yy"
         @date-select="isDisabled = false"
-        :disabled="true"
       />
       <small id="apartment_area_help" class="p-warning">Виставляється автоматично 15 днів з дати початку</small>
     </div>
@@ -88,18 +91,18 @@
 
   <div class="buttons-container">
     <Button
+      :disabled="isDisabled || v$.pollData.$invalid"
       label="Зберегти зміни"
       icon="pi pi-check"
-      @click="editPoll"
       autofocus
       class="p-button-info"
-      :disabled="isDisabled || v$.pollData.$invalid"
+      @click="editPoll"
     />
     <Button
       label="Скасувати"
       icon="pi pi-times"
-      @click="this.$emit('close-edit-poll')"
       class="p-button-outlined p-button-info"
+      @click="this.$emit('close-edit-poll')"
     />
   </div>
 </template>
@@ -121,7 +124,7 @@ import {
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
-import { PollsActionEnum, PollsGettersEnum, PutPollInterface } from '@/store/polls/types';
+import { EditPollPayloadInterface, PollsActionEnum, PollsGettersEnum, PutPollInterface } from '@/store/polls/types';
 import { PollModel } from '@/store/polls/models/poll.model';
 import useVuelidate from '@vuelidate/core';
 import { HouseModel } from '@/shared/models/house.model';
@@ -147,6 +150,7 @@ export default defineComponent({
 
       isDisabled: true,
       isCreationDateHelpActive: false,
+
       beginDate: new Date(),
       finishDate: new Date(),
 
@@ -173,6 +177,7 @@ export default defineComponent({
         header: { requiredValidator, pollTitleLenghtValidator, cyrillicLangTitleValidator },
         description: { requiredValidator, pollDescriptionLenghtValidator, cyrillicLangTitleValidator },
         polledHouses: { requiredValidator },
+        creationDate: { requiredValidator },
       },
     };
   },
@@ -208,20 +213,21 @@ export default defineComponent({
         completionDate: new Date(this.finishDate.toLocaleString('en-US')).toISOString(),
         status: this.$props.poll.status,
         polledHouses: this.pollData.polledHouses,
-      };
+      } as PutPollInterface;
 
       const ids = { cooperationId: this.cooperationId, pollId: this.$props.poll.id };
 
       await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.UPDATE_POLL}`, {
         data,
         ids,
-      });
+      } as EditPollPayloadInterface);
 
       this.$props.showSuccessOperation('редаговано');
       this.$emit('close-edit-poll');
     },
     onChangeCreationDate() {
-      const dateTomorrow = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1);
+      const dateTomorrow = new Date();
+      dateTomorrow.setDate(dateTomorrow.getDate() + 1);
 
       if (this.pollData.creationDate < dateTomorrow) {
         this.isDisabled = true;
@@ -250,6 +256,11 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+%error-message {
+  padding-top: 1.2em;
+  margin: 0.2em 0.9rem;
+  width: 80%;
+}
 .buttons-container {
   float: right;
   .p-button-outlined {
@@ -283,5 +294,9 @@ export default defineComponent({
 
 .p-inputtext.p-component {
   width: 400px;
+}
+.p-error,
+.p-warning {
+  @extend %error-message;
 }
 </style>

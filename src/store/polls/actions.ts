@@ -37,7 +37,7 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
     try {
       const url = `cooperations/${payload.cooperationId}/polls/${payload.pollId}`;
       await HTTP.delete(url);
-      commit(PollsMutationEnum.DELETE_POLL, payload);
+      commit(PollsMutationEnum.DELETE_POLL, payload.pollId);
     } catch (e: any) {
       console.log(e.response);
     }
@@ -48,18 +48,18 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
       const url = `cooperations/${payload.ids.cooperationId}/polls/${payload.ids.pollId}`;
       const { data } = await HTTP.put(url, pollToSend);
 
-      const mockData = {
-        id: data.id,
-        header: data.header,
-        description: payload.data.description,
-        creation_date: payload.data.creationDate,
-        completion_date: payload.data.completionDate,
-        status: data.status,
-        type: data.type,
-        polled_houses: payload.data.polledHouses,
-      };
+      // const mockData = {
+      //   id: data.id,
+      //   header: data.header,
+      //   description: payload.data.description,
+      //   creation_date: payload.data.creationDate,
+      //   completion_date: payload.data.completionDate,
+      //   status: data.status,
+      //   type: data.type,
+      //   polled_houses: payload.data.polledHouses,
+      // };
 
-      const poll = new PollModel(mockData);
+      const poll = new PollModel(data);
 
       commit(PollsMutationEnum.UPDATE_POLL, { poll, pollId: payload.ids.pollId });
     } catch (e: any) {
