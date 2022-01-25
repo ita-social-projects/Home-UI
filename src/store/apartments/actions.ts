@@ -10,6 +10,7 @@ import {
   Actions,
 } from '@/store/apartments/types';
 import { HTTP } from '@/core/api/http-common';
+import { UpdateApartmentDTOModel } from './models/update-upartmentDTO.model';
 
 export const actions: ActionTree<ApartmentsStateInterface, RootStateInterface> & Actions = {
   [ApartmentsActionsEnum.SET_APARTMENTS]: async ({ commit }, payload) => {
@@ -37,7 +38,8 @@ export const actions: ActionTree<ApartmentsStateInterface, RootStateInterface> &
   [ApartmentsActionsEnum.EDIT_APARTMENT]: async ({ commit }, payload) => {
     try {
       const url = `/houses/${payload.houseId}/apartments/${payload.apartmentId}`;
-      const { data } = await HTTP.put(url, payload.payloadData);
+      const body = new UpdateApartmentDTOModel(payload.body);
+      const { data } = await HTTP.put(url, body);
       const apartment: ApartmentModel = new ApartmentModel(data);
       commit(ApartmentsMutationsEnum.EDIT_APARTMENT, apartment);
     } catch (e: any) {

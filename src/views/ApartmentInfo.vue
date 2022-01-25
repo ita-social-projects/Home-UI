@@ -24,70 +24,26 @@
               label="Редагувати"
               icon="pi pi-pencil"
               class="p-button-outlined p-button-info"
-              @click="openEditApartmentDialog"
+              @click="displayEditApartmentModal = true"
             />
           </div>
         </div>
         <Dialog
           header="Редагувати квартиру"
-          v-model:visible="visibleApartmentDialog"
+          v-model:visible="displayEditApartmentModal"
           :style="{ width: '750px' }"
           :modal="true"
           :closable="false"
           :dismissableMask="true"
         >
-          <form>
-            <div>
-              <label for="iban">Номер квартири : </label>
-              <div class="input-block">
-                <small v-if="v$.apartmentNumber.$error" class="p-error">{{
-                  v$.apartmentNumber.$errors[0].$message
-                }}</small>
-                <InputText
-                  id="apartmentNumber"
-                  placeholder="Номер квартири"
-                  maxlength="6"
-                  v-model="editApartmentInfo.apartmentNumber"
-                  :class="{ 'p-invalid': v$.apartmentNumber.$error }"
-                  @input="v$.apartmentNumber.$touch"
-                />
-              </div>
-            </div>
-            <div>
-              <label for="edrpou">Площа квартири : </label>
-              <div class="input-block">
-                <small v-if="v$.apartmentArea.$error" class="p-error">{{ v$.apartmentArea.$errors[0].$message }}</small>
-                <InputText
-                  id="apartmentArea"
-                  placeholder="Площа квартири"
-                  maxlength="7"
-                  v-model="editApartmentInfo.apartmentArea"
-                  :class="{ 'p-invalid': v$.apartmentArea.$error }"
-                  @input="v$.apartmentArea.$touch"
-                />
-                <span> кв.м.</span>
-              </div>
-            </div>
-          </form>
-
-          <template #footer>
-            <Button
-              label="Редагувати"
-              icon="pi pi-check"
-              class="p-button-info"
-              :disabled="v$.$invalid"
-              @click="updateApartment"
-            />
-
-            <Button
-              label="Скасувати"
-              icon="pi pi-times"
-              class="p-button-outlined p-button-info"
-              @click="visibleApartmentDialog = false"
-            />
-          </template>
+          <EditApartmentForm
+            :houseId="id"
+            :apartmentId="apartment"
+            :propsApartmentData="apartmentInfo"
+            @cancel-editing="displayEditApartmentModal = false"
+            @apartment-saved="displayEditApartmentModal = false"
+          />
         </Dialog>
-
         <div class="container">
           <DataTable
             responsiveLayout="scroll"
@@ -159,11 +115,11 @@
               maxlength="10"
               autofocus
               v-model.trim="editOwnershipData.ownershipPart"
-              :class="{ 'p-invalid': v$$.ownershipPart.$error }"
+              :class="{ 'p-invalid': v$.ownershipPart.$error }"
               @blur="checkSum(selectedOwner.id)"
-              @input="v$$.ownershipPart.$touch"
+              @input="v$.ownershipPart.$touch"
             />
-            <small v-if="v$$.ownershipPart.$error" class="p-error">{{ v$$.ownershipPart.$errors[0].$message }}</small>
+            <small v-if="v$.ownershipPart.$error" class="p-error">{{ v$.ownershipPart.$errors[0].$message }}</small>
             <small v-if="isErrorOwnershipSum" class="p-error">{{ errorSumText }}</small>
           </div>
           <template #footer>
@@ -177,7 +133,7 @@
               label="Зберегти"
               icon="pi pi-check"
               class="p-button-info"
-              :disabled="v$$.$invalid || checkSum(selectedOwner.id)"
+              :disabled="v$.$invalid || checkSum(selectedOwner.id)"
               @click="editOwner"
             />
           </template>
@@ -195,30 +151,27 @@ import InputText from 'primevue/inputtext';
 import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import EditApartmentForm from '@/components/EditApartmentForm.vue';
 import { computed, defineComponent, onMounted, reactive, ref, toRefs, watch } from 'vue';
 import { useStore } from 'vuex';
 import { StoreModuleEnum } from '@/store/types';
 import { ApartmentModel } from '@/store/apartments/models/apartment.model';
 import { OwnershipsModel } from '@/shared/models/ownerships.model';
-import { UpdateApartmentDTOModel } from '@/store/apartments/models/update-upartmentDTO.model';
 import { UpdateOwnershipsDTOModel } from '@/shared/models/update-ownershipsDTO.model';
 import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
 import { OwnershipsActionEnum, OwnershipsGettersEnum } from '@/store/ownerships/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { useVuelidate } from '@vuelidate/core';
-import {
-  requiredValidator,
-  apartmentNumberValidator,
-  apartmentAreaValidator,
-  ownershipPartValidator,
-} from '@/utils/validators';
+import { requiredValidator, ownershipPartValidator } from '@/utils/validators';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 import { UserContactInterface } from '@/store/user/types';
 import { ContactTypeEnum } from '@/store/authorization/types';
+import { HouseModel } from '@/shared/models/house.model';
 
 export default defineComponent({
   name: 'ApartmentInfo',
   components: {
+    EditApartmentForm,
     Breadcrumb,
     Button,
     Menu,
@@ -248,7 +201,7 @@ export default defineComponent({
     const submitted = ref(false);
     const editOwnerDialog = ref(false);
     const deleteOwnerDialog = ref(false);
-    const visibleApartmentDialog = ref(false);
+    const displayEditApartmentModal = ref(false);
     const selectedOwner = ref({
       id: 0,
       fullName: '',
@@ -260,24 +213,14 @@ export default defineComponent({
       id: 0,
       ownershipPart: '',
     });
-    const editApartmentInfo = reactive({
-      id: 0,
-      apartmentNumber: '',
-      apartmentArea: 0,
-    });
     const menu = ref();
 
     const rules = {
-      apartment: {
-        apartmentNumber: { requiredValidator, apartmentNumberValidator },
-        apartmentArea: { requiredValidator, apartmentAreaValidator },
-      },
       owner: {
         ownershipPart: { requiredValidator, ownershipPartValidator },
       },
     };
-    const v$ = useVuelidate(rules.apartment, editApartmentInfo);
-    const v$$ = useVuelidate(rules.owner, editOwnershipData);
+    const v$ = useVuelidate(rules.owner, editOwnershipData);
 
     const menuActions = () => {
       return [
@@ -317,7 +260,7 @@ export default defineComponent({
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
     };
 
-    const houseInfo = computed((): any => {
+    const houseInfo = computed((): HouseModel => {
       return store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`];
     });
 
@@ -420,30 +363,6 @@ export default defineComponent({
       return Number(decimal);
     };
 
-    const openEditApartmentDialog = () => {
-      visibleApartmentDialog.value = true;
-      editApartmentInfo.id = apartmentInfo.value.id;
-      editApartmentInfo.apartmentNumber = apartmentInfo.value.apartmentNumber;
-      editApartmentInfo.apartmentArea = apartmentInfo.value.apartmentArea;
-    };
-
-    const updateApartment = () => {
-      if (
-        editApartmentInfo.apartmentNumber === apartmentInfo.value.apartmentNumber &&
-        editApartmentInfo.apartmentArea === apartmentInfo.value.apartmentArea
-      ) {
-        visibleApartmentDialog.value = false;
-        return;
-      }
-      const payload = {
-        houseId: id.value,
-        apartmentId: editApartmentInfo.id,
-        payloadData: new UpdateApartmentDTOModel(editApartmentInfo),
-      };
-      store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.EDIT_APARTMENT}`, payload);
-      visibleApartmentDialog.value = false;
-    };
-
     const sumOwnershipPart = computed(() => {
       return ownershipsData.value.reduce((acc: number, cur: any) => {
         acc += convertFractionToDecimal(cur.ownershipPart);
@@ -479,11 +398,8 @@ export default defineComponent({
       errorSumText,
       convertFractionToDecimal,
       sumOwnershipPart,
-      editApartmentInfo,
-      openEditApartmentDialog,
-      updateApartment,
+      displayEditApartmentModal,
       v$,
-      v$$,
       calcOwnerVoutingShare,
       setApartmentInfo,
       apartmentInfo,
@@ -500,7 +416,6 @@ export default defineComponent({
       submitted,
       editOwnerDialog,
       deleteOwnerDialog,
-      visibleApartmentDialog,
       deleteOwner,
       editOwner,
     };

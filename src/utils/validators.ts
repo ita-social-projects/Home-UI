@@ -19,7 +19,7 @@ const validZipCode = helpers.regex(/^\d{5}$/);
 
 const validPhoneNumber = helpers.regex(/^\+380\d{3}\d{2}\d{2}\d{2}$/);
 
-const validApartmentArea = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,9})?$)|(1000$)/);
+const validApartmentArea = helpers.regex(/(^[^0](\d{1,2}){1}(\.\d{1,9})?$)|(1000$)/);
 const validApartmentDecimal = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|(1000$)/);
 const validApartmentNumber = helpers.regex(/^(?!(0))\d{1,4}(\-[a-zа-я])?$/);
 const validHouseDecimal = helpers.regex(/(^(\d{1,100}){1}(\.\d{1,3})?$)/);
