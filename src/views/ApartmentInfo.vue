@@ -353,11 +353,7 @@ export default defineComponent({
     };
 
     const convertFractionToDecimal = (fraction: string): number => {
-      if (fraction === '1') {
-        return 1;
-      } else if (fraction === '0') {
-        return 0;
-      }
+      if (fraction.length === 1) return parseInt(fraction);
       const splitFraction = fraction.split('/');
       const decimal = (+splitFraction[0] / +splitFraction[1]).toFixed(4);
       return Number(decimal);
