@@ -34,6 +34,7 @@ export type Mutations<S = ApartmentsStateInterface> = {
   [ApartmentsMutationsEnum.SET_APARTMENTS](state: S, payload: Array<ApartmentModel>): void;
   [ApartmentsMutationsEnum.SET_APARTMENT_BY_ID](state: S, payload: ApartmentModel): void;
   [ApartmentsMutationsEnum.ADD_APARTMENT](state: S, payload: AddApartmentModel): void;
+  [ApartmentsMutationsEnum.DELETE_APARTMENT](state: S, payload: number): void;
 };
 
 export interface Actions {
@@ -43,6 +44,7 @@ export interface Actions {
     payload: Record<string, unknown>
   ): void;
   [ApartmentsActionsEnum.ADD_APARTMENT]({ commit }: AugmentedActionContext, payload: AddApartmentModel): void;
+  [ApartmentsActionsEnum.DELETE_APARTMENT]({ commit }: AugmentedActionContext, payload: Record<string, number>): void;
 }
 
 export type Getters<S = ApartmentsStateInterface> = {

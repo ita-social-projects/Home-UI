@@ -23,4 +23,8 @@ export const mutations: MutationTree<ApartmentsStateInterface> & Mutations = {
   [ApartmentsMutationsEnum.ADD_APARTMENT]: (state, payload) => {
     state.apartments?.push(payload);
   },
+  [ApartmentsMutationsEnum.DELETE_APARTMENT]: (state, payload) => {
+    const updateCont = state.apartments?.filter((el: ApartmentModel) => el.id !== payload);
+    state.apartments = updateCont;
+  },
 };

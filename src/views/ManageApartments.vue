@@ -30,7 +30,7 @@
               label="Редагувати"
               icon="pi pi-pencil"
               class="p-button-outlined p-button-info"
-              @click="openEditHouseModal"
+              @click="displayModalForEditHouse = true"
             />
             <Dialog
               header="Редагувати будинок"
@@ -54,7 +54,7 @@
             label="Додати квартиру"
             icon="pi pi-pencil"
             class="p-button-outlined p-button-info"
-            @click="openApartmentModal"
+            @click="displayApartmentModal = true"
           />
           <Dialog
             header="Додати квартиру"
@@ -123,7 +123,7 @@
               class="p-button-outlined p-button-info"
               @click="deleteApartmentDialog = false"
             />
-            <Button label="Видалити" icon="pi pi-check" class="p-button-info" @click="deleteApartment" />
+            <Button label="Видалити" icon="pi pi-check" class="p-button-info" @click="deleteApartment(item.id)" />
           </template>
         </Dialog>
         <Dialog
@@ -225,11 +225,12 @@ export default defineComponent({
       return store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
     });
 
-    function openApartmentModal() {
-      displayApartmentModal.value = true;
-    }
-
-    const deleteApartment = () => {
+    const deleteApartment = async (apartmentId: number) => {
+      const payload = {
+        houseId: id.value,
+        apartmentId: apartmentId,
+      };
+      await store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.DELETE_APARTMENT}`, payload);
       deleteApartmentDialog.value = false;
     };
 
@@ -262,10 +263,6 @@ export default defineComponent({
       return store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`];
     });
 
-    function openEditHouseModal() {
-      displayModalForEditHouse.value = true;
-    };
-
     onMounted(() => {
       setHouseInfo();
       setApartments();
@@ -286,8 +283,6 @@ export default defineComponent({
       editApartmentDialog,
       item,
       displayApartmentModal,
-      openApartmentModal,
-      openEditHouseModal,
       displayModalForEditHouse,
     };
   },

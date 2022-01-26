@@ -56,4 +56,12 @@ export const actions: ActionTree<ApartmentsStateInterface, RootStateInterface> &
       console.log(e.response);
     }
   },
+  [ApartmentsActionsEnum.DELETE_APARTMENT]: async ({ commit }, payload) => {
+    try {
+      await HTTP.delete(`/houses/${payload.houseId}/apartments/${payload.apartmentId}`);
+      commit(ApartmentsMutationsEnum.DELETE_APARTMENT, payload.apartmentId);
+    } catch (err: any) {
+      console.log('error DELETE_APARTMENT', err);
+    }
+  },
 };
