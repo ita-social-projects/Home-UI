@@ -54,9 +54,9 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
       //   description: payload.data.description,
       //   creation_date: payload.data.creationDate,
       //   completion_date: payload.data.completionDate,
+      //   polled_houses: payload.data.polledHouses,
       //   status: data.status,
       //   type: data.type,
-      //   polled_houses: payload.data.polledHouses,
       // };
 
       const poll = new PollModel(data);

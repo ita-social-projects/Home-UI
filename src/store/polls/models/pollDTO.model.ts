@@ -6,8 +6,8 @@ export class PollDTOModel {
   public id: number;
   public header: string;
   public description: string;
-  public creation_date: string;
-  public completion_date: string;
+  public creation_date: Date;
+  public completion_date: Date;
   public polled_houses: HouseDTOModel[];
   public status: PollStatusType;
   public type: string;
