@@ -80,7 +80,13 @@ export default defineComponent({
       apartmentData: apartmentValidations,
     };
   },
-
+  mounted() {
+    const payload = {
+      houseId: this.$props.houseId,
+      apartmentId: this.$props.apartmentId,
+    };
+    this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENT_BY_ID}`, payload);
+  },
   methods: {
     async updateApartment() {
       const payload = {

@@ -129,40 +129,16 @@
         <Dialog
           v-model:visible="editApartmentDialog"
           :style="{ width: '450px' }"
-          header="Редагувати квартиру"
           :modal="true"
+          header="Редагувати квартиру"
         >
-          <div class="p-field dialog">
-            <label for="name" class="dialog_item-label">Номер квартири: </label>
-            <InputText
-              id="name"
-              v-model.trim="item.apartmentNumber"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !item.apartmentNumber }"
-            />
-            <small class="p-error" v-if="submitted && !item.apartmentNumber">Введіть номер квартири</small>
-          </div>
-          <div class="p-field dialog_item">
-            <label for="name" class="dialog_item-label">Площа квартири: </label>
-            <InputText
-              id="name"
-              v-model.trim="item.apartmentArea"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !item.apartmentArea }"
-            />
-            <small class="p-error" v-if="submitted && !item.apartmentArea">Введіть площу квартири</small>
-          </div>
-          <template #footer>
-            <Button
-              label="Скасувати"
-              icon="pi pi-times"
-              class="p-button-outlined p-button-info"
-              @click="editApartmentDialog = false"
-            />
-            <Button label="Зберегти" icon="pi pi-check" class="p-button-info" @click="editApartment" />
-          </template>
+          <EditApartmentForm
+            :houseId="id"
+            :apartmentId="item.id"
+            :propsApartmentData="item"
+            @cancel-editing="editApartmentDialog = false"
+            @apartment-saved="editApartmentDialog = false"
+          />
         </Dialog>
       </div>
     </div>
@@ -179,16 +155,14 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
-import InputText from 'primevue/inputtext';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddApartmentForm from '@/components/AddApartmentForm.vue';
+import EditApartmentForm from '@/components/EditApartmentForm.vue';
 import EditHouseForm from '@/components/EditHouseForm.vue';
-
 import { StoreModuleEnum } from '@/store/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
-
 import { HouseModel } from '@/shared/models/house.model';
 
 export default defineComponent({
@@ -200,8 +174,8 @@ export default defineComponent({
     Column,
     Menu,
     Dialog,
-    InputText,
     AddApartmentForm,
+    EditApartmentForm,
     EditHouseForm,
   },
   props: {
@@ -220,14 +194,12 @@ export default defineComponent({
     const deleteApartmentDialog = ref(false);
     const editApartmentDialog = ref(false);
     const item = ref({});
-    const submitted = ref(false);
     const displayApartmentModal = ref(false);
     const displayModalForEditHouse = ref(false);
 
     const toggle = (event: KeyboardEvent, data: ApartmentModel) => {
       menu.value.toggle(event);
       item.value = data;
-      submitted.value = false;
     };
 
     const menuActions = () => {
@@ -258,13 +230,7 @@ export default defineComponent({
     }
 
     const deleteApartment = () => {
-      submitted.value = true;
       deleteApartmentDialog.value = false;
-    };
-
-    const editApartment = () => {
-      submitted.value = true;
-      editApartmentDialog.value = false;
     };
 
     const setApartments = async () => {
@@ -318,8 +284,6 @@ export default defineComponent({
       deleteApartmentDialog,
       deleteApartment,
       editApartmentDialog,
-      editApartment,
-      submitted,
       item,
       displayApartmentModal,
       openApartmentModal,
@@ -381,43 +345,5 @@ export default defineComponent({
       font-weight: bold;
     }
   }
-}
-
-.dialog {
-  &_item {
-    margin-bottom: 20px;
-
-    &-label {
-      display: inline-block;
-      margin-right: 15px;
-    }
-  }
-}
-
-.p-field {
-  margin-bottom: 20px;
-}
-%error-message {
-  margin: 0.4em 0.5rem;
-  width: 100%;
-}
-
-.address-details {
-  margin-left: 2rem;
-  .dialog-item-address {
-    margin-right: -2rem;
-  }
-}
-.dialog-item {
-  display: inline-block;
-  width: 260px;
-  margin-top: 30px;
-}
-.p-error {
-  display: flex;
-  justify-content: right;
-  margin-bottom: -30px;
-  margin-top: 0;
-  @extend %error-message;
 }
 </style>
