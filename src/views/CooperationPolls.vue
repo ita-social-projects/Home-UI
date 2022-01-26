@@ -38,7 +38,10 @@ export default defineComponent({
   },
   methods: {
     setSelectedPoll(id: number) {
-      this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_SELECTED_POLL}`, id);
+      this.$router.push({
+        name: 'poll-info',
+        params: { id },
+      });
     },
   },
   computed: {

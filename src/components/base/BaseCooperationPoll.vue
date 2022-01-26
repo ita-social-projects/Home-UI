@@ -23,6 +23,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { PollModel } from '@/store/polls/models/poll.model';
+import { PollStatusEnum, PollStatusType } from "@/store/polls/types";
 
 export default defineComponent({
   name: 'BaseCooperationPoll',
@@ -34,13 +35,8 @@ export default defineComponent({
   },
   computed: {
     pollReadableStatus(): string {
-      const statusMap = {
-        draft: 'Чернетка',
-        active: 'Активне',
-        completed: 'Завершене',
-        suspended: 'sus pen ded',
-      };
-      return statusMap[this.poll.status];
+      const status: PollStatusType = this.poll.status;
+      return `${PollStatusEnum[status]}`;
     },
   },
 });
