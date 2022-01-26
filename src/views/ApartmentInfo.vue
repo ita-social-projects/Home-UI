@@ -2,7 +2,7 @@
   <div class="apartment-info">
     <div class="wrapper">
       <div class="breadcrumb">
-        <Breadcrumb :apartmentId="id"> </Breadcrumb>
+        <Breadcrumb :houseIdFromApartInfo="id" :apartmentIdFromApartInfo="apartment"> </Breadcrumb>
       </div>
       <div class="wrapper-container">
         <div class="container">
