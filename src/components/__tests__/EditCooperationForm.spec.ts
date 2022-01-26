@@ -108,7 +108,7 @@ describe('EditCooperationInfo.vue', () => {
 
       const data = {
         userCooperations: {
-          id: 1,
+          id: undefined,
           name: 'Крила ночі',
           edrpou: '12345678',
           iban: 'UA122115518961158112111881111',
@@ -131,7 +131,7 @@ describe('EditCooperationInfo.vue', () => {
       await wrapper.vm.$nextTick();
 
       expect(editCooperationInfoSpy).toBeCalled();
-      expect(store.dispatch).toHaveBeenLastCalledWith('cooperationStore/SET_COOPERATION_UPDATE', data);
+      expect(store.dispatch).toHaveBeenLastCalledWith('cooperationStore/SET_COOPERATION_UPDATE', data.userCooperations);
     });
 
     it('testing cooperationInfo getter', async () => {

@@ -228,6 +228,7 @@ export default defineComponent({
     ]).then(() => {
       this.isLoaded = true;
     });
+    console.log('id coopinfo', this.cooperationData.id);
   },
   methods: {
     onRowSelect() {

@@ -324,6 +324,7 @@ export default defineComponent({
     try {
       this.initData();
       this.$emit('isLoadedMode');
+      console.log('id', this.$props.cooperationId);
     } catch {
       console.log('error was caught during mounting');
     }
