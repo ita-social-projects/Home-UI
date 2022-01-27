@@ -64,6 +64,7 @@ import {
 import { StoreModuleEnum } from '@/store/types';
 import { LocalStorageGettersEnum } from '@/store/localstorage/types';
 import { AuthActionEnum } from '@/store/authorization/types';
+import { mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'login',
@@ -116,9 +117,12 @@ export default defineComponent({
     };
   },
   computed: {
-    isTokenExist(): boolean {
-      return this.$store.getters[`${StoreModuleEnum.localStorageStore}/${LocalStorageGettersEnum.isTokenExist}`];
-    },
+    // isTokenExist(): boolean {
+    //   return this.$store.getters[`${StoreModuleEnum.localStorageStore}/${LocalStorageGettersEnum.isTokenExist}`];
+    // },
+    ...mapGetters({
+      isTokenExist: `${StoreModuleEnum.localStorageStore}/${LocalStorageGettersEnum.isTokenExist}`,
+    }),
   },
   methods: {
     emailBlur() {
