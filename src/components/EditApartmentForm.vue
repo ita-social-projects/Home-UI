@@ -1,9 +1,9 @@
 <template>
-  <form @submit.prevent="updateApartment()">
+  <form @submit.prevent="updateApartment()" id="edit-apartment-form">
     <div>
       <label for="iban">Номер квартири : </label>
       <div class="input-block">
-        <small v-if="v$.apartmentData.apartmentNumber.$error" class="p-error">{{
+        <small v-if="v$.apartmentData.apartmentNumber.$error" class="p-error" id="apartmentNumber-help">{{
           v$.apartmentData.apartmentNumber.$errors[0].$message
         }}</small>
         <InputText
@@ -19,7 +19,7 @@
     <div>
       <label for="edrpou">Площа квартири : </label>
       <div class="input-block">
-        <small v-if="v$.apartmentData.apartmentArea.$error" class="p-error">{{
+        <small v-if="v$.apartmentData.apartmentArea.$error" class="p-error" id="apartmentArea-help">{{
           v$.apartmentData.apartmentArea.$errors[0].$message
         }}</small>
         <InputText
@@ -35,15 +35,22 @@
     </div>
     <div class="button-div">
       <Button
-        :disabled="disabled || v$.apartmentData.$invalid"
         label="Зберегти зміни"
         icon="pi pi-check"
         type="submit"
         autofocus
         class="p-button-info"
         value="Submit"
+        id="update-apartment-btn"
+        :disabled="disabled || v$.apartmentData.$invalid"
       />
-      <Button label="Скасувати" icon="pi pi-times" class="p-button-outlined p-button-info" @click="cancelEditing" />
+      <Button
+        label="Скасувати"
+        icon="pi pi-times"
+        class="p-button-outlined p-button-info"
+        id="cancel-edit-apartment-btn"
+        @click="cancelEditing"
+      />
     </div>
   </form>
 </template>
