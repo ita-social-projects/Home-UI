@@ -345,8 +345,9 @@ export default defineComponent({
         apartmentId: apartment.value,
         ownerId: selectedOwner.value.id,
         data: new UpdateOwnershipsDTOModel({
-          ownershipPart: selectedOwner.value.ownershipPart,
+          ownershipPart: editOwnershipData.ownershipPart, ///I should save this changes
         }),
+        part: editOwnershipData.ownershipPart, /// mock-data
       };
       store.dispatch(`${StoreModuleEnum.ownershipsStore}/${OwnershipsActionEnum.EDIT_OWNER}`, payload);
       editOwnerDialog.value = false;
