@@ -22,19 +22,36 @@
             {{ pollInfo.completionDate }}
           </div>
         </div>
+        <div v-if="pollInfo.status !== 'draft'" class="poll-content-data">
+          <div class="poll-content_name">
+            <strong>Кількість голосів:</strong>
+          </div>
+          <div class="poll-description">
+            <span class="poll-state yes">За: 10</span>
+            <span class="poll-state no">Проти: 7</span>
+          </div>
+        </div>
         <div class="poll-content-description">
           <div class="poll-content_name">
             <strong>Повний опис опитування:</strong>
           </div>
           <div class="poll-description">
             <p class="poll-description_text">
-              {{ pollInfo.description }}
+              <!--              {{ pollInfo.description }}-->
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto, aut commodi consequatur corporis
+              culpa cupiditate dolores eos incidunt inventore laboriosam maiores molestias odio quae quibusdam rem
+              reprehenderit tempore voluptate! Ab.
+            </p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam aut deserunt ex inventore optio quia,
+              veniam? Atque dignissimos doloribus esse magni minima modi nesciunt quisquam sunt vitae? Magni sunt,
+              veritatis!
             </p>
           </div>
         </div>
       </div>
       <div class="footer">
-        <Button label="Всi опитування" @click="returnAllPollsPage" />
+        <Button id="cancel-button" label="Всi опитування" @click="returnAllPollsPage" />
       </div>
     </div>
   </div>
