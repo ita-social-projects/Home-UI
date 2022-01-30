@@ -4,6 +4,7 @@
       <h1>Рєєстрація користувача</h1>
       <div class="field">
         <input-text
+          id="input-firstname"
           type="text"
           v-model="state.formData.firstName"
           placeholder="Ім'я"
@@ -35,6 +36,7 @@
       <div class="field">
         <input-text
           type="text"
+          :value="this.prefillFields[0][1]"
           v-model="state.formData.email"
           placeholder="e-mail"
           :class="{ 'p-invalid': v$.email.$error }"
@@ -69,6 +71,7 @@
       <div class="field">
         <input-text
           type="text"
+          :value="this.prefillFields[1][1]"
           v-model="state.formData.registrationKey"
           placeholder="Ключ реєстраціїї"
           :class="{ 'p-invalid': v$.registrationKey.$error }"
@@ -110,8 +113,24 @@ import { ContactTypeEnum } from '@/store/authorization/types';
 export default defineComponent({
   name: 'userRegistration',
   components: { InputText, Button, Password },
+  data() {
+    return {
+      prefill: window.location.hash.substr(1).split('&'),
+      prefillFields: [] as any,
+    };
+  },
+  beforeMount() {
+    for (let i = 0; i < this.prefill.length; i++) {
+      this.prefillFields.push(this.prefill[i].split('='));
+    }
+    console.log('before mounted');
+  },
+  mounted() {
+    console.log('mounted');
+  },
   setup() {
     const toast = useToast();
+
     const state = reactive({
       formData: {
         firstName: '',
