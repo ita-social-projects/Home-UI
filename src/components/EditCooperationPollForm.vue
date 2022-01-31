@@ -217,8 +217,8 @@ export default defineComponent({
       const poll = {
         header: this.pollData.header,
         description: this.pollData.description,
-        creationDate: new Date(this.beginDate.toLocaleString('en-US')),
-        completionDate: new Date(this.finishDate.toLocaleString('en-US')),
+        creationDate: new Date(this.beginDate.toLocaleString('en-US')).toISOString(),
+        completionDate: new Date(this.finishDate.toLocaleString('en-US')).toISOString(),
         status: this.$props.poll.status,
         polledHouses: this.pollData.polledHouses,
       };
