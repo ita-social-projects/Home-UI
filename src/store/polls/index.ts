@@ -10,8 +10,9 @@ export const state: PollsStateInterface = {
   selectedPoll: {
     id: 0,
     header: '',
-    creationDate: '',
-    completionDate: '',
+    description: 'Full description',
+    creationDate: new Date(),
+    completionDate: new Date(),
     polledHouses: [],
     status: 'active',
     type: '',
