@@ -132,7 +132,7 @@ import {
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
-import { PollsActionEnum, PollsGettersEnum, PutPollInterface } from '@/store/polls/types';
+import { PollsActionEnum, PollsGettersEnum } from '@/store/polls/types';
 import { PollModel } from '@/store/polls/models/poll.model';
 import useVuelidate from '@vuelidate/core';
 import { HouseModel } from '@/shared/models/house.model';
