@@ -9,8 +9,5 @@ export const getters: GetterTree<PollsStateInterface, RootStateInterface> & Gett
   },
   getSelectedPoll: (state) => {
     return state.selectedPoll;
-  },
-  getPollByID: (state) => {
-    return state.getPollById;
-  },
+  }
 };

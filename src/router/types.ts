@@ -9,6 +9,8 @@ export enum RoutesEnum {
   ManageApartments = '/main/cooperation/:id',
   ApartmentInfo = '/main/cooperation/:id/:apartment',
   Polls = '/main/polls',
+  InvitationSection = '/main/invitations',
+  PageErrorInvintation = '/broken-link',
   PollInfo = '/main/polls/:id',
 
   NotFound = '/:catchAll(.*)',

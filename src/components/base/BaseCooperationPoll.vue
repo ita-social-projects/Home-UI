@@ -2,7 +2,6 @@
   <article @click="openPageWithPollInfo(poll.id)" class="poll">
     <div class="header">
       {{ poll.header }}
-
       <div class="settings-btn">
         <Button
           icon="pi pi-cog"
@@ -64,6 +63,7 @@ import { CooperationGettersEnum } from '@/store/cooperation/types';
 import ConfirmPopup from 'primevue/confirmpopup';
 import Dialog from 'primevue/dialog';
 import EditCooperationPollForm from '@/components/EditCooperationPollForm.vue';
+import { PollStatusEnum, PollStatusType } from '@/store/polls/types';
 
 export default defineComponent({
   name: 'BaseCooperationPoll',
@@ -80,6 +80,7 @@ export default defineComponent({
       required: true,
     },
   },
+
   data() {
     return {
       pollActions: () => {
@@ -168,16 +169,11 @@ export default defineComponent({
       });
     },
   },
+
   computed: {
     pollReadableStatus(): string {
-      const statusMap = {
-        draft: 'Чернетка',
-        active: 'Активне',
-        completed: 'Завершене',
-        suspended: 'sus pen ded',
-        noStatus: '',
-      };
-      return statusMap[this.poll.status];
+      const status: PollStatusType = this.poll.status;
+      return `${PollStatusEnum[status]}`;
     },
     ...mapGetters({
       cooperationId: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`,

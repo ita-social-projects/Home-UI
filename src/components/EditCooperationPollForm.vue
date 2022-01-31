@@ -214,7 +214,7 @@ export default defineComponent({
       this.finishDate = this.selectedPoll?.completionDate;
     },
     async editPoll() {
-      const data = {
+      const poll = {
         header: this.pollData.header,
         description: this.pollData.description,
         creationDate: new Date(this.beginDate.toLocaleString('en-US')).toISOString(),
@@ -226,7 +226,7 @@ export default defineComponent({
       const ids = { cooperationId: this.cooperationId, pollId: this.$props.poll.id };
 
       await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.UPDATE_POLL}`, {
-        data,
+        poll,
         ids,
       });
 

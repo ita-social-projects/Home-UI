@@ -7,15 +7,14 @@ import { actions } from '@/store/polls/actions';
 
 export const state: PollsStateInterface = {
   cooperationPolls: [],
-  selectedPoll: null,
-  getPollById: {
+  selectedPoll: {
     id: 0,
     header: '',
     description: 'Full description',
     creationDate: new Date(),
     completionDate: new Date(),
     polledHouses: [],
-    status: 'noStatus',
+    status: 'active',
     type: '',
   },
   displayModal: false,

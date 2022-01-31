@@ -6,8 +6,8 @@ export class PollModel {
   public id: number;
   public header: string;
   public description: string;
-  public creationDate: Date;
-  public completionDate: Date;
+  public creationDate: Date | string;
+  public completionDate: Date | string;
   public polledHouses: HouseModel[];
   public status: PollStatusType;
   public type: string;

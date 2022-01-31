@@ -19,16 +19,17 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
       console.log(e.response);
     }
   },
+
   [PollsActionEnum.SET_SELECTED_POLL]: ({ commit }, payload) => {
     commit(PollsMutationEnum.SET_SELECTED_POLL, payload);
   },
 
-  [PollsActionEnum.GET_POll_BY_ID]: async ({ commit }, payload) => {
+  [PollsActionEnum.SET_POll_BY_ID]: async ({ commit }, payload) => {
     try {
       const url = `/polls/${payload}`;
       const { data } = await HTTP.get(url);
       const pollByID = new PollModel(data);
-      commit(PollsMutationEnum.GET_POll_BY_ID, pollByID);
+      commit(PollsMutationEnum.SET_POll_BY_ID, pollByID);
     } catch (e: any) {
       console.log(e.response);
     }
@@ -44,24 +45,13 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
   },
   [PollsActionEnum.UPDATE_POLL]: async ({ commit }, payload) => {
     try {
-      const pollToSend = new PostPollDTOModel(payload.data);
+      const pollToSend = new PostPollDTOModel(payload.poll);
       const url = `cooperations/${payload.ids.cooperationId}/polls/${payload.ids.pollId}`;
       const { data } = await HTTP.put(url, pollToSend);
 
-      // const mockData = {
-      //   id: data.id,
-      //   header: data.header,
-      //   description: payload.data.description,
-      //   creation_date: payload.data.creationDate,
-      //   completion_date: payload.data.completionDate,
-      //   polled_houses: payload.data.polledHouses,
-      //   status: data.status,
-      //   type: data.type,
-      // };
-
       const poll = new PollModel(data);
 
-      commit(PollsMutationEnum.UPDATE_POLL, { poll, pollId: payload.ids.pollId });
+      commit(PollsMutationEnum.UPDATE_POLL, { poll, ids: { pollId: payload.ids.pollId } });
     } catch (e: any) {
       console.log(e.response);
     }

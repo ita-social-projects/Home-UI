@@ -25,8 +25,8 @@ export enum AuthGettersEnum {
 }
 
 export enum ContactTypeEnum {
-  EMAIL = 'EMAIL',
-  PHONE = 'PHONE',
+  EMAIL = 'email',
+  PHONE = 'phone',
 }
 
 export interface UserInterface {
@@ -48,6 +48,7 @@ export interface UpdateUserInterface {
   password: string;
   contacts: UserContactInterface[];
 }
+
 
 export interface UpdateUserFullNameInterface {
   firstName: string;

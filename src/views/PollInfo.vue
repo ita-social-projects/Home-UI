@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div v-show="dataReady" class="wrapper">
     <div class="container">
       <div class="card-poll">
         <div class="header">
@@ -28,16 +28,7 @@
           </div>
           <div class="poll-description">
             <p class="poll-description_text">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias amet aspernatur atque autem deserunt
-              distinctio, dolore doloribus eius fugiat illum, incidunt necessitatibus, non pariatur perferendis
-              praesentium quasi recusandae repellendus tempore.Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Alias amet aspernatur atque autem deserunt distinctio, dolore doloribus eius fugiat illum, incidunt
-              necessitatibus, non pariatur perferendis praesentium quasi recusandae repellendus tempore.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias amet aspernatur atque autem deserunt
-              distinctio, dolore doloribus eius fugiat illum, incidunt necessitatibus, non pariatur perferendis
-              praesentium quasi recusandae repellendus tempore.
+              {{ pollInfo.description }}
             </p>
           </div>
         </div>
@@ -54,7 +45,7 @@ import { defineComponent } from 'vue';
 import { StoreModuleEnum } from '@/store/types';
 import Button from 'primevue/button';
 import { RoutesEnum } from '@/router/types';
-import { PollsActionEnum } from '@/store/polls/types';
+import { PollsActionEnum, PollStatusEnum, PollStatusType } from '@/store/polls/types';
 import { mapGetters } from 'vuex';
 
 export default defineComponent({
@@ -66,26 +57,28 @@ export default defineComponent({
       required: true,
     },
   },
+  data() {
+    return {
+      dataReady: false,
+    };
+  },
   async mounted() {
-    await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.GET_POll_BY_ID}`, this.id);
+    await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_POll_BY_ID}`, this.id);
+    this.dataReady = true;
   },
   methods: {
     returnAllPollsPage() {
       this.$router.push(RoutesEnum.Polls);
     },
   },
+
   computed: {
     ...mapGetters({
-      pollInfo: `${StoreModuleEnum.pollsStore}/getPollByID`,
+      pollInfo: `${StoreModuleEnum.pollsStore}/getSelectedPoll`,
     }),
     pollReadableStatus(): string {
-      const statusMap: any = {
-        draft: 'Чернетка',
-        active: 'Активне',
-        completed: 'Завершене',
-        suspended: 'sus pen ded',
-      };
-      return statusMap[this.pollInfo.status];
+      const status: PollStatusType = this.pollInfo.status;
+      return `${PollStatusEnum[status]}`;
     },
   },
 });
@@ -113,21 +106,31 @@ export default defineComponent({
         font-weight: bold;
         margin-right: 15px;
       }
-      .poll-state {
-        padding: 0.4em 1em;
-        border-radius: 0.8em;
-        font-size: 15px;
-        &.draft {
-          background-color: rgba(122, 122, 125, 0.25);
-        }
+    }
+    .poll-state {
+      padding: 0.4em 1em;
+      border-radius: 0.8em;
+      font-size: 15px;
+      &.draft {
+        background-color: rgba(122, 122, 125, 0.25);
+      }
 
-        &.active {
-          background-color: rgba(59, 246, 78, 0.25);
-        }
+      &.active {
+        background-color: rgba(59, 246, 78, 0.25);
+      }
 
-        &.completed {
-          background-color: rgba(248, 157, 60, 0.25);
-        }
+      &.completed {
+        background-color: rgba(248, 157, 60, 0.25);
+      }
+      &.yes {
+        background-color: rgba(16, 197, 25, 0.85);
+        color: #fff;
+        margin-right: 20px;
+      }
+
+      &.no {
+        background-color: rgb(187, 13, 13);
+        color: #fff;
       }
     }
 
