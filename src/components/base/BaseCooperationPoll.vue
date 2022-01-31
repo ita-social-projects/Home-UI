@@ -16,6 +16,7 @@
 
       <ConfirmPopup></ConfirmPopup>
     </div>
+
     <div class="poll-content">
       <div class="poll-field">
         <span>Статус опитування:</span>

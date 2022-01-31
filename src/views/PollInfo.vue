@@ -11,7 +11,7 @@
             <strong>Дата початку:</strong>
           </div>
           <div class="poll-description">
-            {{ pollInfo.creationDate }}
+            {{ pollInfo.creationDate.toLocaleString('uk-UA') }}
           </div>
         </div>
         <div class="poll-content-data">
@@ -19,7 +19,7 @@
             <strong>Дата завершення:</strong>
           </div>
           <div class="poll-description">
-            {{ pollInfo.completionDate }}
+            {{ pollInfo.completionDate.toLocaleString('uk-UA') }}
           </div>
         </div>
         <div class="poll-content-description">

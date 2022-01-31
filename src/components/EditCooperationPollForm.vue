@@ -217,11 +217,11 @@ export default defineComponent({
       const poll = {
         header: this.pollData.header,
         description: this.pollData.description,
-        creationDate: new Date(this.beginDate.toLocaleString('en-US')).toISOString(),
-        completionDate: new Date(this.finishDate.toLocaleString('en-US')).toISOString(),
+        creationDate: new Date(this.beginDate.toLocaleString('en-US')),
+        completionDate: new Date(this.finishDate.toLocaleString('en-US')),
         status: this.$props.poll.status,
         polledHouses: this.pollData.polledHouses,
-      } as PutPollInterface;
+      };
 
       const ids = { cooperationId: this.cooperationId, pollId: this.$props.poll.id };
 
@@ -244,10 +244,9 @@ export default defineComponent({
       } else {
         this.beginDate.setHours(0, 0, 0, 0);
 
-        this.finishDate = new Date();
-        this.finishDate.setDate(this.pollData.creationDate.getDate() + 14);
+        this.finishDate = new Date(this.pollData.creationDate.getTime() + 14 * 86400000);
         this.finishDate.setHours(23, 59, 59, 59);
-        this.pollData.completionDate = this.finishDate;
+        this.pollData.completionDate = this.finishDate.toLocaleString('uk-UA').split(',')[0];
 
         this.isCreationDateHelpActive = false;
         this.isDisabled = false;
