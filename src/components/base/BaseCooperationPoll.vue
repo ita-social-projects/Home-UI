@@ -59,12 +59,11 @@ import { PollModel } from '@/store/polls/models/poll.model';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 import { StoreModuleEnum } from '@/store/types';
-import { deletePollPayloadInterface, PollsActionEnum } from '@/store/polls/types';
+import { DeletePollPayloadInterface, PollsActionEnum, PollStatusEnum, PollStatusType } from '@/store/polls/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 import ConfirmPopup from 'primevue/confirmpopup';
 import Dialog from 'primevue/dialog';
 import EditCooperationPollForm from '@/components/EditCooperationPollForm.vue';
-import { PollStatusEnum, PollStatusType } from '@/store/polls/types';
 
 export default defineComponent({
   name: 'BaseCooperationPoll',
@@ -138,7 +137,7 @@ export default defineComponent({
           const payload = {
             cooperationId: this.cooperationId,
             pollId: this.$props.poll.id,
-          } as deletePollPayloadInterface;
+          } as DeletePollPayloadInterface;
 
           await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.DELETE_POLL}`, payload);
           this.showSuccessOperation('видалено');

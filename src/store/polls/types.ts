@@ -46,7 +46,7 @@ export interface EditPollPayloadInterface {
   ids: { [key: string]: number };
 }
 
-export interface deletePollPayloadInterface {
+export interface DeletePollPayloadInterface {
   cooperationId: number;
   pollId: number;
 }
@@ -62,7 +62,7 @@ export type Mutations<S = PollsStateInterface> = {
 export interface Actions {
   [PollsActionEnum.SET_COOPERATION_POLLS]({ commit }: AugmentedActionContext): void;
   [PollsActionEnum.SET_SELECTED_POLL]({ commit }: AugmentedActionContext, payload: number): void;
-  [PollsActionEnum.DELETE_POLL]({ commit }: AugmentedActionContext, payload: deletePollPayloadInterface): void;
+  [PollsActionEnum.DELETE_POLL]({ commit }: AugmentedActionContext, payload: DeletePollPayloadInterface): void;
   [PollsActionEnum.UPDATE_POLL]({ commit }: AugmentedActionContext, payload: EditPollPayloadInterface): void;
   [PollsActionEnum.SET_POll_BY_ID]({ commit }: AugmentedActionContext, payload: number): void;
 }
