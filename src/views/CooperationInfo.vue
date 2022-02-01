@@ -79,6 +79,7 @@
         :isLoaded="isLoaded"
         :cooperationId="cooperationData.id"
         @open-edit-house-modal="displayModalForEditHouse = true"
+        @houseData="catchHouseData"
       ></ListOfHouses>
     </div>
 
@@ -103,7 +104,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
-import useVuelidate from '@vuelidate/core';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Breadcrumb from '@/components/Breadcrumb.vue';
@@ -154,8 +154,6 @@ export default defineComponent({
       displayModalForEditHouse: false,
       displayModalForCooperation: false,
       displayModalForAddHouse: false,
-
-      v$: useVuelidate(),
     };
   },
 
@@ -171,6 +169,11 @@ export default defineComponent({
     ]).then(() => {
       this.isLoaded = true;
     });
+  },
+  methods: {
+    catchHouseData(house: HouseModel) {
+      this.house = house;
+    },
   },
   computed: {
     fillAddress(): string {

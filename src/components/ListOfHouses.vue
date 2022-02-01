@@ -69,10 +69,6 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    displayModalForEditHouse: {
-      type: Boolean,
-      required: true,
-    },
   },
   components: {
     DataTable,
@@ -160,8 +156,9 @@ export default defineComponent({
       this.house.houseArea = houseArea;
       this.house.adjoiningArea = adjoiningArea;
       this.house.address = { ...address };
-      console.log('event', event);
       (this.$refs.menu as any).toggle(event);
+
+      this.$emit('houseData', this.house);
     },
     showSuccessDelete() {
       this.$toast.add({
@@ -182,5 +179,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped></style>
