@@ -75,48 +75,14 @@
     </div>
 
     <div class="container container-houses">
-      <DataTable
-        ref="dt"
-        :value="isLoaded ? housesInfo : []"
-        selectionMode="single"
-        v-model:selection="selectedHouse"
-        dataKey="houses.id"
-        @rowSelect="onRowSelect"
-        responsiveLayout="scroll"
-      >
-        <template #header>
-          <h4>Будинки в цьому ОСББ</h4>
-        </template>
-        <Column field="flatQuantity" style="min-width: 15rem" header="Кількість квартир в будинку" :sortable="true" />
-        <Column field="houseArea" style="min-width: 15rem" header="Площа будинку" :sortable="true" />
-        <Column field="adjoiningArea" style="min-width: 15rem" header="Прибудинкової теріторії" :sortable="true" />
-        <Column field="address" style="min-width: 20rem" header="Адреса" :sortable="true">
-          <template #body="slotProps">
-            {{ slotProps.data.address.region }}, {{ slotProps.data.address.city }},
-            {{ slotProps.data.address.district }}, {{ slotProps.data.address.street }},
-            {{ slotProps.data.address.houseBlock }}, {{ slotProps.data.address.houseNumber }},
-            {{ slotProps.data.address.zipCode }}
-          </template>
-        </Column>
-
-        <Column>
-          <template #body="slotProps">
-            <Button
-              icon="pi pi-pencil"
-              class="p-button p-button-info p-button-text"
-              type="button"
-              @click="toggleOptions($event, slotProps.data)"
-              aria-haspopup="true"
-              aria-controls="overlay_menu"
-              ref="button"
-            />
-            <Menu :model="houseActions()" id="overlay_menu" ref="menu" :popup="true" />
-
-            <ConfirmPopup></ConfirmPopup>
-          </template>
-        </Column>
-      </DataTable>
+      <ListOfHouses
+        :isLoaded="isLoaded"
+        :cooperationId="cooperationData.id"
+        @open-edit-house-modal="displayModalForEditHouse = true"
+        @houseData="catchHouseData"
+      ></ListOfHouses>
     </div>
+
     <Dialog
       header="Редагувати будинок"
       v-model:visible="displayEditHouseModal"
@@ -136,22 +102,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Menu from 'primevue/menu';
-import ConfirmPopup from 'primevue/confirmpopup';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import AddHouseForm from '@/components/AddHouseForm.vue';
 import EditCooperationForm from '@/components/EditCooperationInfo.vue';
 import EditHouseForm from '@/components/EditHouseForm.vue';
+import ListOfHouses from '@/components/ListOfHouses.vue';
 import { CooperationActionEnum, CooperationGettersEnum } from '@/store/cooperation/types';
-import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
+import { HousesActionsEnum } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
-import useVuelidate from '@vuelidate/core';
 import { HouseModel } from '@/shared/models/house.model';
 import { AddressModel } from '@/shared/models/address.model';
 
@@ -161,40 +123,17 @@ export default defineComponent({
     Dialog,
     Button,
     Breadcrumb,
-    DataTable,
-    Column,
-    Menu,
-    ConfirmPopup,
     AddHouseForm,
     EditCooperationForm,
     EditHouseForm,
+    ListOfHouses,
   },
   data() {
     return {
-      houseActions: () => {
-        return [
-          {
-            label: 'Видалити',
-            icon: 'pi pi-times',
-            type: 'Submit',
-            command: () => {
-              this.confirmDeleteHouse(event);
-            },
-          },
-          {
-            label: 'Редагувати',
-            icon: 'pi pi-user-edit',
-            command: () => {
-              this.openEditHouseModal();
-            },
-          },
-        ];
-      },
-      selectedHouse: ref(),
       cooperationData: {
         id: 0,
       },
-      isLoaded: false,
+
       house: {
         id: 0,
         flatQuantity: 0,
@@ -210,15 +149,17 @@ export default defineComponent({
           zipCode: '',
         } as AddressModel,
       } as HouseModel,
+
+      isLoaded: false,
       displayModalForEditHouse: false,
       displayModalForCooperation: false,
       displayModalForAddHouse: false,
-      v$: useVuelidate(),
     };
   },
 
   async mounted() {
     this.cooperationData.id = this.cooperationInfo?.id ?? 1;
+
     await Promise.all([
       this.$store.dispatch(
         `${StoreModuleEnum.cooperationStore}/${CooperationActionEnum.SET_USER_COOPERATIONS}`,
@@ -230,54 +171,8 @@ export default defineComponent({
     });
   },
   methods: {
-    onRowSelect() {
-      this.choosenHouse();
-    },
-    confirmDeleteHouse(event: Event) {
-      this.$confirm.require({
-        target: event.currentTarget,
-        message: 'Видалити обраний будинок?',
-        icon: 'pi pi-exclamation-triangle',
-        acceptLabel: 'Так',
-        rejectLabel: 'Ні',
-        accept: async () => {
-          const payload = {
-            cooperationId: this.cooperationData.id,
-            id: this.house.id,
-          };
-          await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.DELETE_HOUSE}`, payload);
-          this.showSuccessDelete();
-        },
-        reject: () => {
-          console.log('rejected delete');
-        },
-      });
-    },
-    openEditHouseModal() {
-      this.displayModalForEditHouse = true;
-    },
-    toggleOptions(event: any, slotProps: any) {
-      const { id, flatQuantity, houseArea, adjoiningArea, address } = slotProps;
-      this.house.id = id;
-      this.house.flatQuantity = flatQuantity;
-      this.house.houseArea = houseArea;
-      this.house.adjoiningArea = adjoiningArea;
-      this.house.address = { ...address };
-      (this.$refs.menu as any).toggle(event);
-    },
-    showSuccessDelete() {
-      this.$toast.add({
-        severity: 'success',
-        summary: 'Успішно',
-        detail: `Будинок з ID ${this.house.id} успішно видалено`,
-        life: 3000,
-      });
-    },
-    choosenHouse() {
-      this.$router.push({
-        name: 'manage-apartment',
-        params: { id: this.selectedHouse.id },
-      });
+    catchHouseData(house: HouseModel) {
+      this.house = house;
     },
   },
   computed: {
@@ -300,7 +195,6 @@ export default defineComponent({
       return this.displayModalForAddHouse;
     },
     ...mapGetters({
-      housesInfo: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
       cooperationInfo: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperation}`,
     }),
   },
