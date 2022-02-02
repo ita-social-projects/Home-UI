@@ -1,36 +1,84 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { PollModel } from '@/store/polls/models/poll.model';
+import { HouseModel } from '@/shared/models/house.model';
 
 export enum PollsMutationEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',
   SET_SELECTED_POLL = 'SET_SELECTED_POLL',
+  ADD_COOPERATION_POLL = 'ADD_COOPERATION_POLL',
+  DELETE_POLL = 'DELETE_POLL',
+  UPDATE_POLL = 'UPDATE_POLL',
+  SET_POll_BY_ID = 'SET_POll_BY_ID',
 }
 
 export enum PollsActionEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',
+  SET_POll_BY_ID = 'SET_POll_BY_ID',
   SET_SELECTED_POLL = 'SET_SELECTED_POLL',
+  ADD_COOPERATION_POLL = 'ADD_COOPERATION_POLL',
+  GET_POll_BY_ID = 'GET_POll_BY_ID',
+  DELETE_POLL = 'DELETE_POLL',
+  UPDATE_POLL = 'UPDATE_POLL',
+}
+
+export enum PollsGettersEnum {
+  getPolls = 'getPolls',
+  getSelectedPoll = 'getSelectedPoll',
+  getPollByID = 'getPollByID',
 }
 
 export interface PollsStateInterface {
   cooperationPolls: Array<PollModel>;
-  selectedPoll: null | PollModel;
+  selectedPoll: PollModel;
   displayModal: boolean;
+}
+
+export interface PutPollInterface {
+  header: string;
+  description: string;
+  creationDate: string;
+  completionDate: string;
+  status: string;
+  polledHouses: Array<HouseModel>;
+}
+
+export interface EditPollPayloadInterface {
+  poll: PutPollInterface | PollModel;
+  ids: { [key: string]: number };
+}
+
+export interface DeletePollPayloadInterface {
+  cooperationId: number;
+  pollId: number;
 }
 
 export type Mutations<S = PollsStateInterface> = {
   [PollsMutationEnum.SET_COOPERATION_POLLS](state: S, payload: Array<PollModel>): void;
   [PollsMutationEnum.SET_SELECTED_POLL](state: S, payload: number): void;
+  [PollsMutationEnum.ADD_COOPERATION_POLL](state: S, payload: PollModel): void;
+  [PollsMutationEnum.DELETE_POLL](state: S, payload: number): void;
+  [PollsMutationEnum.UPDATE_POLL](state: S, payload: EditPollPayloadInterface): void;
+  [PollsMutationEnum.SET_POll_BY_ID](state: S, payload: PollModel): void;
 };
 
 export interface Actions {
-  [PollsActionEnum.SET_COOPERATION_POLLS]({ commit }: AugmentedActionContext): void;
+  [PollsActionEnum.SET_COOPERATION_POLLS]({ commit }: AugmentedActionContext, payload: number): void;
   [PollsActionEnum.SET_SELECTED_POLL]({ commit }: AugmentedActionContext, payload: number): void;
+  [PollsActionEnum.ADD_COOPERATION_POLL]({ commit }: AugmentedActionContext, payload: any): void;
 }
 
 export type Getters<S = PollsStateInterface> = {
-  getPolls(state: S): Array<PollModel>;
+  [PollsGettersEnum.getPolls](state: S): Array<PollModel>;
+  [PollsGettersEnum.getSelectedPoll](state: S): PollModel;
 };
+
+export enum PollStatusEnum {
+  draft = 'Чернетка',
+  active = 'Активне',
+  completed = 'Завершене',
+  suspended = 'sus pen ded',
+}
 
 export type PollStatusType = 'draft' | 'active' | 'completed' | 'suspended';
 

@@ -194,7 +194,7 @@ export default defineComponent({
     const ownershipsInfo: any = ref([]);
     const isErrorOwnershipSum = ref(false);
     const errorSumText =
-      'Перевірте усі поля "Частка власності, сумма усіх часток власності повинна бути рівна чи менше 1';
+      'Перевірте усі поля "Частка власності", сумма усіх часток власності повинна бути рівна чи менше 1';
     const { id, apartment } = toRefs(props);
     const store = useStore();
     const loading = ref(true);
@@ -345,9 +345,8 @@ export default defineComponent({
         apartmentId: apartment.value,
         ownerId: selectedOwner.value.id,
         data: new UpdateOwnershipsDTOModel({
-          ownershipPart: editOwnershipData.ownershipPart, ///I should save this changes
+          ownershipPart: editOwnershipData.ownershipPart,
         }),
-        part: editOwnershipData.ownershipPart, /// mock-data
       };
       store.dispatch(`${StoreModuleEnum.ownershipsStore}/${OwnershipsActionEnum.EDIT_OWNER}`, payload);
       editOwnerDialog.value = false;

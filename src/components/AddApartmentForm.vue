@@ -64,7 +64,7 @@ export default defineComponent({
   },
   props: {
     houseId: {
-      type: Number,
+      type: String,
       required: true,
     },
   },

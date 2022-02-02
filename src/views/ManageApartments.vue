@@ -10,7 +10,7 @@
             <div class="detailed-info">
               <div>
                 <span>Номер будинку: </span>
-                <span>{{ houseInfo?.address.houseNumber }}</span>
+                <span>{{ houseInfo?.address?.houseNumber }}</span>
               </div>
               <div>
                 <span>Кількість квартир: </span>
@@ -19,8 +19,8 @@
               <div>
                 <span>Адреса: </span>
                 <span>
-                  місто {{ houseInfo?.address.city }}, вулиця {{ houseInfo?.address.street }}, будинок
-                  {{ houseInfo?.address.houseNumber }}, {{ houseInfo?.address.houseBlock }} блок.
+                  місто {{ houseInfo?.address?.city }}, вулиця {{ houseInfo?.address?.street }}, будинок
+                  {{ houseInfo?.address?.houseNumber }}, {{ houseInfo?.address?.houseBlock }} блок.
                 </span>
               </div>
             </div>
