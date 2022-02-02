@@ -55,49 +55,9 @@
       </div>
     </div>
 
-    <div class="add_btn">
-      <Button
-        label="Додати будинок"
-        icon="pi pi-pencil"
-        class="p-button-outlined p-button-info"
-        @click="this.displayModalForAddHouse = true"
-      />
-      <Dialog
-        header="Додати будинок"
-        v-model:visible="displayAddHouseModal"
-        :style="{ width: '580px' }"
-        :modal="true"
-        :closable="false"
-        :dismissableMask="true"
-      >
-        <AddHouseForm :id="cooperationData.id" @cancel-addHouseModal="displayModalForAddHouse = false"></AddHouseForm>
-      </Dialog>
+    <div>
+      <ManageHouses :isLoaded="isLoaded"></ManageHouses>
     </div>
-
-    <div class="container container-houses">
-      <ListOfHouses
-        :isLoaded="isLoaded"
-        :cooperationId="cooperationData.id"
-        @open-edit-house-modal="displayModalForEditHouse = true"
-        @houseData="catchHouseData"
-      ></ListOfHouses>
-    </div>
-
-    <Dialog
-      header="Редагувати будинок"
-      v-model:visible="displayEditHouseModal"
-      :style="{ width: '580px' }"
-      :modal="true"
-      :closable="false"
-      :dismissableMask="true"
-    >
-      <EditHouseForm
-        :cooperationId="cooperationData.id"
-        :propsHouseData="this.house"
-        @house-saved="displayModalForEditHouse = false"
-        @cancel-editing="displayModalForEditHouse = false"
-      ></EditHouseForm
-    ></Dialog>
   </div>
 </template>
 
@@ -107,15 +67,11 @@ import { mapGetters } from 'vuex';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import AddHouseForm from '@/components/AddHouseForm.vue';
 import EditCooperationForm from '@/components/EditCooperationInfo.vue';
-import EditHouseForm from '@/components/EditHouseForm.vue';
-import ListOfHouses from '@/components/ListOfHouses.vue';
+import ManageHouses from '@/components/ManageHouses.vue';
 import { CooperationActionEnum, CooperationGettersEnum } from '@/store/cooperation/types';
 import { HousesActionsEnum } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
-import { HouseModel } from '@/shared/models/house.model';
-import { AddressModel } from '@/shared/models/address.model';
 
 export default defineComponent({
   name: 'CooperationInfo',
@@ -123,10 +79,8 @@ export default defineComponent({
     Dialog,
     Button,
     Breadcrumb,
-    AddHouseForm,
     EditCooperationForm,
-    EditHouseForm,
-    ListOfHouses,
+    ManageHouses,
   },
   data() {
     return {
@@ -134,26 +88,7 @@ export default defineComponent({
         id: 0,
       },
 
-      house: {
-        id: 0,
-        flatQuantity: 0,
-        houseArea: 0,
-        adjoiningArea: 0,
-        address: {
-          region: '',
-          city: '',
-          district: '',
-          street: '',
-          houseBlock: '',
-          houseNumber: '',
-          zipCode: '',
-        } as AddressModel,
-      } as HouseModel,
-
       isLoaded: false,
-      displayModalForEditHouse: false,
-      displayModalForCooperation: false,
-      displayModalForAddHouse: false,
     };
   },
 
@@ -170,11 +105,6 @@ export default defineComponent({
       this.isLoaded = true;
     });
   },
-  methods: {
-    catchHouseData(house: HouseModel) {
-      this.house = house;
-    },
-  },
   computed: {
     fillAddress(): string {
       return `${this.cooperationInfo.address.street},
@@ -184,15 +114,6 @@ export default defineComponent({
       ${this.cooperationInfo.address.city},
       ${this.cooperationInfo.address.region},
       ${this.cooperationInfo.address.zipCode} `;
-    },
-    displayCooperationModal(): boolean {
-      return this.displayModalForCooperation;
-    },
-    displayEditHouseModal(): boolean {
-      return this.displayModalForEditHouse;
-    },
-    displayAddHouseModal(): boolean {
-      return this.displayModalForAddHouse;
     },
     ...mapGetters({
       cooperationInfo: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperation}`,
