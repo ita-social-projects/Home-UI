@@ -14,14 +14,14 @@
       :closable="false"
       :dismissableMask="true"
     >
-      <AddHouseForm :id="cooperationData.id" @cancel-addHouseModal="displayModalForAddHouse = false"></AddHouseForm>
+      <AddHouseForm :id="$props.cooperationId" @cancel-addHouseModal="displayModalForAddHouse = false"></AddHouseForm>
     </Dialog>
   </div>
 
   <div class="container container-houses">
     <ListOfHouses
       :isLoaded="$props.isLoaded"
-      :cooperationId="cooperationData.id"
+      :cooperationId="$props.cooperationId"
       @open-edit-house-modal="displayModalForEditHouse = true"
       @houseData="catchHouseData"
     ></ListOfHouses>
@@ -36,7 +36,7 @@
     :dismissableMask="true"
   >
     <EditHouseForm
-      :cooperationId="cooperationData.id"
+      :cooperationId="$props.cooperationId"
       :propsHouseData="this.house"
       @house-saved="displayModalForEditHouse = false"
       @cancel-editing="displayModalForEditHouse = false"
@@ -53,6 +53,8 @@ import ListOfHouses from '@/components/ListOfHouses.vue';
 import AddHouseForm from '@/components/AddHouseForm.vue';
 import { HouseModel } from '@/shared/models/house.model';
 import { AddressModel } from '@/shared/models/address.model';
+import { HousesActionsEnum } from '@/store/houses/types';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'ManageHouses',
@@ -66,6 +68,10 @@ export default defineComponent({
   props: {
     isLoaded: {
       type: Boolean,
+      required: true,
+    },
+    cooperationId: {
+      type: Number,
       required: true,
     },
   },
@@ -92,6 +98,9 @@ export default defineComponent({
       displayModalForCooperation: false,
     };
   },
+  mounted() {
+    this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.$props.cooperationId);
+  },
   methods: {
     catchHouseData(house: HouseModel) {
       this.house = house;
@@ -111,4 +120,19 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style>
+.container-houses {
+  padding: 1px;
+  margin-bottom: 150px;
+}
+
+.edit_btn {
+  margin: 15px;
+}
+
+.add_btn {
+  display: flex;
+  margin: 15px;
+  justify-content: flex-end;
+}
+</style>

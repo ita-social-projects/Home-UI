@@ -56,7 +56,7 @@
     </div>
 
     <div>
-      <ManageHouses :isLoaded="isLoaded"></ManageHouses>
+      <ManageHouses :isLoaded="isLoaded" :cooperationId="cooperationId"></ManageHouses>
     </div>
   </div>
 </template>
@@ -70,7 +70,6 @@ import Breadcrumb from '@/components/Breadcrumb.vue';
 import EditCooperationForm from '@/components/EditCooperationInfo.vue';
 import ManageHouses from '@/components/ManageHouses.vue';
 import { CooperationActionEnum, CooperationGettersEnum } from '@/store/cooperation/types';
-import { HousesActionsEnum } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
@@ -84,26 +83,18 @@ export default defineComponent({
   },
   data() {
     return {
-      cooperationData: {
-        id: 0,
-      },
-
       isLoaded: false,
     };
   },
-
   async mounted() {
-    this.cooperationData.id = this.cooperationInfo?.id ?? 1;
-
-    await Promise.all([
-      this.$store.dispatch(
+    await this.$store
+      .dispatch(
         `${StoreModuleEnum.cooperationStore}/${CooperationActionEnum.SET_USER_COOPERATIONS}`,
-        this.cooperationData.id
-      ),
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationData.id),
-    ]).then(() => {
-      this.isLoaded = true;
-    });
+        this.cooperationId
+      )
+      .then(() => {
+        this.isLoaded = true;
+      });
   },
   computed: {
     fillAddress(): string {
@@ -117,6 +108,7 @@ export default defineComponent({
     },
     ...mapGetters({
       cooperationInfo: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperation}`,
+      cooperationId: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`,
     }),
   },
 });
@@ -129,65 +121,23 @@ export default defineComponent({
   .breadcrumb {
     margin: 0 0 1em 0;
   }
-}
 
-.container {
-  padding: 10px;
-  border-radius: 10px;
-  display: flex;
-  background-color: #fafafa;
-  justify-content: space-between;
-  &.container-houses {
-    padding: 1px;
-    margin-bottom: 150px;
+  .container {
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    background-color: #fafafa;
+    justify-content: space-between;
+    box-shadow: rgba(0, 0, 0, 0.1) -1px 4px 5px 1px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    .coop_info {
+      margin: 10px;
+      div {
+        padding: 8px;
+        & :nth-child(1) {
+          font-weight: bold;
+        }
+      }
+    }
   }
-  box-shadow: rgba(0, 0, 0, 0.1) -1px 4px 5px 1px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-}
-
-.coop_info {
-  margin: 10px;
-}
-
-.coop_info div {
-  padding: 8px;
-  & :nth-child(1) {
-    font-weight: bold;
-  }
-}
-
-.edit_btn {
-  margin: 15px;
-}
-
-.add_btn {
-  display: flex;
-  margin: 15px;
-  justify-content: flex-end;
-}
-.address-details {
-  margin-left: 2rem;
-  .dialog-item-address {
-    margin-right: -2rem;
-  }
-}
-.dialog-item {
-  display: inline-block;
-  width: 240px;
-}
-label {
-  display: inline-block;
-  width: 240px;
-}
-.address-wrapper label {
-  margin-left: 25px;
-  width: 215px;
-}
-.input-block {
-  display: inline-block;
-  margin-bottom: 15px;
-}
-small {
-  display: block;
-  width: 280px;
 }
 </style>
