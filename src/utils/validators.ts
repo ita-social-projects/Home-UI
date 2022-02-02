@@ -8,6 +8,7 @@ const validEmailLastChars = helpers.regex(/^[a-z\d].*[a-z]$/i);
 const validPassword = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
 
 const validUserName = helpers.regex(/^[a-zA-Z0-9!#$%&'*+\-/=?^_`{|(),:;<>@[\]]*$/);
+
 const validUkranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]*$/);
 const validCyrillicLan = helpers.regex(/^[а-яА-Яа-щА-ЩЬьЮюЇїІіЄєҐґЁёЪъЫы0-9!#$%&№'"*+\-/=?^_`{|(),:;.<>@[\]\\ ]*$/);
 

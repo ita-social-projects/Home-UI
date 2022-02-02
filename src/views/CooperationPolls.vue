@@ -10,12 +10,7 @@
     </div>
     <h2>Список опитувань ОСББ</h2>
     <div class="poll-list">
-      <BaseCooperationPoll
-        v-for="poll in cooperationPolls"
-        :key="poll.id"
-        :poll="poll"
-        @click="setSelectedPoll(poll.id)"
-      />
+      <BaseCooperationPoll v-for="poll in cooperationPolls" :key="poll.id" :poll="poll" />
     </div>
     <Dialog
       v-model:visible="displayCreatePollModal"
@@ -60,11 +55,6 @@ export default defineComponent({
   },
   mounted() {
     this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_COOPERATION_POLLS}`, this.cooperationId);
-  },
-  methods: {
-    setSelectedPoll(id: number) {
-      this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_SELECTED_POLL}`, id);
-    },
   },
   computed: {
     cooperationId(): number {

@@ -234,12 +234,15 @@ export default defineComponent({
   width: 260px;
 }
 .p-error {
+  display: flex;
+  position: absolute;
+  justify-content: right;
+  margin: -4.5em -25px 0 -50px;
   @extend %error-message;
 }
 .apartment {
   position: absolute;
-  margin-left: 30rem;
-  margin-top: -3rem;
+  margin: -80px -25px 0 -50px;
 }
 .buttons-container {
   float: right;
