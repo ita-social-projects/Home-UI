@@ -10,7 +10,7 @@ const validPassword = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8
 const validUserName = helpers.regex(/^[a-zA-Z0-9!#$%&'*+\-/=?^_`{|(),:;<>@[\]]*$/);
 
 const validUkranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]*$/);
-const validCyrillicLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ0-9!#$%&№'"*+\-/=?^_`{|(),:;.<>@[\]\\ ]*$/);
+const validCyrillicLan = helpers.regex(/^[а-яА-Яа-щА-ЩЬьЮюЇїІіЄєҐґЁёЪъЫы0-9!#$%&№'"*+\-/=?^_`{|(),:;.<>@[\]\\ ]*$/);
 
 const validEdrpou = helpers.regex(/^\d{8}$/);
 const validIban = helpers.regex(/^UA\d{27}$/);
@@ -95,6 +95,6 @@ export const flatQuantityAndAdjoiningAreaValidator = helpers.withMessage(
   validFlatQuantityAndAdjoiningArea
 );
 
-export const pollTitleLenghtValidator = helpers.withMessage(lengthMessage(100, 'max'), maxLength(100));
+export const pollTitleLenghtValidator = helpers.withMessage(lengthMessage(250, 'max'), maxLength(250));
 export const pollDescriptionLenghtValidator = helpers.withMessage(lengthMessage(1000, 'max'), maxLength(1000));
-export const cyrillicLangTitleValidator = helpers.withMessage(`${cyrillicLangMessage}`, validCyrillicLan);
+export const cyrillicLangTextValidator = helpers.withMessage(`${cyrillicLangMessage}`, validCyrillicLan);

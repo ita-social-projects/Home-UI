@@ -127,7 +127,7 @@ import {
   requiredValidator,
   pollTitleLenghtValidator,
   pollDescriptionLenghtValidator,
-  cyrillicLangTitleValidator,
+  cyrillicLangTextValidator,
 } from '@/utils/validators';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
@@ -182,8 +182,8 @@ export default defineComponent({
   validations() {
     return {
       pollData: {
-        header: { requiredValidator, pollTitleLenghtValidator, cyrillicLangTitleValidator },
-        description: { requiredValidator, pollDescriptionLenghtValidator, cyrillicLangTitleValidator },
+        header: { requiredValidator, pollTitleLenghtValidator, cyrillicLangTextValidator },
+        description: { requiredValidator, pollDescriptionLenghtValidator, cyrillicLangTextValidator },
         polledHouses: { requiredValidator },
         creationDate: { requiredValidator },
       },

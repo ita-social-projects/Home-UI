@@ -5,17 +5,27 @@
         label="Створити опитування"
         icon="pi pi-plus"
         class="p-button-raised p-button-outlined p-button-secondary"
+        @click="displayCreatePollForm = true"
       />
     </div>
     <h2>Список опитувань ОСББ</h2>
     <div class="poll-list">
-      <BaseCooperationPoll
-        v-for="poll in cooperationPolls"
-        :key="poll.id"
-        :poll="poll"
-        @click="setSelectedPoll(poll.id)"
-      />
+      <BaseCooperationPoll v-for="poll in cooperationPolls" :key="poll.id" :poll="poll" />
     </div>
+    <Dialog
+      v-model:visible="displayCreatePollModal"
+      :style="{ width: '580px' }"
+      :modal="true"
+      :closable="false"
+      :dismissableMask="true"
+      header="Створити опитування"
+    >
+      <CreatePollForm
+        :cooperationId="cooperationId"
+        @cancel-creating-poll="displayCreatePollForm = false"
+        @create-poll="displayCreatePollForm = false"
+      />
+    </Dialog>
   </div>
 </template>
 
@@ -23,30 +33,40 @@
 import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import BaseCooperationPoll from '@/components/base/BaseCooperationPoll.vue';
+import CreatePollForm from '@/components/CreatePollForm.vue';
 import { PollModel } from '@/store/polls/models/poll.model';
 import { StoreModuleEnum } from '@/store/types';
-import { PollsActionEnum } from '@/store/polls/types';
+import { PollsActionEnum, PollsGettersEnum } from '@/store/polls/types';
+import Dialog from 'primevue/dialog';
+import { CooperationGettersEnum } from '@/store/cooperation/types';
 
 export default defineComponent({
   name: 'CooperationPolls',
   components: {
     Button,
     BaseCooperationPoll,
+    Dialog,
+    CreatePollForm,
+  },
+  data() {
+    return {
+      displayCreatePollForm: false,
+    };
   },
   mounted() {
-    this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_COOPERATION_POLLS}`);
-  },
-  methods: {
-    setSelectedPoll(id: number) {
-      this.$router.push({
-        name: 'poll-info',
-        params: { id },
-      });
-    },
+    this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_COOPERATION_POLLS}`, this.cooperationId);
   },
   computed: {
+    cooperationId(): number {
+      return this.$store.getters[
+        `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`
+      ];
+    },
     cooperationPolls(): Array<PollModel> {
-      return this.$store.getters[`${StoreModuleEnum.pollsStore}/getPolls`];
+      return this.$store.getters[`${StoreModuleEnum.pollsStore}/${PollsGettersEnum.getPolls}`];
+    },
+    displayCreatePollModal(): boolean {
+      return this.displayCreatePollForm;
     },
   },
 });
