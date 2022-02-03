@@ -10,6 +10,7 @@ import {
   Actions,
 } from '@/store/apartments/types';
 import { HTTP } from '@/core/api/http-common';
+import { UpdateApartmentDTOModel } from './models/update-upartmentDTO.model';
 
 export const actions: ActionTree<ApartmentsStateInterface, RootStateInterface> & Actions = {
   [ApartmentsActionsEnum.SET_APARTMENTS]: async ({ commit }, payload) => {
@@ -22,6 +23,29 @@ export const actions: ActionTree<ApartmentsStateInterface, RootStateInterface> &
       console.log(e.response);
     }
   },
+
+  [ApartmentsActionsEnum.SET_APARTMENT_BY_ID]: async ({ commit }, payload) => {
+    try {
+      const url = `/houses/${payload.houseId}/apartments/${payload.apartmentId}`;
+      const { data } = await HTTP.get(url);
+      const apartment: ApartmentModel = new ApartmentModel(data);
+      commit(ApartmentsMutationsEnum.SET_APARTMENT_BY_ID, apartment);
+    } catch (e: any) {
+      console.log(e.response);
+    }
+  },
+
+  [ApartmentsActionsEnum.EDIT_APARTMENT]: async ({ commit }, payload) => {
+    try {
+      const url = `/houses/${payload.houseId}/apartments/${payload.apartmentId}`;
+      const body = new UpdateApartmentDTOModel(payload.body);
+      const { data } = await HTTP.put(url, body);
+      const apartment: ApartmentModel = new ApartmentModel(data);
+      commit(ApartmentsMutationsEnum.EDIT_APARTMENT, apartment);
+    } catch (e: any) {
+      console.log(e.response);
+    }
+  },
   [ApartmentsActionsEnum.ADD_APARTMENT]: async ({ commit }, payload) => {
     try {
       await HTTP.post(`/houses/${payload.id}/apartments`, payload).then((r) => {
@@ -30,6 +54,14 @@ export const actions: ActionTree<ApartmentsStateInterface, RootStateInterface> &
       });
     } catch (e: any) {
       console.log(e.response);
+    }
+  },
+  [ApartmentsActionsEnum.DELETE_APARTMENT]: async ({ commit }, payload) => {
+    try {
+      await HTTP.delete(`/houses/${payload.houseId}/apartments/${payload.apartmentId}`);
+      commit(ApartmentsMutationsEnum.DELETE_APARTMENT, payload.apartmentId);
+    } catch (err: any) {
+      console.log('error DELETE_APARTMENT', err);
     }
   },
 };

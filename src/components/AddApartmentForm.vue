@@ -50,16 +50,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import {
-  requiredValidator,
-  apartmentNumberValidator,
-  apartmentAreaValidator,
-  apartmentDecimalValidator,
-} from '@/utils/validators';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
 import { ApartmentsActionsEnum } from '@/store/apartments/types';
+import { apartmentValidations } from '@/utils/apartment-validations';
 
 export default defineComponent({
   name: 'AddApartment',
@@ -69,7 +64,7 @@ export default defineComponent({
   },
   props: {
     houseId: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
@@ -85,10 +80,7 @@ export default defineComponent({
   },
   validations() {
     return {
-      apartmentData: {
-        apartmentNumber: { requiredValidator, apartmentNumberValidator },
-        apartmentArea: { requiredValidator, apartmentAreaValidator, apartmentDecimalValidator },
-      },
+      apartmentData: apartmentValidations,
     };
   },
   methods: {

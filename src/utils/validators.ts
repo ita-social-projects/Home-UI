@@ -22,12 +22,14 @@ const validZipCode = helpers.regex(/^\d{5}$/);
 
 const validPhoneNumber = helpers.regex(/^\+380\d{3}\d{2}\d{2}\d{2}$/);
 
-const validApartmentArea = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,9})?$)|(1000$)/);
+const validApartmentArea = helpers.regex(/(^[^0](\d{1,2}){1}(\.\d{1,9})?$)|(1000$)/);
 const validApartmentDecimal = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|(1000$)/);
 const validApartmentNumber = helpers.regex(/^(?!(0))\d{1,4}(\-[a-zа-я])?$/);
 const validHouseDecimal = helpers.regex(/(^(\d{1,100}){1}(\.\d{1,3})?$)/);
 
 const validNonZeroFields = helpers.regex(/^[^0]/);
+
+const validOwnershipPart = helpers.regex(/((^(?!(0))\d{1,4}\/(?!(0))\d{1,5})$)|(^0$)|(^1$)/);
 
 const lengthMessage = (number: number, description: string): string => {
   const max = `Максимальна кількість символів - ${number}`;
@@ -94,7 +96,7 @@ export const flatQuantityAndAdjoiningAreaValidator = helpers.withMessage(
   'Це поле має містити цілі цифри',
   validFlatQuantityAndAdjoiningArea
 );
-
+export const ownershipPartValidator = helpers.withMessage('Введіть коректно дріб, наприклад: 1/5', validOwnershipPart);
 export const pollTitleLenghtValidator = helpers.withMessage(lengthMessage(250, 'max'), maxLength(250));
 export const pollDescriptionLenghtValidator = helpers.withMessage(lengthMessage(1000, 'max'), maxLength(1000));
 export const cyrillicLangTextValidator = helpers.withMessage(`${cyrillicLangMessage}`, validCyrillicLan);

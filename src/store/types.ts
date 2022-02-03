@@ -6,6 +6,7 @@ import { LocalStorageStateInterface } from '@/store/localstorage/types';
 import { HousesStateInterface } from '@/store/houses/types';
 import { PollsStateInterface } from '@/store/polls/types';
 import { ApartmentsStateInterface } from '@/store/apartments/types';
+import { OwnershipsStateInterface } from '@/store/ownerships/types';
 import { InvitationsStateInterface } from '@/store/invitations/types';
 
 export interface RootStateInterface {
@@ -17,6 +18,7 @@ export interface RootStateInterface {
   housesStore: HousesStateInterface;
   invitationsStore: InvitationsStateInterface;
   apartmentsStore: ApartmentsStateInterface;
+  ownershipsStore: OwnershipsStateInterface;
 }
 
 export enum StoreModuleEnum {
@@ -28,6 +30,7 @@ export enum StoreModuleEnum {
   housesStore = 'housesStore',
   invitationsStore = 'invitationsStore',
   apartmentsStore = 'apartmentsStore',
+  ownershipsStore = 'ownershipsStore',
 }
 
 export type requestPayload<T> = {

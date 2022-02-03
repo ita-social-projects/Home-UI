@@ -1,12 +1,12 @@
-import { OwnershipDTOModel } from '@/shared/models/ownershipDTO.model';
+import { OwnershipsDTOModel } from '@/shared/models/ownershipsDTO.model';
 import { OwnerModel } from '@/shared/models/owner.model';
 
-export class OwnershipModel {
+export class OwnershipsModel {
   public id: number;
   public owner: OwnerModel;
-  public ownershipPart: number;
+  public ownershipPart: string;
 
-  constructor(polledOwner: OwnershipDTOModel) {
+  constructor(polledOwner: OwnershipsDTOModel) {
     this.id = polledOwner.id;
     this.owner = new OwnerModel(polledOwner.owner);
     this.ownershipPart = polledOwner.ownership_part;
