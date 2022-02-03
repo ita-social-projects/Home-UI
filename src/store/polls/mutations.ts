@@ -11,6 +11,10 @@ export const mutations: MutationTree<PollsStateInterface> & Mutations = {
     state.selectedPoll = state.cooperationPolls[index];
   },
 
+  [PollsMutationEnum.ADD_COOPERATION_POLL]: (state, payload) => {
+    state.cooperationPolls = [...state.cooperationPolls, payload];
+  },
+
   [PollsMutationEnum.DELETE_POLL]: (state, payload) => {
     const updatePolls = state.cooperationPolls?.filter((el) => el.id !== payload);
     state.cooperationPolls = updatePolls;

@@ -22,3 +22,9 @@ export const inputSetValueHandler = async (
     return;
   }
 };
+
+export const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>): Promise<void> => {
+  const el = wrapper.find(id);
+  await el.setValue(value);
+  await el.trigger('blur');
+};

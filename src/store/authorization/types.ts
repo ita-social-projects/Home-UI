@@ -25,9 +25,11 @@ export enum AuthGettersEnum {
 }
 
 export enum ContactTypeEnum {
-  EMAIL = 'email',
-  PHONE = 'phone',
+  email = 'email',
+  phone = 'phone',
 }
+
+export type ContactTypeEnumString = keyof typeof ContactTypeEnum;
 
 export interface UserInterface {
   firstName: string;

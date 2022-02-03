@@ -1,6 +1,6 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { ContactTypeEnum } from '../authorization/types';
+import { ContactTypeEnumString } from '../authorization/types';
 
 export enum UserMutationEnum {
   SET_ERROR = 'SET_ERROR',
@@ -36,10 +36,10 @@ export interface UserStateInterface {
 }
 
 export interface UserContactInterface {
-  type: ContactTypeEnum;
+  type: ContactTypeEnumString;
   main: boolean;
   email?: string;
-  phone?: number;
+  phone?: string;
   id?: number;
 }
 

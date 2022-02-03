@@ -8,6 +8,7 @@ import { userStore } from '@/store/user';
 import { pollsStore } from '@/store/polls';
 import { invitationsStore } from '@/store/invitations';
 import { apartmentsStore } from '@/store/apartments';
+import { ownershipsStore } from '@/store/ownerships';
 
 export default createStore<RootStateInterface>({
   strict: process.env.NODE_ENV !== 'production',
@@ -20,5 +21,6 @@ export default createStore<RootStateInterface>({
     housesStore,
     invitationsStore,
     apartmentsStore,
+    ownershipsStore,
   },
 });

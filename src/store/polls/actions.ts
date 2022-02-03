@@ -8,9 +8,9 @@ import { PollDTOModel } from '@/store/polls/models/pollDTO.model';
 import { PostPollDTOModel } from './models/put-pollDTO.model';
 
 export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Actions = {
-  [PollsActionEnum.SET_COOPERATION_POLLS]: async ({ commit }) => {
+  [PollsActionEnum.SET_COOPERATION_POLLS]: async ({ commit }, payload) => {
     try {
-      const url = `/cooperations/1/polls`;
+      const url = `/cooperations/${payload}/polls`;
 
       const { data } = await HTTP.get(url, { params: { page_size: 10, sort: 'id,asc' } });
       const cooperationPolls: Array<PollModel> = data.map((el: PollDTOModel) => new PollModel(el));
@@ -22,6 +22,20 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
 
   [PollsActionEnum.SET_SELECTED_POLL]: ({ commit }, payload) => {
     commit(PollsMutationEnum.SET_SELECTED_POLL, payload);
+  },
+
+  [PollsActionEnum.ADD_COOPERATION_POLL]: async ({ commit }, payload) => {
+    try {
+      console.log(payload)
+      const body = new PollDTOModel(payload.body);
+      const url = `/cooperations/${payload.cooperationId}/polls`;
+      const { data } = await HTTP.post(url, body);
+
+      const newPoll: PollModel = new PollModel(data);
+      commit(PollsMutationEnum.ADD_COOPERATION_POLL, newPoll);
+    } catch (e: any) {
+      console.log(e.response);
+    }
   },
 
   [PollsActionEnum.SET_POll_BY_ID]: async ({ commit }, payload) => {
@@ -51,7 +65,6 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
       const { data } = await HTTP.put(url, pollToSend);
 
       const poll = new PollModel(data);
-
       commit(PollsMutationEnum.UPDATE_POLL, { poll, ids: { pollId: payload.ids.pollId } });
     } catch (e: any) {
       console.log(e.response);

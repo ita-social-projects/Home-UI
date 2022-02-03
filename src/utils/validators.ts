@@ -10,7 +10,7 @@ const validPassword = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8
 const validUserName = helpers.regex(/^[a-zA-Z0-9!#$%&'*+\-/=?^_`{|(),:;<>@[\]]*$/);
 
 const validUkranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ -]*$/);
-const validCyrillicLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ0-9!#$%&№'"*+\-/=?^_`{|(),:;.<>@[\]\\ ]*$/);
+const validCyrillicLan = helpers.regex(/^[а-яА-Яа-щА-ЩЬьЮюЇїІіЄєҐґЁёЪъЫы0-9!#$%&№'"*+\-/=?^_`{|(),:;.<>@[\]\\ ]*$/);
 
 const validEdrpou = helpers.regex(/^\d{8}$/);
 const validIban = helpers.regex(/^UA\d{27}$/);
@@ -22,12 +22,14 @@ const validZipCode = helpers.regex(/^\d{5}$/);
 
 const validPhoneNumber = helpers.regex(/^\+380\d{3}\d{2}\d{2}\d{2}$/);
 
-const validApartmentArea = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,9})?$)|(1000$)/);
+const validApartmentArea = helpers.regex(/(^[^0](\d{1,2}){1}(\.\d{1,9})?$)|(1000$)/);
 const validApartmentDecimal = helpers.regex(/(^(\d{2,3}){1}(\.\d{1,2})?$)|(1000$)/);
 const validApartmentNumber = helpers.regex(/^(?!(0))\d{1,4}(\-[a-zа-я])?$/);
 const validHouseDecimal = helpers.regex(/(^(\d{1,100}){1}(\.\d{1,3})?$)/);
 
 const validNonZeroFields = helpers.regex(/^[^0]/);
+
+const validOwnershipPart = helpers.regex(/((^(?!(0))\d{1,4}\/(?!(0))\d{1,5})$)|(^0$)|(^1$)/);
 
 const lengthMessage = (number: number, description: string): string => {
   const max = `Максимальна кількість символів - ${number}`;
@@ -94,7 +96,7 @@ export const flatQuantityAndAdjoiningAreaValidator = helpers.withMessage(
   'Це поле має містити цілі цифри',
   validFlatQuantityAndAdjoiningArea
 );
-
-export const pollTitleLenghtValidator = helpers.withMessage(lengthMessage(100, 'max'), maxLength(100));
+export const ownershipPartValidator = helpers.withMessage('Введіть коректно дріб, наприклад: 1/5', validOwnershipPart);
+export const pollTitleLenghtValidator = helpers.withMessage(lengthMessage(250, 'max'), maxLength(250));
 export const pollDescriptionLenghtValidator = helpers.withMessage(lengthMessage(1000, 'max'), maxLength(1000));
-export const cyrillicLangTitleValidator = helpers.withMessage(`${cyrillicLangMessage}`, validCyrillicLan);
+export const cyrillicLangTextValidator = helpers.withMessage(`${cyrillicLangMessage}`, validCyrillicLan);

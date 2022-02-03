@@ -1,11 +1,11 @@
 import { ApartmentDTOModel } from '@/store/apartments/models/apartmentDTO.model';
-import { OwnershipModel } from '@/shared/models/ownership.model';
+import { OwnershipsModel } from '@/shared/models/ownerships.model';
 
 export class AddApartmentModel {
   public id: number;
   public apartmentNumber: string;
   public apartmentArea: number;
-  public ownerships: Array<OwnershipModel>;
+  public ownerships: Array<OwnershipsModel>;
 
   constructor(polledApartment: ApartmentDTOModel) {
     this.id = polledApartment.id;
