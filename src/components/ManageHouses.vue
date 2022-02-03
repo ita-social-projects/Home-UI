@@ -95,7 +95,6 @@ export default defineComponent({
 
       displayModalForAddHouse: false,
       displayModalForEditHouse: false,
-      displayModalForCooperation: false,
     };
   },
   mounted() {
@@ -107,9 +106,6 @@ export default defineComponent({
     },
   },
   computed: {
-    displayCooperationModal(): boolean {
-      return this.displayModalForCooperation;
-    },
     displayEditHouseModal(): boolean {
       return this.displayModalForEditHouse;
     },

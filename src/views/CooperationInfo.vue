@@ -35,7 +35,7 @@
         <Button
           label="Редагувати"
           icon="pi pi-pencil"
-          @click="this.displayModalForCooperation = true"
+          @click="displayModalForCooperation = true"
           class="p-button-outlined p-button-info"
         />
         <Dialog
@@ -49,7 +49,7 @@
           <EditCooperationForm
             @cancel-editCoopInfo="displayModalForCooperation = false"
             @isLoadedMode="isLoaded = true"
-            :cooperationId="cooperationData.id"
+            :cooperationId="cooperationId"
           ></EditCooperationForm>
         </Dialog>
       </div>
@@ -84,6 +84,7 @@ export default defineComponent({
   data() {
     return {
       isLoaded: false,
+      displayModalForCooperation: false,
     };
   },
   async mounted() {
@@ -110,6 +111,9 @@ export default defineComponent({
       cooperationInfo: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperation}`,
       cooperationId: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`,
     }),
+    displayCooperationModal(): boolean {
+      return this.displayModalForCooperation;
+    },
   },
 });
 </script>
