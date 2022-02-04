@@ -14,7 +14,13 @@
       :closable="false"
       :dismissableMask="true"
     >
-      <AddHouseForm :id="$props.cooperationId" @cancel-addHouseModal="displayModalForAddHouse = false"></AddHouseForm>
+      <!-- <AddHouseForm :id="$props.cooperationId" @cancel-addHouseModal="displayModalForAddHouse = false"></AddHouseForm> -->
+
+      <ManagingHouseForm
+        :cooperationId="$props.cooperationId"
+        :isAddHouse="true"
+        @cancel-managing="displayModalForAddHouse = false"
+      ></ManagingHouseForm>
     </Dialog>
   </div>
 
@@ -35,13 +41,19 @@
     :closable="false"
     :dismissableMask="true"
   >
-    <EditHouseForm
+    <!-- <EditHouseForm
       :cooperationId="$props.cooperationId"
       :propsHouseData="this.house"
-      @house-saved="displayModalForEditHouse = false"
       @cancel-editing="displayModalForEditHouse = false"
-    ></EditHouseForm
-  ></Dialog>
+    ></EditHouseForm> -->
+
+    <ManagingHouseForm
+      :cooperationId="$props.cooperationId"
+      :houseData="this.house"
+      :isEditHouse="true"
+      @cancel-managing="displayModalForEditHouse = false"
+    ></ManagingHouseForm>
+  </Dialog>
 </template>
 
 <script lang="ts">
@@ -55,6 +67,7 @@ import { HouseModel } from '@/shared/models/house.model';
 import { AddressModel } from '@/shared/models/address.model';
 import { HousesActionsEnum } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
+import ManagingHouseForm from '@/components/ManagingHouseForm.vue';
 
 export default defineComponent({
   name: 'ManageHouses',
@@ -64,6 +77,7 @@ export default defineComponent({
     EditHouseForm,
     ListOfHouses,
     AddHouseForm,
+    ManagingHouseForm,
   },
   props: {
     isLoaded: {

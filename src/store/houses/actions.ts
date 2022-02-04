@@ -14,11 +14,10 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   },
   [HousesActionsEnum.EDIT_HOUSE]: async ({ commit }, payload) => {
     try {
-      const payloadToSend: HouseDTOModel = new HouseDTOModel(payload);
-      await HTTP.put(`/cooperations/${payload.cooperationId}/houses/${payload.id}`, payloadToSend);
+      const payloadToSend: HouseDTOModel = new HouseDTOModel(payload.houseData);
+      await HTTP.put(`/cooperations/${payload.ids.cooperationId}/houses/${payload.ids.houseId}`, payloadToSend);
 
-      commit(HousesMutationsEnum.EDIT_HOUSE, payload);
-      commit(HousesMutationsEnum.GET_HOUSE_BY_ID, payload);
+      commit(HousesMutationsEnum.EDIT_HOUSE, payload.houseData);
     } catch (err: any) {
       console.log('error EDIT_HOUSE', err);
     }
@@ -40,7 +39,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   },
   [HousesActionsEnum.ADD_HOUSE]: async ({ commit }, payload) => {
     try {
-      const payloadToSend: HouseDTOModel = new HouseDTOModel(payload);
+      const payloadToSend: HouseDTOModel = new HouseDTOModel(payload.houseData);
       const { data } = await HTTP.post(`/cooperations/${payload.cooperationId}/houses`, payloadToSend);
       const house: HouseModel = new HouseModel(data);
 

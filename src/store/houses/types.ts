@@ -60,8 +60,8 @@ export type Mutations<S = HousesStateInterface> = {
 export interface Actions {
   [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext, payload: number): void;
   [HousesActionsEnum.DELETE_HOUSE]({ commit }: AugmentedActionContext, payload: HouseModel): void;
-  [HousesActionsEnum.EDIT_HOUSE]({ commit }: AugmentedActionContext, payload: HouseModel): void;
-  [HousesActionsEnum.ADD_HOUSE]({ commit }: AugmentedActionContext, payload: HouseModel): void;
+  [HousesActionsEnum.EDIT_HOUSE]({ commit }: AugmentedActionContext, payload: any): void;
+  [HousesActionsEnum.ADD_HOUSE]({ commit }: AugmentedActionContext, payload: any): void;
   [HousesActionsEnum.GET_HOUSE_BY_ID]({ commit }: AugmentedActionContext, payload: any): void;
 }
 
