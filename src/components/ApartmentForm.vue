@@ -95,19 +95,20 @@ export default defineComponent({
   },
   methods: {
     async submit(): Promise<void> {
-      let message = '';
+      const message =
+        this.$props.apartmentId === undefined
+          ? `Квартиру № ${this.apartmentData.apartmentNumber} додано.`
+          : `Дані про квартиру № ${this.apartmentData.apartmentNumber} змінено.`;
       if (this.$props.apartmentId === undefined) {
         this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.ADD_APARTMENT}`, {
           body: this.apartmentData,
           houseId: this.$props.houseId,
         });
-        message = `Квартиру № ${this.apartmentData.apartmentNumber} додано.`;
       } else {
         this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.EDIT_APARTMENT}`, {
           body: this.apartmentData,
           ...this.payload,
         });
-        message = `Дані про квартиру № ${this.apartmentData.apartmentNumber} змінено.`;
       }
       this.$emit('apartment-saved');
       this.showSuccessMessage(message);
