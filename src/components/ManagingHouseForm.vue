@@ -181,11 +181,9 @@ import useVuelidate from '@vuelidate/core';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { houseValidations } from '@/utils/house-validations';
-import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
+import { AddressInterface, HousesActionsEnum } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
-import { AddressModel } from '@/shared/models/address.model';
 import { HouseModel } from '@/shared/models/house.model';
-import { mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'ManagingHouseForm',
@@ -216,9 +214,10 @@ export default defineComponent({
   data() {
     return {
       houseData: {
-        flatQuantity: null,
-        houseArea: null,
-        adjoiningArea: null,
+        cooperationId: this.$props.cooperationId,
+        flatQuantity: null as any,
+        houseArea: null as any,
+        adjoiningArea: null as any,
         address: {
           region: '',
           city: '',
@@ -227,8 +226,8 @@ export default defineComponent({
           houseBlock: '',
           houseNumber: '',
           zipCode: '',
-        } as AddressModel,
-      } as HouseModel,
+        } as AddressInterface,
+      },
 
       isLoaded: false,
       v$: useVuelidate(),
@@ -241,66 +240,48 @@ export default defineComponent({
   },
   async mounted() {
     if (this.$props.isEditHouse) {
-      const payload = {
-        cooperationId: this.$props.cooperationId,
-        houseId: this.$props.houseData.id,
-      };
-
-      await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
       this.initData();
     }
     this.isLoaded = true;
   },
   methods: {
     initData() {
-      this.houseData.flatQuantity = this.selectedHouseInfo?.flatQuantity;
-      this.houseData.houseArea = this.selectedHouseInfo?.houseArea;
-      this.houseData.adjoiningArea = this.selectedHouseInfo?.adjoiningArea;
-      this.houseData.address = JSON.parse(JSON.stringify(this.selectedHouseInfo?.address ?? ({} as AddressModel)));
+      this.houseData.flatQuantity = this.$props.houseData?.flatQuantity ?? 0;
+      this.houseData.houseArea = this.$props.houseData?.houseArea ?? 0;
+      this.houseData.adjoiningArea = this.$props.houseData?.adjoiningArea ?? 0;
+      this.houseData.address = JSON.parse(JSON.stringify(this.$props.houseData?.address ?? ({} as AddressInterface)));
     },
     async manageHouseInfo() {
+      const payload = {
+        houseData: { ...this.houseData },
+      };
+
       if (this.$props.isEditHouse) {
-        const payload = {
-          ids: {
-            cooperationId: this.$props.cooperationId,
-            houseId: this.$props.houseData.id,
-          },
-          houseData: {
-            id: this.$props.houseData.id,
-            ...this.houseData,
-          },
-        };
+        payload.houseData.id = this.$props.houseData.id;
 
         await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.EDIT_HOUSE}`, payload);
-        this.showSuccessOperation(`Дані про будинок з ID ${this.$props.houseData.id!} змінено!`);
       } else if (this.$props.isAddHouse) {
-        const payload = {
-          cooperationId: this.$props.cooperationId,
-          houseData: { ...this.houseData },
-        };
-
         await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.ADD_HOUSE}`, payload);
-        this.showSuccessOperation(`Новий будинок додано!`);
       }
 
+      this.showSuccessOperation();
       this.cancelManagingModal();
     },
     cancelManagingModal() {
       this.$emit('cancel-managing');
     },
-    showSuccessOperation(string: String) {
+    showSuccessOperation() {
+      const detailText = this.$props.isEditHouse
+        ? `Дані про будинок з ID ${this.$props.houseData.id!} змінено!`
+        : `Новий будинок додано!`;
+
       this.$toast.add({
         severity: 'success',
         summary: 'Успішно',
-        detail: `${string}`,
+        detail: `${detailText}`,
         life: 3000,
       });
     },
-  },
-  computed: {
-    ...mapGetters({
-      selectedHouseInfo: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`,
-    }),
   },
 });
 </script>

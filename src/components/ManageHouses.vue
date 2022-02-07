@@ -14,8 +14,6 @@
       :closable="false"
       :dismissableMask="true"
     >
-      <!-- <AddHouseForm :id="$props.cooperationId" @cancel-addHouseModal="displayModalForAddHouse = false"></AddHouseForm> -->
-
       <ManagingHouseForm
         :cooperationId="$props.cooperationId"
         :isAddHouse="true"
@@ -41,12 +39,6 @@
     :closable="false"
     :dismissableMask="true"
   >
-    <!-- <EditHouseForm
-      :cooperationId="$props.cooperationId"
-      :propsHouseData="this.house"
-      @cancel-editing="displayModalForEditHouse = false"
-    ></EditHouseForm> -->
-
     <ManagingHouseForm
       :cooperationId="$props.cooperationId"
       :houseData="this.house"
@@ -60,9 +52,7 @@
 import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import EditHouseForm from '@/components/EditHouseForm.vue';
 import ListOfHouses from '@/components/ListOfHouses.vue';
-import AddHouseForm from '@/components/AddHouseForm.vue';
 import { HouseModel } from '@/shared/models/house.model';
 import { AddressModel } from '@/shared/models/address.model';
 import { HousesActionsEnum } from '@/store/houses/types';
@@ -74,9 +64,7 @@ export default defineComponent({
   components: {
     Dialog,
     Button,
-    EditHouseForm,
     ListOfHouses,
-    AddHouseForm,
     ManagingHouseForm,
   },
   props: {
