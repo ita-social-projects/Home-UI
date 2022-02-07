@@ -37,7 +37,6 @@
           :dismissableMask="true"
         >
           <ApartmentForm
-            :type="'edit'"
             :houseId="id"
             :apartmentId="apartment"
             :propsApartmentData="apartmentInfo"

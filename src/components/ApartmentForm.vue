@@ -57,13 +57,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import useVuelidate from '@vuelidate/core';
 import { apartmentValidations } from '@/utils/apartment-validations';
 import { StoreModuleEnum } from '@/store/types';
-import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
+import { ApartmentsActionsEnum } from '@/store/apartments/types';
 
 export default defineComponent({
   name: 'ApartmentForm',
@@ -71,11 +70,14 @@ export default defineComponent({
     Button,
     InputText,
   },
-  props: ['houseId', 'apartmentId', 'propsApartmentData', 'type'],
+  props: ['houseId', 'apartmentId', 'propsApartmentData'],
   emits: ['cancel', 'apartment-saved'],
   data() {
     return {
       apartmentData: {
+        ...this.$props.propsApartmentData,
+      },
+      previousApartmentData: {
         ...this.$props.propsApartmentData,
       },
       disabled: true,
@@ -91,39 +93,25 @@ export default defineComponent({
       apartmentData: apartmentValidations,
     };
   },
-  mounted() {
-    if (this.$props.type === 'edit') {
-      this.$store.dispatch(
-        `${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENT_BY_ID}`,
-        this.payload
-      );
-    }
-  },
   methods: {
-    submit() {
-      if (this.$props.type === 'edit') {
-        this.editApartment();
-      } else this.addApartment();
-    },
-    async editApartment(): Promise<void> {
-      this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.EDIT_APARTMENT}`, {
-        body: this.apartmentData,
-        ...this.payload,
-      });
+    async submit(): Promise<void> {
+      let message = '';
+      if (this.$props.apartmentId === undefined) {
+        this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.ADD_APARTMENT}`, {
+          body: this.apartmentData,
+          houseId: this.$props.houseId,
+        });
+        message = `Квартиру № ${this.apartmentData.apartmentNumber} додано.`;
+      } else {
+        this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.EDIT_APARTMENT}`, {
+          body: this.apartmentData,
+          ...this.payload,
+        });
+        message = `Дані про квартиру № ${this.apartmentData.apartmentNumber} змінено.`;
+      }
       this.$emit('apartment-saved');
-      const message = `Дані про квартиру № ${this.apartmentData.apartmentNumber} змінено.`;
       this.showSuccessMessage(message);
-    },
-    async addApartment(): Promise<void> {
-      const payload = {
-        houseId: this.$props.houseId,
-        body: this.apartmentData,
-      };
       this.v$.$reset();
-      this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.ADD_APARTMENT}`, payload);
-      this.$emit('apartment-saved');
-      const message = `Квартиру № ${this.apartmentData.apartmentNumber} додано.`;
-      this.showSuccessMessage(message);
     },
     showSuccessMessage(message: string) {
       this.$toast.add({
@@ -137,21 +125,12 @@ export default defineComponent({
       this.$emit('cancel');
     },
   },
-  computed: {
-    ...mapGetters({
-      stateApartmentInfo: `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentInfo}`,
-    }),
-  },
   watch: {
     apartmentData: {
       handler() {
-        if (this.$props.type === 'edit') {
-          this.disabled =
-            this.apartmentData.apartmentNumber === this.stateApartmentInfo.apartmentNumber &&
-            this.apartmentData.apartmentArea == this.stateApartmentInfo.apartmentArea;
-        } else {
-          this.disabled = false;
-        }
+        this.disabled =
+          this.apartmentData.apartmentNumber === this.previousApartmentData.apartmentNumber &&
+          this.apartmentData.apartmentArea == this.previousApartmentData.apartmentArea;
       },
       deep: true,
     },

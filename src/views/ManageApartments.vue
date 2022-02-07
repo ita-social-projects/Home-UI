@@ -64,7 +64,6 @@
             :dismissableMask="true"
           >
             <ApartmentForm
-              :type="'add'"
               :houseId="id"
               @apartment-saved="displayApartmentModal = false"
               @cancel="displayApartmentModal = false"
@@ -134,7 +133,6 @@
           header="Редагувати квартиру"
         >
           <ApartmentForm
-            :type="'edit'"
             :houseId="id"
             :apartmentId="item.id"
             :propsApartmentData="item"
