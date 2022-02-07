@@ -82,10 +82,6 @@ export default defineComponent({
       },
       disabled: true,
       v$: useVuelidate(),
-      payload: {
-        houseId: this.$props.houseId,
-        apartmentId: this.$props.apartmentId,
-      },
     };
   },
   validations() {
@@ -107,7 +103,8 @@ export default defineComponent({
       } else {
         this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.EDIT_APARTMENT}`, {
           body: this.apartmentData,
-          ...this.payload,
+          houseId: this.$props.houseId,
+          apartmentId: this.$props.apartmentId,
         });
       }
       this.$emit('apartment-saved');
