@@ -91,11 +91,10 @@ export default defineComponent({
   },
   methods: {
     async submit(): Promise<void> {
-      const message =
-        this.$props.apartmentId === undefined
-          ? `Квартиру № ${this.apartmentData.apartmentNumber} додано.`
-          : `Дані про квартиру № ${this.apartmentData.apartmentNumber} змінено.`;
-      if (this.$props.apartmentId === undefined) {
+      const message = !this.$props.apartmentId
+        ? `Квартиру № ${this.apartmentData.apartmentNumber} додано.`
+        : `Дані про квартиру № ${this.apartmentData.apartmentNumber} змінено.`;
+      if (!this.$props.apartmentId) {
         this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.ADD_APARTMENT}`, {
           body: this.apartmentData,
           houseId: this.$props.houseId,
