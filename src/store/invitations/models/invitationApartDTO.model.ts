@@ -1,4 +1,4 @@
-import { AddressDTOModel } from '@/shared/models/addressDTO.model';
+import { AddressDTOModel } from '@/houses/models/addressDTO.model';
 import { InvitationApartmentModel } from '@/store/invitations/models/invitationApart.model';
 
 export class InvitationApartmentDTOModel {

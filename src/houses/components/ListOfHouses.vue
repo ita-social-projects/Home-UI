@@ -54,9 +54,9 @@ import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import ConfirmPopup from 'primevue/confirmpopup';
 import { StoreModuleEnum } from '@/store/types';
-import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
-import { HouseModel } from '@/shared/models/house.model';
-import { AddressModel } from '@/shared/models/address.model';
+import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
+import { HouseModel } from '@/houses/models/house.model';
+import { AddressModel } from '@/houses/models/address.model';
 
 export default defineComponent({
   name: 'ListOfHouses',

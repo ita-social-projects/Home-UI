@@ -160,13 +160,13 @@ import { OwnershipsModel } from '@/shared/models/ownerships.model';
 import { UpdateOwnershipsDTOModel } from '@/shared/models/update-ownershipsDTO.model';
 import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
 import { OwnershipsActionEnum, OwnershipsGettersEnum } from '@/store/ownerships/types';
-import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { useVuelidate } from '@vuelidate/core';
 import { requiredValidator, ownershipPartValidator } from '@/utils/validators';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 import { UserContactInterface } from '@/store/user/types';
 import { ContactTypeEnum } from '@/store/authorization/types';
-import { HouseModel } from '@/shared/models/house.model';
+import { HouseModel } from '@/houses/models/house.model';
 
 export default defineComponent({
   name: 'ApartmentInfo',

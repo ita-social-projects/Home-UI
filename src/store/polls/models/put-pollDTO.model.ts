@@ -1,5 +1,5 @@
-import { HouseDTOModel } from '@/shared/models/houseDTO.model';
-import { HouseModel } from './../../../shared/models/house.model';
+import { HouseDTOModel } from '@/houses/models/houseDTO.model';
+import { HouseModel } from '../../../houses/models/house.model';
 
 export class PostPollDTOModel {
   public header: string;

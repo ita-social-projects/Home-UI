@@ -180,10 +180,10 @@ import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-import { houseValidations } from '@/utils/house-validations';
-import { AddressInterface, HousesActionsEnum } from '@/store/houses/types';
+import { houseValidations } from '@/houses/utils/validators/house-validations';
+import { AddressInterface, HousesActionsEnum } from '@/houses/store/types';
 import { StoreModuleEnum } from '@/store/types';
-import { HouseModel } from '@/shared/models/house.model';
+import { HouseModel } from '@/houses/models/house.model';
 
 export default defineComponent({
   name: 'ManagingHouseForm',

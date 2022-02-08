@@ -52,12 +52,12 @@
 import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import ListOfHouses from '@/components/ListOfHouses.vue';
-import { HouseModel } from '@/shared/models/house.model';
-import { AddressModel } from '@/shared/models/address.model';
-import { HousesActionsEnum } from '@/store/houses/types';
+import ListOfHouses from '@/houses/components/ListOfHouses.vue';
+import { HouseModel } from '@/houses/models/house.model';
+import { AddressModel } from '@/houses/models/address.model';
+import { HousesActionsEnum } from '@/houses/store/types';
 import { StoreModuleEnum } from '@/store/types';
-import ManagingHouseForm from '@/components/ManagingHouseForm.vue';
+import ManagingHouseForm from '@/houses/components/ManagingHouseForm.vue';
 
 export default defineComponent({
   name: 'ManageHouses',
