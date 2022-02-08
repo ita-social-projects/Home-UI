@@ -256,12 +256,11 @@ export default defineComponent({
         cooperationId: cooperationId.value,
         id: id.value,
       };
-      console.log('payload', payload);
+
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
     };
 
     const houseInfo = computed((): HouseModel => {
-      console.log(store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`]);
       return store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHouseInfo}`];
     });
 
