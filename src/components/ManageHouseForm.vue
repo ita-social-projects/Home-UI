@@ -200,16 +200,6 @@ export default defineComponent({
       type: HouseModel,
       required: true,
     },
-    isEditHouse: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    isAddHouse: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
   },
   data() {
     return {
@@ -239,7 +229,7 @@ export default defineComponent({
     };
   },
   async mounted() {
-    if (this.$props.isEditHouse) {
+    if (this.$props.houseData) {
       this.initData();
     }
     this.isLoaded = true;
@@ -256,11 +246,11 @@ export default defineComponent({
         houseData: { ...this.houseData },
       };
 
-      if (this.$props.isEditHouse) {
+      if (this.$props.houseData) {
         payload.houseData.id = this.$props.houseData.id;
 
         await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.EDIT_HOUSE}`, payload);
-      } else if (this.$props.isAddHouse) {
+      } else {
         await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.ADD_HOUSE}`, payload);
       }
 
@@ -271,7 +261,7 @@ export default defineComponent({
       this.$emit('cancel-managing');
     },
     showSuccessOperation() {
-      const detailText = this.$props.isEditHouse
+      const detailText = this.$props.houseData
         ? `Дані про будинок з ID ${this.$props.houseData.id!} змінено!`
         : `Новий будинок додано!`;
 
