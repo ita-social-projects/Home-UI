@@ -36,13 +36,14 @@
           :closable="false"
           :dismissableMask="true"
         >
-          <EditApartmentForm
+          <ApartmentForm
             :houseId="id"
             :apartmentId="apartment"
             :propsApartmentData="apartmentInfo"
-            @cancel-editing="displayEditApartmentModal = false"
             @apartment-saved="displayEditApartmentModal = false"
-          />
+            @cancel="displayEditApartmentModal = false"
+          >
+          </ApartmentForm>
         </Dialog>
         <div class="container">
           <DataTable
@@ -151,7 +152,7 @@ import InputText from 'primevue/inputtext';
 import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import EditApartmentForm from '@/components/EditApartmentForm.vue';
+import ApartmentForm from '@/components/ApartmentForm.vue';
 import { computed, defineComponent, onMounted, reactive, ref, toRefs, watch } from 'vue';
 import { useStore } from 'vuex';
 import { StoreModuleEnum } from '@/store/types';
@@ -171,7 +172,7 @@ import { HouseModel } from '@/shared/models/house.model';
 export default defineComponent({
   name: 'ApartmentInfo',
   components: {
-    EditApartmentForm,
+    ApartmentForm,
     Breadcrumb,
     Button,
     Menu,

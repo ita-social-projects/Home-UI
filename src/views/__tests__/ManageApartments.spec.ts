@@ -89,7 +89,7 @@ const mountingOptions: MountingOptions<any> = {
     plugins: [router],
     stubs: {
       Breadcrumb: true,
-      AddApartmentForm: true,
+      ApartmentForm: true,
       Dialog: true,
     },
   },

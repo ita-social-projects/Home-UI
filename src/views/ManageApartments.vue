@@ -63,12 +63,12 @@
             :closable="false"
             :dismissableMask="true"
           >
-            <AddApartmentForm
+            <ApartmentForm
               :houseId="id"
               @apartment-saved="displayApartmentModal = false"
-              @cancel-editing="displayApartmentModal = false"
+              @cancel="displayApartmentModal = false"
             >
-            </AddApartmentForm>
+            </ApartmentForm>
           </Dialog>
         </div>
         <div class="container">
@@ -132,13 +132,14 @@
           :modal="true"
           header="Редагувати квартиру"
         >
-          <EditApartmentForm
+          <ApartmentForm
             :houseId="id"
             :apartmentId="item.id"
             :propsApartmentData="item"
-            @cancel-editing="editApartmentDialog = false"
             @apartment-saved="editApartmentDialog = false"
-          />
+            @cancel="editApartmentDialog = false"
+          >
+          </ApartmentForm>
         </Dialog>
       </div>
     </div>
@@ -156,8 +157,7 @@ import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import AddApartmentForm from '@/components/AddApartmentForm.vue';
-import EditApartmentForm from '@/components/EditApartmentForm.vue';
+import ApartmentForm from '@/components/ApartmentForm.vue';
 import EditHouseForm from '@/components/EditHouseForm.vue';
 import { StoreModuleEnum } from '@/store/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
@@ -174,8 +174,7 @@ export default defineComponent({
     Column,
     Menu,
     Dialog,
-    AddApartmentForm,
-    EditApartmentForm,
+    ApartmentForm,
     EditHouseForm,
   },
   props: {
