@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="updateApartment()" id="edit-apartment-form">
+  <form @submit.prevent="submit()" id="edit-apartment-form">
     <div>
       <label for="iban">Номер квартири : </label>
       <div class="input-block">
@@ -57,25 +57,27 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import useVuelidate from '@vuelidate/core';
 import { apartmentValidations } from '@/utils/apartment-validations';
 import { StoreModuleEnum } from '@/store/types';
-import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
+import { ApartmentsActionsEnum } from '@/store/apartments/types';
 
 export default defineComponent({
-  name: 'EditApartmentForm',
+  name: 'ApartmentForm',
   components: {
     Button,
     InputText,
   },
   props: ['houseId', 'apartmentId', 'propsApartmentData'],
-  emits: ['cancel-editing', 'apartment-saved'],
+  emits: ['cancel', 'apartment-saved'],
   data() {
     return {
       apartmentData: {
+        ...this.$props.propsApartmentData,
+      },
+      previousApartmentData: {
         ...this.$props.propsApartmentData,
       },
       disabled: true,
@@ -87,47 +89,45 @@ export default defineComponent({
       apartmentData: apartmentValidations,
     };
   },
-  mounted() {
-    const payload = {
-      houseId: this.$props.houseId,
-      apartmentId: this.$props.apartmentId,
-    };
-    this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENT_BY_ID}`, payload);
-  },
   methods: {
-    async updateApartment() {
-      const payload = {
-        houseId: this.$props.houseId,
-        apartmentId: this.$props.apartmentId,
-        body: this.apartmentData,
-      };
-      this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.EDIT_APARTMENT}`, payload);
-      this.showSuccessEdit(this.apartmentData.apartmentNumber);
+    async submit(): Promise<void> {
+      const message = !this.$props.apartmentId
+        ? `Квартиру № ${this.apartmentData.apartmentNumber} додано.`
+        : `Дані про квартиру № ${this.apartmentData.apartmentNumber} змінено.`;
+      if (!this.$props.apartmentId) {
+        this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.ADD_APARTMENT}`, {
+          body: this.apartmentData,
+          houseId: this.$props.houseId,
+        });
+      } else {
+        this.$store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.EDIT_APARTMENT}`, {
+          body: this.apartmentData,
+          houseId: this.$props.houseId,
+          apartmentId: this.$props.apartmentId,
+        });
+      }
       this.$emit('apartment-saved');
+      this.showSuccessMessage(message);
+      this.v$.$reset();
     },
-    showSuccessEdit(apartment: number) {
+    showSuccessMessage(message: string) {
       this.$toast.add({
         severity: 'success',
-        summary: 'Успішно',
-        detail: `Дані про квартиру № ${apartment} змінено`,
+        summary: 'Успішно!',
+        detail: `${message}`,
         life: 3000,
       });
     },
     cancelEditing() {
-      this.$emit('cancel-editing');
+      this.$emit('cancel');
     },
-  },
-  computed: {
-    ...mapGetters({
-      stateApartmentInfo: `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentInfo}`,
-    }),
   },
   watch: {
     apartmentData: {
       handler() {
         this.disabled =
-          this.apartmentData.apartmentNumber === this.stateApartmentInfo.apartmentNumber &&
-          this.apartmentData.apartmentArea == this.stateApartmentInfo.apartmentArea;
+          this.apartmentData.apartmentNumber === this.previousApartmentData.apartmentNumber &&
+          this.apartmentData.apartmentArea == this.previousApartmentData.apartmentArea;
       },
       deep: true,
     },
