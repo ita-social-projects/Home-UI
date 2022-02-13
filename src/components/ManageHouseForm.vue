@@ -156,20 +156,20 @@
     </div>
     <div class="buttons-container">
       <Button
+        id="add-new-house-btn"
         label="Зберегти зміни"
         icon="pi pi-check"
         autofocus
         class="p-button-info"
         type="submit"
         :disabled="v$.houseData.$invalid"
-        id="add-new-house-btn"
       />
       <Button
+        id="cancel-btn"
         label="Скасувати зміни"
         icon="pi pi-times"
-        @click="cancelManagingModal"
         class="p-button-outlined p-button-info"
-        id="cancel-btn"
+        @click="cancelManagingModal"
       />
     </div>
   </form>
@@ -239,7 +239,9 @@ export default defineComponent({
       this.houseData.flatQuantity = this.$props.houseData?.flatQuantity ?? 0;
       this.houseData.houseArea = this.$props.houseData?.houseArea ?? 0;
       this.houseData.adjoiningArea = this.$props.houseData?.adjoiningArea ?? 0;
-      this.houseData.address = JSON.parse(JSON.stringify(this.$props.houseData?.address ?? ({} as AddressInterface)));
+      this.houseData.address = this.$props.houseData.address
+        ? JSON.parse(JSON.stringify(this.$props.houseData.address))
+        : {};
     },
     async manageHouseInfo() {
       const payload = {

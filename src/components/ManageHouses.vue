@@ -14,10 +14,7 @@
       :closable="false"
       :dismissableMask="true"
     >
-      <ManageHouseForm
-        :cooperationId="$props.cooperationId"
-        @cancel-managing="displayModalForAddHouse = false"
-      ></ManageHouseForm>
+      <ManageHouseForm :cooperationId="$props.cooperationId" @cancel-managing="displayModalForAddHouse = false" />
     </Dialog>
   </div>
 
@@ -42,7 +39,7 @@
       :cooperationId="$props.cooperationId"
       :houseData="this.house"
       @cancel-managing="displayModalForEditHouse = false"
-    ></ManageHouseForm>
+    />
   </Dialog>
 </template>
 
