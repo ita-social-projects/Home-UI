@@ -1,7 +1,7 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { PollModel } from '@/store/polls/models/poll.model';
-import { HouseModel } from '@/shared/models/house.model';
+import { HouseModel } from '@/houses/models/house.model';
 
 export enum PollsMutationEnum {
   SET_COOPERATION_POLLS = 'SET_COOPERATION_POLLS',

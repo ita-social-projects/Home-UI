@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="addNewHouse" id="house_data_form">
+  <form @submit.prevent="manageHouseInfo" v-if="isLoaded">
     <p>
       <label class="dialog-item" for="flatQuantity">Кількість квартир в будинку : </label>
       <InputText
@@ -156,20 +156,20 @@
     </div>
     <div class="buttons-container">
       <Button
+        id="add-new-house-btn"
         label="Зберегти зміни"
         icon="pi pi-check"
         autofocus
         class="p-button-info"
         type="submit"
         :disabled="v$.houseData.$invalid"
-        id="add-new-house-btn"
       />
       <Button
+        id="cancel-btn"
         label="Скасувати зміни"
         icon="pi pi-times"
-        @click="closeAddHouseModal"
         class="p-button-outlined p-button-info"
-        id="cancel-btn"
+        @click="cancelManagingModal"
       />
     </div>
   </form>
@@ -180,30 +180,34 @@ import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
+import { houseValidations } from '@/houses/utils/validators/house-validations';
+import { AddressInterface, HousesActionsEnum } from '@/houses/store/types';
 import { StoreModuleEnum } from '@/store/types';
-import { HousesActionsEnum } from '@/store/houses/types';
-import { AddressModel } from '@/shared/models/address.model';
-import { HouseModel } from '@/shared/models/house.model';
-import { houseValidations } from '@/utils/house-validations';
+import { HouseModel } from '@/houses/models/house.model';
 
 export default defineComponent({
-  name: 'AddHouseForm',
+  name: 'ManagingHouseForm',
   components: {
     Button,
     InputText,
   },
   props: {
-    id: {
+    cooperationId: {
       type: Number,
+      required: true,
+    },
+    houseData: {
+      type: HouseModel,
       required: true,
     },
   },
   data() {
     return {
       houseData: {
-        flatQuantity: null,
-        houseArea: null,
-        adjoiningArea: null,
+        cooperationId: this.$props.cooperationId,
+        flatQuantity: null as any,
+        houseArea: null as any,
+        adjoiningArea: null as any,
         address: {
           region: '',
           city: '',
@@ -212,8 +216,10 @@ export default defineComponent({
           houseBlock: '',
           houseNumber: '',
           zipCode: '',
-        } as AddressModel,
-      } as HouseModel,
+        } as AddressInterface,
+      },
+
+      isLoaded: false,
       v$: useVuelidate(),
     };
   },
@@ -222,35 +228,51 @@ export default defineComponent({
       houseData: houseValidations,
     };
   },
+  async mounted() {
+    if (this.$props.houseData) {
+      this.initData();
+    }
+    this.isLoaded = true;
+  },
   methods: {
-    async addNewHouse() {
-      const isValid = await this.v$.$validate();
-
-      if (!isValid) {
-        return;
-      }
-
+    initData() {
+      this.houseData.flatQuantity = this.$props.houseData?.flatQuantity ?? 0;
+      this.houseData.houseArea = this.$props.houseData?.houseArea ?? 0;
+      this.houseData.adjoiningArea = this.$props.houseData?.adjoiningArea ?? 0;
+      this.houseData.address = this.$props.houseData.address
+        ? JSON.parse(JSON.stringify(this.$props.houseData.address))
+        : {};
+    },
+    async manageHouseInfo() {
       const payload = {
-        cooperationId: this.$props.id,
-        ...this.houseData,
+        houseData: { ...this.houseData },
       };
 
-      await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.ADD_HOUSE}`, payload);
+      if (this.$props.houseData) {
+        payload.houseData.id = this.$props.houseData.id;
 
-      this.closeAddHouseModal();
-    },
-    resetHouseDataFields(houseData: any) {
-      for (let field in houseData) {
-        if (typeof houseData[field] === 'object') {
-          this.resetHouseDataFields(houseData[field]);
-        } else {
-          houseData[field] = '';
-        }
+        await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.EDIT_HOUSE}`, payload);
+      } else {
+        await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.ADD_HOUSE}`, payload);
       }
+
+      this.showSuccessOperation();
+      this.cancelManagingModal();
     },
-    closeAddHouseModal() {
-      this.resetHouseDataFields(this.houseData);
-      this.$emit('cancel-addHouseModal');
+    cancelManagingModal() {
+      this.$emit('cancel-managing');
+    },
+    showSuccessOperation() {
+      const detailText = this.$props.houseData
+        ? `Дані про будинок з ID ${this.$props.houseData.id!} змінено!`
+        : `Новий будинок додано!`;
+
+      this.$toast.add({
+        severity: 'success',
+        summary: 'Успішно',
+        detail: `${detailText}`,
+        life: 3000,
+      });
     },
   },
 });

@@ -1,7 +1,7 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
 import { CooperationModel } from '@/store/cooperation/models/cooperation.model';
-import { HouseModel } from '../../shared/models/house.model';
+import { HouseModel } from '../../houses/models/house.model';
 
 export enum CooperationMutationEnum {
   SET_USER_COOPERATIONS = 'SET_USER_COOPERATIONS',

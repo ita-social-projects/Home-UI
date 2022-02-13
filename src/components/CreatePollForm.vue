@@ -94,8 +94,8 @@ import InputText from 'primevue/inputtext';
 import useVuelidate from '@vuelidate/core';
 import { pollValidations } from '@/utils/poll-validations';
 import { StoreModuleEnum } from '@/store/types';
-import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
-import { HouseModel } from '@/shared/models/house.model';
+import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
+import { HouseModel } from '@/houses/models/house.model';
 import { PollsActionEnum } from '@/store/polls/types';
 
 export default defineComponent({
@@ -271,7 +271,7 @@ export default defineComponent({
   position: absolute;
   justify-content: left;
   width: 200px;
-  color: #3B82F6;
+  color: #3b82f6;
   margin: 25px 0 0 0;
   @extend %error-message;
 }
