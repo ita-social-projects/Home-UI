@@ -17,7 +17,7 @@
       <ManageHouseForm
         :cooperationId="$props.cooperationId"
         @cancel-managing="displayModalForAddHouse = false"
-      ></ManageHouseForm>
+      />
     </Dialog>
   </div>
 
