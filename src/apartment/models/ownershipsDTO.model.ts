@@ -1,5 +1,5 @@
-import { OwnershipsModel } from '@/shared/models/ownerships.model';
-import { OwnerDTOModel } from '@/shared/models/ownerDTO.model';
+import { OwnershipsModel } from '@/apartment/models/ownerships.model';
+import { OwnerDTOModel } from '@/apartment/models/ownerDTO.model';
 
 export class OwnershipsDTOModel {
   public id: number;

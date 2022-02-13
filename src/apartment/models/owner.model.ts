@@ -1,4 +1,4 @@
-import { OwnerDTOModel } from '@/shared/models/ownerDTO.model';
+import { OwnerDTOModel } from '@/apartment/models/ownerDTO.model';
 import { UserContactInterface } from '@/store/user/types';
 
 export class OwnerModel {

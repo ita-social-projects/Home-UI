@@ -1,16 +1,16 @@
 import { ActionTree } from 'vuex';
-import { ApartmentModel } from '@/store/apartments/models/apartment.model';
-import { AddApartmentDTOModel } from '@/store/apartments/models/add-apartmentDTO.model';
-import { ApartmentDTOModel } from '@/store/apartments/models/apartmentDTO.model';
+import { ApartmentModel } from '@/apartment/models/apartment.model';
+import { AddApartmentDTOModel } from '@/apartment/models/add-apartmentDTO.model';
+import { ApartmentDTOModel } from '@/apartment/models/apartmentDTO.model';
 import { RootStateInterface } from '@/store/types';
 import {
   ApartmentsStateInterface,
   ApartmentsMutationsEnum,
   ApartmentsActionsEnum,
   Actions,
-} from '@/store/apartments/types';
+} from '@/apartment/store/apartments/types';
 import { HTTP } from '@/core/api/http-common';
-import { UpdateApartmentDTOModel } from './models/update-upartmentDTO.model';
+import { UpdateApartmentDTOModel } from '../../models/update-upartmentDTO.model';
 
 export const actions: ActionTree<ApartmentsStateInterface, RootStateInterface> & Actions = {
   [ApartmentsActionsEnum.SET_APARTMENTS]: async ({ commit }, payload) => {

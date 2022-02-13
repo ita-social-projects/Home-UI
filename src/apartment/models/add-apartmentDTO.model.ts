@@ -1,4 +1,4 @@
-import { ApartmentModel } from '@/store/apartments/models/apartment.model';
+import { ApartmentModel } from '@/apartment/models/apartment.model';
 
 export class AddApartmentDTOModel {
   public number: string;

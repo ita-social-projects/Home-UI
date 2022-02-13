@@ -105,7 +105,7 @@ import Dropdown from 'primevue/dropdown';
 import useVuelidate from '@vuelidate/core';
 import { StoreModuleEnum } from '@/store/types';
 import { mapGetters } from 'vuex';
-import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
+import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
 import {
   requiredValidator,
   emailValidator,
@@ -120,7 +120,6 @@ import { CooperationGettersEnum } from '@/store/cooperation/types';
 export default defineComponent({
   name: 'CreateInvitationForm',
   components: {
-    Dialog,
     Button,
     InputText,
     Dropdown,

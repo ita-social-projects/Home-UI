@@ -1,8 +1,8 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { getters } from '@/store/ownerships/getters';
-import { actions } from '@/store/ownerships/actions';
-import { mutations } from '@/store/ownerships/mutations';
+import { getters } from '@/apartment/store/ownerships/getters';
+import { actions } from '@/apartment/store/ownerships/actions';
+import { mutations } from '@/apartment/store/ownerships/mutations';
 import { OwnershipsStateInterface } from './types';
 
 export const state: OwnershipsStateInterface = {
