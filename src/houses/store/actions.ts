@@ -1,9 +1,9 @@
 import { ActionTree } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { HousesStateInterface, HousesMutationsEnum, HousesActionsEnum, Actions } from '@/store/houses/types';
+import { HousesStateInterface, HousesMutationsEnum, HousesActionsEnum, Actions } from '@/houses/store/types';
 import { HTTP } from '@/core/api/http-common';
-import { HouseModel } from './../../shared/models/house.model';
-import { HouseDTOModel } from './../../shared/models/houseDTO.model';
+import { HouseModel } from '../models/house.model';
+import { HouseDTOModel } from '../models/houseDTO.model';
 
 export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Actions = {
   [HousesActionsEnum.SET_HOUSES]: async ({ commit }, payload) => {

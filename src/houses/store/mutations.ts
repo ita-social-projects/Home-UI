@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex';
-import { HousesStateInterface, HousesMutationsEnum, Mutations, HouseInterface } from '@/store/houses/types';
-import { HouseModel } from '@/shared/models/house.model';
+import { HousesStateInterface, HousesMutationsEnum, Mutations, HouseInterface } from '@/houses/store/types';
+import { HouseModel } from '@/houses/models/house.model';
 
 export const mutations: MutationTree<HousesStateInterface> & Mutations = {
   [HousesMutationsEnum.SET_HOUSES]: (state, payload) => {

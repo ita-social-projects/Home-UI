@@ -40,12 +40,12 @@
               :closable="false"
               :dismissableMask="true"
             >
-              <EditHouseForm
+              <ManageHouseForm
                 :cooperationId="cooperationId"
-                :propsHouseData="houseInfo"
-                @house-saved="displayModalForEditHouse = false"
-                @cancel-editing="displayModalForEditHouse = false"
-              ></EditHouseForm>
+                :houseData="houseInfo"
+                :isEditHouse="true"
+                @cancel-managing="displayModalForEditHouse = false"
+              />
             </Dialog>
           </div>
         </div>
@@ -157,13 +157,13 @@ import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import ManageHouseForm from '@/houses/components/ManageHouseForm.vue';
 import ApartmentForm from '@/components/ApartmentForm.vue';
-import EditHouseForm from '@/components/EditHouseForm.vue';
 import { StoreModuleEnum } from '@/store/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
-import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
-import { HouseModel } from '@/shared/models/house.model';
+import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
+import { HouseModel } from '@/houses/models/house.model';
 
 export default defineComponent({
   name: 'ManageApartments',
@@ -174,8 +174,8 @@ export default defineComponent({
     Column,
     Menu,
     Dialog,
+    ManageHouseForm,
     ApartmentForm,
-    EditHouseForm,
   },
   props: {
     id: {
@@ -255,6 +255,7 @@ export default defineComponent({
         cooperationId: cooperationId.value,
         id: id.value,
       };
+
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
     };
 

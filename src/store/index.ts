@@ -3,7 +3,7 @@ import { RootStateInterface } from '@/store/types';
 import { authorizationStore } from '@/store/authorization';
 import { cooperationStore } from '@/store/cooperation';
 import { localStorageStore } from '@/store/localstorage';
-import { housesStore } from '@/store/houses';
+import { housesStore } from '@/houses/store';
 import { userStore } from '@/store/user';
 import { pollsStore } from '@/store/polls';
 import { invitationsStore } from '@/store/invitations';

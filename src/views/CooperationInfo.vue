@@ -68,7 +68,7 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import EditCooperationForm from '@/components/EditCooperationInfo.vue';
-import ManageHouses from '@/components/ManageHouses.vue';
+import ManageHouses from '@/houses/components/ManageHouses.vue';
 import { CooperationActionEnum, CooperationGettersEnum } from '@/store/cooperation/types';
 import { StoreModuleEnum } from '@/store/types';
 

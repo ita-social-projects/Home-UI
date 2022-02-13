@@ -1,5 +1,5 @@
-import { AddressModel } from '@/shared/models/address.model';
-import { HouseDTOModel } from '@/shared/models/houseDTO.model';
+import { AddressModel } from '@/houses/models/address.model';
+import { HouseDTOModel } from '@/houses/models/houseDTO.model';
 
 export class HouseModel {
   public flatQuantity: number | null;

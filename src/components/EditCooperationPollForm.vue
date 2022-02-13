@@ -130,12 +130,12 @@ import {
   cyrillicLangTextValidator,
 } from '@/utils/validators';
 import { StoreModuleEnum } from '@/store/types';
-import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 import { PollsActionEnum, PollsGettersEnum } from '@/store/polls/types';
 import { PollModel } from '@/store/polls/models/poll.model';
 import useVuelidate from '@vuelidate/core';
-import { HouseModel } from '@/shared/models/house.model';
+import { HouseModel } from '@/houses/models/house.model';
 
 export default defineComponent({
   name: 'EditCooperationPollForm',
