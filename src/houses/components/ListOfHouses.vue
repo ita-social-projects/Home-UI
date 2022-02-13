@@ -87,7 +87,7 @@ export default defineComponent({
             icon: 'pi pi-times',
             type: 'Submit',
             command: () => {
-              this.confirmDeleteHouse(event);
+              this.confirmDeleteHouse(event as Event);
             },
           },
           {
