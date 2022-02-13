@@ -256,8 +256,9 @@ export default defineComponent({
     const setHouseInfo = async () => {
       const payload = {
         cooperationId: cooperationId.value,
-        houseId: id.value,
+        id: id.value,
       };
+
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
     };
 

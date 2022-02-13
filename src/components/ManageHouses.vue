@@ -14,7 +14,7 @@
       :closable="false"
       :dismissableMask="true"
     >
-      <AddHouseForm :id="$props.cooperationId" @cancel-addHouseModal="displayModalForAddHouse = false"></AddHouseForm>
+      <ManageHouseForm :cooperationId="$props.cooperationId" @cancel-managing="displayModalForAddHouse = false" />
     </Dialog>
   </div>
 
@@ -35,35 +35,32 @@
     :closable="false"
     :dismissableMask="true"
   >
-    <EditHouseForm
+    <ManageHouseForm
       :cooperationId="$props.cooperationId"
-      :propsHouseData="this.house"
-      @house-saved="displayModalForEditHouse = false"
-      @cancel-editing="displayModalForEditHouse = false"
-    ></EditHouseForm
-  ></Dialog>
+      :houseData="this.house"
+      @cancel-managing="displayModalForEditHouse = false"
+    />
+  </Dialog>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import EditHouseForm from '@/components/EditHouseForm.vue';
 import ListOfHouses from '@/components/ListOfHouses.vue';
-import AddHouseForm from '@/components/AddHouseForm.vue';
 import { HouseModel } from '@/shared/models/house.model';
 import { AddressModel } from '@/shared/models/address.model';
 import { HousesActionsEnum } from '@/store/houses/types';
 import { StoreModuleEnum } from '@/store/types';
+import ManageHouseForm from '@/components/ManageHouseForm.vue';
 
 export default defineComponent({
   name: 'ManageHouses',
   components: {
     Dialog,
     Button,
-    EditHouseForm,
     ListOfHouses,
-    AddHouseForm,
+    ManageHouseForm,
   },
   props: {
     isLoaded: {

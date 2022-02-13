@@ -49,6 +49,10 @@ export interface HousesStateInterface {
   houseInfo: HouseModel;
 }
 
+export interface ManageHouseInterface {
+  houseData: HouseInterface;
+}
+
 export type Mutations<S = HousesStateInterface> = {
   [HousesMutationsEnum.SET_HOUSES](state: S, payload: Array<HouseModel>): void;
   [HousesMutationsEnum.DELETE_HOUSE](state: any, payload: HouseModel): void;
@@ -60,9 +64,9 @@ export type Mutations<S = HousesStateInterface> = {
 export interface Actions {
   [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext, payload: number): void;
   [HousesActionsEnum.DELETE_HOUSE]({ commit }: AugmentedActionContext, payload: HouseModel): void;
-  [HousesActionsEnum.EDIT_HOUSE]({ commit }: AugmentedActionContext, payload: HouseModel): void;
-  [HousesActionsEnum.ADD_HOUSE]({ commit }: AugmentedActionContext, payload: HouseModel): void;
-  [HousesActionsEnum.GET_HOUSE_BY_ID]({ commit }: AugmentedActionContext, payload: any): void;
+  [HousesActionsEnum.EDIT_HOUSE]({ commit }: AugmentedActionContext, payload: ManageHouseInterface): void;
+  [HousesActionsEnum.ADD_HOUSE]({ commit }: AugmentedActionContext, payload: ManageHouseInterface): void;
+  [HousesActionsEnum.GET_HOUSE_BY_ID]({ commit }: AugmentedActionContext, payload: HouseModel): void;
 }
 
 export type Getters<S = HousesStateInterface> = {

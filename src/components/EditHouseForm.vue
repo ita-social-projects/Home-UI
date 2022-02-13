@@ -174,9 +174,6 @@ export default defineComponent({
   emits: ['cancel-editing', 'isLoadedModeHouse', 'house-saved'],
   data() {
     return {
-      cooperationData: {
-        id: 0,
-      },
       house: {
         id: this.$props.propsHouseData.id,
         ...this.$props.propsHouseData,
@@ -205,7 +202,7 @@ export default defineComponent({
       };
       this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.EDIT_HOUSE}`, payload);
       this.showSuccessEdit(this.house.id!);
-      this.$emit('house-saved');
+      this.cancelEditing();
     },
     showSuccessEdit(id: number) {
       this.$toast.add({
@@ -219,39 +216,32 @@ export default defineComponent({
       this.$emit('cancel-editing');
     },
   },
-  computed: {
-    displayHouseModal(): boolean {
-      return this.displayModalForHouse;
-    },
-  },
 });
 </script>
 
 <style lang="scss" scoped>
-.address-details {
-  margin-left: 2rem;
-  .dialog-item-address {
-    margin-right: -2rem;
+#house_data_form {
+  label {
+    display: inline-block;
+    width: 240px;
+  }
+  p {
+    .dialog-item {
+      display: inline-block;
+      width: 240px;
+    }
+    small {
+      display: block;
+      width: 280px;
+    }
+  }
+  .address-details {
+    margin-left: 2rem;
+    .dialog-item-address {
+      margin-right: -2rem;
+    }
   }
 }
-.dialog-item {
-  display: inline-block;
-  width: 240px;
-}
-label {
-  display: inline-block;
-  width: 240px;
-}
-
-.input-block {
-  display: inline-block;
-  margin-bottom: 15px;
-}
-small {
-  display: block;
-  width: 280px;
-}
-
 .button-div {
   float: right;
   .p-button-outlined {
