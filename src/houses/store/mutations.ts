@@ -7,6 +7,7 @@ export const mutations: MutationTree<HousesStateInterface> & Mutations = {
     state.houses = payload;
   },
   [HousesMutationsEnum.EDIT_HOUSE]: (state, payload) => {
+    state.houseInfo = payload;
     state.houses?.forEach((el: HouseModel) => {
       if (el.id === payload.id) {
         el.flatQuantity = payload.flatQuantity;

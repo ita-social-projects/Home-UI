@@ -156,20 +156,20 @@
     </div>
     <div class="buttons-container">
       <Button
+        id="add-new-house-btn"
         label="Зберегти зміни"
         icon="pi pi-check"
         autofocus
         class="p-button-info"
         type="submit"
         :disabled="v$.houseData.$invalid"
-        id="add-new-house-btn"
       />
       <Button
+        id="cancel-btn"
         label="Скасувати зміни"
         icon="pi pi-times"
-        @click="cancelManagingModal"
         class="p-button-outlined p-button-info"
-        id="cancel-btn"
+        @click="cancelManagingModal"
       />
     </div>
   </form>
@@ -200,16 +200,6 @@ export default defineComponent({
       type: HouseModel,
       required: true,
     },
-    isEditHouse: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    isAddHouse: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
   },
   data() {
     return {
@@ -239,7 +229,7 @@ export default defineComponent({
     };
   },
   async mounted() {
-    if (this.$props.isEditHouse) {
+    if (this.$props.houseData) {
       this.initData();
     }
     this.isLoaded = true;
@@ -249,18 +239,20 @@ export default defineComponent({
       this.houseData.flatQuantity = this.$props.houseData?.flatQuantity ?? 0;
       this.houseData.houseArea = this.$props.houseData?.houseArea ?? 0;
       this.houseData.adjoiningArea = this.$props.houseData?.adjoiningArea ?? 0;
-      this.houseData.address = JSON.parse(JSON.stringify(this.$props.houseData?.address ?? ({} as AddressInterface)));
+      this.houseData.address = this.$props.houseData.address
+        ? JSON.parse(JSON.stringify(this.$props.houseData.address))
+        : {};
     },
     async manageHouseInfo() {
       const payload = {
         houseData: { ...this.houseData },
       };
 
-      if (this.$props.isEditHouse) {
+      if (this.$props.houseData) {
         payload.houseData.id = this.$props.houseData.id;
 
         await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.EDIT_HOUSE}`, payload);
-      } else if (this.$props.isAddHouse) {
+      } else {
         await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.ADD_HOUSE}`, payload);
       }
 
@@ -271,7 +263,7 @@ export default defineComponent({
       this.$emit('cancel-managing');
     },
     showSuccessOperation() {
-      const detailText = this.$props.isEditHouse
+      const detailText = this.$props.houseData
         ? `Дані про будинок з ID ${this.$props.houseData.id!} змінено!`
         : `Новий будинок додано!`;
 
