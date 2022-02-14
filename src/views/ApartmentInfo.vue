@@ -164,7 +164,7 @@ import { OwnershipsActionEnum, OwnershipsGettersEnum } from '@/store/ownerships/
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { useVuelidate } from '@vuelidate/core';
 import { requiredValidator, ownershipPartValidator } from '@/utils/validators';
-import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
 import { UserContactInterface } from '@/store/user/types';
 import { ContactTypeEnum } from '@/store/authorization/types';
 import { HouseModel } from '@/houses/models/house.model';

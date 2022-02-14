@@ -160,7 +160,7 @@ import Breadcrumb from '@/components/Breadcrumb.vue';
 import ManageHouseForm from '@/houses/components/ManageHouseForm.vue';
 import ApartmentForm from '@/components/ApartmentForm.vue';
 import { StoreModuleEnum } from '@/store/types';
-import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
 import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { HouseModel } from '@/houses/models/house.model';

@@ -1,5 +1,5 @@
-import { CooperationContactsInterface } from '@/store/cooperation/types';
-import { CooperationDTOModel } from '@/store/cooperation/models/cooperationDTO.model';
+import { CooperationContactsInterface } from '@/cooperation/store/types';
+import { CooperationDTOModel } from '@/cooperation/models/cooperationDTO.model';
 import { AddressModel } from '@/houses/models/address.model';
 import { HouseModel } from '@/houses/models/house.model';
 
