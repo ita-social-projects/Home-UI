@@ -1,9 +1,9 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { CooperationStateInterface } from '@/store/cooperation/types';
-import { getters } from '@/store/cooperation/getters';
-import { mutations } from '@/store/cooperation/mutations';
-import { actions } from '@/store/cooperation/actions';
+import { CooperationStateInterface } from '@/cooperation/store/types';
+import { getters } from '@/cooperation/store/getters';
+import { mutations } from '@/cooperation/store/mutations';
+import { actions } from '@/cooperation/store/actions';
 
 export const state: CooperationStateInterface = {
   userCooperations: [],

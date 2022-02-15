@@ -5,11 +5,11 @@ import {
   CooperationActionEnum,
   CooperationMutationEnum,
   Actions,
-} from '@/store/cooperation/types';
+} from '@/cooperation/store/types';
 import { HTTP } from '@/core/api/http-common';
-import { CooperationDTOModel } from '@/store/cooperation/models/cooperationDTO.model';
-import { CooperationModel } from './models/cooperation.model';
-import { CooperationPutDTOModel } from './models/put-cooperationDTO.model';
+import { CooperationDTOModel } from '@/cooperation/models/cooperationDTO.model';
+import { CooperationModel } from '../models/cooperation.model';
+import { CooperationPutDTOModel } from '@/cooperation/models/put-cooperationDTO.model';
 
 export const actions: ActionTree<CooperationStateInterface, RootStateInterface> & Actions = {
   [CooperationActionEnum.CREATE_COOPERATION]: async ({ commit }, payload) => {

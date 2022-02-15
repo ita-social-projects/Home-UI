@@ -115,7 +115,7 @@ import {
 } from '@/utils/validators';
 import { InvitationsActionsEnum, InvitationTypesEnum, PostInvitationInterface } from '@/store/invitations/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
-import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
 
 export default defineComponent({
   name: 'CreateInvitationForm',

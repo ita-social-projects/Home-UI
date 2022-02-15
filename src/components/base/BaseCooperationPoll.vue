@@ -60,7 +60,7 @@ import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 import { StoreModuleEnum } from '@/store/types';
 import { DeletePollPayloadInterface, PollsActionEnum, PollStatusEnum, PollStatusType } from '@/store/polls/types';
-import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
 import ConfirmPopup from 'primevue/confirmpopup';
 import Dialog from 'primevue/dialog';
 import EditCooperationPollForm from '@/components/EditCooperationPollForm.vue';

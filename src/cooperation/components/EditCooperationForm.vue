@@ -231,26 +231,10 @@ import {
   CooperationContactsInterface,
   CooperationActionEnum,
   CooperationGettersEnum,
-} from '@/store/cooperation/types';
+} from '@/cooperation/store/types';
 import { mapGetters } from 'vuex';
 import useVuelidate from '@vuelidate/core';
-import {
-  requiredValidator,
-  edrpouValidator,
-  emailLastCharsValidator,
-  emailMaxLength,
-  emailMinLength,
-  emailValidator,
-  someTitleLenghtValidator,
-  ukrLangTitleValidator,
-  ibanValidator,
-  userPhoneValidator,
-  houseNumAndHouseBlockValidator,
-  zipCodeValidator,
-  regionCityDistrictMaxLength,
-  streetMaxLength,
-  houseBlockHouseNumberMaxLength,
-} from '@/utils/validators';
+import { cooperationValidations } from '@/cooperation/utils/validators/cooperation-validations';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
@@ -284,40 +268,7 @@ export default defineComponent({
   },
   validations() {
     return {
-      cooperationData: {
-        name: {
-          requiredValidator,
-          ukrLangTitleValidator,
-          someTitleLenghtValidator,
-        },
-        edrpou: { requiredValidator, edrpouValidator },
-        iban: { requiredValidator, ibanValidator },
-        phone: { requiredValidator, userPhoneValidator },
-        email: {
-          requiredValidator,
-          emailMinLength,
-          emailLastCharsValidator,
-          emailValidator,
-          emailMaxLength,
-        },
-        address: {
-          region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
-          city: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
-          district: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },
-          street: { requiredValidator, ukrLangTitleValidator, streetMaxLength },
-          houseBlock: {
-            requiredValidator,
-            houseNumAndHouseBlockValidator,
-            houseBlockAndNumberMaxLength: houseBlockHouseNumberMaxLength,
-          },
-          houseNumber: {
-            requiredValidator,
-            houseNumAndHouseBlockValidator,
-            houseBlockAndNumberMaxLength: houseBlockHouseNumberMaxLength,
-          },
-          zipCode: { requiredValidator, zipCodeValidator },
-        },
-      },
+      cooperationData: cooperationValidations,
     };
   },
   async mounted() {
