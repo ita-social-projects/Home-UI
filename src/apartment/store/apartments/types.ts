@@ -34,7 +34,6 @@ export enum ApartmentsActionsEnum {
 export enum ApartmentsGettersEnum {
   getApartmentsData = 'getApartmentsData',
   getApartmentInfo = 'getApartmentInfo',
-  getListOfApartments = 'getListOfApartments',
 }
 
 export type Mutations<S = ApartmentsStateInterface> = {

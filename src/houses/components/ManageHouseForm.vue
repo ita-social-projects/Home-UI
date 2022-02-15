@@ -181,12 +181,12 @@ import useVuelidate from '@vuelidate/core';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { houseValidations } from '@/houses/utils/validators/house-validations';
-import { AddressInterface, HousesActionsEnum } from '@/houses/store/types';
+import { AddressInterface, HouseInterface, HousesActionsEnum } from '@/houses/store/types';
 import { StoreModuleEnum } from '@/store/types';
-import { HouseModel } from '@/houses/models/house.model';
+import { HouseModel } from '../models/house.model';
 
 export default defineComponent({
-  name: 'ManagingHouseForm',
+  name: 'ManageHouseForm',
   components: {
     Button,
     InputText,
@@ -217,7 +217,7 @@ export default defineComponent({
           houseNumber: '',
           zipCode: '',
         } as AddressInterface,
-      },
+      } as HouseInterface,
 
       isLoaded: false,
       v$: useVuelidate(),
@@ -244,12 +244,10 @@ export default defineComponent({
         : {};
     },
     async manageHouseInfo() {
-      const payload = {
-        houseData: { ...this.houseData },
-      };
+      const payload = { ...this.houseData };
 
       if (this.$props.houseData) {
-        payload.houseData.id = this.$props.houseData.id;
+        payload.id = this.$props.houseData.id ? this.$props.houseData.id : 0;
 
         await this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.EDIT_HOUSE}`, payload);
       } else {
