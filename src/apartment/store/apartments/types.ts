@@ -1,10 +1,18 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { ApartmentModel } from '@/store/apartments/models/apartment.model';
+import { ApartmentModel } from '@/apartment/models/apartment.model';
+import { OwnershipsInterface } from '../ownerships/types';
 
 export interface ApartmentsStateInterface {
   apartments: Array<ApartmentModel>;
   apartmentInfo: ApartmentModel | null;
+}
+
+export interface ApartmentInterface {
+  id: number;
+  apartmentNumber: string;
+  apartmentArea: number;
+  ownerships: Array<OwnershipsInterface>;
 }
 
 export enum ApartmentsMutationsEnum {
@@ -34,6 +42,7 @@ export type Mutations<S = ApartmentsStateInterface> = {
   [ApartmentsMutationsEnum.SET_APARTMENT_BY_ID](state: S, payload: ApartmentModel): void;
   [ApartmentsMutationsEnum.ADD_APARTMENT](state: S, payload: ApartmentModel): void;
   [ApartmentsMutationsEnum.DELETE_APARTMENT](state: S, payload: number): void;
+  [ApartmentsMutationsEnum.EDIT_APARTMENT](state: S, payload: ApartmentModel): void;
 };
 
 export interface Actions {
@@ -44,6 +53,7 @@ export interface Actions {
   ): void;
   [ApartmentsActionsEnum.ADD_APARTMENT]({ commit }: AugmentedActionContext, payload: Record<string, any>): void;
   [ApartmentsActionsEnum.DELETE_APARTMENT]({ commit }: AugmentedActionContext, payload: Record<string, number>): void;
+  [ApartmentsActionsEnum.EDIT_APARTMENT]({ commit }: AugmentedActionContext, payload: Record<string, any>): void;
 }
 
 export type Getters<S = ApartmentsStateInterface> = {

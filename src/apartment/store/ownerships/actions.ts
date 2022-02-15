@@ -6,10 +6,10 @@ import {
   OwnershipsStateInterface,
   OwnershipsActionEnum,
   Actions,
-} from '@/store/ownerships/types';
+} from '@/apartment/store/ownerships/types';
 import { HTTP } from '@/core/api/http-common';
-import { OwnershipsModel } from '@/shared/models/ownerships.model';
-import { OwnershipsDTOModel } from '@/shared/models/ownershipsDTO.model';
+import { OwnershipsModel } from '@/apartment/models/ownerships.model';
+import { OwnershipsDTOModel } from '@/apartment/models/ownershipsDTO.model';
 
 export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> & Actions = {
   [OwnershipsActionEnum.SET_OWNERSHIPS]: async ({ commit }, payload) => {
@@ -28,7 +28,7 @@ export const actions: ActionTree<OwnershipsStateInterface, RootStateInterface> &
     try {
       const url = `/apartments/${payload.apartmentId}/ownerships/${payload.ownerId}`;
       await HTTP.delete(url);
-      commit(OwnershipsMutationEnum.DELETE_OWNER, payload);
+      commit(OwnershipsMutationEnum.DELETE_OWNER, payload.ownerId);
     } catch (err: any) {
       console.log('error DELETE_OWNER', err);
     }

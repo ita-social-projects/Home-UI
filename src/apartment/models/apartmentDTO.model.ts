@@ -1,5 +1,5 @@
-import { ApartmentModel } from '@/store/apartments/models/apartment.model';
-import { OwnershipsDTOModel } from '@/shared/models/ownershipsDTO.model';
+import { ApartmentModel } from '@/apartment/models/apartment.model';
+import { OwnershipsDTOModel } from '@/apartment/models/ownershipsDTO.model';
 
 export class ApartmentDTOModel {
   public id: number;
