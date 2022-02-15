@@ -34,12 +34,22 @@ export interface PollsStateInterface {
   displayModal: boolean;
 }
 
+export interface PollInterface {
+  id: number;
+  header: string;
+  description: string;
+  creationDate: string;
+  completionDate: string;
+  status: PollStatusType;
+  type: string;
+  polledHouses: Array<HouseModel>;
+}
 export interface PutPollInterface {
   header: string;
   description: string;
   creationDate: string;
   completionDate: string;
-  status: string;
+  status: PollStatusType;
   polledHouses: Array<HouseModel>;
 }
 

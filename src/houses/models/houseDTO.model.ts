@@ -1,5 +1,6 @@
 import { AddressDTOModel } from '@/houses/models/addressDTO.model';
-import { HouseModel } from '@/houses/models/house.model';
+import { HouseInterface } from '@/houses/store/types';
+import { HouseModel } from './house.model';
 
 export class HouseDTOModel {
   public quantity_flat: number | null;

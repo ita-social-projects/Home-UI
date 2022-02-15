@@ -24,7 +24,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   },
   [HousesActionsEnum.DELETE_HOUSE]: async ({ commit }, payload) => {
     try {
-      await HTTP.delete(`/cooperations/${payload.cooperationId}/houses/${payload.id}`);
+      await HTTP.delete(`/cooperations/${payload.cooperationId}/houses/${payload.houseId}`);
 
       commit(HousesMutationsEnum.DELETE_HOUSE, payload);
     } catch (err: any) {
