@@ -21,7 +21,7 @@ export const mutations: MutationTree<HousesStateInterface> & Mutations = {
     const updateCont = state.houses?.filter((el: HouseInterface) => el.id !== payload.id);
     state.houses = updateCont;
   },
-  [HousesMutationsEnum.GET_HOUSE_BY_ID]: (state, payload) => {
+  [HousesMutationsEnum.SET_HOUSE_BY_ID]: (state, payload) => {
     state.houseInfo = { ...payload };
   },
   [HousesMutationsEnum.ADD_HOUSE]: (state, payload) => {

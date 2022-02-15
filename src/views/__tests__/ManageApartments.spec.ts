@@ -47,7 +47,7 @@ const store = createStore({
     'cooperationStore/getSelectedCooperationId': () => 1,
   },
   actions: {
-    'housesStore/GET_HOUSE_BY_ID': jest.fn(),
+    'housesStore/SET_HOUSE_BY_ID': jest.fn(),
     'apartmentsStore/SET_APARTMENTS': jest.fn(),
   },
 });

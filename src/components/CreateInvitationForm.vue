@@ -113,8 +113,13 @@ import {
   emailMaxLength,
   emailLastCharsValidator,
 } from '@/utils/validators';
-import { InvitationsActionsEnum, InvitationTypesEnum, PostInvitationInterface } from '@/store/invitations/types';
-import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
+import {
+  ApartmentInterface,
+  InvitationsActionsEnum,
+  InvitationTypesEnum,
+  PostInvitationInterface,
+} from '@/store/invitations/types';
+import { HouseInterface, HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 
 export default defineComponent({
@@ -184,7 +189,7 @@ export default defineComponent({
       } as PostInvitationInterface;
 
       const address = {
-        houseAddress: this.getHousesData.filter((house: any) => house.id === this.houseId)[0].address,
+        houseAddress: this.houses.filter((house: HouseInterface) => house.id === this.houseId)[0].address,
       };
 
       await this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`, {
@@ -214,11 +219,24 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      listOfHouses: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getListOfHouses}`,
-      listOfApartments: `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getListOfApartments}`,
+      houses: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
+      apartments: `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`,
       cooperationId: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`,
-      getHousesData: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
     }),
+    listOfHouses(): Array<Object> {
+      return this.houses?.map((house: HouseInterface) => {
+        const houseData = `вул. ${house.address.street}, будинок ${house.address.houseNumber}`;
+        const houseId = house.id;
+        return { houseData, houseId };
+      });
+    },
+    listOfApartments(): Array<Object> {
+      return this.apartments?.map((apartment: ApartmentInterface) => {
+        const apartmentData = `кв. ${apartment.apartmentNumber}`;
+        const apartmentId = apartment.id;
+        return { apartmentData, apartmentId };
+      });
+    },
   },
 });
 </script>
