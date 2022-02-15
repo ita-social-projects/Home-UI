@@ -16,7 +16,7 @@ import {
   houseBlockHouseNumberMaxLength,
 } from '@/utils/validators';
 
-export const editCooperationValidators = {
+export const cooperationValidations = {
   name: {
     requiredValidator,
     ukrLangTitleValidator,

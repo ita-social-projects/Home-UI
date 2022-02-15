@@ -234,7 +234,7 @@ import {
 } from '@/cooperation/store/types';
 import { mapGetters } from 'vuex';
 import useVuelidate from '@vuelidate/core';
-import { editCooperationValidators } from '@/cooperation/utils/validators/cooperation-validations';
+import { cooperationValidations } from '@/cooperation/utils/validators/cooperation-validations';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
@@ -268,7 +268,7 @@ export default defineComponent({
   },
   validations() {
     return {
-      cooperationData: editCooperationValidators,
+      cooperationData: cooperationValidations,
     };
   },
   async mounted() {
