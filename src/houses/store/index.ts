@@ -8,7 +8,6 @@ import { HouseModel } from '@/houses/models/house.model';
 
 export const state: HousesStateInterface = {
   houses: [],
-  displayModal: false,
   houseInfo: {} as HouseModel,
 };
 
