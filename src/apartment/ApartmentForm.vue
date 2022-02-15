@@ -60,9 +60,9 @@ import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import useVuelidate from '@vuelidate/core';
-import { apartmentValidations } from '@/utils/apartment-validations';
+import { apartmentValidations } from '@/apartment/validation/apartment-validations';
 import { StoreModuleEnum } from '@/store/types';
-import { ApartmentsActionsEnum } from '@/store/apartments/types';
+import { ApartmentsActionsEnum } from '@/apartment/store/apartments/types';
 
 export default defineComponent({
   name: 'ApartmentForm',

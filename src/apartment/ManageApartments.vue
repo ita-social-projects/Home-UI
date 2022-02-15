@@ -149,7 +149,7 @@
 <script lang="ts">
 import { toRefs, ref, computed, defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { ApartmentModel } from '@/store/apartments/models/apartment.model';
+import { ApartmentModel } from '@/apartment/models/apartment.model';
 import { useStore } from 'vuex';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
@@ -157,11 +157,11 @@ import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import ManageHouseForm from '@/houses/components/ManageHouseForm.vue';
-import ApartmentForm from '@/components/ApartmentForm.vue';
+import ApartmentForm from '@/apartment/ApartmentForm.vue';
 import { StoreModuleEnum } from '@/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
-import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
+import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
+import ManageHouseForm from '@/houses/components/ManageHouseForm.vue';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { HouseModel } from '@/houses/models/house.model';
 

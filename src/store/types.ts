@@ -5,8 +5,8 @@ import { CooperationStateInterface } from '@/cooperation/store/types';
 import { LocalStorageStateInterface } from '@/store/localstorage/types';
 import { HousesStateInterface } from '@/houses/store/types';
 import { PollsStateInterface } from '@/store/polls/types';
-import { ApartmentsStateInterface } from '@/store/apartments/types';
-import { OwnershipsStateInterface } from '@/store/ownerships/types';
+import { ApartmentsStateInterface } from '@/apartment/store/apartments/types';
+import { OwnershipsStateInterface } from '@/apartment/store/ownerships/types';
 import { InvitationsStateInterface } from '@/store/invitations/types';
 
 export interface RootStateInterface {

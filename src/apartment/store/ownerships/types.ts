@@ -1,6 +1,21 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { OwnershipsModel } from '@/shared/models/ownerships.model';
+import { OwnershipsModel } from '@/apartment/models/ownerships.model';
+import { UserContactInterface } from '@/store/user/types';
+
+export interface OwnerInterface {
+  id: number;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  contacts: Array<UserContactInterface>;
+}
+
+export interface OwnershipsInterface {
+  id: number;
+  owner: OwnerInterface;
+  ownershipPart: string;
+}
 
 export enum OwnershipsActionEnum {
   SET_OWNERSHIPS = 'SET_OWNERSHIPS',
@@ -24,14 +39,14 @@ export interface OwnershipsStateInterface {
 
 export interface Actions {
   [OwnershipsActionEnum.SET_OWNERSHIPS]({ commit }: AugmentedActionContext, payload: number): void;
-  [OwnershipsActionEnum.DELETE_OWNER]({ commit }: AugmentedActionContext, payload: Record<string, unknown>): void;
+  [OwnershipsActionEnum.DELETE_OWNER]({ commit }: AugmentedActionContext, payload: Record<string, number>): void;
   [OwnershipsActionEnum.EDIT_OWNER]({ commit }: AugmentedActionContext, payload: any): void;
 }
 
 export type Mutations<S = OwnershipsStateInterface> = {
   [OwnershipsMutationEnum.SET_OWNERSHIPS](state: S, payload: Array<OwnershipsModel>): void;
-  [OwnershipsMutationEnum.DELETE_OWNER](state: any, payload: Record<string, unknown>): void;
-  [OwnershipsMutationEnum.EDIT_OWNER](state: any, payload: OwnershipsModel): void;
+  [OwnershipsMutationEnum.DELETE_OWNER](state: S, id: number): void;
+  [OwnershipsMutationEnum.EDIT_OWNER](state: S, payload: OwnershipsModel): void;
 };
 
 export type Getters<S = OwnershipsStateInterface> = {

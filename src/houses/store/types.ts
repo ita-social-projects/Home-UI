@@ -45,7 +45,6 @@ export interface HouseInterface {
 
 export interface HousesStateInterface {
   houses: Array<HouseModel>;
-  displayModal: boolean;
   houseInfo: HouseModel;
 }
 
