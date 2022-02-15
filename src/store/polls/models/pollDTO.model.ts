@@ -1,7 +1,6 @@
 import { PollStatusType } from '@/store/polls/types';
 import { HouseDTOModel } from '@/houses/models/houseDTO.model';
 import { PollModel } from '@/store/polls/models/poll.model';
-import { PollInterface } from './../types';
 
 export class PollDTOModel {
   public id: number;
@@ -13,7 +12,7 @@ export class PollDTOModel {
   public status: PollStatusType;
   public type: string;
 
-  constructor(poll: PollInterface) {
+  constructor(poll: PollModel) {
     this.id = poll.id;
     this.header = poll.header;
     this.description = poll.description;

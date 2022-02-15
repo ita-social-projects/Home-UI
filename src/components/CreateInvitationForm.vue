@@ -99,7 +99,6 @@
 import { defineComponent } from 'vue';
 
 import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import useVuelidate from '@vuelidate/core';

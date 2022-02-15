@@ -1,5 +1,4 @@
 import { AddressDTOModel } from '@/houses/models/addressDTO.model';
-import { HouseInterface } from '@/houses/store/types';
 import { HouseModel } from './house.model';
 
 export class HouseDTOModel {
@@ -10,11 +9,11 @@ export class HouseDTOModel {
   public address: AddressDTOModel;
   public cooperationId?: number;
 
-  constructor(polledHouse: HouseModel) {
-    this.quantity_flat = polledHouse.flatQuantity;
-    this.house_area = polledHouse.houseArea;
-    this.adjoining_area = polledHouse.adjoiningArea;
-    this.id = polledHouse.id;
-    this.address = new AddressDTOModel(polledHouse.address);
+  constructor(house: HouseModel) {
+    this.quantity_flat = house.flatQuantity;
+    this.house_area = house.houseArea;
+    this.adjoining_area = house.adjoiningArea;
+    this.id = house.id;
+    this.address = new AddressDTOModel(house.address);
   }
 }

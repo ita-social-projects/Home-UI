@@ -1,7 +1,5 @@
 import { HouseDTOModel } from '@/houses/models/houseDTO.model';
-import { HouseInterface } from '@/houses/store/types';
 import { PollModel } from './poll.model';
-import { HouseModel } from './../../../houses/models/house.model';
 
 export class PostPollDTOModel {
   public header: string;
