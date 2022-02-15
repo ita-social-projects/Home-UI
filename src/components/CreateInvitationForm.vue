@@ -97,13 +97,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
+import { mapGetters } from 'vuex';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import useVuelidate from '@vuelidate/core';
 import { StoreModuleEnum } from '@/store/types';
-import { mapGetters } from 'vuex';
 import { ApartmentInterface, ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
 import {
   requiredValidator,

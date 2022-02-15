@@ -183,6 +183,7 @@ import InputText from 'primevue/inputtext';
 import { houseValidations } from '@/houses/utils/validators/house-validations';
 import { AddressInterface, HouseInterface, HousesActionsEnum } from '@/houses/store/types';
 import { StoreModuleEnum } from '@/store/types';
+import { HouseModel } from '../models/house.model';
 
 export default defineComponent({
   name: 'ManageHouseForm',
@@ -190,7 +191,16 @@ export default defineComponent({
     Button,
     InputText,
   },
-  props: ['cooperationId', 'houseData'],
+  props: {
+    cooperationId: {
+      type: Number,
+      required: true,
+    },
+    houseData: {
+      type: HouseModel,
+      required: true,
+    },
+  },
   data() {
     return {
       houseData: {
