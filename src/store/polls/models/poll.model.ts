@@ -1,5 +1,5 @@
 import { PollStatusType } from '@/store/polls/types';
-import { HouseModel } from '@/shared/models/house.model';
+import { HouseModel } from '@/houses/models/house.model';
 import { PollDTOModel } from '@/store/polls/models/pollDTO.model';
 
 export class PollModel {

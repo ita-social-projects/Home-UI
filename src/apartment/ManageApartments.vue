@@ -40,12 +40,12 @@
               :closable="false"
               :dismissableMask="true"
             >
-              <EditHouseForm
+              <ManageHouseForm
                 :cooperationId="cooperationId"
-                :propsHouseData="houseInfo"
-                @house-saved="displayModalForEditHouse = false"
-                @cancel-editing="displayModalForEditHouse = false"
-              ></EditHouseForm>
+                :houseData="houseInfo"
+                :isEditHouse="true"
+                @cancel-managing="displayModalForEditHouse = false"
+              />
             </Dialog>
           </div>
         </div>
@@ -158,12 +158,12 @@ import Dialog from 'primevue/dialog';
 import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import ApartmentForm from '@/apartment/ApartmentForm.vue';
-import EditHouseForm from '@/components/EditHouseForm.vue';
 import { StoreModuleEnum } from '@/store/types';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
-import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
-import { HouseModel } from '@/shared/models/house.model';
+import ManageHouseForm from '@/houses/components/ManageHouseForm.vue';
+import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
+import { HouseModel } from '@/houses/models/house.model';
 
 export default defineComponent({
   name: 'ManageApartments',
@@ -174,8 +174,8 @@ export default defineComponent({
     Column,
     Menu,
     Dialog,
+    ManageHouseForm,
     ApartmentForm,
-    EditHouseForm,
   },
   props: {
     id: {
@@ -253,8 +253,9 @@ export default defineComponent({
     const setHouseInfo = async () => {
       const payload = {
         cooperationId: cooperationId.value,
-        houseId: id.value,
+        id: id.value,
       };
+
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
     };
 

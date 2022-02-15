@@ -3,7 +3,7 @@ import { UserStateInterface } from '@/store/user/types';
 import { AuthorizationStateInterface } from '@/store/authorization/types';
 import { CooperationStateInterface } from '@/store/cooperation/types';
 import { LocalStorageStateInterface } from '@/store/localstorage/types';
-import { HousesStateInterface } from '@/store/houses/types';
+import { HousesStateInterface } from '@/houses/store/types';
 import { PollsStateInterface } from '@/store/polls/types';
 import { ApartmentsStateInterface } from '@/apartment/store/apartments/types';
 import { OwnershipsStateInterface } from '@/apartment/store/ownerships/types';

@@ -1,8 +1,8 @@
 import { CooperationContactsInterface } from '@/store/cooperation/types';
-import { AddressDTOModel } from '@/shared/models/addressDTO.model';
+import { AddressDTOModel } from '@/houses/models/addressDTO.model';
 import { CooperationModel } from './cooperation.model';
-import { HouseDTOModel } from '@/shared/models/houseDTO.model';
-import { HouseModel } from '@/shared/models/house.model';
+import { HouseDTOModel } from '@/houses/models/houseDTO.model';
+import { HouseModel } from '@/houses/models/house.model';
 
 export class CooperationDTOModel {
   public id: number;

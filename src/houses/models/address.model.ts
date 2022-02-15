@@ -1,4 +1,4 @@
-import { AddressDTOModel } from '@/shared/models/addressDTO.model';
+import { AddressDTOModel } from '@/houses/models/addressDTO.model';
 
 export class AddressModel {
   public region: string;

@@ -1,12 +1,13 @@
 import { MutationTree } from 'vuex';
-import { HousesStateInterface, HousesMutationsEnum, Mutations, HouseInterface } from '@/store/houses/types';
-import { HouseModel } from '@/shared/models/house.model';
+import { HousesStateInterface, HousesMutationsEnum, Mutations, HouseInterface } from '@/houses/store/types';
+import { HouseModel } from '@/houses/models/house.model';
 
 export const mutations: MutationTree<HousesStateInterface> & Mutations = {
   [HousesMutationsEnum.SET_HOUSES]: (state, payload) => {
     state.houses = payload;
   },
   [HousesMutationsEnum.EDIT_HOUSE]: (state, payload) => {
+    state.houseInfo = payload;
     state.houses?.forEach((el: HouseModel) => {
       if (el.id === payload.id) {
         el.flatQuantity = payload.flatQuantity;

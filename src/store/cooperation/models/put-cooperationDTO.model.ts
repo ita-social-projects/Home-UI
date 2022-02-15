@@ -1,5 +1,5 @@
 import { CooperationContactsInterface } from '@/store/cooperation/types';
-import { AddressDTOModel } from '@/shared/models/addressDTO.model';
+import { AddressDTOModel } from '@/houses/models/addressDTO.model';
 import { CooperationModel } from './cooperation.model';
 
 export class CooperationPutDTOModel {

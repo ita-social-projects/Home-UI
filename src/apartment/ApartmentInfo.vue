@@ -161,13 +161,13 @@ import { OwnershipsModel } from '@/apartment/models/ownerships.model';
 import { UpdateOwnershipsDTOModel } from '@/apartment/models/update-ownershipsDTO.model';
 import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
 import { OwnershipsActionEnum, OwnershipsGettersEnum } from '@/apartment/store/ownerships/types';
-import { HousesActionsEnum, HousesGettersEnum } from '@/store/houses/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { useVuelidate } from '@vuelidate/core';
 import { requiredValidator, ownershipPartValidator } from '@/utils/validators';
 import { CooperationGettersEnum } from '@/store/cooperation/types';
 import { UserContactInterface } from '@/store/user/types';
 import { ContactTypeEnum } from '@/store/authorization/types';
-import { HouseModel } from '@/shared/models/house.model';
+import { HouseModel } from '@/houses/models/house.model';
 
 export default defineComponent({
   name: 'ApartmentInfo',
@@ -256,8 +256,9 @@ export default defineComponent({
     const setHouseInfo = async () => {
       const payload = {
         cooperationId: cooperationId.value,
-        houseId: id.value,
+        id: id.value,
       };
+
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
     };
 
