@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
-import { ApartmentsStateInterface, ApartmentsMutationsEnum, Mutations } from '@/store/apartments/types';
-import { ApartmentModel } from './models/apartment.model';
-import { OwnerModel } from '@/shared/models/owner.model';
+import { ApartmentsStateInterface, ApartmentsMutationsEnum, Mutations } from '@/apartment/store/apartments/types';
+import { ApartmentModel } from '../../models/apartment.model';
+import { OwnershipsModel } from '@/apartment/models/ownerships.model';
 
 export const mutations: MutationTree<ApartmentsStateInterface> & Mutations = {
   [ApartmentsMutationsEnum.SET_APARTMENTS]: (state, payload) => {
@@ -16,7 +16,7 @@ export const mutations: MutationTree<ApartmentsStateInterface> & Mutations = {
       if (el.id === payload.id) {
         el.apartmentNumber = payload.apartmentNumber;
         el.apartmentArea = payload.apartmentArea;
-        el.ownerships = payload.ownerships.map((cur: OwnerModel) => cur);
+        el.ownerships = payload.ownerships?.map((cur: OwnershipsModel) => cur);
       }
     });
   },
