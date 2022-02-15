@@ -38,7 +38,7 @@ import { PollModel } from '@/store/polls/models/poll.model';
 import { StoreModuleEnum } from '@/store/types';
 import { PollsActionEnum, PollsGettersEnum } from '@/store/polls/types';
 import Dialog from 'primevue/dialog';
-import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
 
 export default defineComponent({
   name: 'CooperationPolls',

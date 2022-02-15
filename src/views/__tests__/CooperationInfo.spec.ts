@@ -1,5 +1,5 @@
 import { VueWrapper, mount } from '@vue/test-utils';
-import CooperationInfo from '@/views/CooperationInfo.vue';
+import CooperationInfo from '@/cooperation/components/CooperationInfo.vue';
 
 describe('RegisterCooperation.vue', () => {
   let wrapper: VueWrapper<CooperationInfo>;

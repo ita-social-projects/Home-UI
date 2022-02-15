@@ -105,7 +105,7 @@ import Dropdown from 'primevue/dropdown';
 import useVuelidate from '@vuelidate/core';
 import { StoreModuleEnum } from '@/store/types';
 import { mapGetters } from 'vuex';
-import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
+import { ApartmentInterface, ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
 import {
   requiredValidator,
   emailValidator,
@@ -113,14 +113,9 @@ import {
   emailMaxLength,
   emailLastCharsValidator,
 } from '@/utils/validators';
-import {
-  ApartmentInterface,
-  InvitationsActionsEnum,
-  InvitationTypesEnum,
-  PostInvitationInterface,
-} from '@/store/invitations/types';
-import { HouseInterface, HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
-import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { InvitationsActionsEnum, InvitationTypesEnum, PostInvitationInterface } from '@/store/invitations/types';
+import { HousesActionsEnum, HousesGettersEnum, HouseInterface } from '@/houses/store/types';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
 
 export default defineComponent({
   name: 'CreateInvitationForm',

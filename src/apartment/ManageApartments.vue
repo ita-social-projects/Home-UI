@@ -159,7 +159,7 @@ import Menu from 'primevue/menu';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import ApartmentForm from '@/apartment/ApartmentForm.vue';
 import { StoreModuleEnum } from '@/store/types';
-import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
 import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
 import ManageHouseForm from '@/houses/components/ManageHouseForm.vue';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';

@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { CooperationStateInterface, CooperationMutationEnum, Mutations } from '@/store/cooperation/types';
+import { CooperationStateInterface, CooperationMutationEnum, Mutations } from '@/cooperation/store/types';
 
 export const mutations: MutationTree<CooperationStateInterface> & Mutations = {
   [CooperationMutationEnum.SET_USER_COOPERATIONS]: (state, payload) => {
