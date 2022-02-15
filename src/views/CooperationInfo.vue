@@ -50,13 +50,13 @@
             @cancel-editCoopInfo="displayModalForCooperation = false"
             @isLoadedMode="isLoaded = true"
             :cooperationId="cooperationId"
-          ></EditCooperationForm>
+          />
         </Dialog>
       </div>
     </div>
 
     <div>
-      <ManageHouses :isLoaded="isLoaded" :cooperationId="cooperationId"></ManageHouses>
+      <ManageHouses :isLoaded="isLoaded" :cooperationId="cooperationId" />
     </div>
   </div>
 </template>
