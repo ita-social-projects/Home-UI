@@ -47,14 +47,14 @@ export interface HousesStateInterface {
   houseInfo: HouseModel;
 }
 
-export interface deleteHouseInterface {
+export interface DeleteHouseInterface {
   cooperationId: number;
   houseId: number;
 }
 
 export type Mutations<S = HousesStateInterface> = {
   [HousesMutationsEnum.SET_HOUSES](state: S, payload: Array<HouseModel>): void;
-  [HousesMutationsEnum.DELETE_HOUSE](state: any, payload: deleteHouseInterface): void;
+  [HousesMutationsEnum.DELETE_HOUSE](state: any, payload: DeleteHouseInterface): void;
   [HousesMutationsEnum.EDIT_HOUSE](state: S, payload: HouseInterface): void;
   [HousesMutationsEnum.SET_HOUSE_BY_ID](state: S, payload: HouseModel): void;
   [HousesMutationsEnum.ADD_HOUSE](state: S, payload: HouseModel): void;
@@ -62,7 +62,7 @@ export type Mutations<S = HousesStateInterface> = {
 
 export interface Actions {
   [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext, payload: number): void;
-  [HousesActionsEnum.DELETE_HOUSE]({ commit }: AugmentedActionContext, payload: deleteHouseInterface): void;
+  [HousesActionsEnum.DELETE_HOUSE]({ commit }: AugmentedActionContext, payload: DeleteHouseInterface): void;
   [HousesActionsEnum.EDIT_HOUSE]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
   [HousesActionsEnum.ADD_HOUSE]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
   [HousesActionsEnum.SET_HOUSE_BY_ID]({ commit }: AugmentedActionContext, payload: HouseModel): void;
