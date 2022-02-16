@@ -23,6 +23,7 @@
         :badge-counter="polls"
         badge-type="secondary"
       />
+      <BaseSidebarNavButton :link="todoPagePath" btn-text="Застосунок 'Що робити'" icon="pi-book" />
     </nav>
   </div>
 </template>
@@ -55,6 +56,9 @@ export default defineComponent({
     },
     invitationsPath(): string {
       return RoutesEnum.InvitationSection;
+    },
+    todoPagePath(): string {
+      return RoutesEnum.TodoAppPage;
     },
     userData(): UserInterface | null {
       return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
