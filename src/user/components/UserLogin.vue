@@ -63,7 +63,7 @@ import {
 
 import { StoreModuleEnum } from '@/store/types';
 import { LocalStorageGettersEnum } from '@/store/localstorage/types';
-import { AuthActionEnum } from '@/store/authorization/types';
+import { AuthActionEnum } from '@/user/store/authorization/types';
 
 export default defineComponent({
   name: 'login',

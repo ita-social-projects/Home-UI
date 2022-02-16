@@ -171,8 +171,8 @@ import {
   emailValidator,
   emailMinLength,
   emailMaxLength,
-  userPhoneValidator
-} from "@/utils/validators";
+  userPhoneValidator,
+} from '@/utils/validators';
 import useVuelidate from '@vuelidate/core';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -180,7 +180,7 @@ import Dropdown from 'primevue/dropdown';
 import { helpers, requiredIf } from '@vuelidate/validators';
 
 import { StoreModuleEnum } from '@/store/types';
-import { AuthActionEnum, AuthMutationEnum, AuthGettersEnum } from '@/store/authorization/types';
+import { AuthActionEnum, AuthMutationEnum, AuthGettersEnum } from '@/user/store/authorization/types';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',

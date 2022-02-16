@@ -102,10 +102,10 @@ import Password from 'primevue/password';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import store from '@/store';
-import { UserStateInterface, UserActionEnum, UserGettersEnum } from '@/store/user/types';
+import { UserStateInterface, UserActionEnum, UserGettersEnum } from '@/user/store/user/types';
 import { useToast } from 'primevue/usetoast';
 import { StoreModuleEnum } from '@/store/types';
-import { ContactTypeEnum, ContactTypeEnumString } from '@/store/authorization/types';
+import { ContactTypeEnum } from '@/user/store/authorization/types';
 
 export default defineComponent({
   name: 'userRegistration',

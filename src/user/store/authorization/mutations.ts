@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { AuthorizationStateInterface, AuthMutationEnum, Mutations } from '@/store/authorization/types';
+import { AuthorizationStateInterface, AuthMutationEnum, Mutations } from '@/user/store/authorization/types';
 
 export const mutations: MutationTree<AuthorizationStateInterface> & Mutations = {
   [AuthMutationEnum.SET_USER]: (state, payload) => {
