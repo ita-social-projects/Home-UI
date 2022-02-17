@@ -23,7 +23,7 @@
         :badge-counter="polls"
         badge-type="secondary"
       />
-      <BaseSidebarNavButton :link="todoPagePath" btn-text="Застосунок 'Що робити'" icon="pi-book" />
+      <BaseSidebarNavButton :link="todoPagePath" btn-text="Список завдань" icon="pi-book" :badgeCounter="todo" />
     </nav>
   </div>
 </template>
@@ -42,6 +42,7 @@ export default defineComponent({
       userName: '',
       notifications: 2,
       polls: 1,
+      todo: 3,
     };
   },
   components: {
