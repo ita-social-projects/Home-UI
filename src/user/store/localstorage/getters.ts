@@ -1,6 +1,6 @@
 import { GetterTree } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { LocalStorageStateInterface, Getters } from '@/store/localstorage/types';
+import { LocalStorageStateInterface, Getters } from '@/user/store/localstorage/types';
 
 export const getters: GetterTree<LocalStorageStateInterface, RootStateInterface> & Getters = {
   isTokenExist() {

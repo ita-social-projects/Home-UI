@@ -50,20 +50,10 @@ import Button from 'primevue/button';
 import { AxiosResponse } from 'axios';
 import useVuelidate from '@vuelidate/core';
 import { RoutesEnum } from '@/router/types';
-import {
-  requiredValidator,
-  emailValidator,
-  emailMinLength,
-  emailMaxLength,
-  emailLastCharsValidator,
-  passwordMinLenght,
-  passwordMaxLenght,
-  passwordValidator,
-} from '@/utils/validators';
-
 import { StoreModuleEnum } from '@/store/types';
-import { LocalStorageGettersEnum } from '@/store/localstorage/types';
+import { LocalStorageGettersEnum } from '@/user/store/localstorage/types';
 import { AuthActionEnum } from '@/user/store/authorization/types';
+import { userPasswordValidations, userEmailValidations } from '@/user/utils/validators/userValidations';
 
 export default defineComponent({
   name: 'login',
@@ -100,19 +90,8 @@ export default defineComponent({
   },
   validations() {
     return {
-      email: {
-        requiredValidator,
-        emailMinLength,
-        emailLastCharsValidator,
-        emailValidator,
-        emailMaxLength,
-      },
-      password: {
-        requiredValidator,
-        passwordMaxLenght,
-        passwordMinLenght,
-        passwordValidator,
-      },
+      email: userEmailValidations,
+      password: userPasswordValidations,
     };
   },
   computed: {
@@ -121,14 +100,14 @@ export default defineComponent({
     },
   },
   methods: {
-    emailBlur() {
-      this.v$.email.$touch();
-      this.isEmailValid = !this.v$.email.$error;
-    },
-    passwordBlur() {
-      this.v$.password.$touch();
-      this.isPasswordValid = !this.v$.password.$error;
-    },
+    // emailBlur() {
+    //   this.v$.email.$touch();
+    //   this.isEmailValid = !this.v$.email.$error;
+    // },
+    // passwordBlur() {
+    //   this.v$.password.$touch();
+    //   this.isPasswordValid = !this.v$.password.$error;
+    // },
     login() {
       const payload = {
         data: {

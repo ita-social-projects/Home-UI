@@ -7,30 +7,36 @@
           type="text"
           v-model="state.formData.firstName"
           placeholder="Ім'я"
-          :class="{ 'p-invalid': v$.firstName.$error }"
-          @blur="v$.firstName.$touch"
+          :class="{ 'p-invalid': v$.userFullName.firstName.$error }"
+          @blur="v$.userFullName.firstName.$touch"
         />
-        <small v-if="v$.firstName.$error" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
+        <small v-if="v$.userFullName.firstName.$error" class="p-error">{{
+          v$.userFullName.firstName.$errors[0].$message
+        }}</small>
       </div>
       <div class="field">
         <input-text
           type="text"
           v-model="state.formData.middleName"
           placeholder="По-батькові"
-          :class="{ 'p-invalid': v$.middleName.$error }"
-          @blur="v$.middleName.$touch"
+          :class="{ 'p-invalid': v$.userFullName.middleName.$error }"
+          @blur="v$.userFullName.middleName.$touch"
         />
-        <small v-if="v$.middleName.$error" class="p-error">{{ v$.middleName.$errors[0].$message }}</small>
+        <small v-if="v$.userFullName.middleName.$error" class="p-error">{{
+          v$.userFullName.middleName.$errors[0].$message
+        }}</small>
       </div>
       <div class="field">
         <input-text
           type="text"
           v-model="state.formData.lastName"
           placeholder="Прізвище"
-          :class="{ 'p-invalid': v$.lastName.$error }"
-          @blur="v$.lastName.$touch"
+          :class="{ 'p-invalid': v$.userFullName.lastName.$error }"
+          @blur="v$.userFullName.lastName.$touch"
         />
-        <small v-if="v$.lastName.$error" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
+        <small v-if="v$.userFullName.lastName.$error" class="p-error">{{
+          v$.userFullName.lastName.$errors[0].$message
+        }}</small>
       </div>
       <div class="field">
         <input-text
@@ -84,21 +90,9 @@
 <script lang="ts">
 import { defineComponent, reactive, computed, watch } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import {
-  requiredValidator,
-  emailValidator,
-  emailMinLength,
-  emailMaxLength,
-  emailLastCharsValidator,
-  passwordValidator,
-  passwordMinLenght,
-  passwordMaxLenght,
-  userNameValidator,
-  someTitleLenghtValidator,
-} from '@/utils/validators';
+import { requiredValidator } from '@/utils/validators';
 import { sameAs } from '@vuelidate/validators';
 import Password from 'primevue/password';
-
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import store from '@/store';
@@ -106,6 +100,11 @@ import { UserStateInterface, UserActionEnum, UserGettersEnum } from '@/user/stor
 import { useToast } from 'primevue/usetoast';
 import { StoreModuleEnum } from '@/store/types';
 import { ContactTypeEnum } from '@/user/store/authorization/types';
+import {
+  userPasswordValidations,
+  userEmailValidations,
+  userFullNameValidations,
+} from '@/user/utils/validators/userValidations';
 
 export default defineComponent({
   name: 'userRegistration',
@@ -124,38 +123,26 @@ export default defineComponent({
         },
         registrationKey: '',
       },
+      validateData: {
+        userFullName: {},
+        email: {},
+        password: {
+          password: {},
+          confirm: {},
+        },
+        registrationKey: {},
+      },
     });
 
     const rules = computed(() => {
       return {
-        firstName: {
-          requiredValidator,
-          userNameValidator,
-          someTitleLenghtValidator,
-        },
-        middleName: {
-          requiredValidator,
-          userNameValidator,
-          someTitleLenghtValidator,
-        },
-        lastName: {
-          requiredValidator,
-          userNameValidator,
-          someTitleLenghtValidator,
-        },
+        userFullName: userFullNameValidations,
         email: {
-          requiredValidator,
-          emailValidator,
-          emailMinLength,
-          emailMaxLength,
-          emailLastCharsValidator,
+          userEmailValidations,
         },
         password: {
           password: {
-            requiredValidator,
-            passwordMinLenght,
-            passwordValidator,
-            passwordMaxLenght,
+            userPasswordValidations,
           },
           confirm: {
             requiredValidator,
@@ -167,7 +154,7 @@ export default defineComponent({
         },
       };
     });
-    const v$ = useVuelidate(rules, state.formData);
+    const v$ = useVuelidate(rules, state.validateData);
     async function sendInfo() {
       const userData: UserStateInterface['data'] = {
         registrationToken: state.formData.registrationKey,

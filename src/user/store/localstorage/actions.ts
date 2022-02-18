@@ -4,7 +4,7 @@ import {
   LocalStorageMutationEnum,
   LocalStorageActionEnum,
   Actions,
-} from '@/store/localstorage/types';
+} from '@/user/store/localstorage/types';
 import { RootStateInterface } from '@/store/types';
 
 export const actions: ActionTree<LocalStorageStateInterface, RootStateInterface> & Actions = {
