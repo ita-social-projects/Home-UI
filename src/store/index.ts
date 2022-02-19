@@ -9,6 +9,7 @@ import { pollsStore } from '@/store/polls';
 import { invitationsStore } from '@/store/invitations';
 import { apartmentsStore } from '@/apartment/store/apartments';
 import { ownershipsStore } from '@/apartment/store/ownerships';
+import { todoStore } from '@/todoPage/store';
 
 export default createStore<RootStateInterface>({
   strict: process.env.NODE_ENV !== 'production',
@@ -22,5 +23,6 @@ export default createStore<RootStateInterface>({
     invitationsStore,
     apartmentsStore,
     ownershipsStore,
+    todoStore,
   },
 });

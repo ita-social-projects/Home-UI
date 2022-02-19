@@ -1,21 +1,30 @@
 <template>
   <div class="todo-form">
     <span class="p-float-label">
-      <InputText id="taskTitle" type="text" />
+      <InputText id="taskTitle" type="text" v-model="payload.title" />
       <label for="taskTitle">Назва завдання</label>
     </span>
     <span class="p-float-label">
-      <InputText id="description" type="text" />
+      <InputText id="description" type="text" v-model="payload.description" />
       <label for="description">Опис завдання</label>
     </span>
-    <Button label="Додати завдання" icon="pi pi-check" class="p-button-lg p-button-info" :disabled="!valid" />
+    <Button
+      label="Додати завдання"
+      icon="pi pi-check"
+      class="p-button-lg p-button-info"
+      @click="onAddTask"
+      :disabled="!valid"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, reactive, computed } from 'vue';
+import { TaskType, TodoActionsEnum } from '../store/types';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import { useStore } from 'vuex';
+import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'TodoInput',
@@ -23,8 +32,26 @@ export default defineComponent({
     InputText,
     Button,
   },
-  setup() {
-    return {};
+  setup(props) {
+    const payload = reactive({ title: '', description: '' } as TaskType);
+    const store = useStore();
+
+    const onAddTask = () => {
+      store.dispatch(`${StoreModuleEnum.todoStore}/${TodoActionsEnum.ADD_NEW_TODO}`, payload);
+
+      payload.title = '';
+      payload.description = '';
+    };
+
+    const valid = computed(() => {
+      return payload.title && payload.description;
+    });
+
+    return {
+      payload,
+      onAddTask,
+      valid,
+    };
   },
 });
 </script>

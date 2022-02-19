@@ -23,7 +23,12 @@
         :badge-counter="polls"
         badge-type="secondary"
       />
-      <BaseSidebarNavButton :link="todoPagePath" btn-text="Список завдань" icon="pi-book" :badgeCounter="todo" />
+      <BaseSidebarNavButton
+        :link="todoPagePath"
+        btn-text="Список завдань"
+        icon="pi-book"
+        :badgeCounter="getUndoneTodos"
+      />
     </nav>
   </div>
 </template>
@@ -34,6 +39,7 @@ import BaseSidebarNavButton from '@/components/base/BaseSidebarNavButton.vue';
 import { RoutesEnum } from '@/router/types';
 import { UserInterface, AuthGettersEnum } from '@/store/authorization/types';
 import { StoreModuleEnum } from '@/store/types';
+import { TodoGettersEnum } from '@/todoPage/store/types';
 
 export default defineComponent({
   name: 'Sidebar',
@@ -42,7 +48,6 @@ export default defineComponent({
       userName: '',
       notifications: 2,
       polls: 1,
-      todo: 3,
     };
   },
   components: {
@@ -63,6 +68,9 @@ export default defineComponent({
     },
     userData(): UserInterface | null {
       return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
+    },
+    getUndoneTodos(): number {
+      return this.$store.getters[`${StoreModuleEnum.todoStore}/${TodoGettersEnum.getNotDoneTodos}`];
     },
   },
 });

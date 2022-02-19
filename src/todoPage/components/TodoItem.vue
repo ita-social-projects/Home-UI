@@ -4,9 +4,8 @@
       <div class="task-wrapper">
         <p :class="{ done: model.isDone }">{{ model.description }}</p>
         <div class="btns">
-          <Button icon="pi pi-check" class="p-button-info" v-if="!model.isDone" />
-          <Button icon="pi pi-undo" class="p-button-info" v-else />
-          <Button icon="pi pi-times" class="p-button-danger" :disabled="!model.isDone" />
+          <Button :icon="!model.isDone ? 'pi pi-check' : 'pi pi-undo'" class="p-button-primary" @click="onDone" />
+          <Button icon="pi pi-times" class="p-button-danger" @click="onRemove" :disabled="!model.isDone" />
         </div>
       </div>
     </Fieldset>
@@ -17,6 +16,9 @@
 import { defineComponent } from 'vue';
 import Fieldset from 'primevue/fieldset';
 import Button from 'primevue/button';
+import { useStore } from 'vuex';
+import { StoreModuleEnum } from '@/store/types';
+import { TodoActionsEnum } from '../store/types';
 
 export default defineComponent({
   name: 'TodoItem',
@@ -35,8 +37,20 @@ export default defineComponent({
       },
     },
   },
-  setup() {
-    return {};
+  setup(props) {
+    const store = useStore();
+    const onDone = () => {
+      const payload = props.model.id;
+      store.dispatch(`${StoreModuleEnum.todoStore}/${TodoActionsEnum.SET_TODO_DONE}`, payload);
+    };
+    const onRemove = () => {
+      const payload = props.model.id;
+      store.dispatch(`${StoreModuleEnum.todoStore}/${TodoActionsEnum.REMOVE_TODO}`, payload);
+    };
+    return {
+      onDone,
+      onRemove,
+    };
   },
 });
 </script>

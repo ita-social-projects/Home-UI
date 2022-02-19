@@ -15,7 +15,8 @@ import { defineComponent, ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import TodoInput from '@/todoPage/components/TodoInput.vue';
 import TodoItem from '@/todoPage/components/TodoItem.vue';
-// import { TodosType } from '@/todoPage/store/types.ts';
+import { StoreModuleEnum } from '@/store/types';
+import { TodoGettersEnum } from '../store/types';
 
 export default defineComponent({
   name: 'TodoList',
@@ -24,10 +25,10 @@ export default defineComponent({
     TodoItem,
   },
   setup() {
-    const title = ref('Список найбилжчих завдань:');
+    const title = ref('Список найближчих завдань:');
     const store = useStore();
 
-    const todoList = computed(() => store.state.todoList);
+    const todoList = computed(() => store.getters[`${StoreModuleEnum.todoStore}/${TodoGettersEnum.getAllTodos}`]);
 
     return { title, todoList };
   },
@@ -43,6 +44,7 @@ export default defineComponent({
   padding-top: 2em;
 }
 .todo-list {
+  min-width: 60%;
   list-style: none;
   padding-left: 0;
 }

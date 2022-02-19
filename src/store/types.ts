@@ -31,6 +31,7 @@ export enum StoreModuleEnum {
   invitationsStore = 'invitationsStore',
   apartmentsStore = 'apartmentsStore',
   ownershipsStore = 'ownershipsStore',
+  todoStore = 'todoStore',
 }
 
 export type requestPayload<T> = {
