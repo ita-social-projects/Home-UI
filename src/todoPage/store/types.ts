@@ -1,4 +1,4 @@
-interface TodoListType {
+interface TodosType {
   id: number;
   title: string;
   description: string;
@@ -10,4 +10,8 @@ type TaskType = {
   description: string;
 };
 
-export { TodoListType, TaskType };
+export interface TodoStore {
+  todoList: Array<TodosType>;
+}
+
+export { TodosType, TaskType };
