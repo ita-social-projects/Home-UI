@@ -9,4 +9,7 @@ export const getters: GetterTree<LocalStorageStateInterface, RootStateInterface>
   getToken(state) {
     return state.token;
   },
+  getUserFromStorage(state) {
+    return state.user;
+  },
 };

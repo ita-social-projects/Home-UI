@@ -17,4 +17,7 @@ export const actions: ActionTree<LocalStorageStateInterface, RootStateInterface>
   [LocalStorageActionEnum.REMOVE]: ({ commit }, payload) => {
     commit(LocalStorageMutationEnum.REMOVE_TOKEN, payload);
   },
+  [LocalStorageActionEnum.GET_USER_FROM_STORAGE]: ({ commit }, payload) => {
+    commit(LocalStorageMutationEnum.GET_USER_FROM_STORAGE, payload);
+  },
 };

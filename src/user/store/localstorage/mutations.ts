@@ -12,4 +12,7 @@ export const mutations: MutationTree<LocalStorageStateInterface> & Mutations = {
   [LocalStorageMutationEnum.REMOVE_TOKEN]: (state, payload) => {
     localStorage.removeItem(payload);
   },
+  [LocalStorageMutationEnum.GET_USER_FROM_STORAGE]: (state) => {
+    state.user = JSON.parse(localStorage.getItem('user') || '{}');
+  },
 };
