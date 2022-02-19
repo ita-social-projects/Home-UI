@@ -15,7 +15,8 @@ import { defineComponent, ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import TodoInput from '@/todoPage/components/TodoInput.vue';
 import TodoItem from '@/todoPage/components/TodoItem.vue';
-// import { TodosType } from '@/todoPage/store/types.ts';
+import { StoreModuleEnum } from '@/store/types';
+import { ToDoGettersEnum } from '../store/types';
 
 export default defineComponent({
   name: 'TodoList',
@@ -27,7 +28,14 @@ export default defineComponent({
     const title = ref('Список найбилжчих завдань:');
     const store = useStore();
 
-    const todoList = computed(() => store.state.todoList);
+    const todoList = computed(() => {
+      return store.getters[`${StoreModuleEnum.todoStore}/${ToDoGettersEnum.getAllTodos}`];
+    });
+
+    const todoList2 = computed(() => {
+      return store.state.todoList;
+    }); // ты можешь и таким образом к стейту доступиться
+    // но это считается плохой практикой напря\мую к стейту образаться, ждля этого геттеры существуют
 
     return { title, todoList };
   },
