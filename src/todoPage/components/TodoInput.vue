@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed } from 'vue';
-import { TaskType, TodoActionsEnum } from '../store/types';
+import { TaskType, TodoActionsEnum, TodoGettersEnum } from '../store/types';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { useStore } from 'vuex';
@@ -38,7 +38,9 @@ export default defineComponent({
 
     const onAddTask = () => {
       store.dispatch(`${StoreModuleEnum.todoStore}/${TodoActionsEnum.ADD_NEW_TODO}`, payload);
+      const updatedList = store.getters[`${StoreModuleEnum.todoStore}/${TodoGettersEnum.getAllTodos}`];
 
+      store.dispatch(`${StoreModuleEnum.todoStore}/${TodoActionsEnum.SAVE_TO_LOCAL}`, updatedList);
       payload.title = '';
       payload.description = '';
     };

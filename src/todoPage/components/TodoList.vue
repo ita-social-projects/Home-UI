@@ -11,12 +11,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import TodoInput from '@/todoPage/components/TodoInput.vue';
 import TodoItem from '@/todoPage/components/TodoItem.vue';
 import { StoreModuleEnum } from '@/store/types';
-import { TodoGettersEnum } from '../store/types';
+import { TodoActionsEnum, TodoGettersEnum } from '../store/types';
 
 export default defineComponent({
   name: 'TodoList',
@@ -27,6 +27,13 @@ export default defineComponent({
   setup() {
     const title = ref('Список найближчих завдань:');
     const store = useStore();
+
+    onMounted(() => {
+      const localTodos = store.getters[`${StoreModuleEnum.todoStore}/${TodoGettersEnum.getTodosFromLocalStorage}`];
+      if (localTodos?.length) {
+        store.dispatch(`${StoreModuleEnum.todoStore}/${TodoActionsEnum.PARSE_LOCAL_TODOS}`, localTodos);
+      }
+    });
 
     const todoList = computed(() => store.getters[`${StoreModuleEnum.todoStore}/${TodoGettersEnum.getAllTodos}`]);
 
@@ -47,5 +54,10 @@ export default defineComponent({
   min-width: 60%;
   list-style: none;
   padding-left: 0;
+}
+@media (max-width: 1200px) {
+  .todo-list__wrapper {
+    flex-direction: column;
+  }
 }
 </style>

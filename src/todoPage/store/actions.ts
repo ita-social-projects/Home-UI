@@ -12,4 +12,10 @@ export const actions: ActionTree<TodoPageInterface, RootStateInterface> & Action
   [TodoActionsEnum.REMOVE_TODO]({ commit }, payload): void {
     commit(TodoMutationsEnum.REMOVE_TODO, payload);
   },
+  [TodoActionsEnum.SAVE_TO_LOCAL]({ commit }, payload): void {
+    commit(TodoMutationsEnum.SAVE_TODO_TO_LOCALSTORAGE, payload);
+  },
+  [TodoActionsEnum.PARSE_LOCAL_TODOS]({ commit }, payload): void {
+    commit(TodoMutationsEnum.PARSE_LOCAL_TODOS, payload);
+  },
 };

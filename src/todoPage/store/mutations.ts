@@ -25,4 +25,11 @@ export const mutations: MutationTree<TodoPageInterface> & Mutations = {
   [TodoMutationsEnum.REMOVE_TODO]: (state, payload): void => {
     state.todoList = state.todoList.filter((todo) => todo.id !== payload);
   },
+  [TodoMutationsEnum.SAVE_TODO_TO_LOCALSTORAGE]: (state, payload): void => {
+    const parsed = JSON.stringify(payload);
+    localStorage.setItem('todo-list', parsed);
+  },
+  [TodoMutationsEnum.PARSE_LOCAL_TODOS]: (state, payload): void => {
+    state.todoList = payload;
+  },
 };
