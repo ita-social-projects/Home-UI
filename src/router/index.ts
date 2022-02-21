@@ -16,6 +16,7 @@ import InvitationSection from '@/views/InvitationSection.vue';
 
 import ManageApartments from '@/views/ManageApartments.vue';
 import ApartmentInfo from '@/views/ApartmentInfo.vue';
+import TodoAppSection from '@/views/TodoAppSection.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -72,6 +73,11 @@ const routes: RouteRecordRaw[] = [
         name: 'poll-info',
         component: PollInfo,
         props: true,
+      },
+      {
+        path: RoutesEnum.TodoAppSection,
+        name: 'todo-app-section',
+        component: TodoAppSection,
       },
     ],
   },

@@ -8,6 +8,7 @@ import { PollsStateInterface } from '@/store/polls/types';
 import { ApartmentsStateInterface } from '@/store/apartments/types';
 import { OwnershipsStateInterface } from '@/store/ownerships/types';
 import { InvitationsStateInterface } from '@/store/invitations/types';
+import { TodoAppTaskStateInterface } from './todoapp/types';
 
 export interface RootStateInterface {
   authorizationStore: AuthorizationStateInterface;
@@ -19,6 +20,7 @@ export interface RootStateInterface {
   invitationsStore: InvitationsStateInterface;
   apartmentsStore: ApartmentsStateInterface;
   ownershipsStore: OwnershipsStateInterface;
+  TodoAppStore: TodoAppTaskStateInterface;
 }
 
 export enum StoreModuleEnum {
@@ -31,6 +33,7 @@ export enum StoreModuleEnum {
   invitationsStore = 'invitationsStore',
   apartmentsStore = 'apartmentsStore',
   ownershipsStore = 'ownershipsStore',
+  TodoAppStore = 'TodoAppStore',
 }
 
 export type requestPayload<T> = {

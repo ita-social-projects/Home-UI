@@ -14,4 +14,6 @@ export enum RoutesEnum {
   PollInfo = '/main/polls/:id',
 
   NotFound = '/:catchAll(.*)',
+
+  TodoAppSection = '/main/todo',
 }
