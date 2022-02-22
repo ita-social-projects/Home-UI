@@ -14,7 +14,7 @@ export class UpdateUserModel {
     this.middle_name = userData.middleName;
     this.last_name = userData.lastName;
     this.email = userData.email;
-    this.password = 'passworD123';
+    this.password = userData.password;
     this.contacts = userData.contacts;
   }
 }
