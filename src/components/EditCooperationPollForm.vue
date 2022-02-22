@@ -131,7 +131,7 @@ import {
 } from '@/utils/validators';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
-import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
 import { PollsActionEnum, PollsGettersEnum } from '@/store/polls/types';
 import { PollModel } from '@/store/polls/models/poll.model';
 import useVuelidate from '@vuelidate/core';

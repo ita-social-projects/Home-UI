@@ -1,7 +1,7 @@
 import { VueWrapper, mount } from '@vue/test-utils';
 import { ComponentPublicInstance } from 'vue';
-import EditCooperationInfo from '@/components/EditCooperationInfo.vue';
-import { CooperationAddressInterface } from './../../store/cooperation/types';
+import EditCooperationInfo from '@/cooperation/components/EditCooperationForm.vue';
+import { CooperationAddressInterface } from '@/cooperation/store/types';
 import { createStore } from 'vuex';
 
 const setup = async (id: string, value: string, wrapper: VueWrapper<ComponentPublicInstance>) => {
@@ -103,7 +103,7 @@ describe('EditCooperationInfo.vue', () => {
 
       wrapper.find('#edit-coop-btn').trigger('click');
       wrapper.find('#edit-coop-form').trigger('submit', {
-        preventDefault: () => {},
+        preventDefault: () => jest.fn(),
       });
 
       const data = {

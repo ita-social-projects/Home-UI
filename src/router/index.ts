@@ -2,18 +2,20 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { RoutesEnum } from '@/router/types';
 
 import StartPage from '@/views/StartPage.vue';
-import RegisterCooperation from '@/views/RegisterCooperation.vue';
+import RegisterCooperation from '@/cooperation/components/RegisterCooperation.vue';
 import RegisterUser from '@/views/RegisterUser.vue';
 import ManageUser from '@/views/ManageUser.vue';
 import UserLogin from '@/views/UserLogin.vue';
 import MainPage from '@/views/MainPage.vue';
-import CooperationInfo from '@/views/CooperationInfo.vue';
+import CooperationInfo from '@/cooperation/components/CooperationInfo.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
 import PageErrorInvintation from '@/views/PageErrorInvintation.vue';
 import CooperationPolls from '@/views/CooperationPolls.vue';
 import PollInfo from '@/views/PollInfo.vue';
 import InvitationSection from '@/views/InvitationSection.vue';
 
+import ManageApartments from '@/apartment/ManageApartments.vue';
+import ApartmentInfo from '@/apartment/ApartmentInfo.vue';
 import ManageApartments from '@/views/ManageApartments.vue';
 import ApartmentInfo from '@/views/ApartmentInfo.vue';
 import TodoAppSection from '@/views/TodoAppSection.vue';

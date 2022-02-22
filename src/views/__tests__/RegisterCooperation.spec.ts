@@ -1,5 +1,5 @@
 import { mount, VueWrapper } from '@vue/test-utils';
-import RegisterCooperation from '@/views/RegisterCooperation.vue';
+import RegisterCooperation from '@/cooperation/components/RegisterCooperation.vue';
 import { inputSetValueHandler } from '@/utils/test-utils';
 
 const validationMessages: { [key: string]: any } = {

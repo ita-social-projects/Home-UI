@@ -97,15 +97,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
+import { mapGetters } from 'vuex';
 import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import useVuelidate from '@vuelidate/core';
 import { StoreModuleEnum } from '@/store/types';
-import { mapGetters } from 'vuex';
-import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/store/apartments/types';
+import { ApartmentInterface, ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
 import {
   requiredValidator,
   emailValidator,
@@ -114,13 +112,12 @@ import {
   emailLastCharsValidator,
 } from '@/utils/validators';
 import { InvitationsActionsEnum, InvitationTypesEnum, PostInvitationInterface } from '@/store/invitations/types';
-import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
-import { CooperationGettersEnum } from '@/store/cooperation/types';
+import { HousesActionsEnum, HousesGettersEnum, HouseInterface } from '@/houses/store/types';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
 
 export default defineComponent({
   name: 'CreateInvitationForm',
   components: {
-    Dialog,
     Button,
     InputText,
     Dropdown,
@@ -184,7 +181,7 @@ export default defineComponent({
       } as PostInvitationInterface;
 
       const address = {
-        houseAddress: this.getHousesData.filter((house: any) => house.id === this.houseId)[0].address,
+        houseAddress: this.houses.filter((house: HouseInterface) => house.id === this.houseId)[0].address,
       };
 
       await this.$store.dispatch(`${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.CREATE_INVITATION}`, {
@@ -214,11 +211,24 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      listOfHouses: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getListOfHouses}`,
-      listOfApartments: `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getListOfApartments}`,
+      houses: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
+      apartments: `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`,
       cooperationId: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`,
-      getHousesData: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
     }),
+    listOfHouses(): Array<Object> {
+      return this.houses?.map((house: HouseInterface) => {
+        const houseData = `вул. ${house.address.street}, будинок ${house.address.houseNumber}`;
+        const houseId = house.id;
+        return { houseData, houseId };
+      });
+    },
+    listOfApartments(): Array<Object> {
+      return this.apartments?.map((apartment: ApartmentInterface) => {
+        const apartmentData = `кв. ${apartment.apartmentNumber}`;
+        const apartmentId = apartment.id;
+        return { apartmentData, apartmentId };
+      });
+    },
   },
 });
 </script>
