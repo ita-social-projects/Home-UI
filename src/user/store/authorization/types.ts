@@ -1,7 +1,7 @@
 import { ActionContext } from 'vuex';
 import { requestPayload, RootStateInterface } from '@/store/types';
-import { UserModel } from './models/user.model';
-import { UserContactInterface } from './../user/types';
+import { UserModel } from '../../models/user.model';
+import { UserContactInterface } from '../user/types';
 
 export enum AuthMutationEnum {
   SET_USER = 'SET_USER',
@@ -50,7 +50,6 @@ export interface UpdateUserInterface {
   password: string;
   contacts: UserContactInterface[];
 }
-
 
 export interface UpdateUserFullNameInterface {
   firstName: string;

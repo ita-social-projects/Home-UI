@@ -165,8 +165,8 @@ import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { useVuelidate } from '@vuelidate/core';
 import { requiredValidator, ownershipPartValidator } from '@/utils/validators';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
-import { UserContactInterface } from '@/store/user/types';
-import { ContactTypeEnum } from '@/store/authorization/types';
+import { UserContactInterface } from '@/user/store/user/types';
+import { ContactTypeEnum } from '@/user/store/authorization/types';
 import { HouseModel } from '@/houses/models/house.model';
 
 export default defineComponent({

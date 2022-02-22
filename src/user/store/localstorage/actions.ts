@@ -4,7 +4,7 @@ import {
   LocalStorageMutationEnum,
   LocalStorageActionEnum,
   Actions,
-} from '@/store/localstorage/types';
+} from '@/user/store/localstorage/types';
 import { RootStateInterface } from '@/store/types';
 
 export const actions: ActionTree<LocalStorageStateInterface, RootStateInterface> & Actions = {
@@ -16,5 +16,8 @@ export const actions: ActionTree<LocalStorageStateInterface, RootStateInterface>
   },
   [LocalStorageActionEnum.REMOVE]: ({ commit }, payload) => {
     commit(LocalStorageMutationEnum.REMOVE_TOKEN, payload);
+  },
+  [LocalStorageActionEnum.GET_USER_FROM_STORAGE]: ({ commit }, payload) => {
+    commit(LocalStorageMutationEnum.GET_USER_FROM_STORAGE, payload);
   },
 };

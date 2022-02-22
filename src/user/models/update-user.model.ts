@@ -1,7 +1,7 @@
-import { UserDataInterface } from '@/store/user/types';
-import { UserContactInterface } from './../user/types';
-export class PostUserModel {
-  public registration_token: string;
+import { UpdateUserInterface } from '../store/authorization/types';
+import { UserContactInterface } from '../store/user/types';
+
+export class UpdateUserModel {
   public first_name: string;
   public middle_name: string;
   public last_name: string;
@@ -9,8 +9,7 @@ export class PostUserModel {
   public password: string;
   public contacts: UserContactInterface[];
 
-  constructor(userData: UserDataInterface) {
-    this.registration_token = userData.registrationToken;
+  constructor(userData: UpdateUserInterface) {
     this.first_name = userData.firstName;
     this.middle_name = userData.middleName;
     this.last_name = userData.lastName;

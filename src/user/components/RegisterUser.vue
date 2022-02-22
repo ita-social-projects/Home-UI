@@ -5,37 +5,43 @@
       <div class="field">
         <input-text
           type="text"
-          v-model="state.formData.firstName"
+          v-model="state.userFullName.firstName"
           placeholder="Ім'я"
-          :class="{ 'p-invalid': v$.firstName.$error }"
-          @blur="v$.firstName.$touch"
+          :class="{ 'p-invalid': v$.userFullName.firstName.$error }"
+          @blur="v$.userFullName.firstName.$touch"
         />
-        <small v-if="v$.firstName.$error" class="p-error">{{ v$.firstName.$errors[0].$message }}</small>
+        <small v-if="v$.userFullName.firstName.$error" class="p-error">{{
+          v$.userFullName.firstName.$errors[0].$message
+        }}</small>
       </div>
       <div class="field">
         <input-text
           type="text"
-          v-model="state.formData.middleName"
+          v-model="state.userFullName.middleName"
           placeholder="По-батькові"
-          :class="{ 'p-invalid': v$.middleName.$error }"
-          @blur="v$.middleName.$touch"
+          :class="{ 'p-invalid': v$.userFullName.middleName.$error }"
+          @blur="v$.userFullName.middleName.$touch"
         />
-        <small v-if="v$.middleName.$error" class="p-error">{{ v$.middleName.$errors[0].$message }}</small>
+        <small v-if="v$.userFullName.middleName.$error" class="p-error">{{
+          v$.userFullName.middleName.$errors[0].$message
+        }}</small>
       </div>
       <div class="field">
         <input-text
           type="text"
-          v-model="state.formData.lastName"
+          v-model="state.userFullName.lastName"
           placeholder="Прізвище"
-          :class="{ 'p-invalid': v$.lastName.$error }"
-          @blur="v$.lastName.$touch"
+          :class="{ 'p-invalid': v$.userFullName.lastName.$error }"
+          @blur="v$.userFullName.lastName.$touch"
         />
-        <small v-if="v$.lastName.$error" class="p-error">{{ v$.lastName.$errors[0].$message }}</small>
+        <small v-if="v$.userFullName.lastName.$error" class="p-error">{{
+          v$.userFullName.lastName.$errors[0].$message
+        }}</small>
       </div>
       <div class="field">
         <input-text
           type="text"
-          v-model="state.formData.email"
+          v-model="state.email"
           placeholder="e-mail"
           :class="{ 'p-invalid': v$.email.$error }"
           @blur="v$.email.$touch"
@@ -46,7 +52,7 @@
         <Password
           class="input-password-class"
           :feedback="false"
-          v-model="state.formData.password.password"
+          v-model="state.password.password"
           placeholder="Пароль"
           :class="{ 'p-invalid': v$.password.password.$error }"
           @blur="v$.password.password.$touch"
@@ -58,7 +64,7 @@
         <Password
           class="input-password-class"
           :feedback="false"
-          v-model="state.formData.password.confirm"
+          v-model="state.password.confirm"
           placeholder="Підтвердження паролю"
           :class="{ 'p-invalid': v$.password.confirm.$error }"
           @blur="v$.password.confirm.$touch"
@@ -69,12 +75,12 @@
       <div class="field">
         <input-text
           type="text"
-          v-model="state.formData.registrationKey"
+          v-model="state.registrationToken"
           placeholder="Ключ реєстраціїї"
-          :class="{ 'p-invalid': v$.registrationKey.$error }"
-          @blur="v$.registrationKey.$touch"
+          :class="{ 'p-invalid': v$.registrationToken.$error }"
+          @blur="v$.registrationToken.$touch"
         />
-        <small v-if="v$.registrationKey.$error" class="p-error">{{ v$.registrationKey.$errors[0].$message }}</small>
+        <small v-if="v$.registrationToken.$error" class="p-error">{{ v$.registrationToken.$errors[0].$message }}</small>
       </div>
       <Button class="p-button-info" type="submit" :disabled="v$.$invalid">Зареєструватися</Button>
     </form>
@@ -84,28 +90,21 @@
 <script lang="ts">
 import { defineComponent, reactive, computed, watch } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import {
-  requiredValidator,
-  emailValidator,
-  emailMinLength,
-  emailMaxLength,
-  emailLastCharsValidator,
-  passwordValidator,
-  passwordMinLenght,
-  passwordMaxLenght,
-  userNameValidator,
-  someTitleLenghtValidator,
-} from '@/utils/validators';
+import { requiredValidator } from '@/utils/validators';
 import { sameAs } from '@vuelidate/validators';
 import Password from 'primevue/password';
-
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import store from '@/store';
-import { UserStateInterface, UserActionEnum, UserGettersEnum } from '@/store/user/types';
+import { UserStateInterface, UserActionEnum, UserGettersEnum } from '@/user/store/user/types';
 import { useToast } from 'primevue/usetoast';
 import { StoreModuleEnum } from '@/store/types';
-import { ContactTypeEnum, ContactTypeEnumString } from '@/store/authorization/types';
+import { ContactTypeEnum } from '@/user/store/authorization/types';
+import {
+  userEmailValidations,
+  userPasswordValidations,
+  userFullNameValidations,
+} from '@/user/utils/validators/userValidations';
 
 export default defineComponent({
   name: 'userRegistration',
@@ -113,87 +112,63 @@ export default defineComponent({
   setup() {
     const toast = useToast();
     const state = reactive({
-      formData: {
+      userFullName: {
         firstName: '',
         middleName: '',
         lastName: '',
-        email: '',
-        password: {
-          password: '',
-          confirm: '',
-        },
-        registrationKey: '',
       },
+      email: '',
+      password: {
+        password: '',
+        confirm: '',
+      },
+      registrationToken: '',
     });
-
     const rules = computed(() => {
       return {
-        firstName: {
-          requiredValidator,
-          userNameValidator,
-          someTitleLenghtValidator,
-        },
-        middleName: {
-          requiredValidator,
-          userNameValidator,
-          someTitleLenghtValidator,
-        },
-        lastName: {
-          requiredValidator,
-          userNameValidator,
-          someTitleLenghtValidator,
-        },
-        email: {
-          requiredValidator,
-          emailValidator,
-          emailMinLength,
-          emailMaxLength,
-          emailLastCharsValidator,
-        },
+        userFullName: userFullNameValidations,
+        email: userEmailValidations,
         password: {
-          password: {
-            requiredValidator,
-            passwordMinLenght,
-            passwordValidator,
-            passwordMaxLenght,
-          },
+          password: userPasswordValidations,
           confirm: {
             requiredValidator,
-            sameAs: sameAs(state.formData.password.password),
+            sameAs: sameAs(state.password.password),
           },
         },
-        registrationKey: {
+        registrationToken: {
           requiredValidator,
         },
       };
     });
-    const v$ = useVuelidate(rules, state.formData);
+    const v$ = useVuelidate(rules, state);
+
     async function sendInfo() {
       const userData: UserStateInterface['data'] = {
-        registrationToken: state.formData.registrationKey,
-        firstName: state.formData.firstName,
-        middleName: state.formData.middleName,
-        lastName: state.formData.lastName,
-        email: state.formData.email,
-        password: state.formData.password.confirm,
-        contacts: [{ type: ContactTypeEnum.email, main: false, email: state.formData.email }],
+        registrationToken: state.registrationToken,
+        firstName: state.userFullName.firstName,
+        middleName: state.userFullName.middleName,
+        lastName: state.userFullName.lastName,
+        email: state.email,
+        password: state.password.confirm,
+        contacts: [{ type: ContactTypeEnum.email, main: false, email: state.email }],
       };
+
       await store.dispatch(`${StoreModuleEnum.userStore}/${UserActionEnum.SET_USER_INFO}`, userData);
     }
+
     const showStatus = (status: string, message: string) => {
       toast.add({ severity: status, summary: message, life: 6000 });
     };
+
     const resetFields = () => {
       v$.value.$reset();
-      state.formData.firstName = '';
-      state.formData.middleName = '';
-      state.formData.lastName = '';
-      state.formData.email = '';
-      state.formData.password = {
-        password: '',
-        confirm: '',
-      };
-      state.formData.registrationKey = '';
+      getProp(state);
+
+      function getProp(obj: any) {
+        for (let prop in obj) {
+          typeof obj[prop] === 'object' ? getProp(obj[prop]) : (obj[prop] = '');
+        }
+      }
     };
 
     async function onSubmit() {
@@ -233,7 +208,6 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   display: flex;
-
   .registration__component {
     @include flex-custom(flex-start, center, column nowrap);
     margin: auto;
@@ -243,7 +217,6 @@ export default defineComponent({
       position: relative;
       margin: 15px;
       min-width: 500px;
-
       .p-inputtext {
         width: 100%;
         min-width: 500px;
@@ -258,7 +231,6 @@ export default defineComponent({
       div {
         width: 100%;
       }
-
       small {
         bottom: -23px;
         position: absolute;

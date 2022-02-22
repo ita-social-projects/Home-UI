@@ -7,47 +7,50 @@
           <form class="user__form" @submit.prevent>
             <div class="field">
               <label for="firstName">І'мя</label>
-              <input-text
+              <InputText
                 class="form__input"
                 id="firstName"
-                v-model.trim="firstName"
+                v-model.trim="userFullName.firstName"
                 type="text"
-                @change="updateName"
-                :class="{ 'p-invalid': v$.firstName.$error }"
-                @blur="v$.firstName.$touch"
+                @change="updateName('firstName')"
+                :class="{ 'p-invalid': v$.userFullName.firstName.$error }"
+                @blur="v$.userFullName.firstName.$touch"
+                @input="isDisabled = false"
               />
-              <small id="firstName-help" v-if="v$.firstName.$error" class="p-error">{{
-                v$.firstName.$errors[0].$message
+              <small id="firstName-help" v-if="v$.userFullName.firstName.$error" class="p-error">{{
+                v$.userFullName.firstName.$errors[0].$message
               }}</small>
             </div>
             <div class="field">
               <label for="middleName">По-батькові</label>
-              <input-text
+              <InputText
                 class="form__input"
                 id="middleName"
-                v-model.trim="middleName"
+                v-model.trim="userFullName.middleName"
                 type="text"
-                @change="updateMiddleName"
-                :class="{ 'p-invalid': v$.middleName.$error }"
-                @blur="v$.middleName.$touch"
+                @change="updateName('middleName')"
+                :class="{ 'p-invalid': v$.userFullName.middleName.$error }"
+                @blur="v$.userFullName.middleName.$touch"
+                @input="isDisabled = false"
               />
-              <small id="middleName-help" v-if="v$.middleName.$error" class="p-error">{{
-                v$.middleName.$errors[0].$message
+              <small id="middleName-help" v-if="v$.userFullName.middleName.$error" class="p-error">{{
+                v$.userFullName.middleName.$errors[0].$message
               }}</small>
             </div>
             <div class="field">
               <label for="lastname">Прізвище</label>
-              <input-text
+              <InputText
                 class="form__input"
                 id="lastname"
-                v-model.trim="lastName"
+                v-model.trim="userFullName.lastName"
                 type="text"
-                @change="updateLastName"
-                :class="{ 'p-invalid': v$.lastName.$error }"
-                @blur="v$.lastName.$touch"
+                @change="updateName('lastName')"
+                :class="{ 'p-invalid': v$.userFullName.lastName.$error }"
+                @blur="v$.userFullName.lastName.$touch"
+                @input="isDisabled = false"
               />
-              <small id="lastname-help" v-if="v$.lastName.$error" class="p-error">{{
-                v$.lastName.$errors[0].$message
+              <small id="lastname-help" v-if="v$.userFullName.lastName.$error" class="p-error">{{
+                v$.userFullName.lastName.$errors[0].$message
               }}</small>
             </div>
           </form>
@@ -57,8 +60,8 @@
           <h2 class="card__header__title">Контакти</h2>
           <span>Додайте ваш новий контакт</span>
           <form @submit.prevent class="add__contact">
-            <input-text class="phone-input" disabled v-if="typeContact === String" :placeholder="placeholderValue" />
-            <input-text
+            <InputText class="phone-input" disabled v-if="typeContact === String" :placeholder="placeholderValue" />
+            <InputText
               id="phone-input"
               class="phone-input"
               v-else-if="typeContact.name === 'Телефон'"
@@ -67,7 +70,7 @@
               :class="{ 'p-invalid': v$.inputValue.phone.$error }"
               @blur="v$.inputValue.phone.$touch"
             />
-            <input-text
+            <InputText
               class="phone-input"
               v-else-if="typeContact.name === 'Пошта'"
               placeholder="Пошта"
@@ -82,6 +85,7 @@
                 :options="contactsType"
                 optionLabel="name"
                 placeholder="Тип"
+                @change="v$.inputValue.$reset()"
               />
               <Dropdown
                 class="drop__menu"
@@ -148,7 +152,7 @@
         />
         <Button
           id="submit-btn"
-          :disabled="v$.$invalid"
+          :disabled="v$.userFullName.$invalid || isDisabled"
           @click="onSubmit"
           label="Зберегти"
           icon="pi pi-check"
@@ -164,37 +168,27 @@
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 import { RoutesEnum } from '@/router/types';
-import {
-  requiredValidator,
-  ukrLangTitleValidator,
-  someTitleLenghtValidator,
-  emailValidator,
-  emailMinLength,
-  emailMaxLength,
-  userPhoneValidator
-} from "@/utils/validators";
 import useVuelidate from '@vuelidate/core';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
+import { userPhoneValidator } from '@/utils/validators';
 import { helpers, requiredIf } from '@vuelidate/validators';
-
 import { StoreModuleEnum } from '@/store/types';
-import { AuthActionEnum, AuthMutationEnum, AuthGettersEnum } from '@/store/authorization/types';
+import { AuthActionEnum, AuthMutationEnum, AuthGettersEnum } from '@/user/store/authorization/types';
+import { userFullNameValidations, userEmailValidations } from '@/user/utils/validators/userValidations';
+import { LocalStorageActionEnum, LocalStorageGettersEnum } from '../store/localstorage/types';
 
 export default defineComponent({
   storeFirstName: 'ManageUser',
   components: { Button, InputText, Dropdown },
-  setup() {
-    return {
-      v$: useVuelidate(),
-    };
-  },
   data() {
     return {
-      firstName: '',
-      middleName: '',
-      lastName: '',
+      userFullName: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+      },
       newUpdateData: {},
       placeholderValue: 'Спочатку оберіть тип контакту...',
       inputValue: {
@@ -215,6 +209,9 @@ export default defineComponent({
         { name: 'Додатковий', code: false },
       ],
       userContacts: [] as any,
+
+      v$: useVuelidate(),
+      isDisabled: true,
     };
   },
   mounted() {
@@ -222,21 +219,7 @@ export default defineComponent({
   },
   validations() {
     return {
-      firstName: {
-        requiredValidator,
-        ukrLangTitleValidator,
-        someTitleLenghtValidator,
-      },
-      middleName: {
-        requiredValidator,
-        ukrLangTitleValidator,
-        someTitleLenghtValidator,
-      },
-      lastName: {
-        requiredValidator,
-        ukrLangTitleValidator,
-        someTitleLenghtValidator,
-      },
+      userFullName: userFullNameValidations,
       inputValue: {
         email: {
           required: helpers.withMessage(
@@ -245,9 +228,7 @@ export default defineComponent({
               return this.typeContact.name === 'Пошта';
             })
           ),
-          emailValidator,
-          emailMinLength,
-          emailMaxLength,
+          ...userEmailValidations,
         },
         phone: {
           required: helpers.withMessage(
@@ -263,28 +244,29 @@ export default defineComponent({
   },
   methods: {
     async setData() {
-      const userData = JSON.parse(localStorage.getItem('user') || '{}');
-      await this.$store.dispatch('authorizationStore/GET_DATA', userData.id);
-      this.firstName = this.userInfo.firstName;
-      this.middleName = this.userInfo.middleName;
-      this.lastName = this.userInfo.lastName;
+      this.$store.dispatch(`${StoreModuleEnum.localStorageStore}/${LocalStorageActionEnum.GET_USER_FROM_STORAGE}`);
+      await this.$store.dispatch(
+        `${StoreModuleEnum.authorizationStore}/${AuthActionEnum.GET_DATA}`,
+        this.storageUserData.id
+      );
+
+      this.userFullName.firstName = this.userInfo.firstName;
+      this.userFullName.middleName = this.userInfo.middleName;
+      this.userFullName.lastName = this.userInfo.lastName;
     },
-    updateName(e: any) {
-      this.newUpdateData = { ...this.newUpdateData, firstName: e.target.value };
-    },
-    updateMiddleName(e: any) {
-      this.newUpdateData = { ...this.newUpdateData, middleName: e.target.value };
-    },
-    updateLastName(e: any) {
-      this.newUpdateData = { ...this.newUpdateData, lastName: e.target.value };
+    updateName(name: string) {
+      let partOfName = Object.entries(this.userFullName).find((el, prop) => el[prop] === name);
+
+      this.newUpdateData = { ...this.newUpdateData, [`${name}`]: partOfName ? partOfName[1] : '' };
     },
 
-    onSubmit() {
+    async onSubmit() {
       if (this.inputValue.email.length > 0 || this.inputValue.phone.length > 0) {
         this.addContact();
       }
       this.$store.commit(`${StoreModuleEnum.authorizationStore}/${AuthMutationEnum.SET_FORM}`, this.newUpdateData);
-      this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.UPDATE_USER}`, this.userInfo);
+      await this.$store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.UPDATE_USER}`, this.userInfo);
+
       this.$router.push(RoutesEnum.MainPage);
     },
 
@@ -318,6 +300,7 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       userInfo: `${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`,
+      storageUserData: `${StoreModuleEnum.localStorageStore}/${LocalStorageGettersEnum.getUserFromStorage}`,
     }),
   },
 });

@@ -1,7 +1,7 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { OwnershipsModel } from '@/apartment/models/ownerships.model';
-import { UserContactInterface } from '@/store/user/types';
+import { UserContactInterface } from '@/user/store/user/types';
 
 export interface OwnerInterface {
   id: number;

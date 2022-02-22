@@ -1,5 +1,5 @@
 import { UserModel } from './user.model';
-import { UserContactInterface } from './../../user/types';
+import { UserContactInterface } from '../store/user/types';
 
 export class UserDTOModel {
   public first_name: string;
