@@ -36,7 +36,7 @@
           </small>
         </div>
         <section class="btn">
-          <Button label="Увiйти" class="p-button-info" type="submit" />
+          <Button label="Увiйти" class="p-button-info" type="submit" :disabled="v$.$invalid" />
         </section>
       </form>
     </div>
@@ -100,14 +100,14 @@ export default defineComponent({
     },
   },
   methods: {
-    // emailBlur() {
-    //   this.v$.email.$touch();
-    //   this.isEmailValid = !this.v$.email.$error;
-    // },
-    // passwordBlur() {
-    //   this.v$.password.$touch();
-    //   this.isPasswordValid = !this.v$.password.$error;
-    // },
+    emailBlur() {
+      this.v$.email.$touch();
+      this.isEmailValid = !this.v$.email.$error;
+    },
+    passwordBlur() {
+      this.v$.password.$touch();
+      this.isPasswordValid = !this.v$.password.$error;
+    },
     login() {
       const payload = {
         data: {
