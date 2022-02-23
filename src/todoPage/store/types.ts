@@ -19,14 +19,14 @@ export interface TodoPageInterface {
 export enum TodoGettersEnum {
   getAllTodos = 'getAllTodos',
   getNotDoneTodos = 'getNotDoneTodos',
-  getTodosFromLocalStorage = 'getTodosFromLocalStorage',
+  // getTodosFromLocalStorage = 'getTodosFromLocalStorage',
 }
 
 export enum TodoMutationsEnum {
   ADD_TODO = 'ADD_TODO',
   SET_DONE_TODO = 'SET_DONE_TODO',
   REMOVE_TODO = 'REMOVE_TODO',
-  SAVE_TODO_TO_LOCALSTORAGE = 'SAVE_TODO_TO_LOCALSTORAGE',
+  // SAVE_TODO_TO_LOCALSTORAGE = 'SAVE_TODO_TO_LOCALSTORAGE',
   PARSE_LOCAL_TODOS = 'PARSE_LOCAL_TODOS',
 }
 
@@ -41,14 +41,14 @@ export enum TodoActionsEnum {
 export type Getters<S = TodoPageInterface> = {
   [TodoGettersEnum.getAllTodos](state: S): Array<TodosType> | [];
   [TodoGettersEnum.getNotDoneTodos](state: S): number;
-  [TodoGettersEnum.getTodosFromLocalStorage](): Array<TodosType>;
+  // [TodoGettersEnum.getTodosFromLocalStorage](): Array<TodosType>;
 };
 
 export type Mutations<S = TodoPageInterface> = {
   [TodoMutationsEnum.ADD_TODO](state: S, payload: TaskType): void;
   [TodoMutationsEnum.SET_DONE_TODO](state: S, payload: number): void;
   [TodoMutationsEnum.REMOVE_TODO](state: S, payload: number): void;
-  [TodoMutationsEnum.SAVE_TODO_TO_LOCALSTORAGE](state: S, payload: Array<TodosType>): void;
+  // [TodoMutationsEnum.SAVE_TODO_TO_LOCALSTORAGE](state: S, payload: Array<TodosType>): void;
   [TodoMutationsEnum.PARSE_LOCAL_TODOS](state: S, payload: Array<TodosType>): void;
 };
 

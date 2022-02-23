@@ -13,7 +13,9 @@ export const actions: ActionTree<TodoPageInterface, RootStateInterface> & Action
     commit(TodoMutationsEnum.REMOVE_TODO, payload);
   },
   [TodoActionsEnum.SAVE_TO_LOCAL]({ commit }, payload): void {
-    commit(TodoMutationsEnum.SAVE_TODO_TO_LOCALSTORAGE, payload);
+    // commit(TodoMutationsEnum.SAVE_TODO_TO_LOCALSTORAGE, payload);
+    const parsed = JSON.stringify(payload);
+    localStorage.setItem('todo-list', parsed);
   },
   [TodoActionsEnum.PARSE_LOCAL_TODOS]({ commit }, payload): void {
     commit(TodoMutationsEnum.PARSE_LOCAL_TODOS, payload);

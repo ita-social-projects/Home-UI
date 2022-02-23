@@ -13,7 +13,7 @@ import PageErrorInvintation from '@/views/PageErrorInvintation.vue';
 import CooperationPolls from '@/views/CooperationPolls.vue';
 import PollInfo from '@/views/PollInfo.vue';
 import InvitationSection from '@/views/InvitationSection.vue';
-import TodoAppPage from '@/views/TodoAppPage.vue';
+import TodoAppPage from '@/todoPage/views/TodoAppPage.vue';
 
 import ManageApartments from '@/apartment/ManageApartments.vue';
 import ApartmentInfo from '@/apartment/ApartmentInfo.vue';

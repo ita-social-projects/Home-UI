@@ -1,19 +1,37 @@
 <template>
   <div class="todo-form">
     <span class="p-float-label">
-      <InputText id="taskTitle" type="text" v-model="payload.title" />
+      <InputText
+        id="taskTitle"
+        type="text"
+        v-model="payload.title"
+        :class="{ 'p-invalid': v$.title.$error }"
+        @input="v$.title.$touch"
+        maxlength="35"
+      />
       <label for="taskTitle">Назва завдання</label>
     </span>
+    <small v-if="v$.title.$error" class="p-error">{{ v$.title.$errors[0].$message }}</small>
     <span class="p-float-label">
-      <InputText id="description" type="text" v-model="payload.description" />
+      <InputText
+        id="description"
+        type="text"
+        v-model="payload.description"
+        :class="{ 'p-invalid': v$.description.$error }"
+        @input="v$.description.$touch"
+        maxlength="35"
+      />
       <label for="description">Опис завдання</label>
     </span>
+    <small v-if="v$.description.$error" class="p-error description-error">{{
+      v$.description.$errors[0].$message
+    }}</small>
     <Button
       label="Додати завдання"
       icon="pi pi-check"
       class="p-button-lg p-button-info"
       @click="onAddTask"
-      :disabled="!valid"
+      :disabled="v$.$invalid"
     />
   </div>
 </template>
@@ -23,6 +41,8 @@ import { defineComponent, reactive, computed } from 'vue';
 import { TaskType, TodoActionsEnum, TodoGettersEnum } from '../store/types';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import useVuelidate from '@vuelidate/core';
+import { todoValidations } from '@/todoPage/validation/todoPageValidations';
 import { useStore } from 'vuex';
 import { StoreModuleEnum } from '@/store/types';
 
@@ -32,10 +52,17 @@ export default defineComponent({
     InputText,
     Button,
   },
-  setup(props) {
+  setup() {
     const payload = reactive({ title: '', description: '' } as TaskType);
     const store = useStore();
+    const rules = computed(() => {
+      return {
+        title: todoValidations.todoTitle,
+        description: todoValidations.todoDescription,
+      };
+    });
 
+    const v$ = useVuelidate(rules, payload);
     const onAddTask = () => {
       store.dispatch(`${StoreModuleEnum.todoStore}/${TodoActionsEnum.ADD_NEW_TODO}`, payload);
       const updatedList = store.getters[`${StoreModuleEnum.todoStore}/${TodoGettersEnum.getAllTodos}`];
@@ -43,16 +70,13 @@ export default defineComponent({
       store.dispatch(`${StoreModuleEnum.todoStore}/${TodoActionsEnum.SAVE_TO_LOCAL}`, updatedList);
       payload.title = '';
       payload.description = '';
+      v$.value.$reset();
     };
-
-    const valid = computed(() => {
-      return payload.title && payload.description;
-    });
 
     return {
       payload,
       onAddTask,
-      valid,
+      v$,
     };
   },
 });
@@ -60,11 +84,20 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .todo-form {
+  position: relative;
   min-width: 35%;
   padding-top: 1.2em;
 }
 .todo-form [type='text'] {
   width: 70%;
-  margin-bottom: 1.5em;
+  padding: 1em 0;
+  margin-bottom: 2em;
+}
+.p-error {
+  position: absolute;
+  top: 65px;
+}
+.description-error {
+  top: 135px;
 }
 </style>

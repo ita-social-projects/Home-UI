@@ -29,7 +29,8 @@ export default defineComponent({
     const store = useStore();
 
     onMounted(() => {
-      const localTodos = store.getters[`${StoreModuleEnum.todoStore}/${TodoGettersEnum.getTodosFromLocalStorage}`];
+      const localTodos = JSON.parse(localStorage.getItem('todo-list') as string);
+
       if (localTodos?.length) {
         store.dispatch(`${StoreModuleEnum.todoStore}/${TodoActionsEnum.PARSE_LOCAL_TODOS}`, localTodos);
       }

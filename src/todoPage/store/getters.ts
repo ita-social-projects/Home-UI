@@ -9,8 +9,4 @@ export const getters: GetterTree<TodoPageInterface, RootStateInterface> & Getter
   getNotDoneTodos: (state: TodoPageInterface): number => {
     return state.todoList.filter((todo) => !todo.isDone).length;
   },
-  getTodosFromLocalStorage: (): Array<TodosType> => {
-    const loacalTodos = JSON.parse(localStorage.getItem('todo-list') as string);
-    return loacalTodos;
-  },
 };
