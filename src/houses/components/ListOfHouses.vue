@@ -54,9 +54,7 @@ import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import ConfirmPopup from 'primevue/confirmpopup';
 import { StoreModuleEnum } from '@/store/types';
-import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
-import { HouseModel } from '@/houses/models/house.model';
-import { AddressModel } from '@/houses/models/address.model';
+import { AddressInterface, HouseInterface, HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 
 export default defineComponent({
   name: 'ListOfHouses',
@@ -115,8 +113,8 @@ export default defineComponent({
           houseBlock: '',
           houseNumber: '',
           zipCode: '',
-        } as AddressModel,
-      } as HouseModel,
+        } as AddressInterface,
+      } as HouseInterface,
     };
   },
   methods: {

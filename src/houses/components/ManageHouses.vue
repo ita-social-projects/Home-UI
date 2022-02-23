@@ -48,9 +48,7 @@ import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import ListOfHouses from '@/houses/components/ListOfHouses.vue';
-import { HouseModel } from '@/houses/models/house.model';
-import { AddressModel } from '@/houses/models/address.model';
-import { HousesActionsEnum } from '@/houses/store/types';
+import { HouseInterface, AddressInterface, HousesActionsEnum } from '@/houses/store/types';
 import { StoreModuleEnum } from '@/store/types';
 import ManageHouseForm from '@/houses/components/ManageHouseForm.vue';
 
@@ -87,8 +85,8 @@ export default defineComponent({
           houseBlock: '',
           houseNumber: '',
           zipCode: '',
-        } as AddressModel,
-      } as HouseModel,
+        } as AddressInterface,
+      } as HouseInterface,
 
       displayModalForAddHouse: false,
       displayModalForEditHouse: false,
@@ -98,7 +96,7 @@ export default defineComponent({
     this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.$props.cooperationId);
   },
   methods: {
-    catchHouseData(house: HouseModel) {
+    catchHouseData(house: HouseInterface) {
       this.house = house;
     },
   },

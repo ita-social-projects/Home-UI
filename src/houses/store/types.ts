@@ -6,7 +6,7 @@ export enum HousesMutationsEnum {
   SET_HOUSES = 'SET_HOUSES',
   EDIT_HOUSE = 'EDIT_HOUSE',
   DELETE_HOUSE = 'DELETE_HOUSE',
-  GET_HOUSE_BY_ID = 'GET_HOUSE_BY_ID',
+  SET_HOUSE_BY_ID = 'SET_HOUSE_BY_ID',
   ADD_HOUSE = 'ADD_HOUSE',
 }
 
@@ -14,14 +14,13 @@ export enum HousesActionsEnum {
   SET_HOUSES = 'SET_HOUSES',
   EDIT_HOUSE = 'EDIT_HOUSE',
   DELETE_HOUSE = 'DELETE_HOUSE',
-  GET_HOUSE_BY_ID = 'GET_HOUSE_BY_ID',
+  SET_HOUSE_BY_ID = 'SET_HOUSE_BY_ID',
   ADD_HOUSE = 'ADD_HOUSE',
 }
 
 export enum HousesGettersEnum {
   getHousesData = 'getHousesData',
   getHouseInfo = 'getHouseInfo',
-  getListOfHouses = 'getListOfHouses',
 }
 
 export interface AddressInterface {
@@ -48,24 +47,25 @@ export interface HousesStateInterface {
   houseInfo: HouseModel;
 }
 
-export interface ManageHouseInterface {
-  houseData: HouseInterface;
+export interface DeleteHouseInterface {
+  cooperationId: number;
+  houseId: number;
 }
 
 export type Mutations<S = HousesStateInterface> = {
   [HousesMutationsEnum.SET_HOUSES](state: S, payload: Array<HouseModel>): void;
-  [HousesMutationsEnum.DELETE_HOUSE](state: any, payload: HouseModel): void;
-  [HousesMutationsEnum.EDIT_HOUSE](state: S, payload: HouseModel): void;
-  [HousesMutationsEnum.GET_HOUSE_BY_ID](state: S, payload: HouseModel): void;
+  [HousesMutationsEnum.DELETE_HOUSE](state: any, payload: DeleteHouseInterface): void;
+  [HousesMutationsEnum.EDIT_HOUSE](state: S, payload: HouseInterface): void;
+  [HousesMutationsEnum.SET_HOUSE_BY_ID](state: S, payload: HouseModel): void;
   [HousesMutationsEnum.ADD_HOUSE](state: S, payload: HouseModel): void;
 };
 
 export interface Actions {
   [HousesActionsEnum.SET_HOUSES]({ commit }: AugmentedActionContext, payload: number): void;
-  [HousesActionsEnum.DELETE_HOUSE]({ commit }: AugmentedActionContext, payload: HouseModel): void;
-  [HousesActionsEnum.EDIT_HOUSE]({ commit }: AugmentedActionContext, payload: ManageHouseInterface): void;
-  [HousesActionsEnum.ADD_HOUSE]({ commit }: AugmentedActionContext, payload: ManageHouseInterface): void;
-  [HousesActionsEnum.GET_HOUSE_BY_ID]({ commit }: AugmentedActionContext, payload: HouseModel): void;
+  [HousesActionsEnum.DELETE_HOUSE]({ commit }: AugmentedActionContext, payload: DeleteHouseInterface): void;
+  [HousesActionsEnum.EDIT_HOUSE]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
+  [HousesActionsEnum.ADD_HOUSE]({ commit }: AugmentedActionContext, payload: HouseInterface): void;
+  [HousesActionsEnum.SET_HOUSE_BY_ID]({ commit }: AugmentedActionContext, payload: HouseModel): void;
 }
 
 export type Getters<S = HousesStateInterface> = {

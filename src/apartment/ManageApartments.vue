@@ -256,7 +256,7 @@ export default defineComponent({
         id: id.value,
       };
 
-      await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.GET_HOUSE_BY_ID}`, payload);
+      await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSE_BY_ID}`, payload);
     };
 
     const houseInfo = computed((): HouseModel => {
