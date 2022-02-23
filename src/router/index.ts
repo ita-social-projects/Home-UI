@@ -13,6 +13,8 @@ import PageErrorInvintation from '@/views/PageErrorInvintation.vue';
 import CooperationPolls from '@/views/CooperationPolls.vue';
 import PollInfo from '@/views/PollInfo.vue';
 import InvitationSection from '@/views/InvitationSection.vue';
+import TodoPage from '@/views/TodoPage.vue';
+
 
 import ManageApartments from '@/apartment/ManageApartments.vue';
 import ApartmentInfo from '@/apartment/ApartmentInfo.vue';
@@ -72,6 +74,11 @@ const routes: RouteRecordRaw[] = [
         name: 'poll-info',
         component: PollInfo,
         props: true,
+      },
+      {
+        path: RoutesEnum.TodoPage,
+        name: 'todo-page',
+        component: TodoPage,
       },
     ],
   },

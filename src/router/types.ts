@@ -12,6 +12,7 @@ export enum RoutesEnum {
   InvitationSection = '/main/invitations',
   PageErrorInvintation = '/broken-link',
   PollInfo = '/main/polls/:id',
+  TodoPage = '/main/todo',
 
   NotFound = '/:catchAll(.*)',
 }

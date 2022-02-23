@@ -23,6 +23,7 @@
         :badge-counter="polls"
         badge-type="secondary"
       />
+      <BaseSidebarNavButton :link="todoPagePath" btn-text="ToDo" icon="pi-list" />
     </nav>
   </div>
 </template>
@@ -55,6 +56,9 @@ export default defineComponent({
     },
     invitationsPath(): string {
       return RoutesEnum.InvitationSection;
+    },
+    todoPagePath(): string {
+      return RoutesEnum.TodoPage;
     },
     userData(): UserInterface | null {
       return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
