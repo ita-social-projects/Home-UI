@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import TodoApp from '@/components/todoapp/TodoApp.vue';
+import TodoApp from '@/todoapp/components/TodoApp.vue';
 export default defineComponent({
   name: 'TodoAppSection',
   components: {

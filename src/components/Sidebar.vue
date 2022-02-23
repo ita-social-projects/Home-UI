@@ -23,7 +23,12 @@
         :badge-counter="polls"
         badge-type="secondary"
       />
-      <BaseSidebarNavButton :link="todoAppSection" :badge-counter="countUnfinishedTasks" btn-text="Що робити" />
+      <BaseSidebarNavButton
+        :link="todoAppSection"
+        icon="pi-bookmark"
+        :badge-counter="countUnfinishedTasks"
+        btn-text="Список завдань"
+      />
     </nav>
   </div>
 </template>
@@ -34,7 +39,7 @@ import BaseSidebarNavButton from '@/components/base/BaseSidebarNavButton.vue';
 import { RoutesEnum } from '@/router/types';
 import { UserInterface, AuthGettersEnum } from '@/store/authorization/types';
 import { StoreModuleEnum } from '@/store/types';
-import { TodoAppGettersEnum, TodoAppActionEnum } from '@/store/todoapp/types';
+import { TodoAppGettersEnum, TodoAppActionEnum } from '@/todoapp/store//types';
 
 export default defineComponent({
   name: 'Sidebar',

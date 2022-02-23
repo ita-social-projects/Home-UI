@@ -1,22 +1,21 @@
 <template>
   <div>
-    <h1>Hello word</h1>
+    <h1>Список завдань</h1>
     <TodoAppEdit></TodoAppEdit>
     <hr />
-    <TodoAppItem v-for="task in tasks" :key="task.id" :task="task" :class="{ 'task-done': task.state }"></TodoAppItem>
-    <!-- {{ tasks }} -->
+    <TodoAppItem v-for="task in tasks" :key="task.id" :task="task"></TodoAppItem>
   </div>
 </template>
 
 <script lang="ts">
-import TodoAppEdit from '@/components/todoapp/TodoAppEdit.vue';
+import TodoAppEdit from '@/todoapp/components/TodoAppEdit.vue';
 import TodoAppItem from './TodoAppItem.vue';
 
-import { defineComponent, reactive, computed, toRefs, onMounted } from 'vue';
+import { defineComponent, computed } from 'vue';
 
 import { useStore } from 'vuex';
 import { StoreModuleEnum } from '@/store/types';
-import { TodoAppGettersEnum, TodoAppActionEnum } from '@/store/todoapp/types';
+import { TodoAppGettersEnum, TodoAppActionEnum } from '@/todoapp/store//types';
 export default defineComponent({
   name: 'TodoApp',
   components: {
@@ -27,7 +26,6 @@ export default defineComponent({
     const store = useStore();
 
     const tasks = computed(() => {
-      console.log('ojfgskld');
       store.dispatch(`${StoreModuleEnum.TodoAppStore}/${TodoAppActionEnum.getTasksLocalStorage}`);
       return store.getters[`${StoreModuleEnum.TodoAppStore}/${TodoAppGettersEnum.getTasks}`];
     });
@@ -39,8 +37,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-.task-done {
-  text-decoration: line-through;
-}
-</style>
+<style scoped></style>

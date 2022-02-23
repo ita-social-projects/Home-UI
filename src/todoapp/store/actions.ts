@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex';
-import { TodoAppTaskStateInterface, TodoAppMutationEnum, TodoAppActionEnum, Actions } from '@/store/todoapp/types';
+import { TodoAppTaskStateInterface, TodoAppMutationEnum, TodoAppActionEnum, Actions } from '@/todoapp/store//types';
 
 import { RootStateInterface } from '@/store/types';
 
@@ -7,7 +7,7 @@ export const actions: ActionTree<TodoAppTaskStateInterface, RootStateInterface> 
   [TodoAppActionEnum.getTasksLocalStorage]: ({ commit }) => {
     const newTasks = localStorage.getItem('tasks');
     if (newTasks) {
-      commit(TodoAppMutationEnum.setTasks, JSON.parse(newTasks || ''));
+      commit(TodoAppMutationEnum.setTasks, JSON.parse(newTasks));
     }
   },
   [TodoAppActionEnum.updateTasksLocalStorage]: ({ state }) => {
@@ -20,6 +20,10 @@ export const actions: ActionTree<TodoAppTaskStateInterface, RootStateInterface> 
   [TodoAppActionEnum.actionChangeStateTask]: ({ commit, state, dispatch }, payload) => {
     const task = state.tasks.find((item) => item.id === payload);
     commit(TodoAppMutationEnum.changeStateTask, task!);
+    dispatch(TodoAppActionEnum.updateTasksLocalStorage);
+  },
+  [TodoAppActionEnum.deleteTask]: ({ commit, dispatch }, id) => {
+    commit(TodoAppMutationEnum.deleteTask, id);
     dispatch(TodoAppActionEnum.updateTasksLocalStorage);
   },
 };

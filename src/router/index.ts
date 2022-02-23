@@ -16,9 +16,8 @@ import InvitationSection from '@/views/InvitationSection.vue';
 
 import ManageApartments from '@/apartment/ManageApartments.vue';
 import ApartmentInfo from '@/apartment/ApartmentInfo.vue';
-import ManageApartments from '@/views/ManageApartments.vue';
-import ApartmentInfo from '@/views/ApartmentInfo.vue';
-import TodoAppSection from '@/views/TodoAppSection.vue';
+
+import TodoAppSection from '@/todoapp/views/TodoAppSection.vue';
 
 const routes: RouteRecordRaw[] = [
   {

@@ -5,6 +5,7 @@ export enum TodoAppMutationEnum {
   addTask = 'addTask',
   setTasks = 'setTasks',
   changeStateTask = 'changeStateTask',
+  deleteTask = 'deleteTask',
 }
 
 export enum TodoAppActionEnum {
@@ -12,6 +13,7 @@ export enum TodoAppActionEnum {
   updateTasksLocalStorage = 'updateTasksLocalStorage',
   addTask = 'addTask',
   actionChangeStateTask = 'actionChangeStateTask',
+  deleteTask = 'deleteTask',
 }
 
 export enum TodoAppGettersEnum {
@@ -33,6 +35,7 @@ export type Mutations<S = TodoAppTaskStateInterface> = {
   [TodoAppMutationEnum.addTask](state: S, payload: TodoAppTaskInterface): void;
   [TodoAppMutationEnum.setTasks](state: S, payload: Array<TodoAppTaskInterface>): void;
   [TodoAppMutationEnum.changeStateTask](state: S, payload: TodoAppTaskInterface): void;
+  [TodoAppMutationEnum.deleteTask](state: S, id: number): void;
 };
 
 export type Getters<S = TodoAppTaskStateInterface> = {
@@ -45,6 +48,7 @@ export interface Actions {
   [TodoAppActionEnum.updateTasksLocalStorage]({ state }: AugmentedActionContext): void;
   [TodoAppActionEnum.addTask]({ commit }: AugmentedActionContext, payload: TodoAppTaskInterface): void;
   [TodoAppActionEnum.actionChangeStateTask]({ commit, state, dispatch }: AugmentedActionContext, payload: number): void;
+  [TodoAppActionEnum.deleteTask]({ commit, dispatch }: AugmentedActionContext, id: number): void;
 }
 
 export type AugmentedActionContext = {

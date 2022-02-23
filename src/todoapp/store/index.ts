@@ -1,10 +1,10 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { TodoAppTaskStateInterface, TodoAppTaskInterface } from '@/store/todoapp/types';
+import { TodoAppTaskStateInterface, TodoAppTaskInterface } from '@/todoapp/store/types';
 
-import { getters } from '@/store/todoapp/getters';
-import { actions } from '@/store/todoapp/actions';
-import { mutations } from '@/store/todoapp/mutation';
+import { getters } from '@/todoapp/store/getters';
+import { actions } from '@/todoapp/store/actions';
+import { mutations } from '@/todoapp/store/mutation';
 
 export const state: TodoAppTaskStateInterface = {
   tasks: Array<TodoAppTaskInterface>(),

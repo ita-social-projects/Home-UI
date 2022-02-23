@@ -100,3 +100,5 @@ export const ownershipPartValidator = helpers.withMessage('Введіть кор
 export const pollTitleLenghtValidator = helpers.withMessage(lengthMessage(250, 'max'), maxLength(250));
 export const pollDescriptionLenghtValidator = helpers.withMessage(lengthMessage(1000, 'max'), maxLength(1000));
 export const cyrillicLangTextValidator = helpers.withMessage(`${cyrillicLangMessage}`, validCyrillicLan);
+
+export const taskTextValidator = helpers.withMessage(lengthMessage(30, 'max'), maxLength(30));

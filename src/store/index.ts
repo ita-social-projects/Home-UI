@@ -9,7 +9,7 @@ import { pollsStore } from '@/store/polls';
 import { invitationsStore } from '@/store/invitations';
 import { apartmentsStore } from '@/apartment/store/apartments';
 import { ownershipsStore } from '@/apartment/store/ownerships';
-import { TodoAppStore } from './todoapp';
+import { TodoAppStore } from '@/todoapp/store/';
 
 export default createStore<RootStateInterface>({
   strict: process.env.NODE_ENV !== 'production',
