@@ -1,10 +1,7 @@
 <template>
   <h1>My ToDO!</h1>
-  <todo-form @create="createTodo"/>
-  <ol>
-    <todo-list :todos="todos" />
-  </ol>
-  
+  <todo-form @create="createTodo" />
+  <todo-list :todos="todos" />
 </template>
 
 <script lang="ts">

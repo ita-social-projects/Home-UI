@@ -1,7 +1,5 @@
 <template>
-  <li>
-    <div>{{ todo.title }}</div>
-  </li>
+  <li>{{ todo.title }}</li>
 </template>
 
 <script lang="ts">
