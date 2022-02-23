@@ -17,13 +17,13 @@ export default defineComponent({
   data() {
     return {
       todos: [
-        { id: 1, title: 'Bay a car' },
-        { id: 2, title: 'Bay a milk' },
+        { id: 1, title: 'Buy a car' },
+        { id: 2, title: 'Buy a milk' },
       ],
     };
   },
   methods: {
-    createTodo(todo) {
+    createTodo(todo: any) {
       this.todos.push(todo);
     },
   },

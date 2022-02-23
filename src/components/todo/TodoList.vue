@@ -1,16 +1,18 @@
 <template>
   <ol>
-    <post-item v-for="todo in todos" :key="todo.id" :todo="todo">
+    <todo-item v-for="todo in todos" :key="todo.id" :todo="todo">
       <span>{{ todo.title }}</span>
-    </post-item>
+    </todo-item>
   </ol>
 </template>
 
-<script>
-import PostItem from '@/components/todo/TodoItem.vue';
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+import TodoItem from '@/components/todo/TodoItem.vue';
+export default defineComponent({
+  name: 'TodoList',
   components: {
-    PostItem,
+    TodoItem,
   },
   props: {
     todos: {
@@ -18,7 +20,7 @@ export default {
       required: true,
     },
   },
-};
+});
 </script>
 
 <style></style>

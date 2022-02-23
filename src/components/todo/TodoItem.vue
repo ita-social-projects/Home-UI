@@ -3,14 +3,15 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue';
+export default defineComponent({
   props: {
     todo: {
       type: Object,
       required: true,
     },
   },
-};
+});
 </script>
 
 <style></style>

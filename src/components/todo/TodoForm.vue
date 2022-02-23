@@ -8,10 +8,12 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue';
+export default defineComponent({
   data() {
     return {
       todo: {
+        id: 0,
         title: '',
       },
     };
@@ -21,11 +23,12 @@ export default {
       this.todo.id = Date.now();
       this.$emit('create', this.todo);
       this.todo = {
+        id: 0,
         title: '',
       };
     },
   },
-};
+});
 </script>
 
 <style></style>
