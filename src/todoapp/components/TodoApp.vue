@@ -8,14 +8,13 @@
 </template>
 
 <script lang="ts">
-import TodoAppEdit from '@/todoapp/components/TodoAppEdit.vue';
-import TodoAppItem from './TodoAppItem.vue';
-
 import { defineComponent, computed } from 'vue';
-
 import { useStore } from 'vuex';
 import { StoreModuleEnum } from '@/store/types';
-import { TodoAppGettersEnum, TodoAppActionEnum } from '@/todoapp/store//types';
+import { TodoAppGettersEnum, TodoAppActionEnum } from '@/todoapp/store/types';
+import TodoAppEdit from '@/todoapp/components/TodoAppEdit.vue';
+import TodoAppItem from '@/todoapp/components/TodoAppItem.vue';
+
 export default defineComponent({
   name: 'TodoApp',
   components: {

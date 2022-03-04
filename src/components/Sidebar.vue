@@ -39,7 +39,7 @@ import BaseSidebarNavButton from '@/components/base/BaseSidebarNavButton.vue';
 import { RoutesEnum } from '@/router/types';
 import { UserInterface, AuthGettersEnum } from '@/store/authorization/types';
 import { StoreModuleEnum } from '@/store/types';
-import { TodoAppGettersEnum, TodoAppActionEnum } from '@/todoapp/store//types';
+import { TodoAppGettersEnum } from '@/todoapp/store/types';
 
 export default defineComponent({
   name: 'Sidebar',
@@ -64,7 +64,7 @@ export default defineComponent({
       return RoutesEnum.InvitationSection;
     },
     countUnfinishedTasks(): number {
-      return this.$store.getters[`${StoreModuleEnum.TodoAppStore}/${TodoAppGettersEnum.getCoutnFinishTasks}`];
+      return this.$store.getters[`${StoreModuleEnum.TodoAppStore}/${TodoAppGettersEnum.getCountDoneTasks}`];
     },
     todoAppSection(): string {
       return RoutesEnum.TodoAppSection;

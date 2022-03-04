@@ -16,12 +16,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-import Button from 'primevue/button';
-
 import { useStore } from 'vuex';
+import { defineComponent, PropType } from 'vue';
+import Button from 'primevue/button';
 import { StoreModuleEnum } from '@/store/types';
-import { TodoAppActionEnum } from '@/todoapp/store//types';
+import { TodoAppTaskInterface, TodoAppActionEnum } from '@/todoapp/store/types';
 
 export default defineComponent({
   name: 'TodoAppItem',
@@ -29,7 +28,7 @@ export default defineComponent({
     Button,
   },
   props: {
-    task: Object as any,
+    task: { required: true, type: Object as PropType<TodoAppTaskInterface> },
   },
   setup(props) {
     const store = useStore();

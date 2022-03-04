@@ -18,7 +18,7 @@ export enum TodoAppActionEnum {
 
 export enum TodoAppGettersEnum {
   getTasks = 'getTasks',
-  getCoutnFinishTasks = 'getCoutnFinishTasks',
+  getCountDoneTasks = 'getCountDoneTasks',
 }
 
 export interface TodoAppTaskInterface {
@@ -40,7 +40,7 @@ export type Mutations<S = TodoAppTaskStateInterface> = {
 
 export type Getters<S = TodoAppTaskStateInterface> = {
   [TodoAppGettersEnum.getTasks](state: S): Array<TodoAppTaskInterface>;
-  [TodoAppGettersEnum.getCoutnFinishTasks](state: S): number;
+  [TodoAppGettersEnum.getCountDoneTasks](state: S): number;
 };
 
 export interface Actions {

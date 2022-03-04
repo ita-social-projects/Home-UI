@@ -6,7 +6,8 @@ export const getters: GetterTree<TodoAppTaskStateInterface, RootStateInterface> 
   getTasks(state) {
     return state.tasks;
   },
-  getCoutnFinishTasks(state) {
+
+  getCountDoneTasks(state) {
     const result = state.tasks.filter((item) => item.state === false);
     return result.length;
   },

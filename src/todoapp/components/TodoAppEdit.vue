@@ -31,8 +31,12 @@ export default defineComponent({
     const addTask = () => {
       v$.value.$validate();
       if (!v$.value.$error) {
+        const crypto = window.crypto;
+        var array = new Uint32Array(1);
+        crypto.getRandomValues(array);
+        const taskId = array[0];
         const payload = {
-          id: Math.round(Math.random() * 1000),
+          id: taskId,
           title: data.task,
           state: false,
         };
