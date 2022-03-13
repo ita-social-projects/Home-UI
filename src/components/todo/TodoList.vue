@@ -1,6 +1,6 @@
 <template>
   <ol>
-    <todo-item v-for="todo in todos" :key="todo.id" :todo="todo">
+    <todo-item v-for="todo in todos" :key="todo.id" :todo="todo" @remove="$emit('remove', todo)">
       <span>{{ todo.title }}</span>
     </todo-item>
   </ol>

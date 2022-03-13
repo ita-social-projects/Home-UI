@@ -1,5 +1,8 @@
 <template>
-  <li>{{ todo.title }}</li>
+  <div class="wrapper">
+    <li>{{ todo.title }}</li>
+    <button class="btn-close" @click="$emit('remove', todo)">X</button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -14,4 +17,11 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style scoped>
+.wrapper {
+  display: flex;
+}
+.btn-close {
+  margin-left: 10px;
+}
+</style>

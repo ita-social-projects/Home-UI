@@ -1,7 +1,7 @@
 <template>
   <h1>My ToDO!</h1>
   <todo-form @create="createTodo" />
-  <todo-list :todos="todos" />
+  <todo-list :todos="todos" @remove="removeTodo" />
 </template>
 
 <script lang="ts">
@@ -25,6 +25,9 @@ export default defineComponent({
   methods: {
     createTodo(todo: any) {
       this.todos.push(todo);
+    },
+    removeTodo(todo: any) {
+      this.todos = this.todos.filter(t => t.id !== todo.id);
     },
   },
 
