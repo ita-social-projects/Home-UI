@@ -23,7 +23,7 @@
         :badge-counter="polls"
         badge-type="secondary"
       />
-      <BaseSidebarNavButton :link="todoPagePath" btn-text="ToDo" icon="pi-list" />
+      <BaseSidebarNavButton :link="todoPagePath" btn-text="ToDo" icon="pi-list" :badgeCounter="todo" />
     </nav>
   </div>
 </template>
@@ -42,6 +42,7 @@ export default defineComponent({
       userName: '',
       notifications: 2,
       polls: 1,
+      todo: 2,
     };
   },
   components: {

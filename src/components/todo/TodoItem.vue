@@ -1,13 +1,16 @@
 <template>
   <div class="wrapper">
-    <input type="checkbox" v-model="checkToggle">
-    <li v-bind:class="checkToggle ? 'done' : ''">{{ todo.title }}</li>
+    <input type="checkbox" v-model="checkToggle" />
+    <li :class="checkToggle ? 'done' : ''">{{ todo.title }}</li>
     <button class="btn-close" @click="$emit('remove', todo)">X</button>
+    
+    <!-- <Button icon="pi pi-times" class="p-button-sm p-button-rounded p-button-danger p-button-outlined" /> -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import Button from 'primevue/button';
 export default defineComponent({
   data() {
     return {
@@ -19,6 +22,9 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+  },
+  components: {
+    Button,
   },
 });
 </script>
