@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex';
 import { AuthorizationStateInterface, AuthActionEnum, AuthMutationEnum, Actions } from '@/store/authorization/types';
 import { RootStateInterface, StoreModuleEnum } from '@/store/types';
-import { HTTP } from '@/core/api/http-common';
+import { HTTP, HTTP_AUTH } from '@/core/api/http-common';
 import { UpdateUserModel } from '@/store/models/update-user.model';
 import { PostContactModel } from '@/store/models/post-contact.model';
 import { UserDTOModel } from './models/userDTO.model';
@@ -10,6 +10,16 @@ import { UserModel } from './models/user.model';
 export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface> & Actions = {
   [AuthActionEnum.SIGN_IN]: async ({ commit, dispatch }, payload) => {
     try {
+      console.log('start');
+
+      //------------------
+      const responseAUTH = await HTTP_AUTH.post('/login', {
+        email: 'admin@example.com',
+        password: 'mySuperStrongPass',
+      });
+      console.log(responseAUTH.data);
+
+      //--------------------
       const token = {
         email: payload.data.email,
         token: window.btoa(`${payload.data.email}:${payload.data.password}`),
