@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { authToken } from '@/core/interceptors';
+import axios, { AxiosResponse } from 'axios';
+import { authToken, notValideRefreshToken, notValideToken } from '@/core/interceptors';
 
 export const HTTP = axios.create({
   baseURL: 'https://home-project-academy.herokuapp.com/api/0',
@@ -17,3 +17,7 @@ export const HTTP_AUTH = axios.create({
 });
 
 HTTP.interceptors.request.use(authToken);
+HTTP.interceptors.response.use((response: AxiosResponse) => response, notValideToken);
+
+HTTP_AUTH.interceptors.response.use((res: AxiosResponse) => res, notValideRefreshToken);
+//add interceptor for check token
