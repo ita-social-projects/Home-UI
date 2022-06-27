@@ -26,13 +26,6 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
       if (response.data.length !== 0) {
         const user: Array<UserModel> = response.data.map((el: UserDTOModel) => new UserModel(el));
         commit(AuthMutationEnum.SET_USER, user[0]);
-
-        const currentToken = {
-          email: payload.data.email,
-          token: token.token,
-          id: user[0].id,
-        };
-
         dispatch(`${StoreModuleEnum.localStorageStore}/SET`, token, { root: true });
       }
 

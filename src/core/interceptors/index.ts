@@ -27,7 +27,7 @@ export const notValideToken = (error: AxiosError) => {
   }
   return Promise.reject(error);
 };
-export const notValideRefreshToken = (error: AxiosError) => {
+export const valideRefreshToken = (error: AxiosError) => {
   if (error.response?.status === 406) {
     localStorage.removeItem('user');
     location.href = '/login';

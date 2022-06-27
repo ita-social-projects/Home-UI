@@ -4,7 +4,6 @@ import { LocalStorageStateInterface, LocalStorageMutationEnum, Mutations } from 
 export const mutations: MutationTree<LocalStorageStateInterface> & Mutations = {
   [LocalStorageMutationEnum.SET_TOKEN]: (state, payload) => {
     localStorage.setItem('user', JSON.stringify(payload));
-    // add refresh token
     state.token = payload.token;
   },
   [LocalStorageMutationEnum.GET_TOKEN]: (state, payload) => {
