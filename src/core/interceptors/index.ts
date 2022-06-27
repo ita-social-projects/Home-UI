@@ -1,5 +1,11 @@
 import { AxiosRequestConfig, AxiosError } from 'axios';
 import { HTTP_AUTH } from '../api/http-common';
+import { AuthActionEnum } from '@/store/authorization/types';
+import { RoutesEnum } from '@/router/types';
+import { StoreModuleEnum } from '@/store/types';
+import { LocalStorageActionEnum } from '@/store/localstorage/types';
+import store from '@/store';
+import router from '@/router';
 
 export const authToken = (req: AxiosRequestConfig): AxiosRequestConfig => {
   const userData: string | null = localStorage.getItem('user');
@@ -12,7 +18,7 @@ export const authToken = (req: AxiosRequestConfig): AxiosRequestConfig => {
   return req;
 };
 
-export const notValideToken = (error: AxiosError) => {
+export const notValidToken = (error: AxiosError) => {
   if (error.response?.status === 401) {
     const userData: string | null = localStorage.getItem('user');
     if (userData != null) {
@@ -21,16 +27,24 @@ export const notValideToken = (error: AxiosError) => {
         refresh_token: user.refreshToken,
       }).then((response) => {
         user.token = response.data.access_token;
-        localStorage.setItem('user', JSON.stringify(user));
+        store.dispatch(`${StoreModuleEnum.localStorageStore}/${LocalStorageActionEnum.SET}`, user);
       });
     }
   }
   return Promise.reject(error);
 };
-export const valideRefreshToken = (error: AxiosError) => {
+export const notValidRefreshToken = (error: AxiosError) => {
   if (error.response?.status === 406) {
-    localStorage.removeItem('user');
-    location.href = '/login';
+    const payload = {
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      email: '',
+      id: 0,
+      contacts: [],
+    };
+    store.dispatch(`${StoreModuleEnum.authorizationStore}/${AuthActionEnum.SIGN_OUT}`, payload);
+    router.push(RoutesEnum.StartPage);
   }
   return Promise.reject(error);
 };
