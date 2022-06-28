@@ -20,4 +20,3 @@ HTTP.interceptors.request.use(authToken);
 HTTP.interceptors.response.use((response: AxiosResponse) => response, notValidToken);
 
 HTTP_AUTH.interceptors.response.use((res: AxiosResponse) => res, notValidRefreshToken);
-//add interceptor for check token
