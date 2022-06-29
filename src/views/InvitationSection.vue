@@ -34,8 +34,10 @@
         <Column field="email" style="min-width: 20rem" header="Email" :sortable="true" />
         <Column field="address" style="min-width: 25rem" header="Адреса" :sortable="true">
           <template #body="slotProps">
-            {{ slotProps.data.apartment.address.street }}, {{ slotProps.data.apartment.address.houseBlock }},
-            {{ slotProps.data.apartment.address.houseNumber }}
+            {{ slotProps.data.apartment.apartmentNumber }}, {{ slotProps.data.apartment.id }},
+            <!-- {{ slotProps.data.apartment?.address.street }}, -->
+            <!-- {{ slotProps.data.apartment.address.houseBlock }},
+            {{ slotProps.data.apartment.address.houseNumber }} -->
           </template>
         </Column>
         <Column field="status" style="min-width: 15rem" header="Статус" :sortable="true" />

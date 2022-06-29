@@ -22,6 +22,7 @@ export interface TokenInterface {
   id: number;
   email: string;
   token: string;
+  refreshToken: string;
 }
 
 export interface LocalStorageStateInterface {
