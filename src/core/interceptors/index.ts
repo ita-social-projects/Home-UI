@@ -49,13 +49,3 @@ export const notValidRefreshToken = (error: AxiosError) => {
   }
   return Promise.reject(error);
 };
-
-export const handleLoadingSpinnerOn = (req: AxiosRequestConfig) => {
-  console.log(this);
-  return req;
-};
-
-export const handleLoadingSpinnerOff = (response: AxiosResponse) => {
-  console.log(this);
-  return response;
-};

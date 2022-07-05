@@ -1,11 +1,11 @@
 <template>
-  <div class="loader-outer" v-if="isLoading">
+  <div class="loader-outer">
     <ProgressSpinner />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import ProgressSpinner from 'primevue/progressspinner';
 
 export default defineComponent({
@@ -14,17 +14,7 @@ export default defineComponent({
     ProgressSpinner,
   },
   setup() {
-    const isLoading = ref(false);
-
-    computed(() => {
-      return isLoading.value;
-    });
-
-    const toggleLoader = () => {
-      isLoading.value = !isLoading.value;
-    };
-
-    return { isLoading, toggleLoader };
+    return {};
   },
 });
 </script>
@@ -33,7 +23,7 @@ export default defineComponent({
 .loader-outer {
   display: grid;
   z-index: 1;
-  background: hsla(182, 48%, 64%, 0.7);
+  background: hsla(0, 0%, 25%, 0.7);
   position: fixed;
   height: 100vh;
   width: 100vw;
