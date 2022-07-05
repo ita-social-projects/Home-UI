@@ -1,4 +1,5 @@
 <template>
+  <LoaderSpinner />
   <Header />
   <Toast />
   <router-view />

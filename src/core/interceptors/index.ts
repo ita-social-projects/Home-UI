@@ -1,9 +1,10 @@
-import { AxiosRequestConfig, AxiosError } from 'axios';
+import { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
 import { HTTP_AUTH } from '../api/http-common';
 import { AuthActionEnum } from '@/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
 import { StoreModuleEnum } from '@/store/types';
 import { LocalStorageActionEnum } from '@/store/localstorage/types';
+
 import store from '@/store';
 import router from '@/router';
 
@@ -47,4 +48,14 @@ export const notValidRefreshToken = (error: AxiosError) => {
     router.push(RoutesEnum.StartPage);
   }
   return Promise.reject(error);
+};
+
+export const handleLoadingSpinnerOn = (req: AxiosRequestConfig) => {
+  console.log(this);
+  return req;
+};
+
+export const handleLoadingSpinnerOff = (response: AxiosResponse) => {
+  console.log(this);
+  return response;
 };

@@ -31,6 +31,7 @@ export const actions: ActionTree<InvitationsStateInterface, RootStateInterface> 
   [InvitationsActionsEnum.SET_APARTMENT_INVITATIONS]: async ({ commit }) => {
     try {
       const { data } = await HTTP.get(`/invitations?type=apartment`);
+
       const invitations: Array<InvitationModel> = data.map((el: InvitationDTOModel) => new InvitationModel(el));
 
       commit(InvitationsMutationsEnum.SET_APARTMENT_INVITATIONS, invitations);
