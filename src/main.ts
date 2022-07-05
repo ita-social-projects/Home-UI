@@ -20,25 +20,3 @@ app.use(ToastService);
 app.use(ConfirmationService);
 app.component('LoaderSpinner', LoaderSpinner);
 app.mount('#app');
-
-// app.component('LoaderSpinner', {
-//   data() {
-//     return {
-//       isLoading: false,
-//     };
-//   },
-//   name: 'LoaderSpinner',
-//   components: {
-//     ProgressSpinner,
-//   },
-//   template: `
-//     <div class="loader-outer" v-if="isLoading">
-//       <ProgressSpinner />
-//     </div>
-//   `,
-//   watch: {
-//     toggleLoader() {
-//       return (this.isLoading = !this.isLoading);
-//     },
-//   },
-// });
