@@ -1,67 +1,95 @@
 <template>
   <form @submit.prevent="createPoll()" id="poll_data_form">
     <div class="input-section">
-      <label class="dialog-item" for="poll_title">Заголовок: </label>
-      <Textarea
-        v-model.trim="pollData.title"
-        :class="{
-          'p-invalid': v$.pollData.title.$error,
-        }"
-        class="input-poll"
-        id="poll_title"
-        placeholder="Заголовок"
-        rows="3"
-        @input="v$.pollData.title.$touch"
-      />
+      <section>
+        <label class="dialog-item" for="poll_title">Заголовок: </label>
+        <Textarea
+          v-model.trim="pollData.title"
+          :class="{
+            'p-invalid': v$.pollData.title.$error,
+          }"
+          class="input-poll"
+          id="poll_title"
+          placeholder="Заголовок"
+          rows="3"
+          @input="v$.pollData.title.$touch"
+        />
+      </section>
       <small v-if="v$.pollData.title.$error" id="poll_title" class="p-error">{{
         v$.pollData.title.$errors[0].$message
       }}</small>
     </div>
     <div class="input-section">
-      <label class="dialog-item" for="poll_description">Опис: </label>
-      <Textarea
-        v-model.trim="pollData.description"
-        :class="{
-          'p-invalid': v$.pollData.description.$error,
-        }"
-        id="poll_description"
-        placeholder="Детальний опис"
-        rows="8"
-        @input="v$.pollData.description.$touch"
-      />
+      <section>
+        <label class="dialog-item" for="poll_description">Опис: </label>
+        <Textarea
+          v-model.trim="pollData.description"
+          :class="{
+            'p-invalid': v$.pollData.description.$error,
+          }"
+          id="poll_description"
+          placeholder="Детальний опис"
+          rows="8"
+          @input="v$.pollData.description.$touch"
+        />
+      </section>
       <small v-if="v$.pollData.description.$error" id="poll_description" class="p-error">{{
         v$.pollData.description.$errors[0].$message
       }}</small>
     </div>
     <div class="input-section">
-      <label class="dialog-item" for="poll_polledHouses">Список будинків: </label>
-      <div class="checkbox-section">
-        <div v-for="(house, index) of houses" :key="house.id" class="p-field-checkbox">
-          <Checkbox v-model="pollData.polledHouses" :id="house.id" :value="house" name="category" />
-          <label :for="house.id" class="house-label">
-            {{ houseAddresses[index] }}
-          </label>
+      <section>
+        <label class="dialog-item" for="poll_polledHouses">Список будинків: </label>
+        <div class="checkbox-section">
+          <div v-for="(house, index) of houses" :key="house.id" class="p-field-checkbox">
+            <Checkbox v-model="pollData.polledHouses" :id="house.id" :value="house" name="category" />
+            <label :for="house.id" class="house-label">
+              {{ houseAddresses[index] }}
+            </label>
+          </div>
         </div>
-      </div>
+      </section>
       <small v-if="v$.pollData.polledHouses.$error" id="poll_polledHouses" class="p-error">{{
         v$.pollData.polledHouses.$errors[0].$message
       }}</small>
     </div>
     <div class="input-section">
-      <label class="dialog-item" for="caledar-begin">Дата початку:</label>
-      <Calendar
-        v-model="startDate"
-        :showIcon="true"
-        :minDate="minDate"
-        id="caledar-begin"
-        dateFormat="dd.mm.yy"
-        @date-select="ChangeDate"
-      />
+      <section>
+        <label class="dialog-item" for="caledar-begin">Дата початку:</label>
+        <Calendar
+          v-model="startDate"
+          :showIcon="true"
+          :minDate="minDate"
+          id="caledar-begin"
+          dateFormat="dd.mm.yy"
+          @date-select="ChangeDate"
+        />
+      </section>
     </div>
     <div class="input-section">
-      <label class="dialog-item" for="calendar-finish">Дата закінчення:</label>
-      <InputText :value="pollData.completionDate" id="calendar-finish" disabled="true"></InputText>
+      <section>
+        <label class="dialog-item" for="calendar-finish">Дата закінчення:</label>
+        <InputText :value="pollData.completionDate" id="calendar-finish" disabled="true"></InputText>
+      </section>
       <small id="apartment_area_help" class="p-warning">виставляється автоматично 15 днів з дати початку</small>
+    </div>
+    <div class="option-section">
+      <div v-for="item in pollAcceptanceCriteriaEnum" :key="item.name">
+        <RadioButton
+          :name="item.name"
+          :value="item.value"
+          v-model="pollData.acceptanceCriteria"
+          :id="item.name"
+          :class="{
+            'p-invalid': v$.pollData.acceptanceCriteria.$error,
+          }"
+          class="radio-button"
+        ></RadioButton>
+        <label for="item.name">{{ item.value }}</label>
+      </div>
+      <small v-if="v$.pollData.acceptanceCriteria.$error" id="poll_title" class="p-error">{{
+        v$.pollData.acceptanceCriteria.$errors[0].$message
+      }}</small>
     </div>
     <div class="button-div">
       <Button
@@ -91,12 +119,13 @@ import Textarea from 'primevue/textarea';
 import Checkbox from 'primevue/checkbox';
 import Calendar from 'primevue/calendar';
 import InputText from 'primevue/inputtext';
+import RadioButton from 'primevue/radiobutton';
 import useVuelidate from '@vuelidate/core';
 import { pollValidations } from '@/utils/poll-validations';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { HouseModel } from '@/houses/models/house.model';
-import { PollsActionEnum } from '@/store/polls/types';
+import { PollsActionEnum, PollAcceptanceCriteria } from '@/store/polls/types';
 
 export default defineComponent({
   name: 'CreatePollForm',
@@ -106,6 +135,7 @@ export default defineComponent({
     Checkbox,
     Calendar,
     InputText,
+    RadioButton,
   },
   props: {
     cooperationId: {
@@ -114,6 +144,12 @@ export default defineComponent({
     },
   },
   data() {
+    const pollAcceptanceCriteriaEnum = Object.keys(PollAcceptanceCriteria).map((name) => {
+      return {
+        name,
+        value: PollAcceptanceCriteria[name as keyof typeof PollAcceptanceCriteria],
+      };
+    });
     return {
       pollData: {
         title: '',
@@ -121,6 +157,7 @@ export default defineComponent({
         polledHouses: [] as Array<HouseModel>,
         creationDate: new Date(),
         completionDate: '',
+        acceptanceCriteria: '',
       },
       startDate: null,
       finishDate: new Date(),
@@ -128,6 +165,7 @@ export default defineComponent({
       minDate: new Date(),
       submitted: false,
       v$: useVuelidate(),
+      pollAcceptanceCriteriaEnum,
     };
   },
   validations() {
@@ -162,6 +200,7 @@ export default defineComponent({
       this.pollData.polledHouses = [];
       this.pollData.creationDate = new Date();
       this.pollData.completionDate = '';
+      this.pollData.acceptanceCriteria = '';
     },
     ChangeDate(value: Date) {
       this.pollData.creationDate = value;
@@ -184,6 +223,7 @@ export default defineComponent({
           description: this.pollData.description,
           creationDate: '',
           completionDate: '',
+          acceptanceCriteria: this.pollData.acceptanceCriteria,
         },
       };
       if (this.startDate !== null) {
@@ -222,7 +262,7 @@ export default defineComponent({
 }
 
 #calendar-finish {
-  width: 200px;
+  width: 230px;
 }
 
 .p-disabled,
@@ -243,8 +283,16 @@ export default defineComponent({
 }
 .input-section {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   margin-bottom: 30px;
+}
+.input-section section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.input-section small {
+  justify-self: flex-end;
 }
 .checkbox-section {
   border: 1px solid #d4d4d8;
@@ -260,16 +308,12 @@ export default defineComponent({
 }
 .p-error {
   display: flex;
-  position: absolute;
-  justify-content: right;
-  margin: -26px -25px 0 -50px;
   @extend %error-message;
 }
 
 .p-warning {
   display: flex;
-  position: absolute;
-  justify-content: left;
+  flex-direction: column;
   width: 200px;
   color: #3b82f6;
   margin: 25px 0 0 0;
@@ -297,5 +341,11 @@ export default defineComponent({
 }
 .p-monthpicker {
   left: 590px;
+}
+.option-section div {
+  padding-bottom: 15px;
+}
+.radio-button {
+  margin-right: 15px;
 }
 </style>

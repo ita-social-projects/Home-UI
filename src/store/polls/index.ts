@@ -16,6 +16,7 @@ export const state: PollsStateInterface = {
     polledHouses: [],
     status: 'active',
     type: '',
+    acceptanceCriteria: '',
   },
   displayModal: false,
 };

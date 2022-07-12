@@ -95,3 +95,9 @@ export type PollStatusType = 'draft' | 'active' | 'completed' | 'suspended';
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
 } & Omit<ActionContext<PollsStateInterface, RootStateInterface>, 'commit'>;
+
+export enum PollAcceptanceCriteria {
+  twoThirdsVoteOfOwnersQuestions = 'Рішення про визначення переліку та розмірів внесків і платежів співвласників, порядок управління та користування спільним майном, передачу у користування фізичним та юридичним особам спільного майна, а також про реконструкцію та капітальний ремонт багатоквартирного будинку або зведення господарських споруд вважається прийнятим, якщо за нього проголосувало не менш як дві третини загальної кількості усіх співвласників',
+  notProvidedStatusQuestions = 'Ті самі питання, але не передбачені Статутом ОСББ',
+  otherQuestions = 'Інші питання',
+}
