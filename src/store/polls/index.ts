@@ -18,6 +18,7 @@ export const state: PollsStateInterface = {
     type: '',
   },
   displayModal: false,
+  cooperationPollsWithResults: [],
 };
 
 export const pollsStore: Module<PollsStateInterface, RootStateInterface> = {
