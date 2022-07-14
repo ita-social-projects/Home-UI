@@ -28,15 +28,15 @@
         <template #header>
           <span class="p-input-icon-right search-field">
             <i class="pi pi-search" />
-            <InputText placeholder="Введіть електронну адресу" />
+            <InputText @input="searchEmail" v-model="searchQuery" placeholder="Введіть електронну адресу" />
           </span>
         </template>
         <Column field="email" style="min-width: 20rem" header="Email" :sortable="true" />
         <Column field="address" style="min-width: 25rem" header="Адреса" :sortable="true">
           <template #body="slotProps">
             {{ slotProps.data.apartment.apartmentNumber }}, {{ slotProps.data.apartment.id }},
-            <!-- {{ slotProps.data.apartment?.address.street }}, -->
-            <!-- {{ slotProps.data.apartment.address.houseBlock }},
+            <!-- {{ slotProps.data.apartment.address.street }}, 
+            {{ slotProps.data.apartment.address.houseBlock }},
             {{ slotProps.data.apartment.address.houseNumber }} -->
           </template>
         </Column>
@@ -91,6 +91,7 @@ export default defineComponent({
   },
   data() {
     return {
+      searchQuery: '',
       title: 'Список запрошень',
       invitationActions: () => {
         return [
@@ -139,6 +140,15 @@ export default defineComponent({
         invitationItem.status = `${InvitationStatusEnum[status]}`;
         return invitationItem;
       });
+    },
+
+    searchEmail() {
+      this.$store
+        .dispatch(
+          `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.SET_APARTMENT_INVITATIONS}`,
+          this.searchQuery
+        )
+        .then(() => this.correctStatus());
     },
   },
   computed: {

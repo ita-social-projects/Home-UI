@@ -28,10 +28,24 @@ export const actions: ActionTree<InvitationsStateInterface, RootStateInterface> 
       console.log('error CREATE_INVITATION', err);
     }
   },
-  [InvitationsActionsEnum.SET_APARTMENT_INVITATIONS]: async ({ commit }) => {
+  [InvitationsActionsEnum.SET_APARTMENT_INVITATIONS]: async ({ commit }, payload) => {
     try {
-      const { data } = await HTTP.get(`/invitations?type=apartment`);
-      const invitations: Array<InvitationModel> = data.map((el: InvitationDTOModel) => new InvitationModel(el));
+      let response;
+      if (!payload) {
+        response = await HTTP.get(`/invitations?type=apartment`);
+      } else {
+        response = await HTTP.get(`/invitations?type=apartment`, {
+          params: {
+            page_number: 1,
+            page_size: 10,
+            email: `*${payload}*`,
+          },
+        });
+      }
+
+      const invitations: Array<InvitationModel> = response.data.map(
+        (el: InvitationDTOModel) => new InvitationModel(el)
+      );
 
       commit(InvitationsMutationsEnum.SET_APARTMENT_INVITATIONS, invitations);
     } catch (err: any) {
