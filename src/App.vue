@@ -1,14 +1,16 @@
 <template>
-  <LoaderSpinner />
+  <LoaderSpinner :isLoading="isLoading" />
   <Header />
   <Toast />
   <router-view />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import Header from '@/components/Header.vue';
 import Toast from 'primevue/toast';
+import { HTTP, HTTP_AUTH } from '@/core/api/http-common';
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export default defineComponent({
   name: 'app',
@@ -17,7 +19,49 @@ export default defineComponent({
     Toast,
   },
   setup() {
-    return {};
+    const isLoading = ref(false);
+
+    HTTP.interceptors.request.use(
+      (req: AxiosRequestConfig) => {
+        isLoading.value = true;
+        return req;
+      },
+      (error: AxiosError) => {
+        isLoading.value = false;
+        return error;
+      }
+    );
+    HTTP.interceptors.response.use(
+      (response: AxiosResponse) => {
+        isLoading.value = false;
+        return response;
+      },
+      (error: AxiosError) => {
+        isLoading.value = false;
+        return error;
+      }
+    );
+    HTTP_AUTH.interceptors.request.use(
+      (req: AxiosRequestConfig) => {
+        isLoading.value = true;
+        return req;
+      },
+      (error: AxiosError) => {
+        isLoading.value = false;
+        return error;
+      }
+    );
+    HTTP_AUTH.interceptors.response.use(
+      (response: AxiosResponse) => {
+        isLoading.value = false;
+        return response;
+      },
+      (error: AxiosError) => {
+        isLoading.value = false;
+        return error;
+      }
+    );
+    return { isLoading };
   },
 });
 </script>
