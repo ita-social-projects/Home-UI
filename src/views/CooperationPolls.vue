@@ -54,8 +54,6 @@ export default defineComponent({
     };
   },
   mounted() {
-    // this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_COOPERATION_POLLS}`,
-    //  this.cooperationId);
     this.$store.dispatch(
       `${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_COOPERATION_POLLS_WITH_RESULTS}`,
       this.cooperationId
@@ -68,7 +66,6 @@ export default defineComponent({
       ];
     },
     cooperationPolls(): Array<PollModel> {
-      // return this.$store.getters[`${StoreModuleEnum.pollsStore}/${PollsGettersEnum.getPolls}`];
       return this.$store.getters[`${StoreModuleEnum.pollsStore}/${PollsGettersEnum.getPollsWithResults}`];
     },
     displayCreatePollModal(): boolean {

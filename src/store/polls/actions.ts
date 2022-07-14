@@ -39,7 +39,6 @@ export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Acti
 
   [PollsActionEnum.ADD_COOPERATION_POLL]: async ({ commit }, payload) => {
     try {
-      console.log(payload);
       const body = new PollDTOModel(payload.body);
       const url = `/cooperations/${payload.cooperationId}/polls`;
       const { data } = await HTTP.post(url, body);
