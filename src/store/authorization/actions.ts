@@ -32,7 +32,7 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
           id: user[0].id,
         };
         commit(AuthMutationEnum.SET_USER, user[0]);
-        dispatch(`${StoreModuleEnum.localStorageStore}/SET`, currentToken, { root: true });
+        dispatch(`${StoreModuleEnum.localStorageStore}/SET`, { ...token, id: user[0].id }, { root: true });
       }
 
       payload.successCallback(response);
