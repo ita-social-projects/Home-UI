@@ -74,18 +74,18 @@
       <small id="apartment_area_help" class="p-warning">виставляється автоматично 15 днів з дати початку</small>
     </div>
     <div class="option-section">
-      <div v-for="item in pollAcceptanceCriteriaEnum" :key="item.name">
+      <div v-for="(item, key) in PollAcceptanceCriteriaEnum" :key="key">
         <RadioButton
-          :name="item.name"
-          :value="item.value"
+          :name="key"
+          :value="item"
           v-model="pollData.acceptanceCriteria"
-          :id="item.name"
+          :id="key"
           :class="{
             'p-invalid': v$.pollData.acceptanceCriteria.$error,
           }"
           class="radio-button"
         ></RadioButton>
-        <label for="item.name">{{ item.value }}</label>
+        <label for="item.name">{{ item }}</label>
       </div>
       <small v-if="v$.pollData.acceptanceCriteria.$error" id="poll_title" class="p-error">{{
         v$.pollData.acceptanceCriteria.$errors[0].$message
@@ -125,7 +125,7 @@ import { pollValidations } from '@/utils/poll-validations';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { HouseModel } from '@/houses/models/house.model';
-import { PollsActionEnum, PollAcceptanceCriteria } from '@/store/polls/types';
+import { PollsActionEnum, PollAcceptanceCriteriaEnum } from '@/store/polls/types';
 
 export default defineComponent({
   name: 'CreatePollForm',
@@ -144,12 +144,6 @@ export default defineComponent({
     },
   },
   data() {
-    const pollAcceptanceCriteriaEnum = Object.keys(PollAcceptanceCriteria).map((name) => {
-      return {
-        name,
-        value: PollAcceptanceCriteria[name as keyof typeof PollAcceptanceCriteria],
-      };
-    });
     return {
       pollData: {
         title: '',
@@ -165,7 +159,7 @@ export default defineComponent({
       minDate: new Date(),
       submitted: false,
       v$: useVuelidate(),
-      pollAcceptanceCriteriaEnum,
+      PollAcceptanceCriteriaEnum,
     };
   },
   validations() {
