@@ -11,6 +11,7 @@ export class PollDTOModel {
   public polled_houses: HouseDTOModel[];
   public status: PollStatusType;
   public type: string;
+  public acceptanceCriteria: string;
 
   constructor(poll: PollModel) {
     this.id = poll.id;
@@ -21,6 +22,7 @@ export class PollDTOModel {
     this.status = poll.status;
     this.type = poll.type;
     this.polled_houses = poll.polledHouses.map((el) => new HouseDTOModel(el));
+    this.acceptanceCriteria = poll.acceptanceCriteria;
   }
 }
 
