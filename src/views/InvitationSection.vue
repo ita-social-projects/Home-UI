@@ -28,7 +28,7 @@
         <template #header>
           <span class="p-input-icon-right search-field">
             <i class="pi pi-search" />
-            <InputText @input="searchEmail" v-model="searchQuery" placeholder="Введіть електронну адресу" />
+            <InputText @input="debounceSearch" v-model="searchQuery" placeholder="Введіть електронну адресу" />
           </span>
         </template>
         <Column field="email" style="min-width: 20rem" header="Email" :sortable="true" />
@@ -92,6 +92,7 @@ export default defineComponent({
   data() {
     return {
       searchQuery: '',
+      debounce: 0,
       title: 'Список запрошень',
       invitationActions: () => {
         return [
@@ -150,7 +151,14 @@ export default defineComponent({
         )
         .then(() => this.correctStatus());
     },
+    debounceSearch() {
+      clearTimeout(this.debounce);
+      this.debounce = setTimeout(() => {
+        this.searchEmail();
+      }, 500);
+    },
   },
+
   computed: {
     ...mapGetters({
       invitationsList: `${StoreModuleEnum.invitationsStore}/${InvitationsGettersEnum.getInvitations}`,

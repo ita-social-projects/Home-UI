@@ -30,18 +30,9 @@ export const actions: ActionTree<InvitationsStateInterface, RootStateInterface> 
   },
   [InvitationsActionsEnum.SET_APARTMENT_INVITATIONS]: async ({ commit }, payload) => {
     try {
-      let response;
-      if (!payload) {
-        response = await HTTP.get(`/invitations?type=apartment`);
-      } else {
-        response = await HTTP.get(`/invitations?type=apartment`, {
-          params: {
-            page_number: 1,
-            page_size: 10,
-            email: `*${payload}*`,
-          },
-        });
-      }
+      const params = payload ? { email: `*${payload}*` } : {};
+
+      const response = await HTTP.get(`/invitations?type=apartment`, { params });
 
       const invitations: Array<InvitationModel> = response.data.map(
         (el: InvitationDTOModel) => new InvitationModel(el)
