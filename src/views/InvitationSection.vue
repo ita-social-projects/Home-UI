@@ -92,7 +92,7 @@ export default defineComponent({
   data() {
     return {
       searchQuery: '',
-      debounce: 0,
+      debounceTimer: 0,
       title: 'Список запрошень',
       invitationActions: () => {
         return [
@@ -152,10 +152,8 @@ export default defineComponent({
         .then(() => this.correctStatus());
     },
     debounceSearch() {
-      clearTimeout(this.debounce);
-      this.debounce = setTimeout(() => {
-        this.searchEmail();
-      }, 500);
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(this.searchEmail, 500);
     },
   },
 
