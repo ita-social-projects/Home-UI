@@ -32,6 +32,17 @@
         <span>Дата завершення:</span>
         <div>{{ poll.completionDate.toLocaleString('uk-UA') }}</div>
       </div>
+
+      <div class="poll-field">
+        <span>Результати опитування:</span>
+        <div>
+          <i class="pi pi-thumbs-up" style="color: green"></i>&nbsp; {{ poll.results.yes }} &nbsp; &nbsp;<i
+            class="pi pi-thumbs-down"
+            style="color: red"
+          ></i
+          >&nbsp; {{ poll.results.no }}
+        </div>
+      </div>
     </div>
   </article>
 
@@ -55,7 +66,7 @@
 <script lang="ts">
 import { defineComponent, VueElement } from 'vue';
 import { mapGetters } from 'vuex';
-import { PollModel } from '@/store/polls/models/poll.model';
+import { PollModelWithResults } from '@/store/polls/models/poll.model';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 import { StoreModuleEnum } from '@/store/types';
@@ -76,7 +87,7 @@ export default defineComponent({
   },
   props: {
     poll: {
-      type: PollModel,
+      type: PollModelWithResults,
       required: true,
     },
   },

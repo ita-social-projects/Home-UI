@@ -33,4 +33,12 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.p-breadcrumb a:hover {
+  cursor: pointer;
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
+}
+.active-link {
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 1);
+}
+</style>

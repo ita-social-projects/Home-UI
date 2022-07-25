@@ -28,11 +28,15 @@ export const actions: ActionTree<InvitationsStateInterface, RootStateInterface> 
       console.log('error CREATE_INVITATION', err);
     }
   },
-  [InvitationsActionsEnum.SET_APARTMENT_INVITATIONS]: async ({ commit }) => {
+  [InvitationsActionsEnum.SET_APARTMENT_INVITATIONS]: async ({ commit }, payload) => {
     try {
-      const { data } = await HTTP.get(`/invitations?type=apartment`);
+      const params = payload ? { email: `*${payload}*` } : {};
 
-      const invitations: Array<InvitationModel> = data.map((el: InvitationDTOModel) => new InvitationModel(el));
+      const response = await HTTP.get(`/invitations?type=apartment`, { params });
+
+      const invitations: Array<InvitationModel> = response.data.map(
+        (el: InvitationDTOModel) => new InvitationModel(el)
+      );
 
       commit(InvitationsMutationsEnum.SET_APARTMENT_INVITATIONS, invitations);
     } catch (err: any) {
