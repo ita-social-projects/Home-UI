@@ -105,7 +105,7 @@ import store from '@/store';
 import { UserStateInterface, UserActionEnum, UserGettersEnum } from '@/store/user/types';
 import { useToast } from 'primevue/usetoast';
 import { StoreModuleEnum } from '@/store/types';
-import { ContactTypeEnum, ContactTypeEnumString } from '@/store/authorization/types';
+import { ContactTypeEnum } from '@/store/authorization/types';
 
 export default defineComponent({
   name: 'userRegistration',
