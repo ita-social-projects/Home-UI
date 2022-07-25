@@ -1,6 +1,6 @@
-import { PollStatusType } from '@/store/polls/types';
+import { PollStatusType, PollsResults } from '@/store/polls/types';
 import { HouseModel } from '@/houses/models/house.model';
-import { PollDTOModel } from '@/store/polls/models/pollDTO.model';
+import { PollDTOModel, PollDTOModelWithResults } from '@/store/polls/models/pollDTO.model';
 
 export class PollModel {
   public id: number;
@@ -11,6 +11,7 @@ export class PollModel {
   public polledHouses: HouseModel[];
   public status: PollStatusType;
   public type: string;
+  public acceptanceCriteria: string;
 
   constructor(poll: PollDTOModel) {
     this.id = poll.id;
@@ -21,5 +22,14 @@ export class PollModel {
     this.status = poll.status;
     this.type = poll.type;
     this.polledHouses = poll.polled_houses.map((el) => new HouseModel(el));
+    this.acceptanceCriteria = poll.acceptanceCriteria;
+  }
+}
+export class PollModelWithResults extends PollModel {
+  public results: PollsResults;
+
+  constructor(poll: PollDTOModelWithResults) {
+    super(poll);
+    this.results = { yes: 50, no: 50 };
   }
 }

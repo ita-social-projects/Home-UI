@@ -28,14 +28,16 @@
         <template #header>
           <span class="p-input-icon-right search-field">
             <i class="pi pi-search" />
-            <InputText placeholder="Введіть електронну адресу" />
+            <InputText @input="debounceSearch" v-model="searchQuery" placeholder="Введіть електронну адресу" />
           </span>
         </template>
         <Column field="email" style="min-width: 20rem" header="Email" :sortable="true" />
         <Column field="address" style="min-width: 25rem" header="Адреса" :sortable="true">
           <template #body="slotProps">
-            {{ slotProps.data.apartment.address.street }}, {{ slotProps.data.apartment.address.houseBlock }},
-            {{ slotProps.data.apartment.address.houseNumber }}
+            {{ slotProps.data.apartment.apartmentNumber }}, {{ slotProps.data.apartment.id }},
+            <!-- {{ slotProps.data.apartment.address.street }}, 
+            {{ slotProps.data.apartment.address.houseBlock }},
+            {{ slotProps.data.apartment.address.houseNumber }} -->
           </template>
         </Column>
         <Column field="status" style="min-width: 15rem" header="Статус" :sortable="true" />
@@ -89,6 +91,8 @@ export default defineComponent({
   },
   data() {
     return {
+      searchQuery: '',
+      debounceTimer: 0,
       title: 'Список запрошень',
       invitationActions: () => {
         return [
@@ -138,7 +142,21 @@ export default defineComponent({
         return invitationItem;
       });
     },
+
+    searchEmail() {
+      this.$store
+        .dispatch(
+          `${StoreModuleEnum.invitationsStore}/${InvitationsActionsEnum.SET_APARTMENT_INVITATIONS}`,
+          this.searchQuery
+        )
+        .then(() => this.correctStatus());
+    },
+    debounceSearch() {
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(this.searchEmail, 500);
+    },
   },
+
   computed: {
     ...mapGetters({
       invitationsList: `${StoreModuleEnum.invitationsStore}/${InvitationsGettersEnum.getInvitations}`,

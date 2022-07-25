@@ -29,9 +29,10 @@ export enum InvitationStatusEnum {
   pending = 'очікує схвалення',
   processing = 'запрошення створено',
   accepted = 'запрошення прийнято',
+  overdue = 'запрошення прострочене',
 }
 
-export type InvitationStatusType = 'pending' | 'processing' | 'accepted';
+export type InvitationStatusType = 'pending' | 'processing' | 'accepted' | 'overdue';
 
 export interface InvitationInterface {
   type: string;
