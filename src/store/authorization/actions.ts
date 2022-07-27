@@ -1,6 +1,6 @@
 import { ActionTree } from 'vuex';
 import { AuthorizationStateInterface, AuthActionEnum, AuthMutationEnum, Actions } from '@/store/authorization/types';
-import { ErrorsActionEnum } from '../errors/types';
+import { ErrorsActionEnum } from '@/core/errors/store/types';
 import { RootStateInterface, StoreModuleEnum } from '@/store/types';
 import { HTTP, HTTP_AUTH } from '@/core/api/http-common';
 import { UpdateUserModel } from '@/store/models/update-user.model';
@@ -33,13 +33,7 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
       payload.successCallback(response);
     } catch (err: any) {
       payload.errorCallback(err);
-      const errorMessage = err.response.data.error_message;
-      const errorStatus = err.response.status;
-      dispatch(
-        `${StoreModuleEnum.errorsStore}/${ErrorsActionEnum.SET_ERROR_ACTION}`,
-        { errorMessage, errorStatus },
-        { root: true }
-      );
+      dispatch(`${StoreModuleEnum.errorsStore}/${ErrorsActionEnum.SET_ERROR_ACTION}`, err, { root: true });
     }
   },
   [AuthActionEnum.GET_DATA]: async ({ commit }, payload) => {

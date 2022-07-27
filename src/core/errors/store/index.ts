@@ -1,15 +1,12 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { ErrorsStateInterface } from '@/store/errors/types';
-import { getters } from '@/store/errors/getters';
-import { mutations } from '@/store/errors/mutations';
-import { actions } from '@/store/errors/actions';
+import { ErrorsStateInterface } from '@/core/errors/store/types';
+import { getters } from '@/core/errors/store/getters';
+import { mutations } from '@/core/errors/store/mutations';
+import { actions } from '@/core/errors/store/actions';
 
 export const state: ErrorsStateInterface = {
-  error: {
-    errorMessage: null,
-    errorStatus: null,
-  },
+  errorsList: [],
 };
 
 export const errorsStore: Module<ErrorsStateInterface, RootStateInterface> = {

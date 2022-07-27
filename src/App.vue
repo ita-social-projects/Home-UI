@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <ErrorsNotify />
+  <MessagePlaceholder />
   <Toast />
   <router-view />
 </template>
@@ -9,14 +9,14 @@
 import { defineComponent } from 'vue';
 import Header from '@/components/Header.vue';
 import Toast from 'primevue/toast';
-import ErrorsNotify from '@/components/ErrorsNotify.vue';
+import MessagePlaceholder from '@/core/errors/MessagePlaceholder.vue';
 
 export default defineComponent({
   name: 'app',
   components: {
     Header,
     Toast,
-    ErrorsNotify,
+    MessagePlaceholder,
   },
 });
 </script>
