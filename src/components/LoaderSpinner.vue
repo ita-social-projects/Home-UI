@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import ProgressSpinner from 'primevue/progressspinner';
 
 export default defineComponent({
@@ -13,14 +13,13 @@ export default defineComponent({
   components: {
     ProgressSpinner,
   },
-  props: {
-    isLoading: {
-      type: Boolean,
-      required: true,
-    },
-  },
   setup() {
     return {};
+  },
+  data() {
+    return {
+      isLoading: this.$isLoading,
+    };
   },
 });
 </script>

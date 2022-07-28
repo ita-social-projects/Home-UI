@@ -1,5 +1,5 @@
 <template>
-  <LoaderSpinner :isLoading="isLoading" />
+  <LoaderSpinner />
   <Header />
   <Toast />
   <router-view />
@@ -15,11 +15,6 @@ export default defineComponent({
   components: {
     Header,
     Toast,
-  },
-  data() {
-    return {
-      isLoading: this.$isLoading,
-    };
   },
   setup() {
     return {};
