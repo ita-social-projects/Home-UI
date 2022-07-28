@@ -1,4 +1,5 @@
 <template>
+  <LoaderSpinner />
   <Header />
   <Toast />
   <router-view />
@@ -14,6 +15,9 @@ export default defineComponent({
   components: {
     Header,
     Toast,
+  },
+  setup() {
+    return {};
   },
 });
 </script>
