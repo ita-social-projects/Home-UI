@@ -6,8 +6,7 @@ import { HTTP } from '@/core/api/http-common';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
-import toggleSpinner from '@/plugins/toggleSpinner';
-import LoaderSpinner from './components/LoaderSpinner.vue';
+import LoaderSpinner from './core/LoaderSpinner.vue';
 import App from './App.vue';
 import '@/styles/style.scss';
 
@@ -19,6 +18,5 @@ app.use(router);
 app.use(PrimeVue);
 app.use(ToastService);
 app.use(ConfirmationService);
-app.use(toggleSpinner);
 app.component('LoaderSpinner', LoaderSpinner);
 app.mount('#app');
