@@ -1,4 +1,4 @@
-import { PostInvitationInterface } from '../types';
+import { PostInvitationInterface } from '../store/types';
 
 export class PostInvitationDTOModel {
   public type: string;

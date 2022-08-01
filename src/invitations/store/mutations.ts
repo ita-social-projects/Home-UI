@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { InvitationsStateInterface, InvitationsMutationsEnum, Mutations } from '@/store/invitations/types';
+import { InvitationsStateInterface, InvitationsMutationsEnum, Mutations } from '@/invitations/store/types';
 
 export const mutations: MutationTree<InvitationsStateInterface> & Mutations = {
   [InvitationsMutationsEnum.CREATE_INVITATION]: (state, payload) => {

@@ -5,11 +5,11 @@ import {
   InvitationsMutationsEnum,
   InvitationsActionsEnum,
   Actions,
-} from '@/store/invitations/types';
+} from '@/invitations/store/types';
 import { HTTP } from '@/core/api/http-common';
-import { InvitationModel } from '@/store/invitations/models/invitations.model';
-import { PostInvitationDTOModel } from './models/post-invitation.DTOmodel';
-import { InvitationDTOModel } from '@/store/invitations/models/invitationsDTO.model';
+import { InvitationModel } from '@/invitations/models/invitations.model';
+import { PostInvitationDTOModel } from '../models/post-invitation.DTOmodel';
+import { InvitationDTOModel } from '@/invitations/models/invitationsDTO.model';
 
 export const actions: ActionTree<InvitationsStateInterface, RootStateInterface> & Actions = {
   [InvitationsActionsEnum.CREATE_INVITATION]: async ({ commit }, payload) => {
