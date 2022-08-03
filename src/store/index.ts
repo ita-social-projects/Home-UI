@@ -5,7 +5,7 @@ import { cooperationStore } from '@/cooperation/store';
 import { localStorageStore } from '@/store/localstorage';
 import { housesStore } from '@/houses/store';
 import { userStore } from '@/store/user';
-import { pollsStore } from '@/store/polls';
+import { pollsStore } from '@/polls/store';
 import { invitationsStore } from '@/store/invitations';
 import { apartmentsStore } from '@/apartment/store/apartments';
 import { ownershipsStore } from '@/apartment/store/ownerships';

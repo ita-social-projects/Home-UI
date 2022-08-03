@@ -121,11 +121,11 @@ import Calendar from 'primevue/calendar';
 import InputText from 'primevue/inputtext';
 import RadioButton from 'primevue/radiobutton';
 import useVuelidate from '@vuelidate/core';
-import { pollValidations } from '@/utils/poll-validations';
+import { pollValidations } from '@/polls/utils/validator/poll-validations';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { HouseModel } from '@/houses/models/house.model';
-import { PollsActionEnum, PollAcceptanceCriteriaEnum } from '@/store/polls/types';
+import { PollsActionEnum, PollAcceptanceCriteriaEnum } from '@/polls/store/types';
 
 export default defineComponent({
   name: 'CreatePollForm',

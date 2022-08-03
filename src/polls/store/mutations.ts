@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { PollsStateInterface, PollsMutationEnum, Mutations } from '@/store/polls/types';
+import { PollsStateInterface, PollsMutationEnum, Mutations } from '@/polls/store/types';
 
 export const mutations: MutationTree<PollsStateInterface> & Mutations = {
   [PollsMutationEnum.SET_COOPERATION_POLLS]: (state, payload) => {
