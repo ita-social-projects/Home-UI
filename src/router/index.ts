@@ -12,7 +12,7 @@ import PageNotFound from '@/views/PageNotFound.vue';
 import PageErrorInvintation from '@/views/PageErrorInvintation.vue';
 import CooperationPolls from '@/views/CooperationPolls.vue';
 import PollInfo from '@/views/PollInfo.vue';
-import InvitationSection from '@/invitations/InvitationSection.vue';
+import InvitationSection from '@/invitation/InvitationSection.vue';
 
 import ManageApartments from '@/apartment/ManageApartments.vue';
 import ApartmentInfo from '@/apartment/ApartmentInfo.vue';

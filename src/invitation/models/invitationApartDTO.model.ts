@@ -1,5 +1,5 @@
 import { AddressDTOModel } from '@/houses/models/addressDTO.model';
-import { InvitationApartmentModel } from '@/invitations/models/invitationApart.model';
+import { InvitationApartmentModel } from '@/invitation/models/invitationApart.model';
 
 export class InvitationApartmentDTOModel {
   public apartment_number?: string;

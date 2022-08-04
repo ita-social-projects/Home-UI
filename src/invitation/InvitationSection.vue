@@ -66,7 +66,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
 import Dialog from 'primevue/dialog';
-import CreateInvitationForm from '@/invitations/CreateInvitationForm.vue';
+import CreateInvitationForm from '@/invitation/CreateInvitationForm.vue';
 import InputText from 'primevue/inputtext';
 import { StoreModuleEnum } from '@/store/types';
 import {
@@ -74,9 +74,9 @@ import {
   InvitationsActionsEnum,
   InvitationStatusType,
   InvitationStatusEnum,
-} from '@/invitations/store/types';
+} from '@/invitation/store/types';
 import { mapGetters } from 'vuex';
-import { InvitationModel } from '@/invitations/models/invitations.model';
+import { InvitationModel } from '@/invitation/models/invitation.model';
 
 export default defineComponent({
   name: 'InvitationSection',

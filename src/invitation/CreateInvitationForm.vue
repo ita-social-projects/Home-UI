@@ -111,7 +111,7 @@ import {
   emailMaxLength,
   emailLastCharsValidator,
 } from '@/utils/validators';
-import { InvitationsActionsEnum, InvitationTypesEnum, PostInvitationInterface } from '@/invitations/store/types';
+import { InvitationsActionsEnum, InvitationTypesEnum, PostInvitationInterface } from '@/invitation/store/types';
 import { HousesActionsEnum, HousesGettersEnum, HouseInterface } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
 
