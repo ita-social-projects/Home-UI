@@ -12,13 +12,6 @@ import { UpdateUserModel } from '@/user/models/update-user.model';
 import { PostContactModel } from '@/user/models/post-contact.model';
 import { UserDTOModel } from '../../models/userDTO.model';
 import { UserModel } from '../../models/user.model';
-// =======
-// import { HTTP, HTTP_AUTH } from '@/core/api/http-common';
-// import { UpdateUserModel } from '@/store/models/update-user.model';
-// import { PostContactModel } from '@/store/models/post-contact.model';
-// import { UserDTOModel } from './models/userDTO.model';
-// import { UserModel } from './models/user.model';
-// >>>>>>> develop:src/store/authorization/actions.ts
 
 export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface> & Actions = {
   [AuthActionEnum.SIGN_IN]: async ({ commit, dispatch }, payload) => {
