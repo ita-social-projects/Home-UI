@@ -6,35 +6,40 @@ import {
   Actions,
 } from '@/user/store/authorization/types';
 import { RootStateInterface, StoreModuleEnum } from '@/store/types';
-import { HTTP } from '@/core/api/http-common';
+// <<<<<<< HEAD:src/user/store/authorization/actions.ts
+import { HTTP, HTTP_AUTH } from '@/core/api/http-common';
 import { UpdateUserModel } from '@/user/models/update-user.model';
 import { PostContactModel } from '@/user/models/post-contact.model';
 import { UserDTOModel } from '../../models/userDTO.model';
 import { UserModel } from '../../models/user.model';
+// =======
+// import { HTTP, HTTP_AUTH } from '@/core/api/http-common';
+// import { UpdateUserModel } from '@/store/models/update-user.model';
+// import { PostContactModel } from '@/store/models/post-contact.model';
+// import { UserDTOModel } from './models/userDTO.model';
+// import { UserModel } from './models/user.model';
+// >>>>>>> develop:src/store/authorization/actions.ts
 
 export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface> & Actions = {
   [AuthActionEnum.SIGN_IN]: async ({ commit, dispatch }, payload) => {
     try {
+      const authResponse = await HTTP_AUTH.post('/login', {
+        email: payload.data.email,
+        password: payload.data.password,
+      });
       const token = {
         email: payload.data.email,
-        token: window.btoa(`${payload.data.email}:${payload.data.password}`),
+        token: authResponse.data.access_token,
+        refreshToken: authResponse.data.refresh_token,
       };
 
       dispatch(`${StoreModuleEnum.localStorageStore}/SET`, token, { root: true });
-
       const response = await HTTP.get('/users', { params: { email: payload.data.email } });
 
       if (response.data.length !== 0) {
         const user: Array<UserModel> = response.data.map((el: UserDTOModel) => new UserModel(el));
         commit(AuthMutationEnum.SET_USER, user[0]);
-
-        const currentToken = {
-          email: payload.data.email,
-          token: window.btoa(`${payload.data.email}:${payload.data.password}`),
-          id: user[0].id,
-        };
-
-        dispatch(`${StoreModuleEnum.localStorageStore}/SET`, currentToken, { root: true });
+        dispatch(`${StoreModuleEnum.localStorageStore}/SET`, { ...token, id: user[0].id }, { root: true });
       }
 
       payload.successCallback(response);

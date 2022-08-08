@@ -2,6 +2,9 @@
   "name": "home",
   "version": "0.4.0",
   "private": true,
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
