@@ -6,7 +6,6 @@ import {
   Actions,
 } from '@/user/store/authorization/types';
 import { RootStateInterface, StoreModuleEnum } from '@/store/types';
-// <<<<<<< HEAD:src/user/store/authorization/actions.ts
 import { HTTP, HTTP_AUTH } from '@/core/api/http-common';
 import { UpdateUserModel } from '@/user/models/update-user.model';
 import { PostContactModel } from '@/user/models/post-contact.model';
