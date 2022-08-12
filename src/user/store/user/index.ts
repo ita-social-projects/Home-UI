@@ -1,9 +1,9 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { UserStateInterface } from '@/store/user/types';
-import { getters } from '@/store/user/getters';
-import { mutations } from '@/store/user/mutations';
-import { actions } from '@/store/user/actions';
+import { UserStateInterface } from '@/user/store/user/types';
+import { getters } from '@/user/store/user/getters';
+import { mutations } from '@/user/store/user/mutations';
+import { actions } from '@/user/store/user/actions';
 
 export const state: UserStateInterface = {
   data: {
