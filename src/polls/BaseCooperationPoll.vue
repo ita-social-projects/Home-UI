@@ -54,12 +54,19 @@
     :closable="false"
     :dismissableMask="true"
   >
-    <EditCooperationPollForm
+    <!-- <EditCooperationPollForm
       :poll="$props.poll"
       :displayEditPollModal="displayEditPollModal"
       @close-edit-poll="displayEditPollModal = false"
       :showSuccessOperation="showSuccessOperation"
-    ></EditCooperationPollForm>
+    ></EditCooperationPollForm> -->
+    <PollForm
+      :isEditing="true"
+      :poll="$props.poll"
+      :displayEditPollModal="displayEditPollModal"
+      @close-edit-poll="displayEditPollModal = false"
+      :showSuccessOperation="showSuccessOperation"
+    ></PollForm>
   </Dialog>
 </template>
 
@@ -74,7 +81,8 @@ import { DeletePollPayloadInterface, PollsActionEnum, PollStatusEnum, PollStatus
 import { CooperationGettersEnum } from '@/cooperation/store/types';
 import ConfirmPopup from 'primevue/confirmpopup';
 import Dialog from 'primevue/dialog';
-import EditCooperationPollForm from '@/components/EditCooperationPollForm.vue';
+import EditCooperationPollForm from '@/polls/EditCooperationPollForm.vue';
+import PollForm from '@/polls/PollForm.vue';
 
 export default defineComponent({
   name: 'BaseCooperationPoll',
@@ -83,6 +91,7 @@ export default defineComponent({
     Menu,
     ConfirmPopup,
     Dialog,
+    PollForm,
     EditCooperationPollForm,
   },
   props: {
@@ -114,6 +123,7 @@ export default defineComponent({
         ];
       },
       displayEditPollModal: false,
+      isEditing: false,
     };
   },
   methods: {

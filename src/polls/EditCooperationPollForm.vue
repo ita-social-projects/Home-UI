@@ -232,6 +232,7 @@ export default defineComponent({
 
       this.$props.showSuccessOperation('редаговано');
       this.$emit('close-edit-poll');
+      console.log(this.pollData);
     },
     onChangeCreationDate() {
       const dateTomorrow = new Date();
