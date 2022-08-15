@@ -89,7 +89,7 @@
             @date-select="onChangeCreationDate"
             @blur="v$.pollData.creationDateInEdition.$touch"
           />
-          <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error сreationDate-рelp">
+          <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error сreationDate-help">
             Переконайтесь, що дата стоїть не раніше, ніж завтра!
           </small>
           <small v-if="v$.pollData.creationDateInEdition.$error" id="poll_creationDate" class="p-error">{{
@@ -132,7 +132,7 @@
         v$.pollData.acceptanceCriteria.$errors[0].$message
       }}</small>
     </div>
-    <div v-if="!isEditing" class="button-div">
+    <div v-if="!isEditing" class="buttons-container">
       <Button
         id="save-button"
         label="Додати опитування"
@@ -151,7 +151,7 @@
       />
     </div>
 
-    <div v-if="isEditing" class="buttons-container">
+    <div v-if="isEditing" class="buttons-container" >
       <Button
         :disabled="isDisabled || v$.pollData.$invalid"
         label="Зберегти зміни"
@@ -181,7 +181,6 @@ import Calendar from 'primevue/calendar';
 import InputText from 'primevue/inputtext';
 import RadioButton from 'primevue/radiobutton';
 import useVuelidate from '@vuelidate/core';
-import { pollValidations } from '@/polls/utils/validator/poll-validations';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { HouseModel } from '@/houses/models/house.model';
@@ -227,7 +226,7 @@ export default defineComponent({
         description: '',
         polledHouses: [] as Array<HouseModel>,
         creationDate: new Date(),
-        creationDateInEdition: '' as any,
+        creationDateInEdition: '',
         completionDate: '',
         acceptanceCriteria: '',
       },
@@ -418,7 +417,7 @@ export default defineComponent({
 }
 
 #calendar-finish {
-  width: 230px;
+  width: 200px;
 }
 
 .p-disabled,
@@ -479,19 +478,16 @@ export default defineComponent({
 .house-label {
   padding-left: 10px;
 }
-
-.button-div {
+.p-inputtext.p-component {
+  width: 400px;
+}
+.buttons-container {
+  padding: 1rem 0;
   float: right;
   .p-button-outlined {
     margin-left: 20px;
   }
-  margin-top: 30px;
 }
-
-.p-inputtext.p-component {
-  width: 400px;
-}
-
 .p-calendar {
   width: 200px;
 }
@@ -503,13 +499,5 @@ export default defineComponent({
 }
 .radio-button {
   margin-right: 15px;
-}
-
-.buttons-container {
-  margin: 1rem 0 0 0;
-  float: right;
-  .p-button-outlined {
-    margin-left: 20px;
-  }
 }
 </style>
