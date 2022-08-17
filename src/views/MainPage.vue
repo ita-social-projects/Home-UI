@@ -11,8 +11,8 @@
 import Sidebar from '@/components/Sidebar.vue';
 import { defineComponent } from 'vue';
 import { StoreModuleEnum } from '@/store/types';
-import { AuthActionEnum, AuthGettersEnum } from '@/store/authorization/types';
-import { UserModel } from '@/store/authorization/models/user.model';
+import { AuthActionEnum, AuthGettersEnum } from '@/user/store/authorization/types';
+import { UserModel } from '@/user/models/user.model';
 
 export default defineComponent({
   name: 'MainPage',

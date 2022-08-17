@@ -1,5 +1,5 @@
 import { OwnerDTOModel } from '@/apartment/models/ownerDTO.model';
-import { UserContactInterface } from '@/store/user/types';
+import { UserContactInterface } from '@/user/store/user/types';
 
 export class OwnerModel {
   public id: number;

@@ -1,7 +1,7 @@
-import { UpdateUserInterface } from '../authorization/types';
-import { UserContactInterface } from './../user/types';
-
-export class UpdateUserModel {
+import { UserDataInterface } from '@/user/store/user/types';
+import { UserContactInterface } from '../store/user/types';
+export class PostUserModel {
+  public registration_token: string;
   public first_name: string;
   public middle_name: string;
   public last_name: string;
@@ -9,12 +9,13 @@ export class UpdateUserModel {
   public password: string;
   public contacts: UserContactInterface[];
 
-  constructor(userData: UpdateUserInterface) {
+  constructor(userData: UserDataInterface) {
+    this.registration_token = userData.registrationToken;
     this.first_name = userData.firstName;
     this.middle_name = userData.middleName;
     this.last_name = userData.lastName;
     this.email = userData.email;
-    this.password = 'passworD123';
+    this.password = userData.password;
     this.contacts = userData.contacts;
   }
 }

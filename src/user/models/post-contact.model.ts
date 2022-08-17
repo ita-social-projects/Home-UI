@@ -1,4 +1,4 @@
-import { UserContactInterface } from './../user/types';
+import { UserContactInterface } from '../store/user/types';
 
 export class PostContactModel {
   public type: string;
