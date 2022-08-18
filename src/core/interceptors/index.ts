@@ -1,5 +1,5 @@
-import { AxiosRequestConfig, AxiosError } from 'axios';
-import { HTTP_AUTH } from '../api/http-common';
+import { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
+import { HTTP, HTTP_AUTH } from '../api/http-common';
 import { AuthActionEnum } from '@/user/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
 import { StoreModuleEnum } from '@/store/types';
@@ -47,4 +47,47 @@ export const notValidRefreshToken = (error: AxiosError) => {
     router.push(RoutesEnum.StartPage);
   }
   return Promise.reject(error);
+};
+
+export const setSpinnerInterceptors = (spinnerState: any): void => {
+  HTTP.interceptors.request.use(
+    (req: AxiosRequestConfig) => {
+      spinnerState.value = true;
+      return req;
+    },
+    (error: AxiosError) => {
+      spinnerState.value = false;
+      return Promise.reject(error);
+    }
+  );
+  HTTP.interceptors.response.use(
+    (response: AxiosResponse) => {
+      spinnerState.value = false;
+      return response;
+    },
+    (error: AxiosError) => {
+      spinnerState.value = false;
+      return Promise.reject(error);
+    }
+  );
+  HTTP_AUTH.interceptors.request.use(
+    (req: AxiosRequestConfig) => {
+      spinnerState.value = true;
+      return req;
+    },
+    (error: AxiosError) => {
+      spinnerState.value = false;
+      return Promise.reject(error);
+    }
+  );
+  HTTP_AUTH.interceptors.response.use(
+    (response: AxiosResponse) => {
+      spinnerState.value = false;
+      return response;
+    },
+    (error: AxiosError) => {
+      spinnerState.value = false;
+      return Promise.reject(error);
+    }
+  );
 };

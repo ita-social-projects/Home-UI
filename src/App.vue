@@ -1,14 +1,15 @@
 <template>
-  <LoaderSpinner />
+  <LoaderSpinner :is-loading="isLoading" />
   <Header />
   <Toast />
   <router-view />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import Header from '@/components/Header.vue';
 import Toast from 'primevue/toast';
+import { setSpinnerInterceptors } from '@/core/interceptors/index';
 
 export default defineComponent({
   name: 'app',
@@ -17,7 +18,10 @@ export default defineComponent({
     Toast,
   },
   setup() {
-    return {};
+    const isLoading = ref(false);
+
+    setSpinnerInterceptors(isLoading);
+    return { isLoading };
   },
 });
 </script>
