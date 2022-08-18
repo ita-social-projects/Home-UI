@@ -12,7 +12,7 @@
 import { defineComponent } from 'vue';
 import { StoreModuleEnum } from '@/store/types';
 import ErrorPage from '@/components/ErrorPage.vue';
-import { AuthGettersEnum } from '@/store/authorization/types';
+import { AuthGettersEnum } from '@/user/store/authorization/types';
 
 export default defineComponent({
   name: 'PageNotFound',

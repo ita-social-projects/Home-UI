@@ -1,9 +1,9 @@
 import { AxiosRequestConfig, AxiosError } from 'axios';
 import { HTTP_AUTH } from '../api/http-common';
-import { AuthActionEnum } from '@/store/authorization/types';
+import { AuthActionEnum } from '@/user/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
 import { StoreModuleEnum } from '@/store/types';
-import { LocalStorageActionEnum } from '@/store/localstorage/types';
+import { LocalStorageActionEnum } from '@/user/store/localstorage/types';
 import store from '@/store';
 import router from '@/router';
 

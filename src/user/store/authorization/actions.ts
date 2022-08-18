@@ -1,12 +1,17 @@
 import { ActionTree } from 'vuex';
-import { AuthorizationStateInterface, AuthActionEnum, AuthMutationEnum, Actions } from '@/store/authorization/types';
-import { ErrorsActionEnum } from '@/core/errors/store/types';
+import {
+  AuthorizationStateInterface,
+  AuthActionEnum,
+  AuthMutationEnum,
+  Actions,
+} from '@/user/store/authorization/types';
 import { RootStateInterface, StoreModuleEnum } from '@/store/types';
+import { ErrorsActionEnum } from '@/core/errors/store/types';
 import { HTTP, HTTP_AUTH } from '@/core/api/http-common';
-import { UpdateUserModel } from '@/store/models/update-user.model';
-import { PostContactModel } from '@/store/models/post-contact.model';
-import { UserDTOModel } from './models/userDTO.model';
-import { UserModel } from './models/user.model';
+import { UpdateUserModel } from '@/user/models/update-user.model';
+import { PostContactModel } from '@/user/models/post-contact.model';
+import { UserDTOModel } from '../../models/userDTO.model';
+import { UserModel } from '../../models/user.model';
 
 export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface> & Actions = {
   [AuthActionEnum.SIGN_IN]: async ({ commit, dispatch }, payload) => {
