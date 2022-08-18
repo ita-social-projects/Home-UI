@@ -50,14 +50,18 @@ export const notValidRefreshToken = (error: AxiosError) => {
 };
 
 export const setSpinnerInterceptors = (spinnerState: any): void => {
+  const handleError = (error: AxiosError): any => {
+    spinnerState.value = false;
+    return Promise.reject(error);
+  };
+
   HTTP.interceptors.request.use(
     (req: AxiosRequestConfig) => {
       spinnerState.value = true;
       return req;
     },
     (error: AxiosError) => {
-      spinnerState.value = false;
-      return Promise.reject(error);
+      handleError(error);
     }
   );
   HTTP.interceptors.response.use(
@@ -66,8 +70,7 @@ export const setSpinnerInterceptors = (spinnerState: any): void => {
       return response;
     },
     (error: AxiosError) => {
-      spinnerState.value = false;
-      return Promise.reject(error);
+      handleError(error);
     }
   );
   HTTP_AUTH.interceptors.request.use(
@@ -76,8 +79,7 @@ export const setSpinnerInterceptors = (spinnerState: any): void => {
       return req;
     },
     (error: AxiosError) => {
-      spinnerState.value = false;
-      return Promise.reject(error);
+      handleError(error);
     }
   );
   HTTP_AUTH.interceptors.response.use(
@@ -86,8 +88,7 @@ export const setSpinnerInterceptors = (spinnerState: any): void => {
       return response;
     },
     (error: AxiosError) => {
-      spinnerState.value = false;
-      return Promise.reject(error);
+      handleError(error);
     }
   );
 };
