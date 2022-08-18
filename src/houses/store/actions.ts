@@ -9,6 +9,7 @@ export const actions: ActionTree<HousesStateInterface, RootStateInterface> & Act
   [HousesActionsEnum.SET_HOUSES]: async ({ commit }, payload) => {
     const { data } = await HTTP.get(`/cooperations/${payload}/houses`);
     const houses: Array<HouseModel> = data.map((el: HouseDTOModel) => new HouseModel(el));
+    console.log(payload);
 
     commit(HousesMutationsEnum.SET_HOUSES, houses);
   },

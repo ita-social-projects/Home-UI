@@ -63,6 +63,7 @@
     <PollForm
       :isEditing="true"
       :poll="$props.poll"
+      :displayEditPollModal="displayEditPollModal"
       @close-edit-poll="displayEditPollModal = false"
       :showSuccessOperation="showSuccessOperation"
     ></PollForm>
