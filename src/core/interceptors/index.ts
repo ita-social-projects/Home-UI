@@ -54,41 +54,16 @@ export const setSpinnerInterceptors = (spinnerState: any): void => {
     spinnerState.value = false;
     return Promise.reject(error);
   };
+  const handleQuery = (
+    query: AxiosResponse | AxiosRequestConfig,
+    state: boolean
+  ): AxiosResponse | AxiosRequestConfig => {
+    spinnerState.value = state;
+    return query;
+  };
 
-  HTTP.interceptors.request.use(
-    (req: AxiosRequestConfig) => {
-      spinnerState.value = true;
-      return req;
-    },
-    (error: AxiosError) => {
-      handleError(error);
-    }
-  );
-  HTTP.interceptors.response.use(
-    (response: AxiosResponse) => {
-      spinnerState.value = false;
-      return response;
-    },
-    (error: AxiosError) => {
-      handleError(error);
-    }
-  );
-  HTTP_AUTH.interceptors.request.use(
-    (req: AxiosRequestConfig) => {
-      spinnerState.value = true;
-      return req;
-    },
-    (error: AxiosError) => {
-      handleError(error);
-    }
-  );
-  HTTP_AUTH.interceptors.response.use(
-    (response: AxiosResponse) => {
-      spinnerState.value = false;
-      return response;
-    },
-    (error: AxiosError) => {
-      handleError(error);
-    }
-  );
+  HTTP.interceptors.request.use((req: AxiosRequestConfig) => handleQuery(req, true), handleError);
+  HTTP.interceptors.response.use((response: AxiosResponse) => handleQuery(response, false), handleError);
+  HTTP_AUTH.interceptors.request.use((req: AxiosRequestConfig) => handleQuery(req, true), handleError);
+  HTTP_AUTH.interceptors.response.use((response: AxiosResponse) => handleQuery(response, false), handleError);
 };
