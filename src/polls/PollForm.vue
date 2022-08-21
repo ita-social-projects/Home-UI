@@ -104,7 +104,7 @@
         <InputText v-if="!isEditing" :value="pollData.completionDate" id="calendar-finish" disabled="true"></InputText>
         <Calendar
           v-if="isEditing"
-          v-model="pollData.creationDateInEdition"
+          v-model="pollData.completionDate"
           :showIcon="true"
           :disabled="true"
           id="calendar-finish"
@@ -137,10 +137,10 @@
         id="save-button"
         label="Додати опитування"
         icon="pi pi-check"
-        autofocus
         class="p-button-info"
         type="submit"
         value="Submit"
+        autofocus
       />
       <Button
         id="cancel-button"
@@ -156,10 +156,10 @@
         :disabled="isDisabled || v$.pollData.$invalid"
         label="Зберегти зміни"
         icon="pi pi-check"
-        autofocus
         class="p-button-info"
         type="submit"
         value="Submit"
+        autofocus
       />
       <Button
         label="Скасувати"
@@ -191,6 +191,7 @@ import {
   pollTitleLenghtValidator,
   pollDescriptionLenghtValidator,
   cyrillicLangTextValidator,
+  // requiredValidatorWithParams
 } from '@/utils/validators';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
 import { pollValidations } from './utils/validator/poll-validations';
@@ -210,7 +211,10 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    isEditing: Boolean,
+    isEditing: {
+      type: Boolean,
+      required: true,
+    },
     poll: {
       type: PollModel,
       required: true,
@@ -232,7 +236,7 @@ export default defineComponent({
         polledHouses: [] as Array<HouseModel>,
         creationDate: new Date(),
         creationDateInEdition: '' as any,
-        completionDate: '',
+        completionDate: '' || ('' as any),
         acceptanceCriteria: '',
       },
       startDate: null,
@@ -254,8 +258,9 @@ export default defineComponent({
         title: { requiredValidator, cyrillicLangTextValidator, pollTitleLenghtValidator },
         description: { requiredValidator, cyrillicLangTextValidator, pollDescriptionLenghtValidator },
         polledHouses: { requiredValidator },
-        acceptanceCriteria: { requiredValidator },
-        // creationDateInEdition: { requiredValidator },
+        // acceptanceCriteria: { requiredValidator },
+        creationDateInEdition: { requiredValidator },
+        // creationDateInEdition: { isEditing: requiredValidatorWithParams },
       },
     };
   },
@@ -292,10 +297,11 @@ export default defineComponent({
       this.pollData.creationDate = value;
     },
     onChangeCreationDate() {
+          console.log(this.v$.pollData.$invalid);
+
       const dateTomorrow = new Date();
       dateTomorrow.setDate(dateTomorrow.getDate() + 1);
       dateTomorrow.setHours(0, 0, 0, 0);
-
       if (this.pollData.creationDateInEdition < dateTomorrow) {
         this.isDisabled = true;
         this.isCreationDateHelpActive = true;
@@ -308,11 +314,13 @@ export default defineComponent({
 
         this.isCreationDateHelpActive = false;
         this.isDisabled = false;
+    console.log(this.v$.pollData.$invalid);
+
       }
     },
     async initData() {
-      console.log(this.isDisabled);
-      
+    console.log(this.v$.pollData.$invalid);
+
       await this.$store.dispatch(
         `${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_SELECTED_POLL}`,
         this.$props.poll.id
@@ -322,15 +330,15 @@ export default defineComponent({
       this.pollData.description = this.selectedPoll?.description ?? 'Повний опис опитування';
       this.pollData.polledHouses = this.selectedPoll?.polledHouses ?? [];
       this.pollData.creationDateInEdition = this.selectedPoll?.creationDate.toLocaleString('uk-UA');
-      console.log(this.pollData.creationDateInEdition);
-      
       this.pollData.completionDate = this.selectedPoll?.completionDate.toLocaleString('uk-UA');
 
-      this.beginDateInEdition = this.selectedPoll?.creationDate;
+      // this.beginDateInEdition = this.selectedPoll?.creationDate;
       this.finishDate = this.selectedPoll?.completionDate;
     },
     submitPollForm() {
       if (this.isEditing) {
+        console.log(this.v$.pollData.$invalid);
+        
         this.editPoll();
       } else {
         this.createPoll();
@@ -342,7 +350,6 @@ export default defineComponent({
         console.log('i am in isFormValid');
         return;
       }
-      console.log(this.isEditing);
       const payload = {
         cooperationId: this.cooperationId,
         body: {
@@ -372,26 +379,32 @@ export default defineComponent({
 
     async editPoll() {
       console.log('it is editPoll function');
+      console.log(this.v$.pollData.$invalid);
 
-      //   const poll = {
-      //     header: this.pollData.title,
-      //     description: this.pollData.description,
-      //     creationDate: new Date(this.beginDateInEdition.toLocaleString('en-US')).toISOString(),
-      //     completionDate: new Date(this.finishDate.toLocaleString('en-US')).toISOString(),
-      //     status: this.$props.poll.status,
-      //     polledHouses: this.pollData.polledHouses,
-      //   };
+      const isFormValid = await this.v$.$validate();
+      if (!isFormValid) {
+        console.log('i am in isFormValid');
+        return;
+      }
 
-      //   const ids = { cooperationId: this.cooperationIdEdit, pollId: this.$props.poll.id };
+      const poll = {
+        header: this.pollData.title,
+        description: this.pollData.description,
+        creationDate: new Date(this.beginDateInEdition.toLocaleString('en-US')).toISOString(),
+        completionDate: new Date(this.finishDate.toLocaleString('en-US')).toISOString(),
+        status: this.$props.poll.status,
+        polledHouses: this.pollData.polledHouses,
+      };
 
-      //   await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.UPDATE_POLL}`, {
-      //     poll,
-      //     ids,
-      //   });
+      const ids = { cooperationId: this.cooperationIdEdit, pollId: this.$props.poll.id };
 
-      //   this.$props.showSuccessOperation('редаговано');
-      //   this.$emit('close-edit-poll');
-      //   console.log(this.pollData);
+      await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.UPDATE_POLL}`, {
+        poll,
+        ids,
+      });
+
+      this.$props.showSuccessOperation('редаговано');
+      this.$emit('close-edit-poll');
     },
   },
   computed: {
@@ -410,6 +423,8 @@ export default defineComponent({
     },
   },
   mounted() {
+    console.log(this.v$.pollData.$invalid);
+
     if (this.$props.isEditing) {
       try {
         this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationIdEdit);
@@ -417,7 +432,7 @@ export default defineComponent({
       } catch {
         console.log('error was caught during mounting BaseCooperationPoll');
       }
-    } else {
+    } else if (!this.$props.isEditing) {
       this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.$props.cooperationId);
     }
   },
@@ -434,10 +449,10 @@ export default defineComponent({
   width: 200px;
 }
 
-.p-disabled,
-.p-component:disabled {
-  opacity: 1;
-}
+// .p-disabled,
+// .p-component:disabled {
+//   opacity: 0.6;
+// }
 
 .address-details {
   margin-left: 2rem;
