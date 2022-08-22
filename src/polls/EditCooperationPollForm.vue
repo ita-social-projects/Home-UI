@@ -209,9 +209,11 @@ export default defineComponent({
       this.pollData.polledHouses = this.selectedPoll?.polledHouses ?? [];
       this.pollData.creationDate = this.selectedPoll?.creationDate.toLocaleString('uk-UA');
       this.pollData.completionDate = this.selectedPoll?.completionDate.toLocaleString('uk-UA');
-
+      console.log("header",this.pollData.header)
       this.beginDate = this.selectedPoll?.creationDate;
       this.finishDate = this.selectedPoll?.completionDate;
+      console.log("after",this.pollData)
+
     },
     async editPoll() {
       const poll = {
@@ -222,7 +224,6 @@ export default defineComponent({
         status: this.$props.poll.status,
         polledHouses: this.pollData.polledHouses,
       };
-
       const ids = { cooperationId: this.cooperationId, pollId: this.$props.poll.id };
 
       await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.UPDATE_POLL}`, {
@@ -232,7 +233,6 @@ export default defineComponent({
 
       this.$props.showSuccessOperation('редаговано');
       this.$emit('close-edit-poll');
-      console.log(this.pollData);
     },
     onChangeCreationDate() {
       const dateTomorrow = new Date();
@@ -243,6 +243,8 @@ export default defineComponent({
         this.isDisabled = true;
         this.isCreationDateHelpActive = true;
       } else {
+        console.log(this.pollData)
+
         this.beginDate.setHours(0, 0, 0, 0);
 
         this.finishDate = new Date(this.pollData.creationDate.getTime() + 14 * 86400000);

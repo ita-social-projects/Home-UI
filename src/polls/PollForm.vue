@@ -77,8 +77,9 @@
           dateFormat="dd.mm.yy"
           @date-select="ChangeDate"
         />
-        <div v-if="isEditing">
+        <!-- <div v-if="isEditing"> -->
           <Calendar
+          v-if="isEditing"
             v-model="pollData.creationDateInEdition"
             :showIcon="true"
             :class="{
@@ -89,13 +90,13 @@
             @date-select="onChangeCreationDate"
             @blur="v$.pollData.creationDateInEdition.$touch"
           />
-          <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error сreationDate-help">
+          <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error сreationDate-help warning-message">
             Переконайтесь, що дата стоїть не раніше, ніж завтра!
           </small>
           <small v-if="v$.pollData.creationDateInEdition.$error" id="poll_creationDate" class="p-error">{{
             v$.pollData.creationDateInEdition.$errors[0].$message
           }}</small>
-        </div>
+        <!-- </div> -->
       </section>
     </div>
     <div class="input-section">
@@ -116,6 +117,7 @@
     </div>
     <div v-if="!isEditing" class="option-section">
       <div v-for="(item, key) in PollAcceptanceCriteriaEnum" :key="key">
+        <label for="item.name">
         <RadioButton
           :name="key"
           :value="item"
@@ -125,8 +127,9 @@
             'p-invalid': v$.pollData.acceptanceCriteria.$error,
           }"
           class="radio-button"
-        ></RadioButton>
-        <label for="item.name">{{ item }}</label>
+        />
+        {{ item }}
+        </label>
       </div>
       <small v-if="v$.pollData.acceptanceCriteria.$error" id="poll_title" class="p-error">{{
         v$.pollData.acceptanceCriteria.$errors[0].$message
@@ -323,12 +326,11 @@ export default defineComponent({
       this.pollData.creationDateInEdition = this.selectedPoll?.creationDate.toLocaleString('uk-UA');
       this.pollData.completionDate = this.selectedPoll?.completionDate.toLocaleString('uk-UA');
 
-      // this.beginDateInEdition = this.selectedPoll?.creationDate;
+      this.beginDateInEdition = this.selectedPoll?.creationDate || new Date();
       this.finishDate = this.selectedPoll?.completionDate;
     },
     submitPollForm() {
       if (this.isEditing) {
-        console.log(this.v$.pollData.$invalid);        
         this.editPoll();
       } else {
         this.createPoll();
@@ -421,7 +423,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 %error-message {
   margin: 0.4em 0.5rem;
-  width: 100%;
 }
 
 #calendar-finish {
@@ -502,4 +503,10 @@ export default defineComponent({
 .radio-button {
   margin-right: 15px;
 }
+
+.warning-message {
+      position: absolute;
+    top: 21rem;
+    right: 2rem;
+  }
 </style>
