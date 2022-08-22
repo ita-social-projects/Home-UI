@@ -191,10 +191,8 @@ import {
   pollTitleLenghtValidator,
   pollDescriptionLenghtValidator,
   cyrillicLangTextValidator,
-  // requiredValidatorWithParams
 } from '@/utils/validators';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
-import { pollValidations } from './utils/validator/poll-validations';
 
 export default defineComponent({
   name: 'PollForm',
@@ -258,9 +256,8 @@ export default defineComponent({
         title: { requiredValidator, cyrillicLangTextValidator, pollTitleLenghtValidator },
         description: { requiredValidator, cyrillicLangTextValidator, pollDescriptionLenghtValidator },
         polledHouses: { requiredValidator },
-        // acceptanceCriteria: { requiredValidator },
-        creationDateInEdition: { requiredValidator },
-        // creationDateInEdition: { isEditing: requiredValidatorWithParams },
+        acceptanceCriteria: !this.isEditing ? { requiredValidator } : '',
+        creationDateInEdition: this.isEditing ? { requiredValidator } : '',
       },
     };
   },
@@ -297,8 +294,6 @@ export default defineComponent({
       this.pollData.creationDate = value;
     },
     onChangeCreationDate() {
-          console.log(this.v$.pollData.$invalid);
-
       const dateTomorrow = new Date();
       dateTomorrow.setDate(dateTomorrow.getDate() + 1);
       dateTomorrow.setHours(0, 0, 0, 0);
@@ -314,13 +309,9 @@ export default defineComponent({
 
         this.isCreationDateHelpActive = false;
         this.isDisabled = false;
-    console.log(this.v$.pollData.$invalid);
-
       }
     },
     async initData() {
-    console.log(this.v$.pollData.$invalid);
-
       await this.$store.dispatch(
         `${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_SELECTED_POLL}`,
         this.$props.poll.id
@@ -337,8 +328,7 @@ export default defineComponent({
     },
     submitPollForm() {
       if (this.isEditing) {
-        console.log(this.v$.pollData.$invalid);
-        
+        console.log(this.v$.pollData.$invalid);        
         this.editPoll();
       } else {
         this.createPoll();
@@ -378,15 +368,6 @@ export default defineComponent({
     },
 
     async editPoll() {
-      console.log('it is editPoll function');
-      console.log(this.v$.pollData.$invalid);
-
-      const isFormValid = await this.v$.$validate();
-      if (!isFormValid) {
-        console.log('i am in isFormValid');
-        return;
-      }
-
       const poll = {
         header: this.pollData.title,
         description: this.pollData.description,
@@ -423,8 +404,6 @@ export default defineComponent({
     },
   },
   mounted() {
-    console.log(this.v$.pollData.$invalid);
-
     if (this.$props.isEditing) {
       try {
         this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationIdEdit);
@@ -448,12 +427,6 @@ export default defineComponent({
 #calendar-finish {
   width: 200px;
 }
-
-// .p-disabled,
-// .p-component:disabled {
-//   opacity: 0.6;
-// }
-
 .address-details {
   margin-left: 2rem;
   .dialog-item-address {

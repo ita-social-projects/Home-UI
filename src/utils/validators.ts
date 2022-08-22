@@ -42,8 +42,6 @@ const correctNumberMessage = (additionalInfo: string) => {
 const validFlatQuantityAndAdjoiningArea = helpers.regex(/^\d+$/);
 
 export const requiredValidator = helpers.withMessage("Це обов'язкове поле", required);
-// export const requiredValidatorWithParams = (param: boolean) => 
-//  helpers.req(param) || "Це обов'язкове поле";
 export const someTitleLenghtValidator = helpers.withMessage(lengthMessage(50, 'max'), maxLength(50));
 export const ukrLangTitleValidator = helpers.withMessage(`${ukrLangMessage}`, validUkranianLan);
 export const zeroValidator = helpers.withMessage('Перша цифра не може бути 0', validNonZeroFields);
