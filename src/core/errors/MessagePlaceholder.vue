@@ -3,12 +3,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from 'vue';
-import store from '@/store';
-import { StoreModuleEnum } from '@/store/types';
+import { computed, defineComponent, watch } from 'vue';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-import { MessagesGetterEnum, MessagesI } from '@/core/messages/store/types';
+import { MessagesI } from '@/core/messages/store/types';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'MessagePlaceholder',
@@ -17,7 +16,7 @@ export default defineComponent({
   },
   setup() {
     const toast = useToast();
-    const showError = (message: string, severity: string, status: string): void => {
+    const showMessage = (message: string, severity: string, status: string): void => {
       toast.add({
         severity: severity,
         summary: message,
@@ -25,20 +24,22 @@ export default defineComponent({
         life: 6000,
       });
     };
+    const store = useStore();
+    const updatedList = computed(() => {
+      return store.state.messagesStore.messages;
+    });
 
     watch(
-      () => store.getters[`${StoreModuleEnum.messagesStore}/${MessagesGetterEnum.getMessages}`],
+      () => updatedList.value,
       function () {
-        if (store.getters[`${StoreModuleEnum.messagesStore}/${MessagesGetterEnum.getMessages}`]) {
-          const errorMessages = store.getters[
-            `${StoreModuleEnum.messagesStore}/${MessagesGetterEnum.getMessages}`
-          ].filter((message: MessagesI) => message.type === 'error');
-          const last = errorMessages.at(-1);
-          showError(last.status, last.type, last.message);
+        if (updatedList.value) {
+          updatedList.value.forEach((message: MessagesI) => {
+            showMessage(message.status.toString(), message.type, message.message);
+          });
         }
       }
     );
-    return { showError };
+    return { showMessage };
   },
 });
 </script>
