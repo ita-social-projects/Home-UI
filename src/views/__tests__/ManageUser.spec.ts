@@ -2,9 +2,9 @@ import { nextTick } from 'vue';
 import { createStore } from 'vuex';
 import { mount, VueWrapper } from '@vue/test-utils';
 import store from '@/store';
-import { getters } from '@/store/authorization/getters';
+import { getters } from '@/user/store/authorization/getters';
 import { inputSetValueHandler } from '@/utils/test-utils';
-import ManageUser from '@/views/ManageUser.vue';
+import ManageUser from '@/user/components/ManageUser.vue';
 
 const mockRouter = {
   push: jest.fn(),

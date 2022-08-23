@@ -5,17 +5,20 @@ export enum LocalStorageMutationEnum {
   SET_TOKEN = 'SET_TOKEN',
   GET_TOKEN = 'GET_TOKEN',
   REMOVE_TOKEN = 'REMOVE_TOKEN',
+  GET_USER_FROM_STORAGE = 'GET_USER_FROM_STORAGE',
 }
 
 export enum LocalStorageActionEnum {
   SET = 'SET',
   GET = 'GET',
   REMOVE = 'REMOVE',
+  GET_USER_FROM_STORAGE = 'GET_USER_FROM_STORAGE',
 }
 
 export enum LocalStorageGettersEnum {
   isTokenExist = 'isTokenExist',
   getToken = 'getToken',
+  getUserFromStorage = 'getUserFromStorage',
 }
 
 export interface TokenInterface {
@@ -27,17 +30,20 @@ export interface TokenInterface {
 
 export interface LocalStorageStateInterface {
   token: TokenInterface | null;
+  user: TokenInterface;
 }
 
 export type Mutations<S = LocalStorageStateInterface> = {
   [LocalStorageMutationEnum.SET_TOKEN](state: S, payload: LocalStorageStateInterface): void;
   [LocalStorageMutationEnum.GET_TOKEN](state: S, payload: string): void;
   [LocalStorageMutationEnum.REMOVE_TOKEN](state: S, payload: string): void;
+  [LocalStorageMutationEnum.GET_USER_FROM_STORAGE](state: S): void;
 };
 
 export type Getters<S = LocalStorageStateInterface> = {
   [LocalStorageGettersEnum.isTokenExist](): boolean;
   [LocalStorageGettersEnum.getToken](state: S): TokenInterface | null;
+  [LocalStorageGettersEnum.getUserFromStorage](state: S): TokenInterface | null;
 };
 
 export interface Actions {

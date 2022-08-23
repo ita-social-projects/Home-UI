@@ -45,7 +45,7 @@ import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 
 import Dropdown from 'primevue/dropdown';
-import { UserCredentialInterface, AuthActionEnum, AuthGettersEnum } from '@/store/authorization/types';
+import { UserCredentialInterface, AuthActionEnum, AuthGettersEnum } from '@/user/store/authorization/types';
 import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({

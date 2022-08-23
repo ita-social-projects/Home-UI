@@ -36,7 +36,7 @@
           </small>
         </div>
         <section class="btn">
-          <Button label="Увiйти" class="p-button-info" type="submit" />
+          <Button label="Увiйти" class="p-button-info" type="submit" :disabled="v$.$invalid" />
         </section>
       </form>
     </div>
@@ -50,20 +50,10 @@ import Button from 'primevue/button';
 import { AxiosResponse } from 'axios';
 import useVuelidate from '@vuelidate/core';
 import { RoutesEnum } from '@/router/types';
-import {
-  requiredValidator,
-  emailValidator,
-  emailMinLength,
-  emailMaxLength,
-  emailLastCharsValidator,
-  passwordMinLenght,
-  passwordMaxLenght,
-  passwordValidator,
-} from '@/utils/validators';
-
 import { StoreModuleEnum } from '@/store/types';
-import { LocalStorageGettersEnum } from '@/store/localstorage/types';
-import { AuthActionEnum } from '@/store/authorization/types';
+import { LocalStorageGettersEnum } from '@/user/store/localstorage/types';
+import { AuthActionEnum } from '@/user/store/authorization/types';
+import { userPasswordValidations, userEmailValidations } from '@/user/utils/validators/userValidations';
 
 export default defineComponent({
   name: 'login',
@@ -100,19 +90,8 @@ export default defineComponent({
   },
   validations() {
     return {
-      email: {
-        requiredValidator,
-        emailMinLength,
-        emailLastCharsValidator,
-        emailValidator,
-        emailMaxLength,
-      },
-      password: {
-        requiredValidator,
-        passwordMaxLenght,
-        passwordMinLenght,
-        passwordValidator,
-      },
+      email: userEmailValidations,
+      password: userPasswordValidations,
     };
   },
   computed: {
