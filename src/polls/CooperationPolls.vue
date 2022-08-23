@@ -20,11 +20,6 @@
       :dismissableMask="true"
       header="Створити опитування"
     >
-      <!-- <CreatePollForm
-        :cooperationId="cooperationId"
-        @cancel-creating-poll="displayCreatePollForm = false"
-        @create-poll="displayCreatePollForm = false"
-      /> -->
       <PollForm
         :isEditing="false"
         :cooperationId="cooperationId"
@@ -40,7 +35,6 @@ import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import BaseCooperationPoll from '@/polls/BaseCooperationPoll.vue';
-import CreatePollForm from '@/polls/CreatePollForm.vue';
 import { PollModel } from '@/polls/models/poll.model';
 import { StoreModuleEnum } from '@/store/types';
 import { PollsActionEnum, PollsGettersEnum } from '@/polls/store/types';
@@ -53,7 +47,6 @@ export default defineComponent({
     Button,
     BaseCooperationPoll,
     Dialog,
-    CreatePollForm,
     PollForm,
   },
   data() {

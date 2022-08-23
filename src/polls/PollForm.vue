@@ -77,26 +77,24 @@
           dateFormat="dd.mm.yy"
           @date-select="ChangeDate"
         />
-        <!-- <div v-if="isEditing"> -->
-          <Calendar
+        <Calendar
           v-if="isEditing"
-            v-model="pollData.creationDateInEdition"
-            :showIcon="true"
-            :class="{
-              'p-invalid': v$.pollData.creationDateInEdition.$error,
-            }"
-            id="caledar-begin"
-            dateFormat="dd.mm.yy"
-            @date-select="onChangeCreationDate"
-            @blur="v$.pollData.creationDateInEdition.$touch"
-          />
-          <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error сreationDate-help warning-message">
-            Переконайтесь, що дата стоїть не раніше, ніж завтра!
-          </small>
-          <small v-if="v$.pollData.creationDateInEdition.$error" id="poll_creationDate" class="p-error">{{
-            v$.pollData.creationDateInEdition.$errors[0].$message
-          }}</small>
-        <!-- </div> -->
+          v-model="pollData.creationDateInEdition"
+          :showIcon="true"
+          :class="{
+            'p-invalid': v$.pollData.creationDateInEdition.$error,
+          }"
+          id="caledar-begin"
+          dateFormat="dd.mm.yy"
+          @date-select="onChangeCreationDate"
+          @blur="v$.pollData.creationDateInEdition.$touch"
+        />
+        <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error сreationDate-help warning-message">
+          Переконайтесь, що дата стоїть не раніше, ніж завтра!
+        </small>
+        <small v-if="v$.pollData.creationDateInEdition.$error" id="poll_creationDate" class="p-error">{{
+          v$.pollData.creationDateInEdition.$errors[0].$message
+        }}</small>
       </section>
     </div>
     <div class="input-section">
@@ -117,7 +115,6 @@
     </div>
     <div v-if="!isEditing" class="option-section">
       <div v-for="(item, key) in PollAcceptanceCriteriaEnum" :key="key">
-        <label for="item.name">
         <RadioButton
           :name="key"
           :value="item"
@@ -128,8 +125,7 @@
           }"
           class="radio-button"
         />
-        {{ item }}
-        </label>
+        <label :for="key"> {{ item }} </label>
       </div>
       <small v-if="v$.pollData.acceptanceCriteria.$error" id="poll_title" class="p-error">{{
         v$.pollData.acceptanceCriteria.$errors[0].$message
@@ -505,8 +501,8 @@ export default defineComponent({
 }
 
 .warning-message {
-      position: absolute;
-    top: 21rem;
-    right: 2rem;
-  }
+  position: absolute;
+  top: 21rem;
+  right: 2rem;
+}
 </style>
