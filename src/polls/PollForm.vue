@@ -431,7 +431,6 @@ export default defineComponent({
   }
 }
 .dialog-item {
-  position: relative;
   width: 150px;
   margin-bottom: 13px;
 }
@@ -444,6 +443,7 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  position: relative;
 }
 .input-section small {
   justify-self: flex-end;
@@ -502,7 +502,7 @@ export default defineComponent({
 
 .warning-message {
   position: absolute;
-  top: 21rem;
-  right: 2rem;
+  top: 3rem;
+  right: 0rem;
 }
 </style>
