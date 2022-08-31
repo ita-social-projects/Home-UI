@@ -34,12 +34,12 @@
 import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import BaseCooperationPoll from '@/polls/BaseCooperationPoll.vue';
-import { PollModel } from '@/polls/models/poll.model';
+import BaseCooperationPoll from '@/poll/BaseCooperationPoll.vue';
+import { PollModel } from '@/poll/models/poll.model';
 import { StoreModuleEnum } from '@/store/types';
-import { PollsActionEnum, PollsGettersEnum } from '@/polls/store/types';
+import { PollsActionEnum, PollsGettersEnum } from '@/poll/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
-import PollForm from '@/polls/PollForm.vue';
+import PollForm from '@/poll/PollForm.vue';
 
 export default defineComponent({
   name: 'CooperationPolls',

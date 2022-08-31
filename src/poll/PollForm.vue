@@ -183,8 +183,8 @@ import useVuelidate from '@vuelidate/core';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { HouseModel } from '@/houses/models/house.model';
-import { PollsActionEnum, PollAcceptanceCriteriaEnum, PollsGettersEnum } from '@/polls/store/types';
-import { PollModel } from '@/polls/models/poll.model';
+import { PollsActionEnum, PollAcceptanceCriteriaEnum, PollsGettersEnum } from '@/poll/store/types';
+import { PollModel } from '@/poll/models/poll.model';
 import {
   requiredValidator,
   pollTitleLenghtValidator,

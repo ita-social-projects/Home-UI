@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 
 import { RootStateInterface } from '@/store/types';
-import { PollsStateInterface, Getters } from '@/polls/store/types';
+import { PollsStateInterface, Getters } from '@/poll/store/types';
 
 export const getters: GetterTree<PollsStateInterface, RootStateInterface> & Getters = {
   getPolls: (state) => {

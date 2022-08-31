@@ -4,7 +4,7 @@ import { AuthorizationStateInterface } from '@/user/store/authorization/types';
 import { CooperationStateInterface } from '@/cooperation/store/types';
 import { LocalStorageStateInterface } from '@/user/store/localstorage/types';
 import { HousesStateInterface } from '@/houses/store/types';
-import { PollsStateInterface } from '@/polls/store/types';
+import { PollsStateInterface } from '@/poll/store/types';
 import { ApartmentsStateInterface } from '@/apartment/store/apartments/types';
 import { OwnershipsStateInterface } from '@/apartment/store/ownerships/types';
 import { InvitationsStateInterface } from '@/store/invitations/types';

@@ -1,6 +1,6 @@
-import { PollStatusType, PollsResults } from '@/polls/store/types';
+import { PollStatusType, PollsResults } from '@/poll/store/types';
 import { HouseDTOModel } from '@/houses/models/houseDTO.model';
-import { PollModel, PollModelWithResults } from '@/polls/models/poll.model';
+import { PollModel, PollModelWithResults } from '@/poll/models/poll.model';
 
 export class PollDTOModel {
   public id: number;

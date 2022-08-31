@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils';
-import CooperationPolls from '@/polls/CooperationPolls.vue';
+import CooperationPolls from '@/poll/CooperationPolls.vue';
 import { createStore } from 'vuex';
-import { getters } from '@/polls/store/getters';
-import { PollStatusType } from '@/polls/store/types';
+import { getters } from '@/poll/store/getters';
+import { PollStatusType } from '@/poll/store/types';
 
 describe('Register user', () => {
   describe('testing render with mock store', () => {

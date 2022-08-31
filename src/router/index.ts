@@ -10,8 +10,8 @@ import MainPage from '@/views/MainPage.vue';
 import CooperationInfo from '@/cooperation/components/CooperationInfo.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
 import PageErrorInvintation from '@/views/PageErrorInvintation.vue';
-import CooperationPolls from '@/polls/CooperationPolls.vue';
-import PollInfo from '@/polls/PollInfo.vue';
+import CooperationPolls from '@/poll/CooperationPolls.vue';
+import PollInfo from '@/poll/PollInfo.vue';
 import InvitationSection from '@/views/InvitationSection.vue';
 
 import ManageApartments from '@/apartment/ManageApartments.vue';

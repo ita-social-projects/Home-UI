@@ -67,15 +67,15 @@
 <script lang="ts">
 import { defineComponent, VueElement } from 'vue';
 import { mapGetters } from 'vuex';
-import { PollModelWithResults } from '@/polls/models/poll.model';
+import { PollModelWithResults } from '@/poll/models/poll.model';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 import { StoreModuleEnum } from '@/store/types';
-import { DeletePollPayloadInterface, PollsActionEnum, PollStatusEnum, PollStatusType } from '@/polls/store/types';
+import { DeletePollPayloadInterface, PollsActionEnum, PollStatusEnum, PollStatusType } from '@/poll/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
 import ConfirmPopup from 'primevue/confirmpopup';
 import Dialog from 'primevue/dialog';
-import PollForm from '@/polls/PollForm.vue';
+import PollForm from '@/poll/PollForm.vue';
 
 export default defineComponent({
   name: 'BaseCooperationPoll',
