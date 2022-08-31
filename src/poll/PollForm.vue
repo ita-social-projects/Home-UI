@@ -373,7 +373,7 @@ export default defineComponent({
         description: this.pollData.description,
         creationDate: new Date(this.beginDateInEdition.toLocaleString('en-US')).toISOString(),
         completionDate: new Date(this.finishDate.toLocaleString('en-US')).toISOString(),
-        status: this.$props.poll.status,
+        status: this.poll.status,
         polledHouses: this.pollData.polledHouses,
       };
 
@@ -404,7 +404,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    if (this.$props.isEditing) {
+    if (this.isEditing) {
       try {
         this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationIdEdit);
         this.initData();
