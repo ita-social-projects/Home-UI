@@ -125,7 +125,7 @@
           }"
           class="radio-button"
         />
-        <label :for="key"> {{ item }} </label>
+        <label :for="key">{{ item }}</label>
       </div>
       <small v-if="v$.pollData.acceptanceCriteria.$error" id="poll_title" class="p-error">{{
         v$.pollData.acceptanceCriteria.$errors[0].$message
@@ -296,6 +296,7 @@ export default defineComponent({
       const dateTomorrow = new Date();
       dateTomorrow.setDate(dateTomorrow.getDate() + 1);
       dateTomorrow.setHours(0, 0, 0, 0);
+
       if (this.pollData.creationDateInEdition < dateTomorrow) {
         this.isDisabled = true;
         this.isCreationDateHelpActive = true;
@@ -310,6 +311,7 @@ export default defineComponent({
         this.isDisabled = false;
       }
     },
+
     async initData() {
       await this.$store.dispatch(
         `${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_SELECTED_POLL}`,
@@ -325,6 +327,7 @@ export default defineComponent({
       this.beginDateInEdition = this.selectedPoll?.creationDate || new Date();
       this.finishDate = this.selectedPoll?.completionDate;
     },
+
     submitPollForm() {
       if (this.isEditing) {
         this.editPoll();
@@ -335,7 +338,6 @@ export default defineComponent({
     async createPoll() {
       const isFormValid = await this.v$.$validate();
       if (!isFormValid) {
-        console.log('i am in isFormValid');
         return;
       }
       const payload = {
@@ -409,8 +411,8 @@ export default defineComponent({
       } catch {
         console.log('error was caught during mounting BaseCooperationPoll');
       }
-    } else if (!this.$props.isEditing) {
-      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.$props.cooperationId);
+    } else {
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationId);
     }
   },
 });

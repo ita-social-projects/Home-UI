@@ -1,4 +1,4 @@
-<template> 
+<template>
   <div class="add_btn">
     <Button
       label="Додати будинок"
