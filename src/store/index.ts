@@ -1,8 +1,8 @@
 import { createStore } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { authorizationStore } from '@/store/authorization';
+import { authorizationStore } from '@/user/store/authorization';
 import { cooperationStore } from '@/cooperation/store';
-import { localStorageStore } from '@/store/localstorage';
+import { localStorageStore } from '@/user/store/localstorage';
 import { housesStore } from '@/houses/store';
 import { userStore } from '@/store/user';
 import { pollsStore } from '@/polls/store';

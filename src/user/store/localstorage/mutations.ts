@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { LocalStorageStateInterface, LocalStorageMutationEnum, Mutations } from '@/store/localstorage/types';
+import { LocalStorageStateInterface, LocalStorageMutationEnum, Mutations } from '@/user/store/localstorage/types';
 
 export const mutations: MutationTree<LocalStorageStateInterface> & Mutations = {
   [LocalStorageMutationEnum.SET_TOKEN]: (state, payload) => {
@@ -11,5 +11,8 @@ export const mutations: MutationTree<LocalStorageStateInterface> & Mutations = {
   },
   [LocalStorageMutationEnum.REMOVE_TOKEN]: (state, payload) => {
     localStorage.removeItem(payload);
+  },
+  [LocalStorageMutationEnum.GET_USER_FROM_STORAGE]: (state) => {
+    state.user = JSON.parse(localStorage.getItem('user') || '{}');
   },
 };

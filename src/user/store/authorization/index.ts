@@ -1,9 +1,9 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { AuthorizationStateInterface } from '@/store/authorization/types';
-import { getters } from '@/store/authorization/getters';
-import { mutations } from '@/store/authorization/mutations';
-import { actions } from '@/store/authorization/actions';
+import { AuthorizationStateInterface } from '@/user/store/authorization/types';
+import { getters } from '@/user/store/authorization/getters';
+import { mutations } from '@/user/store/authorization/mutations';
+import { actions } from '@/user/store/authorization/actions';
 
 export const state: AuthorizationStateInterface = {
   user: {

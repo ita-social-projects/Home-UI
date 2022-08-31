@@ -1,8 +1,8 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { UserStateInterface } from '@/store/user/types';
-import { AuthorizationStateInterface } from '@/store/authorization/types';
+import { UserStateInterface } from '@/user/store/user/types';
+import { AuthorizationStateInterface } from '@/user/store/authorization/types';
 import { CooperationStateInterface } from '@/cooperation/store/types';
-import { LocalStorageStateInterface } from '@/store/localstorage/types';
+import { LocalStorageStateInterface } from '@/user/store/localstorage/types';
 import { HousesStateInterface } from '@/houses/store/types';
 import { PollsStateInterface } from '@/polls/store/types';
 import { ApartmentsStateInterface } from '@/apartment/store/apartments/types';

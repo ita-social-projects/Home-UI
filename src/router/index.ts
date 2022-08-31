@@ -3,9 +3,9 @@ import { RoutesEnum } from '@/router/types';
 
 import StartPage from '@/views/StartPage.vue';
 import RegisterCooperation from '@/cooperation/components/RegisterCooperation.vue';
-import RegisterUser from '@/views/RegisterUser.vue';
-import ManageUser from '@/views/ManageUser.vue';
-import UserLogin from '@/views/UserLogin.vue';
+import RegisterUser from '@/user/components/RegisterUser.vue';
+import ManageUser from '@/user/components/ManageUser.vue';
+import UserLogin from '@/user/components/UserLogin.vue';
 import MainPage from '@/views/MainPage.vue';
 import CooperationInfo from '@/cooperation/components/CooperationInfo.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
