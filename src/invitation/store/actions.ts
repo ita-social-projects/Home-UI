@@ -8,7 +8,7 @@ import {
 } from '@/invitation/store/types';
 import { HTTP } from '@/core/api/http-common';
 import { InvitationModel } from '@/invitation/models/invitation.model';
-import { PostInvitationDTOModel } from '../models/post-invitation.DTOmodel';
+import { PostInvitationDTOModel } from '@/invitation/models/post-invitation.DTOmodel';
 import { InvitationDTOModel } from '@/invitation/models/invitationDTO.model';
 
 export const actions: ActionTree<InvitationsStateInterface, RootStateInterface> & Actions = {
