@@ -229,13 +229,14 @@ export default defineComponent({
     return {
       pollData: {
         title: '',
-        description: '',
+        description: this.isEditing ? 'Повний опис опитування' : '',
         polledHouses: [] as Array<HouseModel>,
         creationDate: new Date(),
         creationDateInEdition: '' as any,
         completionDate: '' || ('' as any),
         acceptanceCriteria: '',
       },
+      polledHouses: [],
       startDate: null,
       finishDate: new Date(),
       displayCreatePollModal: false,
@@ -318,9 +319,9 @@ export default defineComponent({
         this.$props.poll.id
       );
 
-      this.pollData.title = this.selectedPoll?.header ?? '';
-      this.pollData.description = this.selectedPoll?.description ?? 'Повний опис опитування';
-      this.pollData.polledHouses = this.selectedPoll?.polledHouses ?? [];
+      this.pollData.title = this.selectedPoll?.header;
+      this.pollData.description = this.selectedPoll?.description;
+      this.pollData.polledHouses = this.selectedPoll?.polledHouses;
       this.pollData.creationDateInEdition = this.selectedPoll?.creationDate.toLocaleString('uk-UA');
       this.pollData.completionDate = this.selectedPoll?.completionDate.toLocaleString('uk-UA');
 
