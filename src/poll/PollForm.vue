@@ -131,29 +131,11 @@
         v$.pollData.acceptanceCriteria.$errors[0].$message
       }}</small>
     </div>
-    <div v-if="!isEditing" class="buttons-container">
+    <div class="buttons-container">
       <Button
-        id="save-button"
-        label="Додати опитування"
-        icon="pi pi-check"
-        class="p-button-info"
-        type="submit"
-        value="Submit"
-        autofocus
-      />
-      <Button
-        id="cancel-button"
-        label="Відмінити"
-        icon="pi pi-times"
-        class="p-button-outlined p-button-info"
-        @click="cancelEditing"
-      />
-    </div>
-
-    <div v-if="isEditing" class="buttons-container">
-      <Button
+        :id="!this.isEditing && 'save-button'"
         :disabled="isDisabled || v$.pollData.$invalid"
-        label="Зберегти зміни"
+        :label="this.isEditing ? 'Зберегти зміни' : 'Додати опитування'"
         icon="pi pi-check"
         class="p-button-info"
         type="submit"
@@ -161,10 +143,11 @@
         autofocus
       />
       <Button
+        :id="!this.isEditing && 'cancel-button'"
         label="Скасувати"
         icon="pi pi-times"
         class="p-button-outlined p-button-info"
-        @click="this.$emit('close-edit-poll')"
+        @click="cancel"
       />
     </div>
   </form>
@@ -229,7 +212,7 @@ export default defineComponent({
     return {
       pollData: {
         title: '',
-        description: this.isEditing ? 'Повний опис опитування' : '',
+        description: '',
         polledHouses: [] as Array<HouseModel>,
         creationDate: new Date(),
         creationDateInEdition: '' as any,
@@ -278,9 +261,13 @@ export default defineComponent({
     this.minDate.setHours(0, 0, 0, 0);
   },
   methods: {
-    cancelEditing() {
-      this.resetPollDataFields();
-      this.$emit('cancel-creating-poll');
+    cancel() {
+      if (this.isEditing) {
+        this.$emit('close-edit-poll');
+      } else {
+        this.$emit('cancel-creating-poll');
+        this.resetPollDataFields();
+      }
     },
     resetPollDataFields() {
       this.pollData.title = '';
@@ -320,7 +307,7 @@ export default defineComponent({
       );
 
       this.pollData.title = this.selectedPoll?.header;
-      this.pollData.description = this.selectedPoll?.description;
+      this.pollData.description = this.selectedPoll?.description ?? 'Повний опис опитування';
       this.pollData.polledHouses = this.selectedPoll?.polledHouses;
       this.pollData.creationDateInEdition = this.selectedPoll?.creationDate.toLocaleString('uk-UA');
       this.pollData.completionDate = this.selectedPoll?.completionDate.toLocaleString('uk-UA');
