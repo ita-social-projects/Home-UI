@@ -75,7 +75,7 @@
           :minDate="minDate"
           id="caledar-begin"
           dateFormat="dd.mm.yy"
-          @date-select="ChangeDate"
+          @date-select="changeDate"
         />
         <Calendar
           v-if="isEditing"
@@ -269,6 +269,7 @@ export default defineComponent({
         this.resetPollDataFields();
       }
     },
+
     resetPollDataFields() {
       this.pollData.title = '';
       this.pollData.description = '';
@@ -277,9 +278,11 @@ export default defineComponent({
       this.pollData.completionDate = '';
       this.pollData.acceptanceCriteria = '';
     },
-    ChangeDate(value: Date) {
+
+    changeDate(value: Date) {
       this.pollData.creationDate = value;
     },
+
     onChangeCreationDate() {
       const dateTomorrow = new Date();
       dateTomorrow.setDate(dateTomorrow.getDate() + 1);
@@ -307,7 +310,7 @@ export default defineComponent({
       );
 
       this.pollData.title = this.selectedPoll?.header;
-      this.pollData.description = this.selectedPoll?.description ?? 'Повний опис опитування';
+      this.pollData.description = this.selectedPoll?.description;
       this.pollData.polledHouses = this.selectedPoll?.polledHouses;
       this.pollData.creationDateInEdition = this.selectedPoll?.creationDate.toLocaleString('uk-UA');
       this.pollData.completionDate = this.selectedPoll?.completionDate.toLocaleString('uk-UA');
@@ -323,6 +326,7 @@ export default defineComponent({
         this.createPoll();
       }
     },
+
     async createPoll() {
       const isFormValid = await this.v$.$validate();
       if (!isFormValid) {
