@@ -1,5 +1,5 @@
-import { AxiosRequestConfig, AxiosError } from 'axios';
-import { HTTP_AUTH } from '../api/http-common';
+import { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
+import { HTTP, HTTP_AUTH } from '../api/http-common';
 import { AuthActionEnum } from '@/user/store/authorization/types';
 import { RoutesEnum } from '@/router/types';
 import { StoreModuleEnum } from '@/store/types';
@@ -47,4 +47,23 @@ export const notValidRefreshToken = (error: AxiosError) => {
     router.push(RoutesEnum.StartPage);
   }
   return Promise.reject(error);
+};
+
+export const setSpinnerInterceptors = (spinnerState: any): void => {
+  const handleError = (error: AxiosError): any => {
+    spinnerState.value = false;
+    return Promise.reject(error);
+  };
+  const handleQuery = (
+    query: AxiosResponse | AxiosRequestConfig,
+    state: boolean
+  ): AxiosResponse | AxiosRequestConfig => {
+    spinnerState.value = state;
+    return query;
+  };
+
+  HTTP.interceptors.request.use((req: AxiosRequestConfig) => handleQuery(req, true), handleError);
+  HTTP.interceptors.response.use((response: AxiosResponse) => handleQuery(response, false), handleError);
+  HTTP_AUTH.interceptors.request.use((req: AxiosRequestConfig) => handleQuery(req, true), handleError);
+  HTTP_AUTH.interceptors.response.use((response: AxiosResponse) => handleQuery(response, false), handleError);
 };
