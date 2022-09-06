@@ -24,7 +24,7 @@
   <div class="container">
     <h1 class="page-title">{{ title }}</h1>
     <div class="container-invitations">
-      <DataTable :value="invitations" responsiveLayout="scroll">
+      <DataTable :value="invitations" responsiveLayout="stack" breakpoint="960px">
         <template #header>
           <span class="p-input-icon-right search-field">
             <i class="pi pi-search" />
