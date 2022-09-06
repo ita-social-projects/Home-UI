@@ -1,6 +1,6 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { InvitationModel } from '@/store/invitations/models/invitations.model';
+import { InvitationModel } from '@/invitation/models/invitation.model';
 
 export enum InvitationsMutationsEnum {
   CREATE_INVITATION = 'CREATE_INVITATION',
