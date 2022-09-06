@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="createPoll()" id="poll_data_form">
+  <form @submit.prevent="submitPollForm()" id="poll_data_form">
     <div class="input-section">
       <section>
         <label class="dialog-item" for="poll_title">Заголовок: </label>
@@ -12,7 +12,8 @@
           id="poll_title"
           placeholder="Заголовок"
           rows="3"
-          @input="v$.pollData.title.$touch"
+          @blur="v$.pollData.title.$touch"
+          @input="isDisabled = false"
         />
       </section>
       <small v-if="v$.pollData.title.$error" id="poll_title" class="p-error">{{
@@ -30,7 +31,8 @@
           id="poll_description"
           placeholder="Детальний опис"
           rows="8"
-          @input="v$.pollData.description.$touch"
+          @blur="v$.pollData.description.$touch"
+          @input="isDisabled = false"
         />
       </section>
       <small v-if="v$.pollData.description.$error" id="poll_description" class="p-error">{{
@@ -42,7 +44,17 @@
         <label class="dialog-item" for="poll_polledHouses">Список будинків: </label>
         <div class="checkbox-section">
           <div v-for="(house, index) of houses" :key="house.id" class="p-field-checkbox">
-            <Checkbox v-model="pollData.polledHouses" :id="house.id" :value="house" name="category" />
+            <Checkbox
+              v-model="pollData.polledHouses"
+              :id="house.id"
+              :value="house"
+              name="category"
+              :class="{
+                'p-invalid': v$.pollData.polledHouses.$error,
+              }"
+              @input="isDisabled = false"
+              @blur="v$.pollData.polledHouses.$touch"
+            />
             <label :for="house.id" class="house-label">
               {{ houseAddresses[index] }}
             </label>
@@ -57,23 +69,51 @@
       <section>
         <label class="dialog-item" for="caledar-begin">Дата початку:</label>
         <Calendar
+          v-if="!isEditing"
           v-model="startDate"
           :showIcon="true"
           :minDate="minDate"
           id="caledar-begin"
           dateFormat="dd.mm.yy"
-          @date-select="ChangeDate"
+          @date-select="changeDate"
         />
+        <Calendar
+          v-if="isEditing"
+          v-model="pollData.creationDateInEdition"
+          :showIcon="true"
+          :class="{
+            'p-invalid': v$.pollData.creationDateInEdition.$error,
+          }"
+          id="caledar-begin"
+          dateFormat="dd.mm.yy"
+          @date-select="onChangeCreationDate"
+          @blur="v$.pollData.creationDateInEdition.$touch"
+        />
+        <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error сreationDate-help warning-message">
+          Переконайтесь, що дата стоїть не раніше, ніж завтра!
+        </small>
+        <small v-if="v$.pollData.creationDateInEdition.$error" id="poll_creationDate" class="p-error">{{
+          v$.pollData.creationDateInEdition.$errors[0].$message
+        }}</small>
       </section>
     </div>
     <div class="input-section">
       <section>
         <label class="dialog-item" for="calendar-finish">Дата закінчення:</label>
-        <InputText :value="pollData.completionDate" id="calendar-finish" disabled="true"></InputText>
+        <InputText v-if="!isEditing" :value="pollData.completionDate" id="calendar-finish" disabled="true"></InputText>
+        <Calendar
+          v-if="isEditing"
+          v-model="pollData.completionDate"
+          :showIcon="true"
+          :disabled="true"
+          id="calendar-finish"
+          dateFormat="dd.mm.yy"
+          @date-select="isDisabled = false"
+        />
       </section>
-      <small id="apartment_area_help" class="p-warning">виставляється автоматично 15 днів з дати початку</small>
+      <small id="apartment_area_help" class="p-warning">Виставляється автоматично 15 днів з дати початку</small>
     </div>
-    <div class="option-section">
+    <div v-if="!isEditing" class="option-section">
       <div v-for="(item, key) in PollAcceptanceCriteriaEnum" :key="key">
         <RadioButton
           :name="key"
@@ -84,29 +124,30 @@
             'p-invalid': v$.pollData.acceptanceCriteria.$error,
           }"
           class="radio-button"
-        ></RadioButton>
-        <label for="item.name">{{ item }}</label>
+        />
+        <label :for="key">{{ item }}</label>
       </div>
       <small v-if="v$.pollData.acceptanceCriteria.$error" id="poll_title" class="p-error">{{
         v$.pollData.acceptanceCriteria.$errors[0].$message
       }}</small>
     </div>
-    <div class="button-div">
+    <div class="buttons-container">
       <Button
-        id="save-button"
-        label="Додати опитування"
+        :id="!this.isEditing && 'save-button'"
+        :disabled="isDisabled || v$.pollData.$invalid"
+        :label="this.isEditing ? 'Зберегти зміни' : 'Додати опитування'"
         icon="pi pi-check"
-        autofocus
         class="p-button-info"
         type="submit"
         value="Submit"
+        autofocus
       />
       <Button
-        id="cancel-button"
-        label="Відмінити"
+        :id="!this.isEditing && 'cancel-button'"
+        label="Скасувати"
         icon="pi pi-times"
         class="p-button-outlined p-button-info"
-        @click="cancelEditing"
+        @click="cancel"
       />
     </div>
   </form>
@@ -114,6 +155,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { mapGetters } from 'vuex';
 import Button from 'primevue/button';
 import Textarea from 'primevue/textarea';
 import Checkbox from 'primevue/checkbox';
@@ -121,14 +163,21 @@ import Calendar from 'primevue/calendar';
 import InputText from 'primevue/inputtext';
 import RadioButton from 'primevue/radiobutton';
 import useVuelidate from '@vuelidate/core';
-import { pollValidations } from '@/utils/poll-validations';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { HouseModel } from '@/houses/models/house.model';
-import { PollsActionEnum, PollAcceptanceCriteriaEnum } from '@/store/polls/types';
+import { PollsActionEnum, PollAcceptanceCriteriaEnum, PollsGettersEnum } from '@/poll/store/types';
+import { PollModel } from '@/poll/models/poll.model';
+import {
+  requiredValidator,
+  pollTitleLenghtValidator,
+  pollDescriptionLenghtValidator,
+  cyrillicLangTextValidator,
+} from '@/utils/validators';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
 
 export default defineComponent({
-  name: 'CreatePollForm',
+  name: 'PollForm',
   components: {
     Button,
     Textarea,
@@ -142,6 +191,22 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    isEditing: {
+      type: Boolean,
+      required: true,
+    },
+    poll: {
+      type: PollModel,
+      required: true,
+    },
+    showSuccessOperation: {
+      type: Function,
+      required: true,
+    },
+    displayEditPollModal: {
+      type: Boolean,
+      required: true,
+    },
   },
   data() {
     return {
@@ -150,9 +215,11 @@ export default defineComponent({
         description: '',
         polledHouses: [] as Array<HouseModel>,
         creationDate: new Date(),
-        completionDate: '',
+        creationDateInEdition: '' as any,
+        completionDate: '' || ('' as any),
         acceptanceCriteria: '',
       },
+      polledHouses: [],
       startDate: null,
       finishDate: new Date(),
       displayCreatePollModal: false,
@@ -160,11 +227,21 @@ export default defineComponent({
       submitted: false,
       v$: useVuelidate(),
       PollAcceptanceCriteriaEnum,
+
+      beginDateInEdition: new Date(),
+      isDisabled: true,
+      isCreationDateHelpActive: false,
     };
   },
   validations() {
     return {
-      pollData: pollValidations,
+      pollData: {
+        title: { requiredValidator, cyrillicLangTextValidator, pollTitleLenghtValidator },
+        description: { requiredValidator, cyrillicLangTextValidator, pollDescriptionLenghtValidator },
+        polledHouses: { requiredValidator },
+        acceptanceCriteria: !this.isEditing ? { requiredValidator } : '',
+        creationDateInEdition: this.isEditing ? { requiredValidator } : '',
+      },
     };
   },
   created() {
@@ -184,10 +261,15 @@ export default defineComponent({
     this.minDate.setHours(0, 0, 0, 0);
   },
   methods: {
-    cancelEditing() {
-      this.resetPollDataFields();
-      this.$emit('cancel-creating-poll');
+    cancel() {
+      if (this.isEditing) {
+        this.$emit('close-edit-poll');
+      } else {
+        this.$emit('cancel-creating-poll');
+        this.resetPollDataFields();
+      }
     },
+
     resetPollDataFields() {
       this.pollData.title = '';
       this.pollData.description = '';
@@ -196,9 +278,55 @@ export default defineComponent({
       this.pollData.completionDate = '';
       this.pollData.acceptanceCriteria = '';
     },
-    ChangeDate(value: Date) {
+
+    changeDate(value: Date) {
       this.pollData.creationDate = value;
     },
+
+    onChangeCreationDate() {
+      const dateTomorrow = new Date();
+      dateTomorrow.setDate(dateTomorrow.getDate() + 1);
+      dateTomorrow.setHours(0, 0, 0, 0);
+      const forteenDaysInMilliseconds = 14 * 86400000;
+      if (this.pollData.creationDateInEdition < dateTomorrow) {
+        this.isDisabled = true;
+        this.isCreationDateHelpActive = true;
+      } else {
+        this.beginDateInEdition.setHours(0, 0, 0, 0);
+
+        this.finishDate = new Date(this.pollData.creationDateInEdition.getTime() + forteenDaysInMilliseconds);
+        this.finishDate.setHours(23, 59, 59, 59);
+        this.pollData.completionDate = this.finishDate.toLocaleString('uk-UA').split(',')[0];
+
+        this.isCreationDateHelpActive = false;
+        this.isDisabled = false;
+      }
+    },
+
+    async initData() {
+      await this.$store.dispatch(
+        `${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_SELECTED_POLL}`,
+        this.$props.poll.id
+      );
+
+      this.pollData.title = this.selectedPoll?.header;
+      this.pollData.description = this.selectedPoll?.description;
+      this.pollData.polledHouses = this.selectedPoll?.polledHouses;
+      this.pollData.creationDateInEdition = this.selectedPoll?.creationDate.toLocaleString('uk-UA');
+      this.pollData.completionDate = this.selectedPoll?.completionDate.toLocaleString('uk-UA');
+
+      this.beginDateInEdition = this.selectedPoll?.creationDate || new Date();
+      this.finishDate = this.selectedPoll?.completionDate;
+    },
+
+    submitPollForm() {
+      if (this.isEditing) {
+        this.editPoll();
+      } else {
+        this.createPoll();
+      }
+    },
+
     async createPoll() {
       const isFormValid = await this.v$.$validate();
       if (!isFormValid) {
@@ -224,18 +352,42 @@ export default defineComponent({
         payload.body.creationDate = this.pollData.creationDate.toISOString();
         payload.body.completionDate = this.finishDate.toISOString();
       }
+
       this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.ADD_COOPERATION_POLL}`, payload);
       this.resetPollDataFields();
       this.v$.$reset();
       this.$emit('create-poll');
     },
+
+    async editPoll() {
+      const poll = {
+        header: this.pollData.title,
+        description: this.pollData.description,
+        creationDate: new Date(this.beginDateInEdition.toLocaleString('en-US')).toISOString(),
+        completionDate: new Date(this.finishDate.toLocaleString('en-US')).toISOString(),
+        status: this.poll.status,
+        polledHouses: this.pollData.polledHouses,
+      };
+
+      const ids = { cooperationId: this.cooperationIdEdit, pollId: this.$props.poll.id };
+
+      await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.UPDATE_POLL}`, {
+        poll,
+        ids,
+      });
+
+      this.$props.showSuccessOperation('редаговано');
+      this.$emit('close-edit-poll');
+    },
   },
   computed: {
-    houses(): Array<HouseModel> {
-      return this.$store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
-    },
+    ...mapGetters({
+      cooperationIdEdit: `${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`,
+      selectedPoll: `${StoreModuleEnum.pollsStore}/${PollsGettersEnum.getSelectedPoll}`,
+      houses: `${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`,
+    }),
     houseAddresses(): Array<string> {
-      return this.houses.reduce((acc: Array<string>, cur) => {
+      return this.houses.reduce((acc: Array<string>, cur: HouseModel) => {
         acc.push(
           `${cur.address?.houseNumber}, ${cur.address?.houseBlock}, ${cur.address?.district},${cur.address?.street}`
         );
@@ -244,7 +396,16 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.$props.cooperationId);
+    if (this.isEditing) {
+      try {
+        this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationIdEdit);
+        this.initData();
+      } catch {
+        console.log('error was caught during mounting BaseCooperationPoll');
+      }
+    } else {
+      this.$store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, this.cooperationId);
+    }
   },
 });
 </script>
@@ -252,18 +413,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 %error-message {
   margin: 0.4em 0.5rem;
-  width: 100%;
 }
 
 #calendar-finish {
-  width: 230px;
+  width: 200px;
 }
-
-.p-disabled,
-.p-component:disabled {
-  opacity: 1;
-}
-
 .address-details {
   margin-left: 2rem;
   .dialog-item-address {
@@ -271,7 +425,6 @@ export default defineComponent({
   }
 }
 .dialog-item {
-  position: relative;
   width: 150px;
   margin-bottom: 13px;
 }
@@ -284,6 +437,7 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  position: relative;
 }
 .input-section small {
   justify-self: flex-end;
@@ -317,19 +471,16 @@ export default defineComponent({
 .house-label {
   padding-left: 10px;
 }
-
-.button-div {
+.p-inputtext.p-component {
+  width: 400px;
+}
+.buttons-container {
+  padding: 1rem 0;
   float: right;
   .p-button-outlined {
     margin-left: 20px;
   }
-  margin-top: 30px;
 }
-
-.p-inputtext.p-component {
-  width: 400px;
-}
-
 .p-calendar {
   width: 200px;
 }
@@ -341,5 +492,11 @@ export default defineComponent({
 }
 .radio-button {
   margin-right: 15px;
+}
+
+.warning-message {
+  position: absolute;
+  top: 3rem;
+  right: 0rem;
 }
 </style>

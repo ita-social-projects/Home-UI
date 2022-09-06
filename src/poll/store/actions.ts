@@ -1,11 +1,11 @@
 import { ActionTree } from 'vuex';
 
 import { RootStateInterface } from '@/store/types';
-import { PollsStateInterface, PollsActionEnum, PollsMutationEnum, Actions } from '@/store/polls/types';
+import { PollsStateInterface, PollsActionEnum, PollsMutationEnum, Actions } from '@/poll/store/types';
 import { HTTP } from '@/core/api/http-common';
-import { PollModel, PollModelWithResults } from '@/store/polls/models/poll.model';
-import { PollDTOModel, PollDTOModelWithResults } from '@/store/polls/models/pollDTO.model';
-import { PostPollDTOModel } from './models/put-pollDTO.model';
+import { PollModel, PollModelWithResults } from '@/poll/models/poll.model';
+import { PollDTOModel, PollDTOModelWithResults } from '@/poll/models/pollDTO.model';
+import { PostPollDTOModel } from '@/poll/models/put-pollDTO.model';
 
 export const actions: ActionTree<PollsStateInterface, RootStateInterface> & Actions = {
   [PollsActionEnum.SET_COOPERATION_POLLS]: async ({ commit }, payload) => {
