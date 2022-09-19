@@ -277,6 +277,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+input {
+  max-width: 265px;
+}
 %error-message {
   margin: 0.2em 0.9rem;
   width: 80%;
