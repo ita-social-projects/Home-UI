@@ -73,9 +73,13 @@
           v-model="startDate"
           :showIcon="true"
           :minDate="minDate"
+          :class="{
+            'p-invalid': v$.startDate.$error,
+          }"
           id="caledar-begin"
           dateFormat="dd.mm.yy"
           @date-select="changeDate"
+          @blur="v$.startDate.$touch"
         />
         <Calendar
           v-if="isEditing"
@@ -92,8 +96,11 @@
         <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error сreationDate-help warning-message">
           Переконайтесь, що дата стоїть не раніше, ніж завтра!
         </small>
-        <small v-if="v$.pollData.creationDateInEdition.$error" id="poll_creationDate" class="p-error">{{
+        <small v-if="v$.pollData.creationDateInEdition.$error" id="poll_creationDate" class="p-error warning-message">{{
           v$.pollData.creationDateInEdition.$errors[0].$message
+        }}</small>
+        <small v-if="v$.startDate.$error" id="poll_startDate" class="p-error warning-message">{{
+          v$.startDate.$errors[0].$message
         }}</small>
       </section>
     </div>
@@ -134,13 +141,12 @@
     <div class="buttons-container">
       <Button
         :id="!this.isEditing && 'save-button'"
-        :disabled="isDisabled || v$.pollData.$invalid"
+        :disabled="isDisabled || v$.pollData.$invalid || v$.startDate.$invalid"
         :label="this.isEditing ? 'Зберегти зміни' : 'Додати опитування'"
         icon="pi pi-check"
         class="p-button-info"
         type="submit"
         value="Submit"
-        autofocus
       />
       <Button
         :id="!this.isEditing && 'cancel-button'"
@@ -242,6 +248,7 @@ export default defineComponent({
         acceptanceCriteria: !this.isEditing ? { requiredValidator } : '',
         creationDateInEdition: this.isEditing ? { requiredValidator } : '',
       },
+      startDate: !this.isEditing ? { requiredValidator } : '',
     };
   },
   created() {
@@ -252,7 +259,8 @@ export default defineComponent({
           this.pollData.completionDate = '';
           return;
         }
-        this.finishDate = new Date(newVal.getTime() + 14 * 86400000);
+        const forteenDaysInMilliseconds = 14 * 86400000;
+        this.finishDate = new Date(newVal.getTime() + forteenDaysInMilliseconds);
         this.finishDate.setHours(23, 59, 59, 59);
         this.pollData.completionDate = this.finishDate.toLocaleString('uk-UA').split(',')[0];
       }
@@ -320,6 +328,7 @@ export default defineComponent({
     },
 
     submitPollForm() {
+      window.history.go();
       if (this.isEditing) {
         this.editPoll();
       } else {
@@ -332,6 +341,7 @@ export default defineComponent({
       if (!isFormValid) {
         return;
       }
+
       const payload = {
         cooperationId: this.cooperationId,
         body: {
