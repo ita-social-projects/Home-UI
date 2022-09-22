@@ -154,6 +154,7 @@ export default defineComponent({
 
           await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.DELETE_POLL}`, payload);
           this.showSuccessOperation('видалено');
+          window.history.go();
         },
         reject: () => {
           console.log('rejected delete', this.$props.poll.id);
