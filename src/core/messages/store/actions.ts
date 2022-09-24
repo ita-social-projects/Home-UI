@@ -6,4 +6,7 @@ export const actions: ActionTree<MessagesStateInterface, RootStateInterface> & A
   [MessagesActionEnum.SET_MESSAGE_ACTION]: ({ commit }, payload) => {
     commit(MessagesMutationEnum.SET_MESSAGE, payload);
   },
+  [MessagesActionEnum.INVOKE_MESSAGES_CUT]: ({ commit }) => {
+    commit(MessagesMutationEnum.CUT_THE_MESSAGES_LIST);
+  },
 };

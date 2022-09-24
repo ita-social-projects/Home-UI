@@ -6,8 +6,9 @@
 import { computed, defineComponent, watch } from 'vue';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-import { MessagesI } from '@/core/messages/store/types';
 import { useStore } from 'vuex';
+import { StoreModuleEnum } from '@/store/types';
+import { MessagesActionEnum } from '../messages/store/types';
 
 export default defineComponent({
   name: 'MessagePlaceholder',
@@ -24,6 +25,7 @@ export default defineComponent({
         life: 6000,
       });
     };
+    const MESSAGES_CHUNK = 3;
     const store = useStore();
     const updatedList = computed(() => {
       return store.state.messagesStore.messages;
@@ -33,9 +35,11 @@ export default defineComponent({
       () => updatedList.value,
       function () {
         if (updatedList.value) {
-          updatedList.value.forEach((message: MessagesI) => {
-            showMessage(message.status.toString(), message.type, message.message);
-          });
+          const { length, [length - 1]: last } = updatedList.value;
+          if (length > MESSAGES_CHUNK) {
+            store.dispatch(`${StoreModuleEnum.messagesStore}/${MessagesActionEnum.INVOKE_MESSAGES_CUT}`);
+          }
+          showMessage(last.status.toString(), last.type, last.message);
         }
       }
     );
