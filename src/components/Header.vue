@@ -4,9 +4,9 @@
       <div class="logo" @click="redirectToMain"></div>
     </div>
 
-    <div class="header__info">
+    <!-- <div class="header__info">
       <span>{{ headerInfo }}</span>
-    </div>
+    </div> -->
 
     <div class="header__btn">
       <Dropdown
@@ -26,13 +26,14 @@
           @click="toggle"
           aria-haspopup="true"
           aria-controls="overlay_tmenu"
-          class="p-button-rounded p-button-info p-button-sm"
+          class="p-button-rounded p-button-info p-button-sm avatar_btn"
         >
           <Avatar icon="pi pi-user" class="p-mr-2" style="background-color: #ffffff; color: #609af8" shape="circle" />
-          <span class="p-ml-2 p-text-bold">{{ getNameFromStore }}</span>
+          <span class="user_name p-ml-2 p-text-bold">{{ getNameFromStore }}</span>
         </Button>
-        <Menu id="overlay_tmenu" ref="menu" :model="items" :popup="true" />
+        <Menu id="overlay_tmenu" ref="menu" :model="items" :popup="true" /> 
       </div>
+      <Button icon="pi pi-align-justify" label="Меню" class="menu_btn p-button-rounded p-button-info p-button-lg" />
     </div>
   </header>
 </template>
@@ -140,10 +141,10 @@ export default defineComponent({
 .header__logo {
   @include flex-custom(flex-start);
   height: 40px;
-  width: 100%;
+  // width: 100%;
   padding-left: 65px;
-  padding-right: 15px;
-  flex: 1 1 auto;
+  padding-right: 1rem;
+  // flex: 1 1 auto;
 
   .logo {
     height: 100%;
@@ -176,7 +177,63 @@ export default defineComponent({
     margin-right: 10px;
   }
   button {
-    margin: 0 65px;
+    margin: 0 3rem 0 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header__btn .drop-menu {
+    display: none;
+  }
+
+  .header__btn .menu_btn {
+    margin: 0 2rem 0 1rem;
+  }
+  .header__btn button {
+    margin: 0;
+  }
+
+  .header__btn .p-button.p-button-lg {
+    font-size: 1rem;
+  }
+  
+  .header__logo {
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 769px) {
+  .header__btn .menu_btn {
+    display: none;
+  }
+}
+
+@media (max-width: 570px) {
+  .header {
+    padding: 20px 7px 20px 11px;
+  }
+  .user_name {
+    display: none;
+  }
+
+  .header__btn .p-avatar {
+    margin-right: 0;
+  }
+
+  .header__btn .avatar_btn {
+    padding: 5px;
+  }
+
+  .header__btn .menu_btn {
+    margin: 0 0.5rem 0 1rem;
+  }
+
+  .header__logo {
+    padding-right: 0;
+  }
+  
+  .header .header__logo .logo {
+    width: 9em;
   }
 }
 </style>

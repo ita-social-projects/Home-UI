@@ -25,6 +25,33 @@
       />
     </nav>
   </div>
+
+  
+  <div v-show="mobileSidebar" class="dropdown-nav">
+    <div class="back"><div class="header">
+      <div class="logo" @click="redirectToMain"></div>
+      <i class="pi pi-times"></i>
+    </div>
+
+    <hr>
+    
+    <BaseSidebarNavButton
+      link="notifications"
+      btn-text="Повідомлення"
+      icon="pi-comments"
+      :badge-counter="notifications"
+    />
+    <BaseSidebarNavButton :link="cooperationInfoPath" btn-text="Управління ОСББ" icon="pi-inbox" />
+    <BaseSidebarNavButton :link="invitationsPath" btn-text="Запрошення" icon="pi-globe" />
+    <BaseSidebarNavButton
+      :link="pollsPath"
+      btn-text="Опитування"
+      icon="pi-users"
+      :badge-counter="polls"
+      badge-type="secondary"
+    /></div>
+    
+  </div>
 </template>
 
 <script lang="ts">
@@ -41,6 +68,7 @@ export default defineComponent({
       userName: '',
       notifications: 2,
       polls: 1,
+      // mobileSidebar: true,
     };
   },
   components: {
@@ -102,5 +130,55 @@ export default defineComponent({
 
 .create-btn-wrap {
   @include flex-center-all();
+}
+
+.dropdown-nav {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  width: 100%;
+  // max-width: 290px;
+  height: 100%;
+  // background-color: #F3F3F3;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+
+.back {
+  max-width: 290px;
+  height: 100%;
+  background-color: #F3F3F3;
+}
+
+.dropdown-nav .header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 80px;
+}
+
+.logo {
+  height: 100%;
+  width: 135px;
+  background-image: url('../assets/logo.svg');
+  background-repeat: no-repeat;
+  background-position: 0 center;
+  cursor: pointer;
+  margin: 1rem;
+  align-self: flex-start
+}
+
+i {
+  align-self: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
 }
 </style>

@@ -51,4 +51,16 @@ export default defineComponent({
   height: 100%;
   overflow: scroll;
 }
+
+@media (max-width: 768px) {
+  .main-page {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 570px) {
+  .content {
+    padding: 0;
+  }
+}
 </style>

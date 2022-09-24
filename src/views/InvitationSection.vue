@@ -1,5 +1,13 @@
 <template>
   <div class="create_btn">
+    <Dropdown
+      
+      class="drop-menu"
+      v-model="typeContact"
+      :options="contactsType"
+      optionLabel="name"
+      placeholder="Обрати ОСББ"
+    />
     <Button
       label="Створити запрошення"
       icon="pi pi-pencil"
@@ -24,7 +32,7 @@
   <div class="container">
     <h1 class="page-title">{{ title }}</h1>
     <div class="container-invitations">
-      <DataTable :value="invitations" responsiveLayout="stack" breakpoint="960px">
+      <DataTable :value="invitations" class="p-datatable-sm" responsiveLayout="stack" breakpoint="960px" stripedRows showGridlines>
         <template #header>
           <span class="p-input-icon-right search-field">
             <i class="pi pi-search" />
@@ -41,7 +49,7 @@
           </template>
         </Column>
         <Column field="status" style="min-width: 15rem" header="Статус" :sortable="true" />
-        <Column style="min-width: 10rem" header="Опції">
+        <Column style="min-width: 5rem" header="Опції">
           <template #body="slotProps">
             <Button
               icon="pi pi-cog"
@@ -68,6 +76,7 @@ import Menu from 'primevue/menu';
 import Dialog from 'primevue/dialog';
 import CreateInvitationForm from '@/components/CreateInvitationForm.vue';
 import InputText from 'primevue/inputtext';
+import Dropdown from 'primevue/dropdown';
 import { StoreModuleEnum } from '@/store/types';
 import {
   InvitationsGettersEnum,
@@ -88,6 +97,7 @@ export default defineComponent({
     CreateInvitationForm,
     InputText,
     Dialog,
+    Dropdown,
   },
   data() {
     return {
@@ -186,9 +196,43 @@ export default defineComponent({
   display: flex;
   margin: 15px;
   justify-content: flex-end;
+  .drop-menu {
+    display: flex;
+    width: 200px;
+    margin-right: 26px;
+    align-items: center;
+    box-shadow: none;
+  }
 }
 .search-field {
   display: block;
   text-align: right;
+}
+
+@media (min-width: 769px) {
+  .create_btn .drop-menu {
+    display: none;
+  }
+}
+
+@media (max-width: 570px) {
+  .container {
+    margin-top: 50px;
+  }
+
+  .create_btn {
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 35px;
+  }
+
+  .create_btn .drop-menu {
+    width: 235px;
+    margin: 0 0 1rem 0;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
 }
 </style>
