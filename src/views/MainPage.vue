@@ -24,6 +24,7 @@ export default defineComponent({
   components: {
     Sidebar,
   },
+
   mounted() {
     const user: string | null = localStorage.getItem('user');
     if (user !== null && !this.userData) {

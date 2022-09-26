@@ -33,7 +33,7 @@
         </Button>
         <Menu id="overlay_tmenu" ref="menu" :model="items" :popup="true" /> 
       </div>
-      <Button icon="pi pi-align-justify" label="Меню" class="menu_btn p-button-rounded p-button-info p-button-lg" />
+      <Button @click="showMobSidebar" icon="pi pi-align-justify" label="Меню" class="menu_btn p-button-rounded p-button-info p-button-lg" />
     </div>
   </header>
 </template>
@@ -51,6 +51,7 @@ import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'baseHeader',
+  emit: ['showMobSidebar'],
   data() {
     return {
       headerInfo: 'Додаток для керування ОСББ.',
@@ -120,6 +121,10 @@ export default defineComponent({
 
     toggle(event: any) {
       (this.$refs.menu as Menu).toggle(event);
+    },
+
+    showMobSidebar() {
+      this.$emit('showMobSidebar');
     },
   },
 });

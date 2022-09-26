@@ -28,34 +28,35 @@
 
   
   <div v-show="mobileSidebar" class="dropdown-nav">
-    <div class="back"><div class="header">
-      <div class="logo" @click="redirectToMain"></div>
-      <i class="pi pi-times"></i>
-    </div>
+    <div class="back">
+      <div class="header">
+        <div class="logo" @click="redirectToMain"></div>
+        <i @click="closeMobSidebar" class="pi pi-times"></i>
+      </div>
 
-    <hr>
-    
-    <BaseSidebarNavButton
-      link="notifications"
-      btn-text="Повідомлення"
-      icon="pi-comments"
-      :badge-counter="notifications"
-    />
-    <BaseSidebarNavButton :link="cooperationInfoPath" btn-text="Управління ОСББ" icon="pi-inbox" />
-    <BaseSidebarNavButton :link="invitationsPath" btn-text="Запрошення" icon="pi-globe" />
-    <BaseSidebarNavButton
-      :link="pollsPath"
-      btn-text="Опитування"
-      icon="pi-users"
-      :badge-counter="polls"
-      badge-type="secondary"
-    /></div>
-    
+      <hr>
+      
+      <BaseSidebarNavButton
+        link="notifications"
+        btn-text="Повідомлення"
+        icon="pi-comments"
+        :badge-counter="notifications"
+      />
+      <BaseSidebarNavButton :link="cooperationInfoPath" btn-text="Управління ОСББ" icon="pi-inbox" />
+      <BaseSidebarNavButton :link="invitationsPath" btn-text="Запрошення" icon="pi-globe" />
+      <BaseSidebarNavButton
+        :link="pollsPath"
+        btn-text="Опитування"
+        icon="pi-users"
+        :badge-counter="polls"
+        badge-type="secondary"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
 import BaseSidebarNavButton from '@/components/base/BaseSidebarNavButton.vue';
 import { RoutesEnum } from '@/router/types';
 import { UserInterface, AuthGettersEnum } from '@/user/store/authorization/types';
@@ -63,17 +64,30 @@ import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'Sidebar',
+
+  setup() {
+    const mobileSidebar = inject('mobileSidebar');
+    return {
+      mobileSidebar,
+    }
+  },
   data() {
     return {
       userName: '',
       notifications: 2,
       polls: 1,
-      // mobileSidebar: true,
     };
   },
   components: {
     BaseSidebarNavButton,
   },
+
+  methods: {
+    closeMobSidebar() {
+      this.mobileSidebar = false;
+    },
+  },
+
   computed: {
     cooperationInfoPath(): string {
       return RoutesEnum.Cooperation;
