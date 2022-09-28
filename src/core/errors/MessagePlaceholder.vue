@@ -33,13 +33,13 @@ export default defineComponent({
 
     watch(
       () => updatedList.value,
-      function () {
+      () => {
         if (updatedList.value) {
           const { length, [length - 1]: last } = updatedList.value;
           if (length > MESSAGES_CHUNK) {
             store.dispatch(`${StoreModuleEnum.messagesStore}/${MessagesActionEnum.INVOKE_MESSAGES_CUT}`);
           }
-          showMessage(last.status.toString(), last.type, last.message);
+          showMessage(last.type, last.type, last.message);
         }
       }
     );
