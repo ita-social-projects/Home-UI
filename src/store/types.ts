@@ -7,7 +7,9 @@ import { HousesStateInterface } from '@/houses/store/types';
 import { PollsStateInterface } from '@/poll/store/types';
 import { ApartmentsStateInterface } from '@/apartment/store/apartments/types';
 import { OwnershipsStateInterface } from '@/apartment/store/ownerships/types';
-import { InvitationsStateInterface } from '@/invitation/store/types';
+import { InvitationsStateInterface } from '@/store/invitations/types';
+import { ErrorsStateInterface } from '@/core/errors/store/types';
+import { MessagesStateInterface } from '@/core/messages/store/types';
 
 export interface RootStateInterface {
   authorizationStore: AuthorizationStateInterface;
@@ -19,6 +21,8 @@ export interface RootStateInterface {
   invitationsStore: InvitationsStateInterface;
   apartmentsStore: ApartmentsStateInterface;
   ownershipsStore: OwnershipsStateInterface;
+  errorsStore: ErrorsStateInterface;
+  messagesStore: MessagesStateInterface;
 }
 
 export enum StoreModuleEnum {
@@ -31,6 +35,8 @@ export enum StoreModuleEnum {
   invitationsStore = 'invitationsStore',
   apartmentsStore = 'apartmentsStore',
   ownershipsStore = 'ownershipsStore',
+  errorsStore = 'errorsStore',
+  messagesStore = 'messagesStore',
 }
 
 export type requestPayload<T> = {
