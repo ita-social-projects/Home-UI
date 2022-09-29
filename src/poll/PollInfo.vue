@@ -45,7 +45,7 @@ import { defineComponent } from 'vue';
 import { StoreModuleEnum } from '@/store/types';
 import Button from 'primevue/button';
 import { RoutesEnum } from '@/router/types';
-import { PollsActionEnum, PollStatusEnum, PollStatusType } from '@/store/polls/types';
+import { PollsActionEnum, PollStatusEnum, PollStatusType } from '@/poll/store/types';
 import { mapGetters } from 'vuex';
 
 export default defineComponent({

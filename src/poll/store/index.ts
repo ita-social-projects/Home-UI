@@ -1,9 +1,9 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { PollsStateInterface, PollAcceptanceCriteriaEnum } from '@/store/polls/types';
-import { getters } from '@/store/polls/getters';
-import { mutations } from '@/store/polls/mutations';
-import { actions } from '@/store/polls/actions';
+import { PollsStateInterface, PollAcceptanceCriteriaEnum } from '@/poll/store/types';
+import { getters } from '@/poll/store/getters';
+import { mutations } from '@/poll/store/mutations';
+import { actions } from '@/poll/store/actions';
 
 export const state: PollsStateInterface = {
   cooperationPolls: [],

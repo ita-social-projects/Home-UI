@@ -1,6 +1,6 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { PollModel, PollModelWithResults } from '@/store/polls/models/poll.model';
+import { PollModel, PollModelWithResults } from '@/poll/models/poll.model';
 import { HouseModel } from '@/houses/models/house.model';
 
 export enum PollsMutationEnum {

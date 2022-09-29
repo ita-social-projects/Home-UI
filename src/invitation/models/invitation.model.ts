@@ -1,5 +1,5 @@
-import { InvitationDTOModel } from '@/store/invitations/models/invitationsDTO.model';
-import { InvitationApartmentModel } from '@/store/invitations/models/invitationApart.model';
+import { InvitationDTOModel } from '@/invitation/models/invitationDTO.model';
+import { InvitationApartmentModel } from '@/invitation/models/invitationApart.model';
 
 export class InvitationModel {
   public type: string;

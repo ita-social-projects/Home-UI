@@ -20,7 +20,8 @@
       :dismissableMask="true"
       header="Створити опитування"
     >
-      <CreatePollForm
+      <PollForm
+        :isEditing="false"
         :cooperationId="cooperationId"
         @cancel-creating-poll="displayCreatePollForm = false"
         @create-poll="displayCreatePollForm = false"
@@ -32,13 +33,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Button from 'primevue/button';
-import BaseCooperationPoll from '@/components/base/BaseCooperationPoll.vue';
-import CreatePollForm from '@/components/CreatePollForm.vue';
-import { PollModel } from '@/store/polls/models/poll.model';
-import { StoreModuleEnum } from '@/store/types';
-import { PollsActionEnum, PollsGettersEnum } from '@/store/polls/types';
 import Dialog from 'primevue/dialog';
+import BaseCooperationPoll from '@/poll/BaseCooperationPoll.vue';
+import { PollModel } from '@/poll/models/poll.model';
+import { StoreModuleEnum } from '@/store/types';
+import { PollsActionEnum, PollsGettersEnum } from '@/poll/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
+import PollForm from '@/poll/PollForm.vue';
 
 export default defineComponent({
   name: 'CooperationPolls',
@@ -46,11 +47,12 @@ export default defineComponent({
     Button,
     BaseCooperationPoll,
     Dialog,
-    CreatePollForm,
+    PollForm,
   },
   data() {
     return {
       displayCreatePollForm: false,
+      isEditing: false,
     };
   },
   mounted() {
