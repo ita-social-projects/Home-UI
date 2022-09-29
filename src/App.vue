@@ -25,15 +25,10 @@ export default defineComponent({
       mobileSidebar.value = true;
     };
 
-    const closeMobSidebar = () => {
-      console.log('hi');
-      mobileSidebar.value = false;
-    };
-  
     provide('mobileSidebar', mobileSidebar);
 
     setSpinnerInterceptors(isLoading);
-    return { isLoading, showMobSidebar, closeMobSidebar };
+    return { isLoading, showMobSidebar };
   },
 });
 </script>

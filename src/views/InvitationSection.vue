@@ -32,15 +32,15 @@
   <div class="container">
     <h1 class="page-title">{{ title }}</h1>
     <div class="container-invitations">
-      <DataTable :value="invitations" class="p-datatable-sm" responsiveLayout="stack" breakpoint="960px" stripedRows showGridlines>
+      <DataTable :value="invitations" class="p-datatable-sm" responsiveLayout="stack" breakpoint="570px" stripedRows showGridlines>
         <template #header>
           <span class="p-input-icon-right search-field">
             <i class="pi pi-search" />
             <InputText @input="debounceSearch" v-model="searchQuery" placeholder="Введіть електронну адресу" />
           </span>
         </template>
-        <Column field="email" style="min-width: 20rem" header="Email" :sortable="true" />
-        <Column field="address" style="min-width: 25rem" header="Адреса" :sortable="true">
+        <Column field="email" header="Email" :sortable="true" />
+        <Column field="address" header="Адреса" :sortable="true">
           <template #body="slotProps">
             {{ slotProps.data.apartment.apartmentNumber }}, {{ slotProps.data.apartment.id }},
             <!-- {{ slotProps.data.apartment.address.street }}, 
@@ -48,8 +48,8 @@
             {{ slotProps.data.apartment.address.houseNumber }} -->
           </template>
         </Column>
-        <Column field="status" style="min-width: 15rem" header="Статус" :sortable="true" />
-        <Column style="min-width: 5rem" header="Опції">
+        <Column field="status" header="Статус" :sortable="true" />
+        <Column header="Опції">
           <template #body="slotProps">
             <Button
               icon="pi pi-cog"

@@ -26,33 +26,45 @@
     </nav>
   </div>
 
-  
-  <div v-show="mobileSidebar" class="dropdown-nav">
-    <div class="back">
-      <div class="header">
-        <div class="logo" @click="redirectToMain"></div>
-        <i @click="closeMobSidebar" class="pi pi-times"></i>
-      </div>
+  <transition name="slide-fade" mode="out-in">
+    <div v-show="mobileSidebar" class="mobile-menu">
+      <div class="back">
+        <div class="header">
+          <div class="logo" @click="redirectToMain"></div>
+          <i @click="closeMobSidebar" class="pi pi-times"></i>
+        </div>
 
-      <hr>
-      
-      <BaseSidebarNavButton
-        link="notifications"
-        btn-text="Повідомлення"
-        icon="pi-comments"
-        :badge-counter="notifications"
-      />
-      <BaseSidebarNavButton :link="cooperationInfoPath" btn-text="Управління ОСББ" icon="pi-inbox" />
-      <BaseSidebarNavButton :link="invitationsPath" btn-text="Запрошення" icon="pi-globe" />
-      <BaseSidebarNavButton
-        :link="pollsPath"
-        btn-text="Опитування"
-        icon="pi-users"
-        :badge-counter="polls"
-        badge-type="secondary"
-      />
+        <BaseSidebarNavButton
+          link="notifications"
+          btn-text="Обрати ОСББ"
+          icon="pi-home"
+        />
+        <BaseSidebarNavButton
+          link="notifications"
+          btn-text="Марія"
+          icon="pi-user"
+        />
+
+        <hr>
+        
+        <BaseSidebarNavButton
+          link="notifications"
+          btn-text="Повідомлення"
+          icon="pi-comments"
+          :badge-counter="notifications"
+        />
+        <BaseSidebarNavButton :link="cooperationInfoPath" btn-text="Управління ОСББ" icon="pi-inbox" />
+        <BaseSidebarNavButton :link="invitationsPath" btn-text="Запрошення" icon="pi-globe" />
+        <BaseSidebarNavButton
+          :link="pollsPath"
+          btn-text="Опитування"
+          icon="pi-users"
+          :badge-counter="polls"
+          badge-type="secondary"
+        />z
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -146,7 +158,7 @@ export default defineComponent({
   @include flex-center-all();
 }
 
-.dropdown-nav {
+.mobile-menu {
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -166,11 +178,12 @@ export default defineComponent({
   background-color: #F3F3F3;
 }
 
-.dropdown-nav .header {
+.mobile-menu .header {
   display: flex;
   justify-content: space-around;
   align-items: center;
   height: 80px;
+  margin-bottom: 3rem;
 }
 
 .logo {
@@ -189,6 +202,19 @@ i {
   font-weight: 700;
   font-size: 1.5rem;
 }
+
+
+// -----ANIMATION-FOR-MOBILE-SIDEBAR-----
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: 400ms ease all;
+}
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+  // transform: translateX(-100px);
+}
+// --------------------------------------
 
 @media (max-width: 768px) {
   .sidebar {
