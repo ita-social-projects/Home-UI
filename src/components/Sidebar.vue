@@ -26,43 +26,46 @@
     </nav>
   </div>
 
-  <transition name="slide-fade" mode="out-in">
-    <div v-show="mobileSidebar" class="mobile-menu">
-      <div class="back">
-        <div class="header">
-          <div class="logo" @click="redirectToMain"></div>
-          <i @click="closeMobSidebar" class="pi pi-times"></i>
+  <transition name="slide-fade-opacity" mode="out-in">
+    <div v-show="mobileSidebar" ref="mobile-menu-wrapper" class="mobile-menu-wrapper">
+      <transition name="slide-fade-translateX" mode="out-in">
+        <div v-show="mobileSidebar" class="mobile-menu">
+          <div class="back">
+            <div class="header">
+              <div class="logo" @click="redirectToMain"></div>
+              <i @click="closeMobSidebar" class="pi pi-times"></i>
+            </div>
+            <BaseSidebarNavButton
+              link="notifications"
+              btn-text="Обрати ОСББ"
+              icon="pi-home"
+            />
+            <BaseSidebarNavButton
+              link="notifications"
+              btn-text="Марія"
+              icon="pi-user"
+            />
+
+            <hr>
+            
+            <BaseSidebarNavButton
+              link="notifications"
+              btn-text="Повідомлення"
+              icon="pi-comments"
+              :badge-counter="notifications"
+            />
+            <BaseSidebarNavButton :link="cooperationInfoPath" btn-text="Управління ОСББ" icon="pi-inbox" />
+            <BaseSidebarNavButton :link="invitationsPath" btn-text="Запрошення" icon="pi-globe" />
+            <BaseSidebarNavButton
+              :link="pollsPath"
+              btn-text="Опитування"
+              icon="pi-users"
+              :badge-counter="polls"
+              badge-type="secondary"
+            />
+          </div>
         </div>
-
-        <BaseSidebarNavButton
-          link="notifications"
-          btn-text="Обрати ОСББ"
-          icon="pi-home"
-        />
-        <BaseSidebarNavButton
-          link="notifications"
-          btn-text="Марія"
-          icon="pi-user"
-        />
-
-        <hr>
-        
-        <BaseSidebarNavButton
-          link="notifications"
-          btn-text="Повідомлення"
-          icon="pi-comments"
-          :badge-counter="notifications"
-        />
-        <BaseSidebarNavButton :link="cooperationInfoPath" btn-text="Управління ОСББ" icon="pi-inbox" />
-        <BaseSidebarNavButton :link="invitationsPath" btn-text="Запрошення" icon="pi-globe" />
-        <BaseSidebarNavButton
-          :link="pollsPath"
-          btn-text="Опитування"
-          icon="pi-users"
-          :badge-counter="polls"
-          badge-type="secondary"
-        />z
-      </div>
+      </transition>
     </div>
   </transition>
 </template>
@@ -98,6 +101,14 @@ export default defineComponent({
     closeMobSidebar() {
       this.mobileSidebar = false;
     },
+  },
+
+  mounted() {
+    document.addEventListener('click', (item) => {
+      if (item.target === this.$refs['mobile-menu-wrapper']) {
+        this.closeMobSidebar();
+      }
+    });
   },
 
   computed: {
@@ -158,15 +169,25 @@ export default defineComponent({
   @include flex-center-all();
 }
 
+.mobile-menu-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 98;
+}
+
 .mobile-menu {
   display: flex;
   flex-direction: column;
   position: fixed;
-  width: 100%;
-  // max-width: 290px;
+  width: 290px;
   height: 100%;
-  // background-color: #F3F3F3;
-  background-color: rgba(0, 0, 0, 0.5);
   top: 0;
   left: 0;
   z-index: 99;
@@ -204,15 +225,25 @@ i {
 }
 
 
-// -----ANIMATION-FOR-MOBILE-SIDEBAR-----
-.slide-fade-enter-active,
-.slide-fade-leave-active {
+// -----ANIMATION-OPASITY-FOR-MOBILE-SIDEBAR-----
+.slide-fade-opacity-enter-active,
+.slide-fade-opacity-leave-active {
   transition: 400ms ease all;
 }
-.slide-fade-enter-from,
-.slide-fade-leave-to {
+.slide-fade-opacity-enter-from,
+.slide-fade-opacity-leave-to {
   opacity: 0;
-  // transform: translateX(-100px);
+}
+// --------------------------------------
+
+// -----ANIMATION2-FOR-MOBILE-SIDEBAR-----
+.slide-fade-translateX-enter-active,
+.slide-fade-translateX-leave-active {
+  transition: 400ms ease all;
+}
+.slide-fade-translateX-enter-from,
+.slide-fade-translateX-leave-to {
+  transform: translateX(-290px);
 }
 // --------------------------------------
 

@@ -109,7 +109,7 @@ export default defineComponent({
 
 @media (max-width: 768px) {
   .nav-btn-link .nav-btn {
-    padding: 0.5em;
+    padding: 0.5em 1em 0.5em 0.5em;
   }
 }
 </style>
