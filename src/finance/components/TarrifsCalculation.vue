@@ -51,7 +51,7 @@
       </div>
       <div class="calculation_controls">
         <p>Тариф дорівнює: {{ finalCalculation }}</p>
-        <Button label="Згенерувати" icon="pi pi-check" />
+        <Button label="Згенерувати" icon="pi pi-check" class="p-button-info" />
       </div>
     </div>
   </div>
@@ -101,7 +101,7 @@ export default defineComponent({
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(6, 1fr);
   grid-template-rows: auto;
-  padding: 2em 0 4em 0;
+  padding: 2em 0 3.5em 0;
   label {
     display: block;
     margin-block-end: 1em;
@@ -137,7 +137,7 @@ export default defineComponent({
   }
 }
 .expense-list {
-  max-height: 400px;
+  max-height: 500px;
   overflow-y: scroll;
   padding-block-start: 2em;
   grid-column: 3 / 5;
