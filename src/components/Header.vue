@@ -3,11 +3,6 @@
     <div class="header__logo">
       <div class="logo" @click="redirectToMain"></div>
     </div>
-
-    <!-- <div class="header__info">
-      <span>{{ headerInfo }}</span>
-    </div> -->
-
     <div class="header__btn">
       <Dropdown
         v-show="isLoggedIn"
@@ -31,9 +26,14 @@
           <Avatar icon="pi pi-user" class="p-mr-2" style="background-color: #ffffff; color: #609af8" shape="circle" />
           <span class="user_name p-ml-2 p-text-bold">{{ getNameFromStore }}</span>
         </Button>
-        <Menu id="overlay_tmenu" ref="menu" :model="items" :popup="true" /> 
+        <Menu id="overlay_tmenu" ref="menu" :model="items" :popup="true" />
       </div>
-      <Button @click="showMobSidebar" icon="pi pi-align-justify" label="Меню" class="menu_btn p-button-rounded p-button-info p-button-lg" />
+      <Button
+        @click="showMobSidebar"
+        icon="pi pi-align-justify"
+        label="Меню"
+        class="menu_btn p-button-rounded p-button-info p-button-lg"
+      />
     </div>
   </header>
 </template>
@@ -54,7 +54,6 @@ export default defineComponent({
   emit: ['showMobSidebar'],
   data() {
     return {
-      headerInfo: 'Додаток для керування ОСББ.',
       items: [
         {
           label: 'Редагувати',
@@ -146,11 +145,8 @@ export default defineComponent({
 .header__logo {
   @include flex-custom(flex-start);
   height: 40px;
-  // width: 100%;
   padding-left: 65px;
   padding-right: 1rem;
-  // flex: 1 1 auto;
-
   .logo {
     height: 100%;
     width: 10em;
@@ -159,11 +155,6 @@ export default defineComponent({
     background-position: 0 center;
     cursor: pointer;
   }
-}
-.header__info {
-  @include flex-center-all();
-  width: 100%;
-  flex: 1 1 auto;
 }
 
 .header__btn {
@@ -201,7 +192,7 @@ export default defineComponent({
   .header__btn .p-button.p-button-lg {
     font-size: 1rem;
   }
-  
+
   .header__logo {
     padding-left: 0;
   }
@@ -236,7 +227,7 @@ export default defineComponent({
   .header__logo {
     padding-right: 0;
   }
-  
+
   .header .header__logo .logo {
     width: 9em;
   }
