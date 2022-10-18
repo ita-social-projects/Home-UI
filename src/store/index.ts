@@ -5,10 +5,12 @@ import { cooperationStore } from '@/cooperation/store';
 import { localStorageStore } from '@/user/store/localstorage';
 import { housesStore } from '@/houses/store';
 import { userStore } from '@/user/store/user';
-import { pollsStore } from '@/store/polls';
-import { invitationsStore } from '@/store/invitations';
+import { pollsStore } from '@/poll/store';
+import { invitationsStore } from '@/invitation/store';
 import { apartmentsStore } from '@/apartment/store/apartments';
 import { ownershipsStore } from '@/apartment/store/ownerships';
+import { errorsStore } from '@/core/errors/store';
+import { messagesStore } from '@/core/messages/store';
 
 export default createStore<RootStateInterface>({
   strict: process.env.NODE_ENV !== 'production',
@@ -22,5 +24,7 @@ export default createStore<RootStateInterface>({
     invitationsStore,
     apartmentsStore,
     ownershipsStore,
+    errorsStore,
+    messagesStore,
   },
 });

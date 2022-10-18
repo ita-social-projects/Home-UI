@@ -1,6 +1,7 @@
 <template>
   <LoaderSpinner :is-loading="isLoading" />
   <Header @showMobSidebar="showMobSidebar" />
+  <MessagePlaceholder />
   <Toast />
   <router-view />
 </template>
@@ -9,6 +10,7 @@
 import { defineComponent, ref, provide } from 'vue';
 import Header from '@/components/Header.vue';
 import Toast from 'primevue/toast';
+import MessagePlaceholder from '@/core/errors/MessagePlaceholder.vue';
 import { setSpinnerInterceptors } from '@/core/interceptors/index';
 
 export default defineComponent({
@@ -16,6 +18,7 @@ export default defineComponent({
   components: {
     Header,
     Toast,
+    MessagePlaceholder,
   },
   setup() {
     const isLoading = ref(false);
