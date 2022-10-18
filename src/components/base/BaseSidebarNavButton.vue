@@ -106,4 +106,10 @@ export default defineComponent({
     background-color: rgba(100, 109, 117, 0.36);
   }
 }
+
+@media (max-width: 768px) {
+  .nav-btn-link .nav-btn {
+    padding: 0.5em 1em 0.5em 0.5em;
+  }
+}
 </style>
