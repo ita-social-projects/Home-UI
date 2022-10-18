@@ -7,7 +7,7 @@ import { HousesStateInterface } from '@/houses/store/types';
 import { PollsStateInterface } from '@/poll/store/types';
 import { ApartmentsStateInterface } from '@/apartment/store/apartments/types';
 import { OwnershipsStateInterface } from '@/apartment/store/ownerships/types';
-import { InvitationsStateInterface } from '@/store/invitations/types';
+import { InvitationsStateInterface } from '@/invitation/store/types';
 import { ErrorsStateInterface } from '@/core/errors/store/types';
 import { MessagesStateInterface } from '@/core/messages/store/types';
 

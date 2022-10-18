@@ -33,21 +33,13 @@
           <div class="back">
             <div class="header">
               <div class="logo" @click="redirectToMain"></div>
-              <i @click="closeMobSidebar" class="pi pi-times"></i>
+              <span @click="closeMobSidebar" class="pi pi-times close_mobsidebar_btn"></span>
             </div>
-            <BaseSidebarNavButton
-              link="notifications"
-              btn-text="Обрати ОСББ"
-              icon="pi-home"
-            />
-            <BaseSidebarNavButton
-              link="notifications"
-              btn-text="Марія"
-              icon="pi-user"
-            />
+            <BaseSidebarNavButton link="notifications" btn-text="Обрати ОСББ" icon="pi-home" />
+            <BaseSidebarNavButton link="notifications" btn-text="Марія" icon="pi-user" />
 
-            <hr>
-            
+            <hr />
+
             <BaseSidebarNavButton
               link="notifications"
               btn-text="Повідомлення"
@@ -84,7 +76,7 @@ export default defineComponent({
     const mobileSidebar = inject('mobileSidebar');
     return {
       mobileSidebar,
-    }
+    };
   },
   data() {
     return {
@@ -196,7 +188,7 @@ export default defineComponent({
 .back {
   max-width: 290px;
   height: 100%;
-  background-color: #F3F3F3;
+  background-color: #f3f3f3;
 }
 
 .mobile-menu .header {
@@ -215,15 +207,14 @@ export default defineComponent({
   background-position: 0 center;
   cursor: pointer;
   margin: 1rem;
-  align-self: flex-start
+  align-self: flex-start;
 }
 
-i {
+.close_mobsidebar_btn {
   align-self: center;
   font-weight: 700;
   font-size: 1.5rem;
 }
-
 
 // -----ANIMATION-OPASITY-FOR-MOBILE-SIDEBAR-----
 .slide-fade-opacity-enter-active,
