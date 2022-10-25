@@ -4,18 +4,69 @@
     <div class="tarrifs-calculator">
       <div class="input_field tarrif_name">
         <label for="tarrif_name">Назва тарифу:</label>
-        <InputText name="tarrif_name" placeholder="Введіть назву тарифу"></InputText>
+        <InputText name="tarrif_name" placeholder="Введіть назву тарифу" v-model="tarrifName"></InputText>
       </div>
       <div class="expense-list">
+        <h3>{{ tarrifName }}</h3>
+        <p>{{ comment }}</p>
+        <!-- {{ housesInfo }} -->
         <ul>
-          <li>Стаття витрат 1 <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" /></li>
-          <li>Стаття витрат 2 <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" /></li>
-          <li>Стаття витрат 3 <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" /></li>
-          <li>Стаття витрат 4 <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" /></li>
-          <li>Стаття витрат 5 <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" /></li>
-          <li>Стаття витрат 5 <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" /></li>
-          <li>Стаття витрат 5 <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" /></li>
-          <li>Стаття витрат 5 <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" /></li>
+          <li>
+            Стаття витрат 1
+            <div class="expense-list--actions">
+              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
+              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+            </div>
+          </li>
+          <li>
+            Стаття витрат 2
+            <div class="expense-list--actions">
+              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
+              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+            </div>
+          </li>
+          <li>
+            Стаття витрат 3
+            <div class="expense-list--actions">
+              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
+              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+            </div>
+          </li>
+          <li>
+            Стаття витрат 4
+            <div class="expense-list--actions">
+              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
+              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+            </div>
+          </li>
+          <li>
+            Стаття витрат 5
+            <div class="expense-list--actions">
+              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
+              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+            </div>
+          </li>
+          <li>
+            Стаття витрат 5
+            <div class="expense-list--actions">
+              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
+              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+            </div>
+          </li>
+          <li>
+            Стаття витрат 5
+            <div class="expense-list--actions">
+              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
+              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+            </div>
+          </li>
+          <li>
+            Стаття витрат 5
+            <div class="expense-list--actions">
+              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
+              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+            </div>
+          </li>
         </ul>
       </div>
       <div class="input_field tarrif_comment">
@@ -34,8 +85,8 @@
         />
       </div>
       <div class="input_field area-label">
-        <h4>Загальна площа квартир у будинку:</h4>
-        <Chip :label="area" icon="pi pi-pencil" />
+        <h4>Загальна площа:</h4>
+        <Chip :label="`${area}, м²`" icon="pi pi-pencil" />
       </div>
       <div class="input_field service_name">
         <label for="service_name">Назва статті витрат:</label>
@@ -43,14 +94,14 @@
       </div>
       <div class="input_field service_price">
         <label for="service_price">Вартість статті витрат:</label>
-        <InputNumber class="servise_price_input" name="service_price" placeholder="0 000"></InputNumber>
+        <InputNumber class="servise_price_input" name="service_price" placeholder="0.00 грн"></InputNumber>
         <Button class="p-button-success add-btn">
           Додати &nbsp;
           <i class="pi pi-plus-circle"></i>
         </Button>
       </div>
       <div class="calculation_controls">
-        <p>Тариф дорівнює: {{ finalCalculation }}</p>
+        <p>Тариф дорівнює: {{ finalCalculation }} грн</p>
         <Button label="Згенерувати" icon="pi pi-check" class="p-button-info" />
       </div>
     </div>
@@ -65,6 +116,12 @@ import Textarea from 'primevue/textarea';
 import Dropdown from 'primevue/dropdown';
 import Chip from 'primevue/chip';
 import Button from 'primevue/button';
+import { useStore } from 'vuex';
+
+import { StoreModuleEnum } from '@/store/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
+import { HouseModel } from '@/houses/models/house.model';
 
 export default defineComponent({
   name: 'tarrifs-calculation',
@@ -77,18 +134,40 @@ export default defineComponent({
     Button,
   },
   setup() {
-    const selectedHouse = ref('');
-    const houses = reactive([]);
-    const area = ref('Оберіть будинок');
-    const finalCalculation = ref(0);
+    const tarrifName = ref('');
+    const selectedHouse = ref(null);
+    let houses = reactive([]);
+    const area = ref(0);
+    const finalCalculation = ref('0.00');
     const comment = ref('');
+    const store = useStore();
+    const housesInfo = ref();
+    const cooperationId = ref(null);
+
+    cooperationId.value =
+      store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
+    store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
+    housesInfo.value = store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
+    houses = housesInfo.value.map((house: HouseModel) =>
+      // `${house.address.city}, ${house.address.district}, ${house.address.street},
+      // ${house.address.houseBlock}, ${house.address.houseNumber}`
+      console.log(house)
+    );
+
+    const deleteExpense = () => {
+      console.log('deleting this expense');
+    };
 
     return {
+      tarrifName,
       selectedHouse,
       houses,
       area,
       finalCalculation,
       comment,
+      housesInfo,
+      cooperationId,
+      deleteExpense,
     };
   },
 });
@@ -124,7 +203,8 @@ export default defineComponent({
   .service_price {
     grid-column: 2 / 3;
   }
-  .area-label h4 {
+  .area-label h4,
+  .expense-list h3 {
     margin-top: 0;
   }
   .tarrif_comment textarea {
@@ -133,17 +213,16 @@ export default defineComponent({
 }
 ::v-deep(.service_price .servise_price_input) {
   input {
-    max-width: 80px;
+    max-width: 90px;
   }
 }
 .expense-list {
-  max-height: 500px;
-  overflow-y: scroll;
-  padding-block-start: 2em;
   grid-column: 3 / 5;
   grid-row: 1 / 6;
 }
 .expense-list ul {
+  max-height: 500px;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   list-style: none;

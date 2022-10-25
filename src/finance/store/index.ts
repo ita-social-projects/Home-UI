@@ -6,3 +6,11 @@ export const state: TarrifStateInterface = {
   tarrifList: [],
   newTarrif: null,
 };
+
+export const tarrifStore: Module<TarrifStateInterface, RootStateInterface> = {
+  namespaced: true,
+  state,
+  // mutations,
+  // actions,
+  // getters,
+};
