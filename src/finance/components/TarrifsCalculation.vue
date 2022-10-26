@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h1>Калькулятор тарифів</h1>
+    <h1>Калькулятор тарифу</h1>
     <div class="tarrifs-calculator">
       <div class="input_field tarrif_name">
         <label for="tarrif_name">Назва тарифу:</label>
-        <InputText name="tarrif_name" placeholder="Введіть назву тарифу" v-model="tarrifName"></InputText>
+        <InputText name="tarrif_name" v-model="tarrifName"></InputText>
       </div>
       <div class="expense-list">
         <h3>{{ tarrifName }}</h3>
@@ -68,13 +68,14 @@
             </div>
           </li>
         </ul>
+        <h4>Сума статей витрат: <Chip :label="finalCalculation" /> грн.</h4>
       </div>
       <div class="input_field tarrif_comment">
         <label for="comment">Коментар до тарифу:</label>
-        <Textarea v-model="comment" name="comment" rows="5" cols="30" placeholder="Напишіть коментар" />
+        <Textarea v-model="comment" name="comment" rows="5" cols="30" />
       </div>
       <div class="input_field house_picker">
-        <label for="house">Оберіть будинок під тариф:</label>
+        <!-- <label for="house">Оберіть будинок під тариф:</label> -->
         <Dropdown
           name="house"
           v-model="selectedHouse"
@@ -90,18 +91,20 @@
       </div>
       <div class="input_field service_name">
         <label for="service_name">Назва статті витрат:</label>
-        <InputText name="service_name" placeholder="Введіть назву"></InputText>
+        <InputText name="service_name"></InputText>
       </div>
-      <div class="input_field service_price">
-        <label for="service_price">Вартість статті витрат:</label>
-        <InputNumber class="servise_price_input" name="service_price" placeholder="0.00 грн"></InputNumber>
+      <div class="input_field service_actions">
         <Button class="p-button-success add-btn">
           Додати &nbsp;
           <i class="pi pi-plus-circle"></i>
         </Button>
       </div>
+      <div class="input_field service_price">
+        <label for="service_price">Вартість статті витрат:</label>
+        <InputNumber class="servise_price_input" name="service_price" placeholder="0.00 грн"></InputNumber>
+      </div>
       <div class="calculation_controls">
-        <p>Тариф дорівнює: {{ finalCalculation }} грн</p>
+        <h4>Тариф дорівнює: <Chip :label="finalCalculation" />грн.</h4>
         <Button label="Згенерувати" icon="pi pi-check" class="p-button-info" />
       </div>
     </div>
@@ -176,7 +179,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .tarrifs-calculator {
   display: grid;
-  gap: 2em;
+  gap: 1em;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(6, 1fr);
   grid-template-rows: auto;
@@ -188,15 +191,13 @@ export default defineComponent({
   .input_field input {
     width: 100%;
   }
-  .add-btn {
-    margin-left: 1em;
-  }
   .tarrif_name,
   .tarrif_comment {
     grid-column: 1 / 3;
   }
   .house_picker,
-  .service_name {
+  .service_name,
+  .service_actions {
     grid-column: 1 / 2;
   }
   .area-label,
@@ -210,10 +211,16 @@ export default defineComponent({
   .tarrif_comment textarea {
     width: 100%;
   }
+  .area-label {
+    grid-row: 3;
+  }
+  .service_price {
+    grid-row: 4;
+  }
 }
 ::v-deep(.service_price .servise_price_input) {
   input {
-    max-width: 90px;
+    max-width: 150px;
   }
 }
 .expense-list {
@@ -237,6 +244,13 @@ export default defineComponent({
 .calculation_controls {
   grid-column: 1 / 2;
   justify-self: start;
+  h4 {
+    display: inline;
+    margin-right: 1em;
+  }
+  button {
+    margin-top: 1em;
+  }
 }
 
 @media screen and (max-width: 1000px) {
