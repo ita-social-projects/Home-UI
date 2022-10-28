@@ -32,17 +32,6 @@
         <span>Дата завершення:</span>
         <div>{{ poll.completionDate.toLocaleString('uk-UA') }}</div>
       </div>
-
-      <div class="poll-field">
-        <span>Результати опитування:</span>
-        <div>
-          <i class="pi pi-thumbs-up" style="color: green"></i>&nbsp; {{ poll.results.yes }} &nbsp; &nbsp;<i
-            class="pi pi-thumbs-down"
-            style="color: red"
-          ></i
-          >&nbsp; {{ poll.results.no }}
-        </div>
-      </div>
     </div>
   </article>
 
@@ -67,7 +56,7 @@
 <script lang="ts">
 import { defineComponent, VueElement } from 'vue';
 import { mapGetters } from 'vuex';
-import { PollModelWithResults } from '@/poll/models/poll.model';
+import { PollModel } from '@/poll/models/poll.model';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 import { StoreModuleEnum } from '@/store/types';
@@ -88,7 +77,7 @@ export default defineComponent({
   },
   props: {
     poll: {
-      type: PollModelWithResults,
+      type: PollModel,
       required: true,
     },
   },
@@ -154,7 +143,6 @@ export default defineComponent({
 
           await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.DELETE_POLL}`, payload);
           this.showSuccessOperation('видалено');
-          window.history.go();
         },
         reject: () => {
           console.log('rejected delete', this.$props.poll.id);

@@ -56,10 +56,7 @@ export default defineComponent({
     };
   },
   mounted() {
-    this.$store.dispatch(
-      `${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_COOPERATION_POLLS_WITH_RESULTS}`,
-      this.cooperationId
-    );
+    this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_COOPERATION_POLLS}`, this.cooperationId);
   },
   computed: {
     cooperationId(): number {
@@ -68,7 +65,7 @@ export default defineComponent({
       ];
     },
     cooperationPolls(): Array<PollModel> {
-      return this.$store.getters[`${StoreModuleEnum.pollsStore}/${PollsGettersEnum.getPollsWithResults}`];
+      return this.$store.getters[`${StoreModuleEnum.pollsStore}/${PollsGettersEnum.getPolls}`];
     },
     displayCreatePollModal(): boolean {
       return this.displayCreatePollForm;

@@ -323,12 +323,11 @@ export default defineComponent({
       this.pollData.creationDateInEdition = this.selectedPoll?.creationDate.toLocaleString('uk-UA');
       this.pollData.completionDate = this.selectedPoll?.completionDate.toLocaleString('uk-UA');
 
-      this.beginDateInEdition = this.selectedPoll?.creationDate || new Date();
+      this.beginDateInEdition = this.selectedPoll?.creationDate;
       this.finishDate = this.selectedPoll?.completionDate;
     },
 
     submitPollForm() {
-      window.history.go();
       if (this.isEditing) {
         this.editPoll();
       } else {
@@ -378,7 +377,6 @@ export default defineComponent({
         status: this.poll.status,
         polledHouses: this.pollData.polledHouses,
       };
-
       const ids = { cooperationId: this.cooperationIdEdit, pollId: this.$props.poll.id };
 
       await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.UPDATE_POLL}`, {
