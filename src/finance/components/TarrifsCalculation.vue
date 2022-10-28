@@ -4,7 +4,13 @@
     <div class="tarrifs-calculator">
       <div class="input_field tarrif_name">
         <label for="tarrif_name">Назва тарифу:</label>
-        <InputText name="tarrif_name" v-model="tarrifName"></InputText>
+        <InputText
+          name="tarrif_name"
+          v-model="tarrifName"
+          :class="{ 'p-invalid': v.tarrifTitle.$error }"
+          @blur="v.tarrifTitle.$touch"
+        ></InputText>
+        <p v-if="v.tarrifTitle.$error">{{ v.tarrifTitle.$errors[0].$message }}</p>
       </div>
       <div class="expense-list">
         <h3>{{ tarrifName }}</h3>
@@ -72,7 +78,15 @@
       </div>
       <div class="input_field tarrif_comment">
         <label for="comment">Коментар до тарифу:</label>
-        <Textarea v-model="comment" name="comment" rows="5" cols="30" />
+        <Textarea
+          v-model="comment"
+          name="comment"
+          rows="5"
+          cols="30"
+          :class="{ 'p-invalid': v.tarrifComment.$error }"
+          @blur="v.tarrifComment.$touch"
+        />
+        <p v-if="v.tarrifComment.$error">{{ v.tarrifComment.$errors[0].$message }}</p>
       </div>
       <div class="input_field house_picker">
         <!-- <label for="house">Оберіть будинок під тариф:</label> -->
@@ -91,7 +105,12 @@
       </div>
       <div class="input_field service_name">
         <label for="service_name">Назва статті витрат:</label>
-        <InputText name="service_name"></InputText>
+        <InputText
+          name="service_name"
+          :class="{ 'p-invalid': v.tarrifExpenseTitle.$error }"
+          @blur="v.tarrifExpenseTitle.$touch"
+        ></InputText>
+        <p v-if="v.tarrifExpenseTitle.$error">{{ v.tarrifExpenseTitle.$errors[0].$message }}</p>
       </div>
       <div class="input_field service_actions">
         <Button class="p-button-success add-btn">
@@ -101,7 +120,14 @@
       </div>
       <div class="input_field service_price">
         <label for="service_price">Вартість статті витрат:</label>
-        <InputNumber class="servise_price_input" name="service_price" placeholder="0.00 грн"></InputNumber>
+        <InputNumber
+          class="servise_price_input"
+          name="service_price"
+          placeholder="0.00 грн"
+          :class="{ 'p-invalid': v.tarrifExpenseCost.$error }"
+          @blur="v.tarrifExpenseCost.$touch"
+        ></InputNumber>
+        <p v-if="v.tarrifExpenseCost.$error">{{ v.tarrifExpenseCost.$errors[0].$message }}</p>
       </div>
       <div class="calculation_controls">
         <h4>Тариф дорівнює: <Chip :label="finalCalculation" />грн.</h4>
@@ -119,7 +145,10 @@ import Textarea from 'primevue/textarea';
 import Dropdown from 'primevue/dropdown';
 import Chip from 'primevue/chip';
 import Button from 'primevue/button';
+
 import { useStore } from 'vuex';
+import { useVuelidate } from '@vuelidate/core';
+import { tarrifCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
 
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
@@ -146,6 +175,8 @@ export default defineComponent({
     const store = useStore();
     const housesInfo = ref();
     const cooperationId = ref(null);
+    const rules = tarrifCalculatorValidations;
+    const v = useVuelidate(rules);
 
     cooperationId.value =
       store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
@@ -171,6 +202,7 @@ export default defineComponent({
       housesInfo,
       cooperationId,
       deleteExpense,
+      v,
     };
   },
 });
