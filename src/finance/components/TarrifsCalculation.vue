@@ -6,15 +6,15 @@
         <label for="tarrif_name">Назва тарифу:</label>
         <InputText
           name="tarrif_name"
-          v-model="tarrifName"
-          :class="{ 'p-invalid': v.tarrifTitle.$error }"
-          @blur="v.tarrifTitle.$touch"
+          v-model="tarrifTitle"
+          :class="{ 'p-invalid': v$.tarrifTitle.$error }"
+          @blur="v$.tarrifTitle.$touch"
         ></InputText>
-        <p v-if="v.tarrifTitle.$error">{{ v.tarrifTitle.$errors[0].$message }}</p>
+        <p v-if="v$.tarrifTitle.$error" class="p-error">{{ v$.tarrifTitle.$errors[0].$message }}</p>
       </div>
       <div class="expense-list">
-        <h3>{{ tarrifName }}</h3>
-        <p>{{ comment }}</p>
+        <h3>{{ tarrifTitle }}</h3>
+        <p>{{ tarrifComment }}</p>
         <!-- {{ housesInfo }} -->
         <ul>
           <li>
@@ -79,14 +79,14 @@
       <div class="input_field tarrif_comment">
         <label for="comment">Коментар до тарифу:</label>
         <Textarea
-          v-model="comment"
+          v-model="tarrifComment"
           name="comment"
           rows="5"
           cols="30"
-          :class="{ 'p-invalid': v.tarrifComment.$error }"
-          @blur="v.tarrifComment.$touch"
+          :class="{ 'p-invalid': v$.tarrifComment.$error }"
+          @blur="v$.tarrifComment.$touch"
         />
-        <p v-if="v.tarrifComment.$error">{{ v.tarrifComment.$errors[0].$message }}</p>
+        <p v-if="v$.tarrifComment.$error" class="p-error">{{ v$.tarrifComment.$errors[0].$message }}</p>
       </div>
       <div class="input_field house_picker">
         <!-- <label for="house">Оберіть будинок під тариф:</label> -->
@@ -107,10 +107,11 @@
         <label for="service_name">Назва статті витрат:</label>
         <InputText
           name="service_name"
-          :class="{ 'p-invalid': v.tarrifExpenseTitle.$error }"
-          @blur="v.tarrifExpenseTitle.$touch"
+          v-model="tarrifExpenseTitle"
+          :class="{ 'p-invalid': v$.tarrifExpenseTitle.$error }"
+          @blur="v$.tarrifExpenseTitle.$touch"
         ></InputText>
-        <p v-if="v.tarrifExpenseTitle.$error">{{ v.tarrifExpenseTitle.$errors[0].$message }}</p>
+        <p v-if="v$.tarrifExpenseTitle.$error" class="p-error">{{ v$.tarrifExpenseTitle.$errors[0].$message }}</p>
       </div>
       <div class="input_field service_actions">
         <Button class="p-button-success add-btn">
@@ -122,16 +123,17 @@
         <label for="service_price">Вартість статті витрат:</label>
         <InputNumber
           class="servise_price_input"
+          v-model="tarrifExpenseCost"
           name="service_price"
           placeholder="0.00 грн"
-          :class="{ 'p-invalid': v.tarrifExpenseCost.$error }"
-          @blur="v.tarrifExpenseCost.$touch"
+          :class="{ 'p-invalid': v$.tarrifExpenseCost.$error }"
+          @blur="v$.tarrifExpenseCost.$touch"
         ></InputNumber>
-        <p v-if="v.tarrifExpenseCost.$error">{{ v.tarrifExpenseCost.$errors[0].$message }}</p>
+        <p v-if="v$.tarrifExpenseCost.$error" class="p-error">{{ v$.tarrifExpenseCost.$errors[0].$message }}</p>
       </div>
       <div class="calculation_controls">
         <h4>Тариф дорівнює: <Chip :label="finalCalculation" />грн.</h4>
-        <Button label="Згенерувати" icon="pi pi-check" class="p-button-info" />
+        <Button label="Згенерувати" icon="pi pi-check" class="p-button-info" :disabled="v$.$invalid" />
       </div>
     </div>
   </div>
@@ -166,17 +168,22 @@ export default defineComponent({
     Button,
   },
   setup() {
-    const tarrifName = ref('');
+    const tarrifTitle = ref('');
+    const tarrifComment = ref('');
+    const tarrifExpenseTitle = ref('');
+    const tarrifExpenseCost = ref(null);
     const selectedHouse = ref(null);
+
     let houses = reactive([]);
     const area = ref(0);
     const finalCalculation = ref('0.00');
-    const comment = ref('');
+
     const store = useStore();
     const housesInfo = ref();
     const cooperationId = ref(null);
+
     const rules = tarrifCalculatorValidations;
-    const v = useVuelidate(rules);
+    const v$ = useVuelidate(rules, { tarrifTitle, tarrifComment, tarrifExpenseTitle, tarrifExpenseCost });
 
     cooperationId.value =
       store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
@@ -193,16 +200,18 @@ export default defineComponent({
     };
 
     return {
-      tarrifName,
+      tarrifTitle,
+      tarrifComment,
+      tarrifExpenseTitle,
+      tarrifExpenseCost,
       selectedHouse,
       houses,
       area,
       finalCalculation,
-      comment,
       housesInfo,
       cooperationId,
       deleteExpense,
-      v,
+      v$,
     };
   },
 });
