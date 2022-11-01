@@ -16,58 +16,10 @@
         <h3>{{ tarrifTitle }}</h3>
         <p>{{ tarrifComment }}</p>
         <!-- {{ housesInfo }} -->
-        <ul>
-          <li>
-            Стаття витрат 1
-            <div class="expense-list--actions">
-              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
-              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
-            </div>
-          </li>
-          <li>
-            Стаття витрат 2
-            <div class="expense-list--actions">
-              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
-              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
-            </div>
-          </li>
-          <li>
-            Стаття витрат 3
-            <div class="expense-list--actions">
-              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
-              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
-            </div>
-          </li>
-          <li>
-            Стаття витрат 4
-            <div class="expense-list--actions">
-              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
-              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
-            </div>
-          </li>
-          <li>
-            Стаття витрат 5
-            <div class="expense-list--actions">
-              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
-              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
-            </div>
-          </li>
-          <li>
-            Стаття витрат 5
-            <div class="expense-list--actions">
-              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
-              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
-            </div>
-          </li>
-          <li>
-            Стаття витрат 5
-            <div class="expense-list--actions">
-              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
-              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
-            </div>
-          </li>
-          <li>
-            Стаття витрат 5
+        <ul v-show="expenseList">
+          <li v-for="(expense, idx) in expenseList" :key="idx">
+            {{ expense.serviceName }}
+            <span>{{ expense.servicePrice }} грн.</span>
             <div class="expense-list--actions">
               <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
               <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
@@ -114,7 +66,7 @@
         <p v-if="v$.tarrifExpenseTitle.$error" class="p-error">{{ v$.tarrifExpenseTitle.$errors[0].$message }}</p>
       </div>
       <div class="input_field service_actions">
-        <Button class="p-button-success add-btn">
+        <Button class="p-button-success add-btn" @click="addExpense">
           Додати &nbsp;
           <i class="pi pi-plus-circle"></i>
         </Button>
@@ -152,6 +104,7 @@ import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
 import { tarrifCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
 
+import { TarrifService } from '@/finance/store/types';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
@@ -173,9 +126,11 @@ export default defineComponent({
     const tarrifExpenseTitle = ref('');
     const tarrifExpenseCost = ref(null);
     const selectedHouse = ref(null);
+    let expenseList: Array<TarrifService> = reactive([]);
 
     let houses = reactive([]);
     const area = ref(0);
+    const servicesTotal = ref('0.00');
     const finalCalculation = ref('0.00');
 
     const store = useStore();
@@ -184,6 +139,16 @@ export default defineComponent({
 
     const rules = tarrifCalculatorValidations;
     const v$ = useVuelidate(rules, { tarrifTitle, tarrifComment, tarrifExpenseTitle, tarrifExpenseCost });
+
+    // const countServices = () => {
+    //   return expenseList.reduce((acc, service) => (acc += service.servicePrice));
+    // };
+    const currentTarrif: string | null = localStorage.getItem('current-tarrif');
+    if (currentTarrif) {
+      expenseList = JSON.parse(currentTarrif).services;
+      tarrifTitle.value = JSON.parse(currentTarrif).tarrifTitle;
+      tarrifComment.value = JSON.parse(currentTarrif).tarrifComment;
+    }
 
     cooperationId.value =
       store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
@@ -195,6 +160,24 @@ export default defineComponent({
       console.log(house)
     );
 
+    const addExpense = (): void => {
+      const newService: TarrifService = {
+        serviceName: tarrifExpenseTitle.value,
+        servicePrice: tarrifExpenseCost.value,
+      };
+      expenseList.push(newService);
+      updateLocalStorage();
+      tarrifExpenseTitle.value = '';
+      tarrifExpenseCost.value = null;
+    };
+    const updateLocalStorage = () => {
+      const currentTarrif = {
+        tarrifTitle: tarrifTitle.value,
+        tarrifComment: tarrifComment.value,
+        services: expenseList,
+      };
+      localStorage.setItem('current-tarrif', JSON.stringify(currentTarrif));
+    };
     const deleteExpense = () => {
       console.log('deleting this expense');
     };
@@ -211,6 +194,11 @@ export default defineComponent({
       housesInfo,
       cooperationId,
       deleteExpense,
+      expenseList,
+      addExpense,
+      updateLocalStorage,
+      servicesTotal,
+      // countServices,
       v$,
     };
   },
@@ -265,8 +253,13 @@ export default defineComponent({
   }
 }
 .expense-list {
+  display: flex;
+  flex-direction: column;
   grid-column: 3 / 5;
   grid-row: 1 / 6;
+  h4 {
+    align-self: flex-end;
+  }
 }
 .expense-list ul {
   max-height: 500px;

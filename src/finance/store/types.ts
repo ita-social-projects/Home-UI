@@ -3,9 +3,8 @@ import { RootStateInterface } from '@/store/types';
 import { TarrifModel } from '../models/tarrif.model';
 
 export interface TarrifService {
-  serviceId: number;
   serviceName: string;
-  servicePrice: number;
+  servicePrice: number | null;
 }
 
 export interface TarrifStateInterface {
