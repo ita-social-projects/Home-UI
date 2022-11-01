@@ -189,6 +189,7 @@ export default defineComponent({
   max-width: 290px;
   height: 100%;
   background-color: #f3f3f3;
+  overflow: auto;
 }
 
 .mobile-menu .header {
@@ -196,7 +197,7 @@ export default defineComponent({
   justify-content: space-around;
   align-items: center;
   height: 80px;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .logo {
