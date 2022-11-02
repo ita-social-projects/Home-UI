@@ -16,17 +16,21 @@
         <h3>{{ tarrifTitle }}</h3>
         <p>{{ tarrifComment }}</p>
         <!-- {{ housesInfo }} -->
-        <ul v-show="expenseList">
-          <li v-for="(expense, idx) in expenseList" :key="idx">
-            {{ expense.serviceName }}
-            <span>{{ expense.servicePrice }} грн.</span>
+        <ul v-show="expense.list">
+          <li v-for="(service, idx) in expense.list" :key="idx">
+            {{ service.serviceName }}
+            <span>{{ service.servicePrice }} грн.</span>
             <div class="expense-list--actions">
               <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
-              <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+              <Button
+                icon="pi pi-times"
+                class="p-button-rounded p-button-danger p-button-text"
+                @click="deleteExpense(service)"
+              />
             </div>
           </li>
         </ul>
-        <h4>Сума статей витрат: <Chip :label="finalCalculation" /> грн.</h4>
+        <h4>Сума статей витрат: <Chip :label="countServices()" /> грн.</h4>
       </div>
       <div class="input_field tarrif_comment">
         <label for="comment">Коментар до тарифу:</label>
@@ -61,7 +65,7 @@
           name="service_name"
           v-model="tarrifExpenseTitle"
           :class="{ 'p-invalid': v$.tarrifExpenseTitle.$error }"
-          @blur="v$.tarrifExpenseTitle.$touch"
+          @blur="v$.tarrifExpenseTitle.$dirty"
         ></InputText>
         <p v-if="v$.tarrifExpenseTitle.$error" class="p-error">{{ v$.tarrifExpenseTitle.$errors[0].$message }}</p>
       </div>
@@ -79,20 +83,29 @@
           name="service_price"
           placeholder="0.00 грн"
           :class="{ 'p-invalid': v$.tarrifExpenseCost.$error }"
-          @blur="v$.tarrifExpenseCost.$touch"
+          @blur="v$.tarrifExpenseCost.$dirty"
         ></InputNumber>
         <p v-if="v$.tarrifExpenseCost.$error" class="p-error">{{ v$.tarrifExpenseCost.$errors[0].$message }}</p>
       </div>
       <div class="calculation_controls">
-        <h4>Тариф дорівнює: <Chip :label="finalCalculation" />грн.</h4>
-        <Button label="Згенерувати" icon="pi pi-check" class="p-button-info" :disabled="v$.$invalid" />
+        <h4>
+          Тариф дорівнює:
+          <Chip :label="finalCalculation()" style="font-size: 1.2rem" />грн.
+        </h4>
+        <Button
+          label="Згенерувати"
+          icon="pi pi-check"
+          class="p-button-info"
+          @click="saveTarrif"
+          :disabled="!expense.list.length"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, watch } from 'vue';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import Textarea from 'primevue/textarea';
@@ -126,12 +139,12 @@ export default defineComponent({
     const tarrifExpenseTitle = ref('');
     const tarrifExpenseCost = ref(null);
     const selectedHouse = ref(null);
-    let expenseList: Array<TarrifService> = reactive([]);
+    let expense = reactive({ list: [] as Array<TarrifService> });
 
     let houses = reactive([]);
-    const area = ref(0);
+    const area = ref(325);
     const servicesTotal = ref('0.00');
-    const finalCalculation = ref('0.00');
+    const blankedTarrif = ref('0.00');
 
     const store = useStore();
     const housesInfo = ref();
@@ -140,12 +153,9 @@ export default defineComponent({
     const rules = tarrifCalculatorValidations;
     const v$ = useVuelidate(rules, { tarrifTitle, tarrifComment, tarrifExpenseTitle, tarrifExpenseCost });
 
-    // const countServices = () => {
-    //   return expenseList.reduce((acc, service) => (acc += service.servicePrice));
-    // };
     const currentTarrif: string | null = localStorage.getItem('current-tarrif');
     if (currentTarrif) {
-      expenseList = JSON.parse(currentTarrif).services;
+      expense.list = JSON.parse(currentTarrif).services;
       tarrifTitle.value = JSON.parse(currentTarrif).tarrifTitle;
       tarrifComment.value = JSON.parse(currentTarrif).tarrifComment;
     }
@@ -160,27 +170,57 @@ export default defineComponent({
       console.log(house)
     );
 
+    const countServices = (): number => {
+      return expense.list
+        .reduce((acc: any, service: TarrifService) => {
+          if (service.servicePrice) {
+            return (acc += service.servicePrice);
+          }
+        }, 0)
+        .toString();
+    };
+
     const addExpense = (): void => {
       const newService: TarrifService = {
         serviceName: tarrifExpenseTitle.value,
         servicePrice: tarrifExpenseCost.value,
       };
-      expenseList.push(newService);
-      updateLocalStorage();
+      expense.list.push(newService);
       tarrifExpenseTitle.value = '';
       tarrifExpenseCost.value = null;
     };
-    const updateLocalStorage = () => {
+    const updateLocalStorage = (): void => {
       const currentTarrif = {
         tarrifTitle: tarrifTitle.value,
         tarrifComment: tarrifComment.value,
-        services: expenseList,
+        services: expense.list,
       };
       localStorage.setItem('current-tarrif', JSON.stringify(currentTarrif));
     };
-    const deleteExpense = () => {
-      console.log('deleting this expense');
+
+    const saveTarrif = (): void => {
+      tarrifTitle.value = '';
+      tarrifComment.value = '';
+      tarrifExpenseTitle.value = '';
+      tarrifExpenseCost.value = null;
+      expense.list = [];
+      localStorage.removeItem('current-tarrif');
+      console.log('Sended and saved to DB');
     };
+
+    const finalCalculation = () => {
+      const finalTarrif = countServices() / area.value;
+      return finalTarrif > 1 ? finalTarrif.toFixed(2) : finalTarrif.toPrecision(3);
+    };
+
+    const deleteExpense = (serviceToDelete: TarrifService): void => {
+      expense.list = expense.list.filter((service: TarrifService) => service !== serviceToDelete);
+    };
+
+    watch(
+      () => expense.list.length,
+      () => updateLocalStorage()
+    );
 
     return {
       tarrifTitle,
@@ -191,14 +231,16 @@ export default defineComponent({
       houses,
       area,
       finalCalculation,
+      blankedTarrif,
       housesInfo,
       cooperationId,
       deleteExpense,
-      expenseList,
+      expense,
       addExpense,
       updateLocalStorage,
       servicesTotal,
-      // countServices,
+      countServices,
+      saveTarrif,
       v$,
     };
   },
