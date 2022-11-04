@@ -17,7 +17,7 @@ import FinanceSection from '@/finance/components/FinanceSection.vue';
 import ManageApartments from '@/apartment/ManageApartments.vue';
 import ApartmentInfo from '@/apartment/ApartmentInfo.vue';
 import TarrifsCalculation from '@/finance/components/TarrifsCalculation.vue';
-import ManagementOfTariffs from '@/finance/components/ManagementOfTariffs.vue';
+import TariffsManagement from '@/finance/components/TariffsManagement.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -128,9 +128,9 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: RoutesEnum.ManagementOfTariffs,
-        name: 'management-of-tariffs',
-        component: ManagementOfTariffs,
+        path: RoutesEnum.TariffsManagement,
+        name: 'tariffs-managemant',
+        component: TariffsManagement,
         meta: {
           title: 'Управління тарифами',
         },

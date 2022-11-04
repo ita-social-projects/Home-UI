@@ -14,7 +14,7 @@ export enum RoutesEnum {
   PollInfo = '/main/polls/:id',
   FinanceSection = '/main/finance',
   TarrifsCalculation = '/main/finance/tarrifs-calculation',
-  ManagementOfTariffs = '/main/finance/management-of-tariffs',
+  TariffsManagement = '/main/finance/tariffs-management',
 
   NotFound = '/:catchAll(.*)',
 }

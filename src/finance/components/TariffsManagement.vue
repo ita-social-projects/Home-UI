@@ -25,7 +25,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
@@ -33,7 +33,7 @@ import Column from 'primevue/column';
 import Menu from 'primevue/menu';
 
 export default defineComponent({
-  name: 'ManagementOfTariffs',
+  name: 'tariffs-management',
   components: {
     Button,
     DataTable,
@@ -64,7 +64,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .page-title {
   text-align: center;
 }
