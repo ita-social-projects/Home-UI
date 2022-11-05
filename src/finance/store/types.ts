@@ -3,6 +3,7 @@ import { RootStateInterface } from '@/store/types';
 import { TarrifModel } from '../models/tarrif.model';
 
 export interface TarrifService {
+  editState: boolean;
   serviceName: string;
   servicePrice: number | null;
 }

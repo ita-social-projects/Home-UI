@@ -1,52 +1,66 @@
 <template>
   <div>
     <h1>Калькулятор тарифу</h1>
-    <div class="tarrifs-calculator">
+    <form @submit.prevent="handleSubmit(!v$.$invalid)" class="tarrifs-calculator">
       <div class="input_field tarrif_name">
-        <label for="tarrif_name">Назва тарифу:</label>
+        <label for="tarrif_name" :class="{ 'p-error': v$.tarrifTitle.$invalid && submitted }">Назва тарифу*</label>
         <InputText
           name="tarrif_name"
-          v-model="tarrifTitle"
-          :class="{ 'p-invalid': v$.tarrifTitle.$error }"
-          @blur="v$.tarrifTitle.$touch"
+          v-model="v$.tarrifTitle.$model"
+          :class="{ 'p-invalid': v$.tarrifTitle.$invalid && submitted }"
         ></InputText>
-        <p v-if="v$.tarrifTitle.$error" class="p-error">{{ v$.tarrifTitle.$errors[0].$message }}</p>
+        <p v-if="(v$.tarrifTitle.$invalid && submitted) || v$.tarrifTitle.$pending" class="p-error">
+          {{ v$.tarrifTitle.$errors[0].$message }}
+        </p>
       </div>
       <div class="expense-list">
-        <h3>{{ tarrifTitle }}</h3>
-        <p>{{ tarrifComment }}</p>
+        <h3>{{ formState.tarrifTitle }}</h3>
+        <p>{{ formState.tarrifComment }}</p>
         <!-- {{ housesInfo }} -->
         <ul v-show="expense.list">
           <li v-for="(service, idx) in expense.list" :key="idx">
-            {{ service.serviceName }}
-            <span>{{ service.servicePrice }} грн.</span>
-            <div class="expense-list--actions">
-              <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
-              <Button
-                icon="pi pi-times"
-                class="p-button-rounded p-button-danger p-button-text"
-                @click="deleteExpense(service)"
-              />
+            <div class="expense-list--item" v-if="!service.editState">
+              <div class="expense-list--item-text">
+                <p>{{ service.serviceName }}</p>
+                <span>{{ service.servicePrice }} грн.</span>
+              </div>
+              <div class="expense-list--actions">
+                <Button
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning p-button-text"
+                  @click="handleEdit(service)"
+                />
+                <Button
+                  icon="pi pi-times"
+                  class="p-button-rounded p-button-danger p-button-text"
+                  @click="deleteExpense(service)"
+                />
+              </div>
+            </div>
+            <div class="expense-list--item-edit" v-else>
+              <InputText name="edit-service-name" v-model="service.serviceName"></InputText>
+              <InputNumber name="edit-service-price" v-model="service.servicePrice"></InputNumber>
+              <Button icon="pi pi-check" class="p-button-rounded p-button-text" @click="service.editState = false" />
             </div>
           </li>
         </ul>
-        <h4>Сума статей витрат: <Chip :label="countServices()" /> грн.</h4>
+        <h4 v-show="expense.list.length">Сума статей витрат: <Chip :label="countServices()" /> грн.</h4>
       </div>
       <div class="input_field tarrif_comment">
         <label for="comment">Коментар до тарифу:</label>
         <Textarea
-          v-model="tarrifComment"
+          v-model="v$.tarrifComment.$model"
           name="comment"
           rows="5"
           cols="30"
-          :class="{ 'p-invalid': v$.tarrifComment.$error }"
-          @blur="v$.tarrifComment.$touch"
+          :class="{ 'p-invalid': v$.tarrifComment.$invalid && submitted }"
         />
-        <p v-if="v$.tarrifComment.$error" class="p-error">{{ v$.tarrifComment.$errors[0].$message }}</p>
+        <p v-if="v$.tarrifComment.$invalid && submitted" class="p-error">{{ v$.tarrifComment.$error }}</p>
       </div>
       <div class="input_field house_picker">
         <!-- <label for="house">Оберіть будинок під тариф:</label> -->
         <Dropdown
+          style="margin-top: 2em"
           name="house"
           v-model="selectedHouse"
           :options="houses"
@@ -60,14 +74,17 @@
         <Chip :label="`${area}, м²`" icon="pi pi-pencil" />
       </div>
       <div class="input_field service_name">
-        <label for="service_name">Назва статті витрат:</label>
+        <label for="service_name" :class="{ 'p-error': v$.tarrifExpenseTitle.$invalid && submitted }"
+          >Назва статті витрат*</label
+        >
         <InputText
           name="service_name"
-          v-model="tarrifExpenseTitle"
-          :class="{ 'p-invalid': v$.tarrifExpenseTitle.$error }"
-          @blur="v$.tarrifExpenseTitle.$dirty"
+          v-model="v$.tarrifExpenseTitle.$model"
+          :class="{ 'p-invalid': v$.tarrifExpenseTitle.$invalid && submitted }"
         ></InputText>
-        <p v-if="v$.tarrifExpenseTitle.$error" class="p-error">{{ v$.tarrifExpenseTitle.$errors[0].$message }}</p>
+        <p v-if="v$.tarrifExpenseTitle.$error" class="p-error">
+          {{ v$.tarrifExpenseTitle.$errors[0].$message }}
+        </p>
       </div>
       <div class="input_field service_actions">
         <Button class="p-button-success add-btn" @click="addExpense">
@@ -76,16 +93,19 @@
         </Button>
       </div>
       <div class="input_field service_price">
-        <label for="service_price">Вартість статті витрат:</label>
+        <label for="service_price" :class="{ 'p-error': v$.tarrifExpenseCost.$invalid && submitted }"
+          >Вартість статті витрат*</label
+        >
         <InputNumber
           class="servise_price_input"
-          v-model="tarrifExpenseCost"
+          v-model="v$.tarrifExpenseCost.$model"
           name="service_price"
           placeholder="0.00 грн"
-          :class="{ 'p-invalid': v$.tarrifExpenseCost.$error }"
-          @blur="v$.tarrifExpenseCost.$dirty"
+          :class="{ 'p-invalid': v$.tarrifExpenseCost.$invalid && submitted }"
         ></InputNumber>
-        <p v-if="v$.tarrifExpenseCost.$error" class="p-error">{{ v$.tarrifExpenseCost.$errors[0].$message }}</p>
+        <p v-if="v$.tarrifExpenseCost.$error" class="p-error">
+          {{ v$.tarrifExpenseCost.$errors[0].$message }}
+        </p>
       </div>
       <div class="calculation_controls">
         <h4>
@@ -93,19 +113,19 @@
           <Chip :label="finalCalculation()" style="font-size: 1.2rem" />грн.
         </h4>
         <Button
+          type="submit"
           label="Згенерувати"
           icon="pi pi-check"
           class="p-button-info"
-          @click="saveTarrif"
           :disabled="!expense.list.length"
         />
       </div>
-    </div>
+    </form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, watch } from 'vue';
+import { defineComponent, onMounted, reactive, ref, watch } from 'vue';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import Textarea from 'primevue/textarea';
@@ -134,11 +154,18 @@ export default defineComponent({
     Button,
   },
   setup() {
-    const tarrifTitle = ref('');
-    const tarrifComment = ref('');
-    const tarrifExpenseTitle = ref('');
-    const tarrifExpenseCost = ref(null);
     const selectedHouse = ref(null);
+
+    const formState = reactive({
+      tarrifTitle: '',
+      tarrifComment: '',
+      tarrifExpenseTitle: '',
+      tarrifExpenseCost: null,
+    });
+    const rules = tarrifCalculatorValidations;
+    const v$ = useVuelidate(rules, formState);
+    const submitted = ref(false);
+
     let expense = reactive({ list: [] as Array<TarrifService> });
 
     let houses = reactive([]);
@@ -150,14 +177,11 @@ export default defineComponent({
     const housesInfo = ref();
     const cooperationId = ref(null);
 
-    const rules = tarrifCalculatorValidations;
-    const v$ = useVuelidate(rules, { tarrifTitle, tarrifComment, tarrifExpenseTitle, tarrifExpenseCost });
-
     const currentTarrif: string | null = localStorage.getItem('current-tarrif');
     if (currentTarrif) {
       expense.list = JSON.parse(currentTarrif).services;
-      tarrifTitle.value = JSON.parse(currentTarrif).tarrifTitle;
-      tarrifComment.value = JSON.parse(currentTarrif).tarrifComment;
+      formState.tarrifTitle = JSON.parse(currentTarrif).tarrifTitle;
+      formState.tarrifComment = JSON.parse(currentTarrif).tarrifComment;
     }
 
     cooperationId.value =
@@ -171,41 +195,51 @@ export default defineComponent({
     );
 
     const countServices = (): number => {
-      return expense.list
-        .reduce((acc: any, service: TarrifService) => {
-          if (service.servicePrice) {
-            return (acc += service.servicePrice);
-          }
-        }, 0)
-        .toString();
+      const total = expense.list.reduce((acc: any, service: TarrifService) => {
+        if (service.servicePrice) {
+          return (acc += service.servicePrice);
+        }
+      }, 0);
+      return total ? total.toString() : '0';
     };
 
     const addExpense = (): void => {
       const newService: TarrifService = {
-        serviceName: tarrifExpenseTitle.value,
-        servicePrice: tarrifExpenseCost.value,
+        editState: false,
+        serviceName: formState.tarrifExpenseTitle,
+        servicePrice: formState.tarrifExpenseCost,
       };
       expense.list.push(newService);
-      tarrifExpenseTitle.value = '';
-      tarrifExpenseCost.value = null;
+      formState.tarrifExpenseTitle = '';
+      formState.tarrifExpenseCost = null;
     };
+
     const updateLocalStorage = (): void => {
       const currentTarrif = {
-        tarrifTitle: tarrifTitle.value,
-        tarrifComment: tarrifComment.value,
+        tarrifTitle: formState.tarrifTitle,
+        tarrifComment: formState.tarrifComment,
         services: expense.list,
       };
       localStorage.setItem('current-tarrif', JSON.stringify(currentTarrif));
     };
 
-    const saveTarrif = (): void => {
-      tarrifTitle.value = '';
-      tarrifComment.value = '';
-      tarrifExpenseTitle.value = '';
-      tarrifExpenseCost.value = null;
+    const handleSubmit = (isFormvalid: boolean): void => {
+      submitted.value = true;
+      if (!isFormvalid) {
+        submitted.value = false;
+        return;
+      }
+      resetForm();
+      console.log('Sended and saved to DB');
+    };
+
+    const resetForm = (): void => {
+      formState.tarrifTitle = '';
+      formState.tarrifComment = '';
+      formState.tarrifExpenseTitle = '';
+      formState.tarrifExpenseCost = null;
       expense.list = [];
       localStorage.removeItem('current-tarrif');
-      console.log('Sended and saved to DB');
     };
 
     const finalCalculation = () => {
@@ -216,17 +250,17 @@ export default defineComponent({
     const deleteExpense = (serviceToDelete: TarrifService): void => {
       expense.list = expense.list.filter((service: TarrifService) => service !== serviceToDelete);
     };
+    const handleEdit = (service: TarrifService) => {
+      service.editState = true;
+    };
 
     watch(
-      () => expense.list.length,
+      () => [...expense.list],
       () => updateLocalStorage()
     );
 
     return {
-      tarrifTitle,
-      tarrifComment,
-      tarrifExpenseTitle,
-      tarrifExpenseCost,
+      formState,
       selectedHouse,
       houses,
       area,
@@ -235,12 +269,15 @@ export default defineComponent({
       housesInfo,
       cooperationId,
       deleteExpense,
+      handleEdit,
       expense,
       addExpense,
       updateLocalStorage,
       servicesTotal,
       countServices,
-      saveTarrif,
+      submitted,
+      handleSubmit,
+      resetForm,
       v$,
     };
   },
@@ -250,7 +287,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .tarrifs-calculator {
   display: grid;
-  gap: 1em;
+  gap: 2em;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(6, 1fr);
   grid-template-rows: auto;
@@ -302,19 +339,38 @@ export default defineComponent({
   h4 {
     align-self: flex-end;
   }
+  &--item {
+    gap: 2em;
+  }
+  &--item,
+  &--item-edit {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  &--item-text {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+  }
+  &--actions {
+    display: flex;
+  }
 }
 .expense-list ul {
   max-height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   list-style: none;
-  padding: 0 2em 0 0;
+  padding: 0 0 2em 0;
   margin: 0;
   li {
-    display: flex;
-    justify-content: space-between;
     line-height: 3;
+    padding: 0.5em 0;
+    p {
+      margin: 0;
+    }
   }
 }
 .calculation_controls {
