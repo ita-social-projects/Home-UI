@@ -125,7 +125,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from 'vue';
+import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import Textarea from 'primevue/textarea';
@@ -174,8 +174,7 @@ export default defineComponent({
     const blankedTarrif = ref('0.00');
 
     const store = useStore();
-    const housesInfo = ref();
-    const cooperationId = ref(null);
+    // const housesInfo = ref();
 
     const currentTarrif: string | null = localStorage.getItem('current-tarrif');
     if (currentTarrif) {
@@ -184,15 +183,36 @@ export default defineComponent({
       formState.tarrifComment = JSON.parse(currentTarrif).tarrifComment;
     }
 
-    cooperationId.value =
-      store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
-    store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
-    housesInfo.value = store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
-    houses = housesInfo.value.map((house: HouseModel) =>
-      // `${house.address.city}, ${house.address.district}, ${house.address.street},
-      // ${house.address.houseBlock}, ${house.address.houseNumber}`
-      console.log(house)
-    );
+    const cooperationId = computed(() => {
+      return store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
+    });
+
+    const setHouses = async (): Promise<void> => {
+      const payload = cooperationId.value;
+      await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, payload);
+    };
+
+    const housesInfo = computed(() => {
+      return store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
+    });
+
+    const setListOfHouses = async () => {
+      console.log(housesInfo.value);
+      const listOfHouses = await housesInfo.value.reduce((acc: any, house: HouseModel, arr: Array<HouseModel>) => {
+        acc.push(
+          `${house.address?.houseNumber},
+          ${house.address?.houseBlock},
+          ${house.address?.district},
+          ${house.address?.street}`
+        );
+      }, []);
+      return (houses = listOfHouses);
+    };
+
+    onMounted(() => {
+      setHouses();
+      setListOfHouses();
+    });
 
     const countServices = (): number => {
       const total = expense.list.reduce((acc: any, service: TarrifService) => {
@@ -266,6 +286,8 @@ export default defineComponent({
       area,
       finalCalculation,
       blankedTarrif,
+      setHouses,
+      setListOfHouses,
       housesInfo,
       cooperationId,
       deleteExpense,
