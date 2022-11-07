@@ -64,8 +64,7 @@
           name="house"
           v-model="selectedHouse"
           :options="houses"
-          optionLabel="name"
-          optionValue="code"
+          optionLabel="adress"
           placeholder="Оберіть будинок"
         />
       </div>
@@ -168,13 +167,12 @@ export default defineComponent({
 
     let expense = reactive({ list: [] as Array<TarrifService> });
 
-    let houses = reactive([]);
+    let houses = ref();
     const area = ref(325);
     const servicesTotal = ref('0.00');
     const blankedTarrif = ref('0.00');
 
     const store = useStore();
-    // const housesInfo = ref();
 
     const currentTarrif: string | null = localStorage.getItem('current-tarrif');
     if (currentTarrif) {
@@ -187,31 +185,23 @@ export default defineComponent({
       return store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
     });
 
-    const setHouses = async (): Promise<void> => {
-      const payload = cooperationId.value;
-      await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, payload);
-    };
-
-    const housesInfo = computed(() => {
-      return store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
-    });
-
-    const setListOfHouses = async () => {
-      console.log(housesInfo.value);
-      const listOfHouses = await housesInfo.value.reduce((acc: any, house: HouseModel, arr: Array<HouseModel>) => {
-        acc.push(
-          `${house.address?.houseNumber},
-          ${house.address?.houseBlock},
-          ${house.address?.district},
-          ${house.address?.street}`
-        );
+    const setHouses = async () => {
+      await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
+      const housesList = await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
+      houses.value = housesList.reduce((acc: any, house: HouseModel) => {
+        return (acc = [
+          ...acc,
+          {
+            adress: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
+            ${house.address.houseBlock}, ${house.address.district}`,
+            id: house.houseArea,
+          },
+        ]);
       }, []);
-      return (houses = listOfHouses);
     };
 
     onMounted(() => {
       setHouses();
-      setListOfHouses();
     });
 
     const countServices = (): number => {
@@ -282,14 +272,10 @@ export default defineComponent({
     return {
       formState,
       selectedHouse,
-      houses,
       area,
+      houses,
       finalCalculation,
       blankedTarrif,
-      setHouses,
-      setListOfHouses,
-      housesInfo,
-      cooperationId,
       deleteExpense,
       handleEdit,
       expense,
