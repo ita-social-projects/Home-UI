@@ -14,37 +14,39 @@
         </p>
       </div>
       <div class="expense-list">
-        <h3>{{ formState.tarrifTitle }}</h3>
-        <p>{{ formState.tarrifComment }}</p>
-        <!-- {{ housesInfo }} -->
-        <ul v-show="expense.list">
-          <li v-for="(service, idx) in expense.list" :key="idx">
-            <div class="expense-list--item" v-if="!service.editState">
-              <div class="expense-list--item-text">
-                <p>{{ service.serviceName }}</p>
-                <span>{{ service.servicePrice }} грн.</span>
+        <div class="expense-list__wrapper" v-show="expense.list.length">
+          <h3>{{ formState.tarrifTitle }}</h3>
+          <p>{{ formState.tarrifComment }}</p>
+          <ul>
+            <li v-for="(service, idx) in expense.list" :key="idx">
+              <div class="expense-list--item" v-if="!service.editState">
+                <div class="expense-list--item-text">
+                  <p>{{ service.serviceName }}</p>
+                  <span>{{ service.servicePrice }} грн.</span>
+                </div>
+                <div class="expense-list--actions">
+                  <Button
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-warning p-button-text"
+                    @click="handleEdit(service)"
+                  />
+                  <Button
+                    icon="pi pi-times"
+                    class="p-button-rounded p-button-danger p-button-text"
+                    @click="deleteExpense(service)"
+                  />
+                </div>
               </div>
-              <div class="expense-list--actions">
-                <Button
-                  icon="pi pi-pencil"
-                  class="p-button-rounded p-button-warning p-button-text"
-                  @click="handleEdit(service)"
-                />
-                <Button
-                  icon="pi pi-times"
-                  class="p-button-rounded p-button-danger p-button-text"
-                  @click="deleteExpense(service)"
-                />
+              <div class="expense-list--item-edit" v-else>
+                <InputText name="edit-service-name" v-model="service.serviceName"></InputText>
+                <InputNumber name="edit-service-price" v-model="service.servicePrice"></InputNumber>
+                <Button icon="pi pi-check" class="p-button-rounded p-button-text" @click="service.editState = false" />
               </div>
-            </div>
-            <div class="expense-list--item-edit" v-else>
-              <InputText name="edit-service-name" v-model="service.serviceName"></InputText>
-              <InputNumber name="edit-service-price" v-model="service.servicePrice"></InputNumber>
-              <Button icon="pi pi-check" class="p-button-rounded p-button-text" @click="service.editState = false" />
-            </div>
-          </li>
-        </ul>
-        <h4 v-show="expense.list.length">Сума статей витрат: <Chip :label="countServices()" /> грн.</h4>
+            </li>
+          </ul>
+          <h4>Сума статей витрат: <Chip :label="countServices()" /> грн.</h4>
+        </div>
+        <h3 v-show="!expense.list.length">Для розрахунку потрібна принаймні одна стаття витрат!</h3>
       </div>
       <div class="input_field tarrif_comment">
         <label for="comment">Коментар до тарифу:</label>
@@ -109,7 +111,7 @@
       <div class="calculation_controls">
         <h4>
           Тариф дорівнює:
-          <Chip :label="finalCalculation()" style="font-size: 1.2rem" />грн.
+          <Chip :label="selectedHouse ? finalCalculation() : '----'" style="font-size: 1.2rem" />грн.
         </h4>
         <Button
           type="submit"
@@ -136,7 +138,7 @@ import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
 import { tarrifCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
 
-import { TarrifService } from '@/finance/store/types';
+import { TarrifService, SelectedHouse } from '@/finance/store/types';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
@@ -153,7 +155,7 @@ export default defineComponent({
     Button,
   },
   setup() {
-    const selectedHouse = ref(null);
+    const selectedHouse = ref<SelectedHouse>();
 
     const formState = reactive({
       tarrifTitle: '',
@@ -166,11 +168,12 @@ export default defineComponent({
     const submitted = ref(false);
 
     let expense = reactive({ list: [] as Array<TarrifService> });
+    const houses = ref();
+    const area = computed(() => {
+      return selectedHouse.value ? selectedHouse.value.houseArea : 0;
+    });
 
-    let houses = ref();
-    const area = ref(325);
     const servicesTotal = ref('0.00');
-    const blankedTarrif = ref('0.00');
 
     const store = useStore();
 
@@ -179,6 +182,7 @@ export default defineComponent({
       expense.list = JSON.parse(currentTarrif).services;
       formState.tarrifTitle = JSON.parse(currentTarrif).tarrifTitle;
       formState.tarrifComment = JSON.parse(currentTarrif).tarrifComment;
+      selectedHouse.value = JSON.parse(currentTarrif).selectedHouse;
     }
 
     const cooperationId = computed(() => {
@@ -194,7 +198,7 @@ export default defineComponent({
           {
             adress: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
             ${house.address.houseBlock}, ${house.address.district}`,
-            id: house.houseArea,
+            houseArea: house.houseArea,
           },
         ]);
       }, []);
@@ -228,6 +232,7 @@ export default defineComponent({
       const currentTarrif = {
         tarrifTitle: formState.tarrifTitle,
         tarrifComment: formState.tarrifComment,
+        selectedHouse: selectedHouse.value,
         services: expense.list,
       };
       localStorage.setItem('current-tarrif', JSON.stringify(currentTarrif));
@@ -269,13 +274,17 @@ export default defineComponent({
       () => updateLocalStorage()
     );
 
+    watch(
+      () => selectedHouse.value,
+      () => updateLocalStorage()
+    );
+
     return {
       formState,
       selectedHouse,
       area,
       houses,
       finalCalculation,
-      blankedTarrif,
       deleteExpense,
       handleEdit,
       expense,
@@ -340,12 +349,20 @@ export default defineComponent({
   }
 }
 .expense-list {
+  height: 500px;
   display: flex;
   flex-direction: column;
   grid-column: 3 / 5;
   grid-row: 1 / 6;
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+  }
   h4 {
     align-self: flex-end;
+  }
+  h3 {
+    align-self: center;
   }
   &--item {
     gap: 2em;

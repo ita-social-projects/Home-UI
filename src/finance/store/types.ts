@@ -8,6 +8,11 @@ export interface TarrifService {
   servicePrice: number | null;
 }
 
+export interface SelectedHouse {
+  adress: string;
+  houseArea: number;
+}
+
 export interface TarrifStateInterface {
   tarrifList: Array<TarrifModel> | [];
   newTarrif: TarrifModel | null;
