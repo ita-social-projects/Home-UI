@@ -238,5 +238,11 @@ export default defineComponent({
   h1 {
     font-size: 28px;
   }
+
+  ::v-deep(.p-datatable-sm) {
+    .p-column-title {
+      margin-right: 1.5rem;
+    }
+  }
 }
 </style>
