@@ -234,7 +234,6 @@ export default defineComponent({
       v$: useVuelidate(),
       PollAcceptanceCriteriaEnum,
 
-      beginDateInEdition: new Date(),
       isDisabled: true,
       isCreationDateHelpActive: false,
     };
@@ -300,10 +299,7 @@ export default defineComponent({
         this.isDisabled = true;
         this.isCreationDateHelpActive = true;
       } else {
-        this.beginDateInEdition.setHours(0, 0, 0, 0);
-
         this.finishDate = new Date(this.pollData.creationDateInEdition.getTime() + forteenDaysInMilliseconds);
-        this.finishDate.setHours(23, 59, 59, 59);
         this.pollData.completionDate = this.finishDate.toLocaleString('uk-UA').split(',')[0];
 
         this.isCreationDateHelpActive = false;
@@ -320,10 +316,8 @@ export default defineComponent({
       this.pollData.title = this.selectedPoll?.header;
       this.pollData.description = this.selectedPoll?.description;
       this.pollData.polledHouses = this.selectedPoll?.polledHouses;
-      this.pollData.creationDateInEdition = this.selectedPoll?.creationDate.toLocaleString('uk-UA');
-      this.pollData.completionDate = this.selectedPoll?.completionDate.toLocaleString('uk-UA');
-
-      this.beginDateInEdition = this.selectedPoll?.creationDate;
+      this.pollData.creationDateInEdition = this.selectedPoll?.creationDate;
+      this.pollData.completionDate = this.selectedPoll?.completionDate;
       this.finishDate = this.selectedPoll?.completionDate;
     },
 
@@ -369,14 +363,25 @@ export default defineComponent({
     },
 
     async editPoll() {
+      const yearInUTC = this.pollData.creationDateInEdition.getFullYear();
+      const monthInUTC = this.pollData.creationDateInEdition.getMonth();
+      const dateInUTC = this.pollData.creationDateInEdition.getDate();
+      const hoursInUTC = this.pollData.creationDateInEdition.getHours();
+      const minutesInUTC = this.pollData.creationDateInEdition.getMinutes();
+      const secondsInUTC = this.pollData.creationDateInEdition.getSeconds();
+      const millisecondsInUTC = this.pollData.creationDateInEdition.getMilliseconds();
+
       const poll = {
         header: this.pollData.title,
         description: this.pollData.description,
-        creationDate: new Date(this.beginDateInEdition.toLocaleString('en-US')).toISOString(),
-        completionDate: new Date(this.finishDate.toLocaleString('en-US')).toISOString(),
+        creationDate: new Date(
+          Date.UTC(yearInUTC, monthInUTC, dateInUTC, hoursInUTC, minutesInUTC, secondsInUTC, millisecondsInUTC)
+        ).toISOString(),
+        completionDate: new Date(this.finishDate.getTime()).toISOString(),
         status: this.poll.status,
         polledHouses: this.pollData.polledHouses,
       };
+
       const ids = { cooperationId: this.cooperationIdEdit, pollId: this.$props.poll.id };
 
       await this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.UPDATE_POLL}`, {
