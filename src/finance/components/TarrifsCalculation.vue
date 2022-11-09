@@ -88,7 +88,11 @@
         </p>
       </div>
       <div class="input_field service_actions">
-        <Button class="p-button-success add-btn" @click="addExpense">
+        <Button
+          class="p-button-success add-btn"
+          @click="addExpense(v$.tarrifExpenseTitle.$invalid && v$.tarrifExpenseCost.$invalid)"
+          :disabled="v$.tarrifExpenseTitle.$invalid || v$.tarrifExpenseCost.$invalid"
+        >
           Додати &nbsp;
           <i class="pi pi-plus-circle"></i>
         </Button>
@@ -217,7 +221,12 @@ export default defineComponent({
       return total ? total.toString() : '0';
     };
 
-    const addExpense = (): void => {
+    const addExpense = (isServiceFieldsValid: boolean): void => {
+      v$.value.tarrifExpenseTitle.$touch();
+      v$.value.tarrifExpenseCost.$touch();
+      if (isServiceFieldsValid) {
+        return;
+      }
       const newService: TarrifService = {
         editState: false,
         serviceName: formState.tarrifExpenseTitle,
@@ -226,6 +235,8 @@ export default defineComponent({
       expense.list.push(newService);
       formState.tarrifExpenseTitle = '';
       formState.tarrifExpenseCost = null;
+      v$.value.tarrifExpenseTitle.$reset();
+      v$.value.tarrifExpenseCost.$reset();
     };
 
     const updateLocalStorage = (): void => {
@@ -242,6 +253,7 @@ export default defineComponent({
       submitted.value = true;
       if (!isFormvalid) {
         submitted.value = false;
+        console.log('💩💩💩💩💩💩');
         return;
       }
       resetForm();
