@@ -257,8 +257,8 @@ export default defineComponent({
           this.pollData.completionDate = '';
           return;
         }
-        const forteenDaysInMilliseconds = 14 * 86400000;
-        this.finishDate = new Date(newVal.getTime() + forteenDaysInMilliseconds);
+        const fifteenDaysInMilliseconds = 15 * 86400000;
+        this.finishDate = new Date(newVal.getTime() + fifteenDaysInMilliseconds);
         this.finishDate.setHours(23, 59, 59, 59);
         this.pollData.completionDate = this.finishDate.toLocaleString('uk-UA').split(',')[0];
       }
