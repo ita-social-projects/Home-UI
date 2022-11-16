@@ -225,7 +225,6 @@ export default defineComponent({
         completionDate: '' || ('' as any),
         acceptanceCriteria: '',
       },
-      polledHouses: [],
       startDate: null,
       finishDate: new Date(),
       displayCreatePollModal: false,
