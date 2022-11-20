@@ -22,18 +22,22 @@ export interface TarrifStateInterface {
 
 export enum TarrifMutationEnum {
   SET_CURRENT_TARRIF = 'SET_CURRENT_TARRIF',
+  CLEAR_CURRENT_TARRIF = 'CLEAR_CURRENT_TARRIF',
 }
 
 export enum TarrifActionEnum {
   SET_CURRENT_TARRIF = 'SET_CURRENT_TARRIF',
+  CLEAR_CURRENT_TARRIF = 'CLEAR_CURRENT_TARRIF',
 }
 
 export interface Actions {
   [TarrifActionEnum.SET_CURRENT_TARRIF]({ commit }: AugmentedActionContext, payload: TarrifDTOModel): void;
+  [TarrifActionEnum.CLEAR_CURRENT_TARRIF]({ commit }: AugmentedActionContext): void;
 }
 
 export type Mutations<S = TarrifStateInterface> = {
   [TarrifMutationEnum.SET_CURRENT_TARRIF](state: S, payload: TarrifModel): void;
+  [TarrifMutationEnum.CLEAR_CURRENT_TARRIF](state: S, payload: string): void;
 };
 
 export type AugmentedActionContext = {

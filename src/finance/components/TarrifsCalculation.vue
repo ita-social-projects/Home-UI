@@ -1,5 +1,14 @@
 <template>
   <div>
+    <Breadcrumb :home="home" :model="items">
+      <template #item="{ item }">
+        <router-link :to="item.to" custom v-slot="{ navigate, isActive, isExactActive }">
+          <a @click="navigate" :class="{ 'active-link': isActive, 'active-link-exact': isExactActive }">{{
+            item.label
+          }}</a>
+        </router-link>
+      </template>
+    </Breadcrumb>
     <h1>Калькулятор тарифу</h1>
     <form @submit.prevent="handleSubmit(!v$.$invalid)" class="tarrifs-calculator">
       <div class="input_field tarrif_name">
@@ -137,10 +146,12 @@ import Textarea from 'primevue/textarea';
 import Dropdown from 'primevue/dropdown';
 import Chip from 'primevue/chip';
 import Button from 'primevue/button';
+import Breadcrumb from 'primevue/breadcrumb';
 
 import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
 import { tarrifCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
+import { RoutesEnum } from '@/router/types';
 
 import { TarrifService, SelectedHouse } from '@/finance/store/types';
 import { StoreModuleEnum } from '@/store/types';
@@ -157,8 +168,18 @@ export default defineComponent({
     Dropdown,
     Chip,
     Button,
+    Breadcrumb,
   },
   setup() {
+    const home = ref({
+      icon: 'pi pi-building',
+      label: 'Початкова',
+      to: RoutesEnum.StartPage,
+    });
+    const items = ref([
+      { label: 'Фінанси', to: RoutesEnum.FinanceSection },
+      { label: 'Калькулятор тарифів', to: RoutesEnum.TarrifsCalculation },
+    ]);
     const selectedHouse = ref<SelectedHouse>();
 
     const formState = reactive({
@@ -267,7 +288,7 @@ export default defineComponent({
       formState.tarrifExpenseTitle = '';
       formState.tarrifExpenseCost = null;
       expense.list = [];
-      selectedHouse.value = '';
+      selectedHouse.value = undefined;
       localStorage.removeItem('current-tarrif');
     };
 
@@ -310,12 +331,21 @@ export default defineComponent({
       handleSubmit,
       resetForm,
       v$,
+      home,
+      items,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
+.p-breadcrumb a:hover {
+  cursor: pointer;
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
+}
+.active-link {
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 1);
+}
 .tarrifs-calculator {
   display: grid;
   gap: 2em;

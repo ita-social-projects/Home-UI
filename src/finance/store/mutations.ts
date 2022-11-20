@@ -5,4 +5,7 @@ export const mutations: MutationTree<TarrifStateInterface> & Mutations = {
   [TarrifMutationEnum.SET_CURRENT_TARRIF]: (state, payload) => {
     state.currentTarrif = payload;
   },
+  [TarrifMutationEnum.CLEAR_CURRENT_TARRIF]: (state) => {
+    state.currentTarrif = null;
+  },
 };

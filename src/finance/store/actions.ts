@@ -9,4 +9,7 @@ export const actions: ActionTree<TarrifStateInterface, RootStateInterface> & Act
     const newTarrif: TarrifModel = new TarrifModel(payload);
     commit(TarrifMutationEnum.SET_CURRENT_TARRIF, newTarrif);
   },
+  [TarrifActionEnum.CLEAR_CURRENT_TARRIF]: ({ commit }) => {
+    commit(TarrifMutationEnum.CLEAR_CURRENT_TARRIF, '');
+  },
 };
