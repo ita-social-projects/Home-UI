@@ -12,5 +12,5 @@ export const tarrifStore: Module<TarrifStateInterface, RootStateInterface> = {
   state,
   // mutations,
   // actions,
-  // getters,
+  getters,
 };

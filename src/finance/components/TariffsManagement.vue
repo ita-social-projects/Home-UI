@@ -2,11 +2,18 @@
   <div class="container">
     <h1 class="page-title">{{ title }}</h1>
     <div class="container-management-of-tariffs">
-      <DataTable class="p-datatable-sm" responsiveLayout="stack" breakpoint="570px" stripedRows showGridlines>
-        <Column field="name" header="Назва тарифу" :sortable="true" />
-        <Column field="cost" header="Вартість членського внеска на 1 м. кв. (грн)" :sortable="true"> </Column>
-        <Column field="comment" header="Коментар" :sortable="true" />
-        <Column field="date" header="Дата" :sortable="true" />
+      <DataTable
+        class="p-datatable-sm"
+        :value="tariffList"
+        responsiveLayout="stack"
+        breakpoint="570px"
+        stripedRows
+        showGridlines
+      >
+        <Column field="tariffName" header="Назва тарифу" :sortable="true" />
+        <Column field="tariffCost" header="Вартість членського внеска на 1 м. кв. (грн)" :sortable="true"> </Column>
+        <Column field="tariffComment" header="Коментар" :sortable="true" />
+        <Column field="tariffDate" header="Дата" :sortable="true" />
         <Column header="Опції">
           <template #body="slotProps">
             <Button
@@ -31,6 +38,9 @@ import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
+import { StoreModuleEnum } from '@/store/types';
+import { mapGetters } from 'vuex';
+import { TariffActionsEnum, TariffGettersEnum } from '@/finance/store/types';
 
 export default defineComponent({
   name: 'tariffs-management',
@@ -43,6 +53,26 @@ export default defineComponent({
   data() {
     return {
       title: 'Управління тарифами',
+      tariffList: [
+        {
+          tariffName: 'Тариф 1',
+          tariffCost: 100,
+          tariffComment: '1-й коментар',
+          tariffDate: new Date().toLocaleDateString('ek-UA'),
+        },
+        {
+          tariffName: 'Тариф 2',
+          tariffCost: 200,
+          tariffComment: '2-й коментар',
+          tariffDate: new Date().toLocaleDateString('ek-UA'),
+        },
+        {
+          tariffName: 'Тариф 3',
+          tariffCost: 300,
+          tariffComment: '3-й коментар',
+          tariffDate: new Date().toLocaleDateString('ek-UA'),
+        },
+      ],
       tariffActions: () => {
         return [
           {
@@ -60,7 +90,17 @@ export default defineComponent({
       },
     };
   },
-  methods: {},
+
+  methods: {
+    async deleteTariff() {
+      await this.$store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionsEnum.DEL_TARIFF}`);
+    },
+  },
+  computed: {
+    ...mapGetters({
+      tariffList: `${StoreModuleEnum.tariffStore}/${TariffGettersEnum.getTriffList}`,
+    }),
+  },
 });
 </script>
 
