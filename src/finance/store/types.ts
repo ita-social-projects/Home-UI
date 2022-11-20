@@ -1,6 +1,7 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { TarrifModel } from '../models/tarrif.model';
+import { TarrifDTOModel } from '../models/tarrifDTO.model';
 
 export interface TarrifService {
   editState: boolean;
@@ -11,9 +12,30 @@ export interface TarrifService {
 export interface SelectedHouse {
   adress: string;
   houseArea: number;
+  houseId: number;
 }
 
 export interface TarrifStateInterface {
   tarrifList: Array<TarrifModel> | [];
-  newTarrif: TarrifModel | null;
+  currentTarrif: TarrifModel | null;
 }
+
+export enum TarrifMutationEnum {
+  SET_CURRENT_TARRIF = 'SET_CURRENT_TARRIF',
+}
+
+export enum TarrifActionEnum {
+  SET_CURRENT_TARRIF = 'SET_CURRENT_TARRIF',
+}
+
+export interface Actions {
+  [TarrifActionEnum.SET_CURRENT_TARRIF]({ commit }: AugmentedActionContext, payload: TarrifDTOModel): void;
+}
+
+export type Mutations<S = TarrifStateInterface> = {
+  [TarrifMutationEnum.SET_CURRENT_TARRIF](state: S, payload: TarrifModel): void;
+};
+
+export type AugmentedActionContext = {
+  commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
+} & Omit<ActionContext<TarrifStateInterface, RootStateInterface>, 'commit'>;

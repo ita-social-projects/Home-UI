@@ -203,6 +203,7 @@ export default defineComponent({
             adress: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
             ${house.address.houseBlock}, ${house.address.district}`,
             houseArea: house.houseArea,
+            houseId: house.id,
           },
         ]);
       }, []);
@@ -266,6 +267,7 @@ export default defineComponent({
       formState.tarrifExpenseTitle = '';
       formState.tarrifExpenseCost = null;
       expense.list = [];
+      selectedHouse.value = '';
       localStorage.removeItem('current-tarrif');
     };
 
