@@ -10,116 +10,129 @@
       </template>
     </Breadcrumb>
     <h1>Калькулятор тарифу</h1>
-    <form @submit.prevent="handleSubmit(!v$.$invalid)" class="tarrifs-calculator">
-      <div class="input_field tarrif_name">
-        <label for="tarrif_name" :class="{ 'p-error': v$.tarrifTitle.$invalid && submitted }">Назва тарифу*</label>
-        <InputText
-          name="tarrif_name"
-          v-model="v$.tarrifTitle.$model"
-          :class="{ 'p-invalid': v$.tarrifTitle.$invalid && submitted }"
-        ></InputText>
-        <p v-if="(v$.tarrifTitle.$invalid && submitted) || v$.tarrifTitle.$pending" class="p-error">
-          {{ v$.tarrifTitle.$errors[0].$message }}
-        </p>
+    <div class="tarrifs-calculator">
+      <div class="tarrifs-calculator--left-col">
+        <form @submit.prevent="handleSubmit(!v$.$invalid)">
+          <div class="input_field tarrif_name">
+            <label for="tarrif_name" :class="{ 'p-error': v$.tarrifTitle.$invalid && submitted }">Назва тарифу*</label>
+            <InputText
+              name="tarrif_name"
+              v-model="v$.tarrifTitle.$model"
+              :class="{ 'p-invalid': v$.tarrifTitle.$invalid && submitted }"
+            ></InputText>
+            <p v-if="(v$.tarrifTitle.$invalid && submitted) || v$.tarrifTitle.$pending" class="p-error">
+              {{ v$.tarrifTitle.$errors[0].$message }}
+            </p>
+          </div>
+          <div class="input_field tarrif_comment">
+            <label for="comment">Коментар до тарифу:</label>
+            <Textarea
+              v-model="v$.tarrifComment.$model"
+              name="comment"
+              rows="5"
+              cols="30"
+              :class="{ 'p-invalid': v$.tarrifComment.$invalid && submitted }"
+            />
+            <p v-if="v$.tarrifComment.$invalid && submitted" class="p-error">{{ v$.tarrifComment.$error }}</p>
+          </div>
+          <div class="tarrifs-calculator--area-block">
+            <div class="input_field house_picker">
+              <Dropdown
+                style="margin-top: 2em"
+                name="house"
+                v-model="selectedHouse"
+                :options="houses"
+                optionLabel="adress"
+                placeholder="Оберіть будинок"
+              />
+            </div>
+            <div class="input_field area-label">
+              <h4>Загальна площа:</h4>
+              <Chip :label="`${area}, м²`" icon="pi pi-pencil" style="max-width: 120px" />
+            </div>
+          </div>
+        </form>
       </div>
-      <div class="expense-list">
-        <div class="expense-list__wrapper" v-show="expense.list.length">
-          <h3>{{ formState.tarrifTitle }}</h3>
-          <p>{{ formState.tarrifComment }}</p>
-          <ul>
-            <li v-for="(service, idx) in expense.list" :key="idx">
-              <div class="expense-list--item" v-if="!service.editState">
-                <div class="expense-list--item-text">
-                  <p>{{ service.serviceName }}</p>
-                  <span>{{ service.servicePrice }} грн.</span>
+      <div class="tarrifs-calculator--right-col">
+        <form class="tarrifs-calculator--service-form">
+          <div class="input_field service_name">
+            <label for="service_name" :class="{ 'p-error': v$.tarrifExpenseTitle.$invalid && submitted }"
+              >Назва статті витрат*</label
+            >
+            <InputText
+              name="service_name"
+              v-model="v$.tarrifExpenseTitle.$model"
+              :class="{ 'p-invalid': v$.tarrifExpenseTitle.$invalid && submitted }"
+            ></InputText>
+            <p v-if="v$.tarrifExpenseTitle.$error" class="p-error">
+              {{ v$.tarrifExpenseTitle.$errors[0].$message }}
+            </p>
+          </div>
+          <div class="input_field service_price">
+            <label for="service_price" :class="{ 'p-error': v$.tarrifExpenseCost.$invalid && submitted }"
+              >Вартість статті витрат*</label
+            >
+            <InputNumber
+              class="servise_price_input"
+              v-model="v$.tarrifExpenseCost.$model"
+              name="service_price"
+              placeholder="0.00 грн"
+              :class="{ 'p-invalid': v$.tarrifExpenseCost.$invalid && submitted }"
+            ></InputNumber>
+            <p v-if="v$.tarrifExpenseCost.$error" class="p-error">
+              {{ v$.tarrifExpenseCost.$errors[0].$message }}
+            </p>
+          </div>
+          <div class="input_field service_actions">
+            <Button
+              class="p-button-success add-btn"
+              @click="addExpense(v$.tarrifExpenseTitle.$invalid && v$.tarrifExpenseCost.$invalid)"
+              :disabled="v$.tarrifExpenseTitle.$invalid || v$.tarrifExpenseCost.$invalid"
+            >
+              Додати &nbsp;
+              <i class="pi pi-plus-circle"></i>
+            </Button>
+          </div>
+        </form>
+        <div class="expense-list">
+          <div class="expense-list__wrapper" v-show="expense.list.length">
+            <h3>{{ formState.tarrifTitle }}</h3>
+            <p>{{ formState.tarrifComment }}</p>
+            <ul>
+              <li v-for="(service, idx) in expense.list" :key="idx">
+                <div class="expense-list--item" v-if="!service.editState">
+                  <div class="expense-list--item-text">
+                    <p>{{ service.serviceName }}</p>
+                    <span>{{ service.servicePrice }} грн.</span>
+                  </div>
+                  <div class="expense-list--actions">
+                    <Button
+                      icon="pi pi-pencil"
+                      class="p-button-rounded p-button-warning p-button-text"
+                      @click="handleEdit(service)"
+                    />
+                    <Button
+                      icon="pi pi-times"
+                      class="p-button-rounded p-button-danger p-button-text"
+                      @click="deleteExpense(service)"
+                    />
+                  </div>
                 </div>
-                <div class="expense-list--actions">
+                <div class="expense-list--item-edit" v-else>
+                  <InputText name="edit-service-name" v-model="service.serviceName"></InputText>
+                  <InputNumber name="edit-service-price" v-model="service.servicePrice"></InputNumber>
                   <Button
-                    icon="pi pi-pencil"
-                    class="p-button-rounded p-button-warning p-button-text"
-                    @click="handleEdit(service)"
-                  />
-                  <Button
-                    icon="pi pi-times"
-                    class="p-button-rounded p-button-danger p-button-text"
-                    @click="deleteExpense(service)"
+                    icon="pi pi-check"
+                    class="p-button-rounded p-button-text"
+                    @click="service.editState = false"
                   />
                 </div>
-              </div>
-              <div class="expense-list--item-edit" v-else>
-                <InputText name="edit-service-name" v-model="service.serviceName"></InputText>
-                <InputNumber name="edit-service-price" v-model="service.servicePrice"></InputNumber>
-                <Button icon="pi pi-check" class="p-button-rounded p-button-text" @click="service.editState = false" />
-              </div>
-            </li>
-          </ul>
-          <h4>Сума статей витрат: <Chip :label="countServices()" /> грн.</h4>
+              </li>
+            </ul>
+            <h4>Сума статей витрат: <Chip :label="countServices()" /> грн.</h4>
+          </div>
+          <h3 v-show="!expense.list.length">Для розрахунку потрібна принаймні одна стаття витрат!</h3>
         </div>
-        <h3 v-show="!expense.list.length">Для розрахунку потрібна принаймні одна стаття витрат!</h3>
-      </div>
-      <div class="input_field tarrif_comment">
-        <label for="comment">Коментар до тарифу:</label>
-        <Textarea
-          v-model="v$.tarrifComment.$model"
-          name="comment"
-          rows="5"
-          cols="30"
-          :class="{ 'p-invalid': v$.tarrifComment.$invalid && submitted }"
-        />
-        <p v-if="v$.tarrifComment.$invalid && submitted" class="p-error">{{ v$.tarrifComment.$error }}</p>
-      </div>
-      <div class="input_field house_picker">
-        <!-- <label for="house">Оберіть будинок під тариф:</label> -->
-        <Dropdown
-          style="margin-top: 2em"
-          name="house"
-          v-model="selectedHouse"
-          :options="houses"
-          optionLabel="adress"
-          placeholder="Оберіть будинок"
-        />
-      </div>
-      <div class="input_field area-label">
-        <h4>Загальна площа:</h4>
-        <Chip :label="`${area}, м²`" icon="pi pi-pencil" />
-      </div>
-      <div class="input_field service_name">
-        <label for="service_name" :class="{ 'p-error': v$.tarrifExpenseTitle.$invalid && submitted }"
-          >Назва статті витрат*</label
-        >
-        <InputText
-          name="service_name"
-          v-model="v$.tarrifExpenseTitle.$model"
-          :class="{ 'p-invalid': v$.tarrifExpenseTitle.$invalid && submitted }"
-        ></InputText>
-        <p v-if="v$.tarrifExpenseTitle.$error" class="p-error">
-          {{ v$.tarrifExpenseTitle.$errors[0].$message }}
-        </p>
-      </div>
-      <div class="input_field service_actions">
-        <Button
-          class="p-button-success add-btn"
-          @click="addExpense(v$.tarrifExpenseTitle.$invalid && v$.tarrifExpenseCost.$invalid)"
-          :disabled="v$.tarrifExpenseTitle.$invalid || v$.tarrifExpenseCost.$invalid"
-        >
-          Додати &nbsp;
-          <i class="pi pi-plus-circle"></i>
-        </Button>
-      </div>
-      <div class="input_field service_price">
-        <label for="service_price" :class="{ 'p-error': v$.tarrifExpenseCost.$invalid && submitted }"
-          >Вартість статті витрат*</label
-        >
-        <InputNumber
-          class="servise_price_input"
-          v-model="v$.tarrifExpenseCost.$model"
-          name="service_price"
-          placeholder="0.00 грн"
-          :class="{ 'p-invalid': v$.tarrifExpenseCost.$invalid && submitted }"
-        ></InputNumber>
-        <p v-if="v$.tarrifExpenseCost.$error" class="p-error">
-          {{ v$.tarrifExpenseCost.$errors[0].$message }}
-        </p>
       </div>
       <div class="calculation_controls">
         <h4>
@@ -134,7 +147,7 @@
           :disabled="!expense.list.length"
         />
       </div>
-    </form>
+    </div>
   </div>
 </template>
 
@@ -275,7 +288,6 @@ export default defineComponent({
       submitted.value = true;
       if (!isFormvalid) {
         submitted.value = false;
-        console.log('💩💩💩💩💩💩');
         return;
       }
       resetForm();
@@ -339,135 +351,96 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.tarrifs-calculator {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3.5em;
+  &--left-col,
+  &--right-col {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  &--right-col {
+    flex-grow: 0.5;
+  }
+  &--service-form {
+    display: flex;
+    gap: 1em;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    .service_name,
+    .service_price {
+      flex-grow: 1;
+      width: 48%;
+    }
+  }
+  &--area-block {
+    display: flex;
+    justify-content: space-between;
+  }
+  .input_field {
+    display: flex;
+    flex-direction: column;
+    margin-block-end: 1em;
+    label {
+      margin-block-end: 1em;
+    }
+  }
+  .expense-list {
+    max-height: 250px;
+    display: flex;
+    flex-direction: column;
+    &__wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+    h4 {
+      align-self: flex-end;
+    }
+    h3 {
+      align-self: center;
+    }
+    &--item {
+      gap: 2em;
+    }
+    &--item,
+    &--item-edit {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+    &--item-text {
+      width: 90%;
+      display: flex;
+      justify-content: space-between;
+    }
+    &--actions {
+      display: flex;
+    }
+    ul {
+      max-height: 250px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      padding: 0 0 2em 0;
+      margin: 0;
+      li {
+        line-height: 3;
+        padding: 0.5em 0;
+        p {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
 .p-breadcrumb a:hover {
   cursor: pointer;
   text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
 }
 .active-link {
   text-shadow: 1px 1px 1px rgba(150, 150, 150, 1);
-}
-.tarrifs-calculator {
-  display: grid;
-  gap: 2em;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  grid-template-rows: auto;
-  padding: 2em 0 3.5em 0;
-  label {
-    display: block;
-    margin-block-end: 1em;
-  }
-  .input_field input {
-    width: 100%;
-  }
-  .tarrif_name,
-  .tarrif_comment {
-    grid-column: 1 / 3;
-  }
-  .house_picker,
-  .service_name,
-  .service_actions {
-    grid-column: 1 / 2;
-  }
-  .area-label,
-  .service_price {
-    grid-column: 2 / 3;
-  }
-  .area-label h4,
-  .expense-list h3 {
-    margin-top: 0;
-  }
-  .tarrif_comment textarea {
-    width: 100%;
-  }
-  .area-label {
-    grid-row: 3;
-  }
-  .service_price {
-    grid-row: 4;
-  }
-}
-::v-deep(.service_price .servise_price_input) {
-  input {
-    max-width: 150px;
-  }
-}
-.expense-list {
-  height: 500px;
-  display: flex;
-  flex-direction: column;
-  grid-column: 3 / 5;
-  grid-row: 1 / 6;
-  &__wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-  h4 {
-    align-self: flex-end;
-  }
-  h3 {
-    align-self: center;
-  }
-  &--item {
-    gap: 2em;
-  }
-  &--item,
-  &--item-edit {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
-  &--item-text {
-    width: 90%;
-    display: flex;
-    justify-content: space-between;
-  }
-  &--actions {
-    display: flex;
-  }
-}
-.expense-list ul {
-  max-height: 500px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-  padding: 0 0 2em 0;
-  margin: 0;
-  li {
-    line-height: 3;
-    padding: 0.5em 0;
-    p {
-      margin: 0;
-    }
-  }
-}
-.calculation_controls {
-  grid-column: 1 / 2;
-  justify-self: start;
-  h4 {
-    display: inline;
-    margin-right: 1em;
-  }
-  button {
-    margin-top: 1em;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-  .tarrif_name,
-  .house_picker,
-  .service_name,
-  .tarrif_comment,
-  .area-label,
-  .service_price,
-  .expense-list,
-  .area-label,
-  .calculation_controls {
-    grid-column: 1 / 5 !important;
-  }
-  .expense-list {
-    grid-row: 7;
-  }
 }
 </style>
