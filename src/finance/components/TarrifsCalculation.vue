@@ -185,7 +185,6 @@ export default defineComponent({
   },
   setup() {
     const home = ref({
-      icon: 'pi pi-building',
       label: 'Початкова',
       to: RoutesEnum.StartPage,
     });
