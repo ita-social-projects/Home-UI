@@ -100,33 +100,11 @@
             <p>{{ formState.tarrifComment }}</p>
             <ul>
               <li v-for="(service, idx) in expense.list" :key="idx">
-                <div class="expense-list--item" v-if="!service.editState">
-                  <div class="expense-list--item-text">
-                    <p>{{ service.serviceName }}</p>
-                    <span>{{ service.servicePrice }} грн.</span>
-                  </div>
-                  <div class="expense-list--actions">
-                    <Button
-                      icon="pi pi-pencil"
-                      class="p-button-rounded p-button-warning p-button-text"
-                      @click="handleEdit(service)"
-                    />
-                    <Button
-                      icon="pi pi-times"
-                      class="p-button-rounded p-button-danger p-button-text"
-                      @click="deleteExpense(service)"
-                    />
-                  </div>
-                </div>
-                <div class="expense-list--item-edit" v-else>
-                  <InputText name="edit-service-name" v-model="service.serviceName"></InputText>
-                  <InputNumber name="edit-service-price" v-model="service.servicePrice"></InputNumber>
-                  <Button
-                    icon="pi pi-check"
-                    class="p-button-rounded p-button-text"
-                    @click="service.editState = false"
-                  />
-                </div>
+                <service-item
+                  :service="service"
+                  @toggle-service-edit="toggleServiceEdit(service)"
+                  @handle-service-delete="handleServiceDelete(service)"
+                />
               </li>
             </ul>
             <h4>Сума статей витрат: <Chip :label="countServices()" /> грн.</h4>
@@ -137,7 +115,7 @@
       <div class="calculation_controls">
         <h4>
           Тариф дорівнює:
-          <Chip :label="selectedHouse ? finalCalculation() : '----'" style="font-size: 1.2rem" />грн.
+          <Chip :label="selectedHouse ? finalCalculation() : ''" style="font-size: 1.2rem" />грн.
         </h4>
         <Button
           type="submit"
@@ -165,6 +143,7 @@ import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
 import { tarrifCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
 import { RoutesEnum } from '@/router/types';
+import ServiceItem from '@/finance/components/ServiceItem.vue';
 
 import { TarrifService, SelectedHouse } from '@/finance/store/types';
 import { StoreModuleEnum } from '@/store/types';
@@ -182,6 +161,7 @@ export default defineComponent({
     Chip,
     Button,
     Breadcrumb,
+    ServiceItem,
   },
   setup() {
     const home = ref({
@@ -308,11 +288,11 @@ export default defineComponent({
       return finalTarrif > 1 ? finalTarrif.toFixed(2) : finalTarrif.toPrecision(3);
     };
 
-    const deleteExpense = (serviceToDelete: TarrifService): void => {
+    const handleServiceDelete = (serviceToDelete: TarrifService): void => {
       expense.list = expense.list.filter((service: TarrifService) => service !== serviceToDelete);
     };
-    const handleEdit = (service: TarrifService) => {
-      service.editState = true;
+    const toggleServiceEdit = (service: TarrifService): void => {
+      service.editState = !service.editState;
     };
 
     watch(
@@ -331,8 +311,8 @@ export default defineComponent({
       area,
       houses,
       finalCalculation,
-      deleteExpense,
-      handleEdit,
+      handleServiceDelete,
+      toggleServiceEdit,
       expense,
       addExpense,
       updateLocalStorage,
@@ -353,6 +333,7 @@ export default defineComponent({
 .tarrifs-calculator {
   display: flex;
   flex-wrap: wrap;
+  padding-block-end: 4em;
   gap: 3.5em;
   &--left-col,
   &--right-col {
@@ -399,23 +380,6 @@ export default defineComponent({
     }
     h3 {
       align-self: center;
-    }
-    &--item {
-      gap: 2em;
-    }
-    &--item,
-    &--item-edit {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-    }
-    &--item-text {
-      width: 90%;
-      display: flex;
-      justify-content: space-between;
-    }
-    &--actions {
-      display: flex;
     }
     ul {
       max-height: 250px;

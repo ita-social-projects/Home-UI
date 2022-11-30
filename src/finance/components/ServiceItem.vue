@@ -1,53 +1,91 @@
 <template>
-  <li v-for="(service, idx) in services" :key="idx">
-    <div class="expense-list--item" v-if="!service.editState">
-      <div class="expense-list--item-text">
-        <p>{{ service.serviceName }}</p>
-        <span>{{ service.servicePrice }} грн.</span>
-      </div>
-      <div class="expense-list--actions">
-        <Button
-          icon="pi pi-pencil"
-          class="p-button-rounded p-button-warning p-button-text"
-          @click="handleEdit(service)"
-        />
-        <Button
-          icon="pi pi-times"
-          class="p-button-rounded p-button-danger p-button-text"
-          @click="deleteExpense(service)"
-        />
-      </div>
+  <div class="expense-list--item" v-if="!service.editState">
+    <div class="expense-list--item-text">
+      <p>{{ service.serviceName }}</p>
+      <span>{{ service.servicePrice }} грн.</span>
     </div>
-    <div class="expense-list--item-edit" v-else>
-      <InputText name="edit-service-name" v-model="service.serviceName"></InputText>
-      <InputNumber name="edit-service-price" v-model="service.servicePrice"></InputNumber>
-      <Button icon="pi pi-check" class="p-button-rounded p-button-text" @click="service.editState = false" />
+    <div class="expense-list--actions">
+      <Button
+        icon="pi pi-pencil"
+        class="p-button-rounded p-button-warning p-button-text"
+        @click="toggleServiceEdit(service)"
+      />
+      <Button
+        icon="pi pi-times"
+        class="p-button-rounded p-button-danger p-button-text"
+        @click="handleServiceDelete(service)"
+      />
     </div>
-  </li>
+  </div>
+  <div class="expense-list--item-edit" v-else>
+    <InputText name="edit-service-name" v-model="service.serviceName"></InputText>
+    <InputNumber name="edit-service-price" v-model="service.servicePrice"></InputNumber>
+    <Button icon="pi pi-check" class="p-button-rounded p-button-text" @click="toggleServiceEdit(service)" />
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { TarrifService } from '@/finance/store/types';
 
+import InputText from 'primevue/inputtext';
+import InputNumber from 'primevue/inputnumber';
+import Button from 'primevue/button';
+
 export default defineComponent({
   name: 'ServiceItem',
-  emits: ['handle-edit'],
+  components: {
+    InputText,
+    InputNumber,
+    Button,
+  },
+  emits: ['toggle-service-edit', 'handle-service-delete', 'handle-edit-service-name', 'handle-edit-service-price'],
   props: {
-    services: {
+    service: {
       required: true,
-      type: Array as Array<TarrifService>,
+      type: Object,
     },
   },
   setup(props, { emit }) {
-    const handleEdit = (service): void => {
-      emit('handle-edit', service.id);
+    const toggleServiceEdit = (service: TarrifService): void => {
+      emit('toggle-service-edit', service);
     };
+    const handleServiceDelete = (service: TarrifService): void => {
+      emit('handle-service-delete', service);
+    };
+    // const handleEditServiceName = (service: TarrifService): void => {
+    //   emit('handle-edit-service-name', service);
+    // };
+    // const handleEditServicePrice = (service: TarrifService): void => {
+    //   emit('handle-edit-service-price', service);
+    // };
+
     return {
-      handleEdit,
+      toggleServiceEdit,
+      handleServiceDelete,
+      // handleEditServiceName,
+      // handleEditServicePrice,
     };
   },
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.expense-list--item {
+  gap: 2em;
+  &-text {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .expense-list--actions {
+    display: flex;
+  }
+}
+.expense-list--item,
+.expense-list--item-edit {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+</style>
