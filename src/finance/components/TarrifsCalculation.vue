@@ -1,14 +1,16 @@
 <template>
   <div>
-    <Breadcrumb :home="home" :model="items">
-      <template #item="{ item }">
-        <router-link :to="item.to" custom v-slot="{ navigate, isActive, isExactActive }">
-          <a @click="navigate" :class="{ 'active-link': isActive, 'active-link-exact': isExactActive }">{{
-            item.label
-          }}</a>
-        </router-link>
-      </template>
-    </Breadcrumb>
+    <div class="breadcrumb">
+      <Breadcrumb :home="home" :model="items">
+        <template #item="{ item }">
+          <router-link :to="item.to" custom v-slot="{ navigate, isActive, isExactActive }">
+            <a @click="navigate" :class="{ 'active-link': isActive, 'active-link-exact': isExactActive }">{{
+              item.label
+            }}</a>
+          </router-link>
+        </template>
+      </Breadcrumb>
+    </div>
     <h1>Калькулятор тарифу</h1>
     <div class="tarrifs-calculator">
       <div class="tarrifs-calculator--left-col">
@@ -40,7 +42,7 @@
               <Dropdown
                 style="margin-top: 2em"
                 name="house"
-                v-model="selectedHouse"
+                v-model="house"
                 :options="houses"
                 optionLabel="adress"
                 placeholder="Оберіть будинок"
@@ -115,7 +117,7 @@
       <div class="calculation_controls">
         <h4>
           Тариф дорівнює:
-          <Chip :label="selectedHouse ? finalCalculation() : ''" style="font-size: 1.2rem" />грн.
+          <Chip :label="house ? finalCalculation() : '0.00'" style="font-size: 1.2rem" />грн.
         </h4>
         <Button
           type="submit"
@@ -145,7 +147,7 @@ import { tarrifCalculatorValidations } from '@/finance/utils/validators/financeC
 import { RoutesEnum } from '@/router/types';
 import ServiceItem from '@/finance/components/ServiceItem.vue';
 
-import { TarrifService, SelectedHouse } from '@/finance/store/types';
+import { TarrifService, SelectedHouse, TarrifActionEnum } from '@/finance/store/types';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
@@ -165,14 +167,15 @@ export default defineComponent({
   },
   setup() {
     const home = ref({
-      label: 'Початкова',
+      icon: 'pi pi-dollar',
+      // label: 'Початкова',
       to: RoutesEnum.StartPage,
     });
     const items = ref([
       { label: 'Фінанси', to: RoutesEnum.FinanceSection },
       { label: 'Калькулятор тарифів', to: RoutesEnum.TarrifsCalculation },
     ]);
-    const selectedHouse = ref<SelectedHouse>();
+    const house = ref<SelectedHouse>();
 
     const formState = reactive({
       tarrifTitle: '',
@@ -187,19 +190,19 @@ export default defineComponent({
     let expense = reactive({ list: [] as Array<TarrifService> });
     const houses = ref();
     const area = computed(() => {
-      return selectedHouse.value ? selectedHouse.value.houseArea : 0;
+      return house.value ? house.value.houseArea : 0;
     });
 
     const servicesTotal = ref('0.00');
 
     const store = useStore();
 
-    const currentTarrif: string | null = localStorage.getItem('current-tarrif');
+    const currentTarrif = JSON.parse(localStorage.getItem('current-tarrif') as string);
     if (currentTarrif) {
-      expense.list = JSON.parse(currentTarrif).services;
-      formState.tarrifTitle = JSON.parse(currentTarrif).tarrifTitle;
-      formState.tarrifComment = JSON.parse(currentTarrif).tarrifComment;
-      selectedHouse.value = JSON.parse(currentTarrif).selectedHouse;
+      expense.list = currentTarrif.services;
+      formState.tarrifTitle = currentTarrif.tarrifTitle;
+      formState.tarrifComment = currentTarrif.tarrifComment;
+      house.value = currentTarrif.house;
     }
 
     const cooperationId = computed(() => {
@@ -255,12 +258,14 @@ export default defineComponent({
 
     const updateLocalStorage = (): void => {
       const currentTarrif = {
+        houseId: house.value?.houseId,
+        house: house.value,
         tarrifTitle: formState.tarrifTitle,
         tarrifComment: formState.tarrifComment,
-        selectedHouse: selectedHouse.value,
         services: expense.list,
       };
       localStorage.setItem('current-tarrif', JSON.stringify(currentTarrif));
+      store.dispatch(`${StoreModuleEnum.tarrifStore}/${TarrifActionEnum.SET_CURRENT_TARRIF}`, currentTarrif);
     };
 
     const handleSubmit = (isFormvalid: boolean): void => {
@@ -269,6 +274,7 @@ export default defineComponent({
         submitted.value = false;
         return;
       }
+      store.dispatch(`${StoreModuleEnum.tarrifStore}/${TarrifActionEnum.CLEAR_CURRENT_TARRIF}`);
       resetForm();
       console.log('Sended and saved to DB');
     };
@@ -279,7 +285,7 @@ export default defineComponent({
       formState.tarrifExpenseTitle = '';
       formState.tarrifExpenseCost = null;
       expense.list = [];
-      selectedHouse.value = undefined;
+      house.value = undefined;
       localStorage.removeItem('current-tarrif');
     };
 
@@ -296,18 +302,25 @@ export default defineComponent({
     };
 
     watch(
+      () => {
+        return { ...formState };
+      },
+      () => updateLocalStorage()
+    );
+
+    watch(
       () => [...expense.list],
       () => updateLocalStorage()
     );
 
     watch(
-      () => selectedHouse.value,
+      () => house.value,
       () => updateLocalStorage()
     );
 
     return {
       formState,
-      selectedHouse,
+      house,
       area,
       houses,
       finalCalculation,

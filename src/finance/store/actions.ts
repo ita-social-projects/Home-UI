@@ -7,6 +7,7 @@ import { TarrifModel } from '@/finance/models/tarrif.model';
 export const actions: ActionTree<TarrifStateInterface, RootStateInterface> & Actions = {
   [TarrifActionEnum.SET_CURRENT_TARRIF]: ({ commit }, payload) => {
     const newTarrif: TarrifModel = new TarrifModel(payload);
+    console.log(newTarrif);
     commit(TarrifMutationEnum.SET_CURRENT_TARRIF, newTarrif);
   },
   [TarrifActionEnum.CLEAR_CURRENT_TARRIF]: ({ commit }) => {
