@@ -23,6 +23,7 @@
         :badge-counter="polls"
         badge-type="secondary"
       />
+      <BaseSidebarNavButton :link="financePath" btn-text="Фінанси" icon="pi-dollar" />
     </nav>
   </div>
 </template>
@@ -58,6 +59,9 @@ export default defineComponent({
     },
     userData(): UserInterface | null {
       return this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
+    },
+    financePath(): string {
+      return RoutesEnum.FinanceSection;
     },
   },
 });
