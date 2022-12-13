@@ -123,7 +123,7 @@ const routes: RouteRecordRaw[] = [
         name: 'tarrifs-calculation',
         component: TarrifsCalculation,
         meta: {
-          title: 'Калькулятор тарифів',
+          title: 'Калькулятор тарифу',
         },
       },
     ],

@@ -53,18 +53,10 @@ export default defineComponent({
     const handleServiceDelete = (service: TarrifService): void => {
       emit('handle-service-delete', service);
     };
-    // const handleEditServiceName = (service: TarrifService): void => {
-    //   emit('handle-edit-service-name', service);
-    // };
-    // const handleEditServicePrice = (service: TarrifService): void => {
-    //   emit('handle-edit-service-price', service);
-    // };
 
     return {
       toggleServiceEdit,
       handleServiceDelete,
-      // handleEditServiceName,
-      // handleEditServicePrice,
     };
   },
 });

@@ -1,16 +1,15 @@
 <template>
   <div>
-    <div class="breadcrumb">
-      <Breadcrumb :home="home" :model="items">
-        <template #item="{ item }">
-          <router-link :to="item.to" custom v-slot="{ navigate, isActive, isExactActive }">
-            <a @click="navigate" :class="{ 'active-link': isActive, 'active-link-exact': isExactActive }">{{
-              item.label
-            }}</a>
-          </router-link>
-        </template>
-      </Breadcrumb>
-    </div>
+    <!-- todo Styles for breadcrumb link doesn't work OR icon won't show up -->
+    <Breadcrumb :home="home" :model="items">
+      <template #item="{ item }">
+        <router-link :to="item.to" custom v-slot="{ route, navigate, isActive, isExactActive }">
+          <a @click="navigate" :class="{ 'active-link': isActive, 'active-link-exact': isExactActive }">{{
+            route.meta.title
+          }}</a>
+        </router-link>
+      </template>
+    </Breadcrumb>
     <h1>Калькулятор тарифу</h1>
     <div class="tarrifs-calculator">
       <div class="tarrifs-calculator--left-col">
@@ -40,7 +39,7 @@
           <div class="tarrifs-calculator--area-block">
             <div class="input_field house_picker">
               <Dropdown
-                style="margin-top: 2em"
+                style="margin-top: 4em"
                 name="house"
                 v-model="house"
                 :options="houses"
@@ -99,7 +98,7 @@
         <div class="expense-list">
           <div class="expense-list__wrapper" v-show="expense.list.length">
             <h3>{{ formState.tarrifTitle }}</h3>
-            <p>{{ formState.tarrifComment }}</p>
+            <blockquote>{{ formState.tarrifComment }}</blockquote>
             <ul>
               <li v-for="(service, idx) in expense.list" :key="idx">
                 <service-item
@@ -167,14 +166,10 @@ export default defineComponent({
   },
   setup() {
     const home = ref({
-      icon: 'pi pi-dollar',
-      // label: 'Початкова',
       to: RoutesEnum.StartPage,
     });
-    const items = ref([
-      { label: 'Фінанси', to: RoutesEnum.FinanceSection },
-      { label: 'Калькулятор тарифів', to: RoutesEnum.TarrifsCalculation },
-    ]);
+    const items = ref([{ to: RoutesEnum.FinanceSection }, { to: RoutesEnum.TarrifsCalculation }]);
+
     const house = ref<SelectedHouse>();
 
     const formState = reactive({
@@ -183,6 +178,7 @@ export default defineComponent({
       tarrifExpenseTitle: '',
       tarrifExpenseCost: null,
     });
+    // todo refactor validation for all the forms
     const rules = tarrifCalculatorValidations;
     const v$ = useVuelidate(rules, formState);
     const submitted = ref(false);
@@ -203,6 +199,7 @@ export default defineComponent({
       formState.tarrifTitle = currentTarrif.tarrifTitle;
       formState.tarrifComment = currentTarrif.tarrifComment;
       house.value = currentTarrif.house;
+      // TODO dispatch set current tarrif action
     }
 
     const cooperationId = computed(() => {
@@ -257,6 +254,7 @@ export default defineComponent({
     };
 
     const updateLocalStorage = (): void => {
+      // TODO refactor current tarrif to match model / check action + mutation set the current tarrif to a store
       const currentTarrif = {
         houseId: house.value?.houseId,
         house: house.value,
@@ -343,6 +341,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.p-breadcrumb a:hover {
+  cursor: pointer;
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
+}
+.active-link {
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 1);
+}
+
 .tarrifs-calculator {
   display: flex;
   flex-wrap: wrap;
@@ -351,11 +357,11 @@ export default defineComponent({
   &--left-col,
   &--right-col {
     display: flex;
+    width: 35%;
     flex-direction: column;
-    flex-grow: 1;
   }
   &--right-col {
-    flex-grow: 0.5;
+    width: 61%;
   }
   &--service-form {
     display: flex;
@@ -375,7 +381,7 @@ export default defineComponent({
   .input_field {
     display: flex;
     flex-direction: column;
-    margin-block-end: 1em;
+    padding-block-end: 2em;
     label {
       margin-block-end: 1em;
     }
@@ -402,21 +408,19 @@ export default defineComponent({
       list-style: none;
       padding: 0 0 2em 0;
       margin: 0;
+      margin-block-end: 1em;
       li {
-        line-height: 3;
+        line-height: 1;
         padding: 0.5em 0;
         p {
           margin: 0;
         }
       }
     }
+    &--item-text,
+    &--actions {
+      align-items: center;
+    }
   }
-}
-.p-breadcrumb a:hover {
-  cursor: pointer;
-  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
-}
-.active-link {
-  text-shadow: 1px 1px 1px rgba(150, 150, 150, 1);
 }
 </style>
