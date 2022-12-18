@@ -10,7 +10,9 @@
       </template>
     </Breadcrumb>
   </div>
-  <FinanceCard v-for="card in cardsInfo" :key="card.id" :card="card" />
+  <section class="card-section">
+    <FinanceCard v-for="card in cardsInfo" :key="card.id" :card="card" />
+  </section>
 </template>
 
 <script lang="ts">
@@ -27,7 +29,7 @@ export default defineComponent({
   name: 'finance-section',
   setup() {
     const home = ref({
-      icon: 'pi pi-home',
+      label: 'Початкова',
       to: RoutesEnum.StartPage,
     });
     const finance = ref([{ label: 'Фінанси', to: RoutesEnum.FinanceSection }]);
@@ -35,6 +37,7 @@ export default defineComponent({
       {
         id: 1,
         title: 'Тарифи',
+        description: 'Розрахунки тарифів та збереження даних в архів',
         items: [
           {
             icon: 'pi pi-percentage',
@@ -42,7 +45,7 @@ export default defineComponent({
             to: RoutesEnum.TarrifsCalculation,
           },
           {
-            icon: 'pi pi-folder-open',
+            icon: 'pi pi-inbox',
             label: 'Архів',
             to: RoutesEnum.TarrifsCalculation,
           },
@@ -50,8 +53,64 @@ export default defineComponent({
       },
       {
         id: 2,
-        title: 'other',
-        label: 'food',
+        title: 'Нарахування',
+        description: 'Короткий опис функціоналу',
+        items: [
+          {
+            icon: 'pi pi-percentage',
+            label: 'Калькулятор',
+            to: RoutesEnum.TarrifsCalculation,
+          },
+           {
+            icon: 'pi pi-inbox',
+            label: 'Архів',
+            to: RoutesEnum.TarrifsCalculation,
+          },
+           {
+            icon: 'pi pi-inbox',
+            label: 'Архів',
+            to: RoutesEnum.TarrifsCalculation,
+          },
+          {
+            icon: 'pi pi-inbox',
+            label: 'Архів',
+            to: RoutesEnum.TarrifsCalculation,
+          },
+        ],
+      },
+      {
+        id: 1,
+        title: 'Тарифи',
+        description: 'Розрахунки тарифів та збереження даних в архів',
+        items: [
+          {
+            icon: 'pi pi-percentage',
+            label: 'Калькулятор',
+            to: RoutesEnum.TarrifsCalculation,
+          },
+          {
+            icon: 'pi pi-inbox',
+            label: 'Архів',
+            to: RoutesEnum.TarrifsCalculation,
+          },
+        ],
+      },
+      {
+        id: 1,
+        title: 'Тарифи',
+        description: 'Розрахунки тарифів та збереження даних в архів',
+        items: [
+          {
+            icon: 'pi pi-percentage',
+            label: 'Калькулятор',
+            to: RoutesEnum.TarrifsCalculation,
+          },
+          {
+            icon: 'pi pi-inbox',
+            label: 'Архів',
+            to: RoutesEnum.TarrifsCalculation,
+          },
+        ],
       },
     ];
 
@@ -64,4 +123,11 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.card-section {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+
+}
+</style>
