@@ -1,10 +1,10 @@
 <template>
   <div class="breadcrumb">
-    <Breadcrumb :home="home" :model="finance">
-      <template #finance="{ finance }">
-        <router-link :to="finance.to" custom v-slot="{ navigate, isActive, isExactActive }">
+    <Breadcrumb :home="home" :model="items">
+      <template #item="{ item }">
+        <router-link :to="item.to" custom v-slot="{ navigate, isActive, isExactActive }">
           <a @click="navigate" :class="{ 'active-link': isActive, 'active-link-exact': isExactActive }">{{
-            finance.label
+            item.label
           }}</a>
         </router-link>
       </template>
@@ -32,7 +32,7 @@ export default defineComponent({
       label: 'Початкова',
       to: RoutesEnum.StartPage,
     });
-    const finance = ref([{ label: 'Фінанси', to: RoutesEnum.FinanceSection }]);
+    const items = ref([{ label: 'Фінанси', to: RoutesEnum.FinanceSection }]);
     const cardsInfo = [
       {
         id: 1,
@@ -116,7 +116,7 @@ export default defineComponent({
 
     return {
       home,
-      finance,
+      items,
       cardsInfo,
     };
   },
@@ -128,6 +128,5 @@ export default defineComponent({
   display: inline-flex;
   align-items: baseline;
   flex-wrap: wrap;
-
 }
 </style>
