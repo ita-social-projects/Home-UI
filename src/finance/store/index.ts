@@ -1,6 +1,7 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { TarrifStateInterface } from './types';
+import { getters } from './getters';
 
 export const state: TarrifStateInterface = {
   tarrifList: [],

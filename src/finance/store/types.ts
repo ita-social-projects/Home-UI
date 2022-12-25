@@ -21,11 +21,11 @@ export enum TariffMutationsEnum {
 }
 
 export enum TariffGettersEnum {
-  getTriffList = 'getTariffList',
+  getTariffsList = 'getTariffsList',
 }
 
 export type Getters<S = TarrifStateInterface> = {
-  [TariffGettersEnum.getTriffList](state: S): Array<TarrifModel> | null;
+  [TariffGettersEnum.getTariffsList](state: S): Array<TarrifModel> | null;
 };
 
 export type Mutations<S = TarrifStateInterface> = {

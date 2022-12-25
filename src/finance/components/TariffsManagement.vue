@@ -98,7 +98,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      tariffList: `${StoreModuleEnum.tariffStore}/${TariffGettersEnum.getTriffList}`,
+      tariffList: `${StoreModuleEnum.tariffStore}/${TariffGettersEnum.getTariffsList}`,
     }),
   },
 });

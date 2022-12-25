@@ -4,7 +4,7 @@ import { TarrifStateInterface, TariffMutationsEnum, Mutations } from '@/finance/
 export const mutations: MutationTree<TarrifStateInterface> & Mutations = {
   [TariffMutationsEnum.DEL_TARIFF]: (state, payload) => {
     if (state.tarrifList !== null) {
-      state.tarrifList = state.tarrifList.filter((el) => el.id !== payload);
+      state.tarrifList = state.tarrifList.filter((el) => el.tarrifId !== payload);
     }
   },
 };
