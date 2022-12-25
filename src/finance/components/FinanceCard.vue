@@ -1,9 +1,11 @@
 <template>
-  <div class="card">
-    <Card style="width: 25rem; margin: 2em 0">
-      <template #title class="card-title"> {{ card.title }} </template>
-      <template #content>
+  <div>
+    <Card style="width: 20rem; margin: 2em 0">
+      <template #title class="card-title">
+        {{ card.title }}
         <p class="card-description">{{ card.description }}</p>
+      </template>
+      <template #content>
         <div v-for="item in card.items" :key="item.label" class="card-item">
           <router-link :to="item.to" v-slot="navigate">
             <span :class="item.icon" class="icon-style"></span>
@@ -36,12 +38,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.card {
-  margin: 0 1.1rem 1.1rem 0;
-}
-
 .card-item {
-  margin-bottom: 1rem;
+  padding: 1.25rem;
 }
 
 .icon-style {
@@ -58,9 +56,10 @@ export default defineComponent({
   font-weight: 400;
   font-size: 11px;
   font-style: italic;
-  padding: 1.1rem 0 1.1rem 0.6rem;
+  padding: 1.1rem 0.6rem;
+  margin: 0;
   background: #fafafa;
-  margin: 0 0 1.5rem 0;
+  align-self: flex-start;
 }
 
 ::v-deep(.p-button-label) {
@@ -70,7 +69,7 @@ export default defineComponent({
 }
 
 ::v-deep(.p-card .p-card-content) {
-  padding: 0 0 1.25rem 0;
+  padding: 0;
 }
 
 ::v-deep(.p-card .p-card-title) {
@@ -80,5 +79,12 @@ export default defineComponent({
   justify-content: center;
   font-size: 20px;
   margin: 0rem;
+  flex-direction: column;
+  align-items: center;
+}
+
+::v-deep(.p-card .p-card-body) {
+  min-height: 19rem;
+  padding: 0;
 }
 </style>
