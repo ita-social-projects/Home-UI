@@ -42,6 +42,10 @@ export default defineComponent({
   padding: 1.25rem;
 }
 
+.card-item a {
+  text-decoration: none;
+}
+
 .icon-style {
   font-size: 1.5rem;
   padding-bottom: 0.7rem;
@@ -86,5 +90,15 @@ export default defineComponent({
 ::v-deep(.p-card .p-card-body) {
   min-height: 19rem;
   padding: 0;
+}
+
+::v-deep(.p-button-label:hover) {
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
+}
+
+::v-deep(.p-button:focus) {
+  color: transparent;
+  border-color: transparent;
+  box-shadow: 0 0 0 1px transparent;
 }
 </style>
