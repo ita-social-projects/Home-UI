@@ -24,8 +24,16 @@ export const tarrifCalculatorValidations = {
     tarrifCalculatorServicePrice,
     tarrifCalculatorDigitsOnly,
   },
-  $validationGroups: {
-    tarrifValidations: ['title', 'comment'],
-    serviceValidations: ['serviceTitle', 'servicePrice'],
+};
+
+export const tarrifCalculatorServiceEditValidations = {
+  serviceTitle: {
+    requiredValidator,
+    tarrifCalculatorServiceTitle,
+  },
+  servicePrice: {
+    requiredValidator,
+    tarrifCalculatorServicePrice,
+    tarrifCalculatorDigitsOnly,
   },
 };

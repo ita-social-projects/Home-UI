@@ -20,9 +20,9 @@
               v-model="v$.title.$model"
               :class="{ 'p-invalid': v$.title.$invalid && submitted }"
             ></InputText>
-            <!-- <p v-if="(v$.title.$invalid && submitted) || v$.title.$pending" class="p-error">
-              {{ v$.title.$errors[0].$message }}
-            </p> -->
+            <p v-if="v$.title.$invalid && submitted" class="p-error">
+              {{ v$.title.$silentErrors[0].$message }}
+            </p>
           </div>
           <div class="input_field tarrif_comment">
             <label for="comment">Коментар до тарифу:</label>
@@ -33,7 +33,7 @@
               cols="30"
               :class="{ 'p-invalid': v$.comment.$invalid && submitted }"
             />
-            <!-- <p v-if="v$.comment.$invalid && submitted" class="p-error">{{ v$.comment.$error }}</p> -->
+            <p v-if="v$.comment.$invalid && submitted" class="p-error">{{ v$.comment.$silentErrors[0].$message }}</p>
           </div>
           <div class="tarrifs-calculator--area-block">
             <div class="input_field house_picker">
@@ -64,9 +64,9 @@
               v-model="v$.serviceTitle.$model"
               :class="{ 'p-invalid': v$.serviceTitle.$invalid && isServiceAdded }"
             ></InputText>
-            <!-- <p v-if="v$.serviceTitle.$error && submitted" class="p-error">
-              {{ v$.serviceTitle.$errors[0].$message }}
-            </p> -->
+            <p v-if="v$.serviceTitle.$invalid && isServiceAdded" class="p-error">
+              {{ v$.serviceTitle.$silentErrors[0].$message }}
+            </p>
           </div>
           <div class="input_field service_price">
             <label for="service_price" :class="{ 'p-error': v$.servicePrice.$invalid && isServiceAdded }"
@@ -79,9 +79,9 @@
               placeholder="0.00 грн"
               :class="{ 'p-invalid': v$.servicePrice.$invalid && isServiceAdded }"
             ></InputText>
-            <!-- <p v-if="v$.servicePrice.$error && submitted" class="p-error">
-              {{ v$.servicePrice.$errors[0].$message }}
-            </p> -->
+            <p v-if="v$.servicePrice.$invalid && isServiceAdded" class="p-error">
+              {{ v$.servicePrice.$silentErrors[0].$message }}
+            </p>
           </div>
           <div class="input_field service_actions">
             <Button
@@ -111,7 +111,7 @@
         </div>
       </div>
       <div class="calculation_controls">
-        <h4 v-show="!tarrifData.house || !tarrifData.services.length">
+        <h4 v-show="!Object.keys(tarrifData.house) || !tarrifData.services.length">
           Для розрахунку потрібно: обрати будинок та принаймні одна стаття витрат!
         </h4>
         <h4>
@@ -122,7 +122,7 @@
           label="Згенерувати"
           icon="pi pi-check"
           class="p-button-info"
-          :disabled="!tarrifData.services.length || !Object.keys(tarrifData.house).length"
+          :disabled="!tarrifData.services.length || !Object.keys(tarrifData.house)"
           @click="handleSubmit(!v$.title.$invalid && !v$.comment.$invalid)"
         />
       </div>
@@ -141,15 +141,7 @@ import Breadcrumb from 'primevue/breadcrumb';
 
 import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
-// import { tarrifCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
-import {
-  requiredValidator,
-  tarrifCalculatorTitle,
-  tarrifCalculatorComment,
-  tarrifCalculatorServicePrice,
-  tarrifCalculatorServiceTitle,
-  tarrifCalculatorDigitsOnly,
-} from '@/utils/validators';
+import { tarrifCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
 import { RoutesEnum } from '@/router/types';
 import ServiceItem from '@/finance/components/ServiceItem.vue';
 
@@ -183,25 +175,7 @@ export default defineComponent({
       servicePrice: null,
       services: [] as Array<TarrifService>,
     });
-    const rules = {
-      title: {
-        requiredValidator,
-        tarrifCalculatorTitle,
-      },
-      comment: {
-        tarrifCalculatorComment,
-      },
-      serviceTitle: {
-        requiredValidator,
-        tarrifCalculatorServiceTitle,
-      },
-      servicePrice: {
-        requiredValidator,
-        tarrifCalculatorServicePrice,
-        tarrifCalculatorDigitsOnly,
-      },
-    };
-    const v$ = useVuelidate(rules, tarrifData);
+    const v$ = useVuelidate(tarrifCalculatorValidations, tarrifData);
     const submitted = ref(false);
     const isServiceAdded = ref(false);
 
@@ -343,7 +317,6 @@ export default defineComponent({
       handleSubmit,
       resetForm,
       resetServiceForm,
-      rules,
       v$,
       home,
       items,
