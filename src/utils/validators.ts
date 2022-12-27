@@ -30,6 +30,7 @@ const validHouseDecimal = helpers.regex(/(^(\d{1,100}){1}(\.\d{1,3})?$)/);
 const validNonZeroFields = helpers.regex(/^[^0]/);
 
 const validOwnershipPart = helpers.regex(/((^(?!(0))\d{1,4}\/(?!(0))\d{1,5})$)|(^0$)|(^1$)/);
+const digitsOnly = helpers.regex(/^[0-9]+$/);
 
 const lengthMessage = (number: number, description: string): string => {
   const max = `Максимальна кількість символів - ${number}`;
@@ -103,6 +104,6 @@ export const cyrillicLangTextValidator = helpers.withMessage(`${cyrillicLangMess
 
 export const tarrifCalculatorTitle = helpers.withMessage(lengthMessage(320, 'max'), maxLength(320));
 export const tarrifCalculatorComment = helpers.withMessage(lengthMessage(320, 'max'), maxLength(320));
-export const tarrifCalculatorExpenseTitle = helpers.withMessage(lengthMessage(100, 'max'), maxLength(100));
-export const tarrifCalculatorExpenseItemCost = helpers.withMessage(lengthMessage(12, 'max'), maxLength(12));
-export const tarrifCalculatorDigitsOnly = helpers.regex(/^[0-9]+$/);
+export const tarrifCalculatorServiceTitle = helpers.withMessage(lengthMessage(100, 'max'), maxLength(100));
+export const tarrifCalculatorServicePrice = helpers.withMessage(lengthMessage(12, 'max'), maxLength(12));
+export const tarrifCalculatorDigitsOnly = helpers.withMessage(correctNumberMessage(''), digitsOnly);

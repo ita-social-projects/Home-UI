@@ -2,26 +2,30 @@ import {
   requiredValidator,
   tarrifCalculatorTitle,
   tarrifCalculatorComment,
-  tarrifCalculatorExpenseItemCost,
-  tarrifCalculatorExpenseTitle,
+  tarrifCalculatorServicePrice,
+  tarrifCalculatorServiceTitle,
   tarrifCalculatorDigitsOnly,
 } from '@/utils/validators';
 
 export const tarrifCalculatorValidations = {
-  tarrifTitle: {
+  title: {
     requiredValidator,
     tarrifCalculatorTitle,
   },
-  tarrifComment: {
+  comment: {
     tarrifCalculatorComment,
   },
-  tarrifExpenseTitle: {
+  serviceTitle: {
     requiredValidator,
-    tarrifCalculatorExpenseTitle,
+    tarrifCalculatorServiceTitle,
   },
-  tarrifExpenseCost: {
+  servicePrice: {
     requiredValidator,
-    tarrifCalculatorExpenseItemCost,
+    tarrifCalculatorServicePrice,
     tarrifCalculatorDigitsOnly,
+  },
+  $validationGroups: {
+    tarrifValidations: ['title', 'comment'],
+    serviceValidations: ['serviceTitle', 'servicePrice'],
   },
 };

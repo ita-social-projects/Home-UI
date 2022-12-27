@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- todo Styles for breadcrumb link doesn't work OR icon won't show up -->
     <Breadcrumb :home="home" :model="items">
       <template #item="{ item }">
         <router-link :to="item.to" custom v-slot="{ route, navigate, isActive, isExactActive }">
@@ -13,35 +12,35 @@
     <h1>Калькулятор тарифу</h1>
     <div class="tarrifs-calculator">
       <div class="tarrifs-calculator--left-col">
-        <form @submit.prevent="handleSubmit(!v$.$invalid)">
+        <form>
           <div class="input_field tarrif_name">
-            <label for="tarrif_name" :class="{ 'p-error': v$.tarrifTitle.$invalid && submitted }">Назва тарифу*</label>
+            <label for="tarrif_name" :class="{ 'p-error': v$.title.$invalid && submitted }">Назва тарифу*</label>
             <InputText
               name="tarrif_name"
-              v-model="v$.tarrifTitle.$model"
-              :class="{ 'p-invalid': v$.tarrifTitle.$invalid && submitted }"
+              v-model="v$.title.$model"
+              :class="{ 'p-invalid': v$.title.$invalid && submitted }"
             ></InputText>
-            <p v-if="(v$.tarrifTitle.$invalid && submitted) || v$.tarrifTitle.$pending" class="p-error">
-              {{ v$.tarrifTitle.$errors[0].$message }}
-            </p>
+            <!-- <p v-if="(v$.title.$invalid && submitted) || v$.title.$pending" class="p-error">
+              {{ v$.title.$errors[0].$message }}
+            </p> -->
           </div>
           <div class="input_field tarrif_comment">
             <label for="comment">Коментар до тарифу:</label>
             <Textarea
-              v-model="v$.tarrifComment.$model"
+              v-model="v$.comment.$model"
               name="comment"
               rows="5"
               cols="30"
-              :class="{ 'p-invalid': v$.tarrifComment.$invalid && submitted }"
+              :class="{ 'p-invalid': v$.comment.$invalid && submitted }"
             />
-            <p v-if="v$.tarrifComment.$invalid && submitted" class="p-error">{{ v$.tarrifComment.$error }}</p>
+            <!-- <p v-if="v$.comment.$invalid && submitted" class="p-error">{{ v$.comment.$error }}</p> -->
           </div>
           <div class="tarrifs-calculator--area-block">
             <div class="input_field house_picker">
               <Dropdown
                 style="margin-top: 4em"
                 name="house"
-                v-model="house"
+                v-model="tarrifData.house"
                 :options="houses"
                 optionLabel="adress"
                 placeholder="Оберіть будинок"
@@ -57,73 +56,74 @@
       <div class="tarrifs-calculator--right-col">
         <form class="tarrifs-calculator--service-form">
           <div class="input_field service_name">
-            <label for="service_name" :class="{ 'p-error': v$.tarrifExpenseTitle.$invalid && submitted }"
+            <label for="service_name" :class="{ 'p-error': v$.serviceTitle.$invalid && isServiceAdded }"
               >Назва статті витрат*</label
             >
             <InputText
               name="service_name"
-              v-model="v$.tarrifExpenseTitle.$model"
-              :class="{ 'p-invalid': v$.tarrifExpenseTitle.$invalid && submitted }"
+              v-model="v$.serviceTitle.$model"
+              :class="{ 'p-invalid': v$.serviceTitle.$invalid && isServiceAdded }"
             ></InputText>
-            <p v-if="v$.tarrifExpenseTitle.$error" class="p-error">
-              {{ v$.tarrifExpenseTitle.$errors[0].$message }}
-            </p>
+            <!-- <p v-if="v$.serviceTitle.$error && submitted" class="p-error">
+              {{ v$.serviceTitle.$errors[0].$message }}
+            </p> -->
           </div>
           <div class="input_field service_price">
-            <label for="service_price" :class="{ 'p-error': v$.tarrifExpenseCost.$invalid && submitted }"
+            <label for="service_price" :class="{ 'p-error': v$.servicePrice.$invalid && isServiceAdded }"
               >Вартість статті витрат*</label
             >
-            <InputNumber
+            <InputText
               class="servise_price_input"
-              v-model="v$.tarrifExpenseCost.$model"
+              v-model="v$.servicePrice.$model"
               name="service_price"
               placeholder="0.00 грн"
-              :class="{ 'p-invalid': v$.tarrifExpenseCost.$invalid && submitted }"
-            ></InputNumber>
-            <p v-if="v$.tarrifExpenseCost.$error" class="p-error">
-              {{ v$.tarrifExpenseCost.$errors[0].$message }}
-            </p>
+              :class="{ 'p-invalid': v$.servicePrice.$invalid && isServiceAdded }"
+            ></InputText>
+            <!-- <p v-if="v$.servicePrice.$error && submitted" class="p-error">
+              {{ v$.servicePrice.$errors[0].$message }}
+            </p> -->
           </div>
           <div class="input_field service_actions">
             <Button
               class="p-button-success add-btn"
-              @click="addExpense(v$.tarrifExpenseTitle.$invalid && v$.tarrifExpenseCost.$invalid)"
-              :disabled="v$.tarrifExpenseTitle.$invalid || v$.tarrifExpenseCost.$invalid"
+              @click="addService(!v$.serviceTitle.$invalid && !v$.servicePrice.$invalid)"
             >
               Додати &nbsp;
               <i class="pi pi-plus-circle"></i>
             </Button>
           </div>
         </form>
-        <div class="expense-list">
-          <div class="expense-list__wrapper" v-show="expense.list.length">
-            <h3>{{ formState.tarrifTitle }}</h3>
-            <blockquote>{{ formState.tarrifComment }}</blockquote>
+        <div class="service-list">
+          <div class="service-list__wrapper" v-show="tarrifData.services.length">
+            <h3>{{ tarrifData.title }}</h3>
+            <blockquote>{{ tarrifData.comment }}</blockquote>
             <ul>
-              <li v-for="(service, idx) in expense.list" :key="idx">
-                <service-item
-                  :service="service"
-                  @toggle-service-edit="toggleServiceEdit(service)"
-                  @handle-service-delete="handleServiceDelete(service)"
-                />
-              </li>
+              <service-item
+                v-for="(service, idx) in tarrifData.services"
+                :key="idx"
+                :service="service"
+                @toggle-service-edit="toggleServiceEdit(service)"
+                @handle-service-delete="handleServiceDelete(service)"
+              />
             </ul>
-            <h4>Сума статей витрат: <Chip :label="countServices()" /> грн.</h4>
+            <h4>Сума статей витрат: <Chip :label="servicesTotalPrice()" /> грн.</h4>
           </div>
-          <h3 v-show="!expense.list.length">Для розрахунку потрібна принаймні одна стаття витрат!</h3>
         </div>
       </div>
       <div class="calculation_controls">
+        <h4 v-show="!tarrifData.house || !tarrifData.services.length">
+          Для розрахунку потрібно: обрати будинок та принаймні одна стаття витрат!
+        </h4>
         <h4>
           Тариф дорівнює:
-          <Chip :label="house ? finalCalculation() : '0.00'" style="font-size: 1.2rem" />грн.
+          <Chip :label="finalCalculation()" style="font-size: 1.2rem" />грн/м²
         </h4>
         <Button
-          type="submit"
           label="Згенерувати"
           icon="pi pi-check"
           class="p-button-info"
-          :disabled="!expense.list.length"
+          :disabled="!tarrifData.services.length || !Object.keys(tarrifData.house).length"
+          @click="handleSubmit(!v$.title.$invalid && !v$.comment.$invalid)"
         />
       </div>
     </div>
@@ -133,7 +133,6 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue';
 import InputText from 'primevue/inputtext';
-import InputNumber from 'primevue/inputnumber';
 import Textarea from 'primevue/textarea';
 import Dropdown from 'primevue/dropdown';
 import Chip from 'primevue/chip';
@@ -142,11 +141,19 @@ import Breadcrumb from 'primevue/breadcrumb';
 
 import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
-import { tarrifCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
+// import { tarrifCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
+import {
+  requiredValidator,
+  tarrifCalculatorTitle,
+  tarrifCalculatorComment,
+  tarrifCalculatorServicePrice,
+  tarrifCalculatorServiceTitle,
+  tarrifCalculatorDigitsOnly,
+} from '@/utils/validators';
 import { RoutesEnum } from '@/router/types';
 import ServiceItem from '@/finance/components/ServiceItem.vue';
 
-import { TarrifService, SelectedHouse, TarrifActionEnum } from '@/finance/store/types';
+import { TarrifService, TarrifActionEnum, SelectedHouse } from '@/finance/store/types';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
@@ -156,7 +163,6 @@ export default defineComponent({
   name: 'tarrifs-calculation',
   components: {
     InputText,
-    InputNumber,
     Textarea,
     Dropdown,
     Chip,
@@ -169,36 +175,48 @@ export default defineComponent({
       to: RoutesEnum.StartPage,
     });
     const items = ref([{ to: RoutesEnum.FinanceSection }, { to: RoutesEnum.TarrifsCalculation }]);
-
-    const house = ref<SelectedHouse>();
-
-    const formState = reactive({
-      tarrifTitle: '',
-      tarrifComment: '',
-      tarrifExpenseTitle: '',
-      tarrifExpenseCost: null,
+    const tarrifData = reactive({
+      house: {} as SelectedHouse,
+      title: '',
+      comment: '',
+      serviceTitle: '',
+      servicePrice: null,
+      services: [] as Array<TarrifService>,
     });
-    // todo refactor validation for all the forms
-    const rules = tarrifCalculatorValidations;
-    const v$ = useVuelidate(rules, formState);
+    const rules = {
+      title: {
+        requiredValidator,
+        tarrifCalculatorTitle,
+      },
+      comment: {
+        tarrifCalculatorComment,
+      },
+      serviceTitle: {
+        requiredValidator,
+        tarrifCalculatorServiceTitle,
+      },
+      servicePrice: {
+        requiredValidator,
+        tarrifCalculatorServicePrice,
+        tarrifCalculatorDigitsOnly,
+      },
+    };
+    const v$ = useVuelidate(rules, tarrifData);
     const submitted = ref(false);
+    const isServiceAdded = ref(false);
 
-    let expense = reactive({ list: [] as Array<TarrifService> });
     const houses = ref();
     const area = computed(() => {
-      return house.value ? house.value.houseArea : 0;
+      return tarrifData.house?.houseArea ?? 0;
     });
-
-    const servicesTotal = ref('0.00');
-
     const store = useStore();
 
     const currentTarrif = JSON.parse(localStorage.getItem('current-tarrif') as string);
     if (currentTarrif) {
-      expense.list = currentTarrif.services;
-      formState.tarrifTitle = currentTarrif.tarrifTitle;
-      formState.tarrifComment = currentTarrif.tarrifComment;
-      house.value = currentTarrif.house;
+      tarrifData.services = currentTarrif.services;
+      tarrifData.title = currentTarrif.title;
+      tarrifData.comment = currentTarrif.comment;
+      tarrifData.house = currentTarrif.house;
       // TODO dispatch set current tarrif action
     }
 
@@ -207,6 +225,12 @@ export default defineComponent({
     });
 
     const setHouses = async () => {
+      houses.value = [
+        { adress: 'Dnipro, Kirova str. 102', houseArea: 250, houseId: 1 },
+        { adress: 'Dnipro, Robocha str. 31', houseArea: 420, houseId: 2 },
+        { adress: 'Dnipro, Bohdana Hmelnitskogo str. 12', houseArea: 350, houseId: 3 },
+        { adress: 'Dnipro, Peremogi str. 23', houseArea: 270, houseId: 4 },
+      ];
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
       const housesList = await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
       houses.value = housesList.reduce((acc: any, house: HouseModel) => {
@@ -226,112 +250,100 @@ export default defineComponent({
       setHouses();
     });
 
-    const countServices = (): number => {
-      const total = expense.list.reduce((acc: any, service: TarrifService) => {
-        if (service.servicePrice) {
-          return (acc += service.servicePrice);
-        }
-      }, 0);
-      return total ? total.toString() : '0';
+    const servicesTotalPrice = (): string => {
+      const total = tarrifData.services.reduce((acc, service) => (acc += Number(service.servicePrice)), 0);
+      return total.toString();
     };
 
-    const addExpense = (isServiceFieldsValid: boolean): void => {
-      v$.value.tarrifExpenseTitle.$touch();
-      v$.value.tarrifExpenseCost.$touch();
-      if (isServiceFieldsValid) {
+    const resetServiceForm = () => {
+      isServiceAdded.value = false;
+      tarrifData.serviceTitle = '';
+      tarrifData.servicePrice = null;
+    };
+
+    const resetForm = (): void => {
+      submitted.value = false;
+      tarrifData.title = '';
+      tarrifData.comment = '';
+      tarrifData.serviceTitle = '';
+      tarrifData.servicePrice = null;
+      tarrifData.services = [];
+      tarrifData.house = {} as SelectedHouse;
+      localStorage.removeItem('current-tarrif');
+    };
+
+    const addService = (isServiceValid: boolean): void => {
+      isServiceAdded.value = true;
+      if (!isServiceValid) {
         return;
       }
       const newService: TarrifService = {
         editState: false,
-        serviceName: formState.tarrifExpenseTitle,
-        servicePrice: formState.tarrifExpenseCost,
+        serviceTitle: tarrifData.serviceTitle,
+        servicePrice: tarrifData.servicePrice,
       };
-      expense.list.push(newService);
-      formState.tarrifExpenseTitle = '';
-      formState.tarrifExpenseCost = null;
-      v$.value.tarrifExpenseTitle.$reset();
-      v$.value.tarrifExpenseCost.$reset();
+      tarrifData.services.push(newService);
+      resetServiceForm();
     };
 
     const updateLocalStorage = (): void => {
       // TODO refactor current tarrif to match model / check action + mutation set the current tarrif to a store
       const currentTarrif = {
-        houseId: house.value?.houseId,
-        house: house.value,
-        tarrifTitle: formState.tarrifTitle,
-        tarrifComment: formState.tarrifComment,
-        services: expense.list,
+        houseId: tarrifData.house?.houseId,
+        house: tarrifData.house,
+        title: tarrifData.title,
+        comment: tarrifData.comment,
+        services: tarrifData.services,
       };
       localStorage.setItem('current-tarrif', JSON.stringify(currentTarrif));
-      store.dispatch(`${StoreModuleEnum.tarrifStore}/${TarrifActionEnum.SET_CURRENT_TARRIF}`, currentTarrif);
+      // store.dispatch(`${StoreModuleEnum.tarrifStore}/${TarrifActionEnum.SET_CURRENT_TARRIF}`, currentTarrif);
     };
 
-    const handleSubmit = (isFormvalid: boolean): void => {
+    const handleSubmit = (isFormValid: boolean): void => {
       submitted.value = true;
-      if (!isFormvalid) {
-        submitted.value = false;
+      if (!isFormValid) {
         return;
       }
       store.dispatch(`${StoreModuleEnum.tarrifStore}/${TarrifActionEnum.CLEAR_CURRENT_TARRIF}`);
       resetForm();
-      console.log('Sended and saved to DB');
-    };
-
-    const resetForm = (): void => {
-      formState.tarrifTitle = '';
-      formState.tarrifComment = '';
-      formState.tarrifExpenseTitle = '';
-      formState.tarrifExpenseCost = null;
-      expense.list = [];
-      house.value = undefined;
-      localStorage.removeItem('current-tarrif');
     };
 
     const finalCalculation = () => {
-      const finalTarrif = countServices() / area.value;
+      if (!servicesTotalPrice() || !area.value) {
+        return '0.00';
+      }
+      const finalTarrif = Number(servicesTotalPrice()) / area.value;
       return finalTarrif > 1 ? finalTarrif.toFixed(2) : finalTarrif.toPrecision(3);
     };
 
     const handleServiceDelete = (serviceToDelete: TarrifService): void => {
-      expense.list = expense.list.filter((service: TarrifService) => service !== serviceToDelete);
+      tarrifData.services = tarrifData.services.filter((service: TarrifService) => service !== serviceToDelete);
     };
     const toggleServiceEdit = (service: TarrifService): void => {
       service.editState = !service.editState;
     };
 
     watch(
-      () => {
-        return { ...formState };
-      },
-      () => updateLocalStorage()
-    );
-
-    watch(
-      () => [...expense.list],
-      () => updateLocalStorage()
-    );
-
-    watch(
-      () => house.value,
+      () => ({ ...tarrifData }),
       () => updateLocalStorage()
     );
 
     return {
-      formState,
-      house,
+      tarrifData,
       area,
       houses,
       finalCalculation,
       handleServiceDelete,
       toggleServiceEdit,
-      expense,
-      addExpense,
+      addService,
       updateLocalStorage,
-      servicesTotal,
-      countServices,
+      servicesTotalPrice,
       submitted,
+      isServiceAdded,
       handleSubmit,
       resetForm,
+      resetServiceForm,
+      rules,
       v$,
       home,
       items,
@@ -366,7 +378,6 @@ export default defineComponent({
   &--service-form {
     display: flex;
     gap: 1em;
-    align-items: flex-end;
     flex-wrap: wrap;
     .service_name,
     .service_price {
@@ -386,7 +397,7 @@ export default defineComponent({
       margin-block-end: 1em;
     }
   }
-  .expense-list {
+  .service-list {
     max-height: 250px;
     display: flex;
     flex-direction: column;
@@ -416,10 +427,6 @@ export default defineComponent({
           margin: 0;
         }
       }
-    }
-    &--item-text,
-    &--actions {
-      align-items: center;
     }
   }
 }

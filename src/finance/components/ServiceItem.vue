@@ -1,27 +1,29 @@
 <template>
-  <div class="expense-list--item" v-if="!service.editState">
-    <div class="expense-list--item-text">
-      <p>{{ service.serviceName }}</p>
-      <span>{{ service.servicePrice }} грн.</span>
+  <li>
+    <div class="service-list--item" v-if="!service.editState">
+      <div class="service-list--item-text">
+        <p>{{ service.serviceTitle }}</p>
+        <span>{{ service.servicePrice }} грн.</span>
+      </div>
+      <div class="service-list--actions">
+        <Button
+          icon="pi pi-pencil"
+          class="p-button-rounded p-button-warning p-button-text"
+          @click="toggleServiceEdit(service)"
+        />
+        <Button
+          icon="pi pi-times"
+          class="p-button-rounded p-button-danger p-button-text"
+          @click="handleServiceDelete(service)"
+        />
+      </div>
     </div>
-    <div class="expense-list--actions">
-      <Button
-        icon="pi pi-pencil"
-        class="p-button-rounded p-button-warning p-button-text"
-        @click="toggleServiceEdit(service)"
-      />
-      <Button
-        icon="pi pi-times"
-        class="p-button-rounded p-button-danger p-button-text"
-        @click="handleServiceDelete(service)"
-      />
+    <div class="service-list--item-edit" v-else>
+      <InputText name="edit-service-name" v-model="service.serviceTitle"></InputText>
+      <InputNumber name="edit-service-price" v-model="service.servicePrice"></InputNumber>
+      <Button icon="pi pi-check" class="p-button-rounded p-button-text" @click="toggleServiceEdit(service)" />
     </div>
-  </div>
-  <div class="expense-list--item-edit" v-else>
-    <InputText name="edit-service-name" v-model="service.serviceName"></InputText>
-    <InputNumber name="edit-service-price" v-model="service.servicePrice"></InputNumber>
-    <Button icon="pi pi-check" class="p-button-rounded p-button-text" @click="toggleServiceEdit(service)" />
-  </div>
+  </li>
 </template>
 
 <script lang="ts">
@@ -39,7 +41,7 @@ export default defineComponent({
     InputNumber,
     Button,
   },
-  emits: ['toggle-service-edit', 'handle-service-delete', 'handle-edit-service-name', 'handle-edit-service-price'],
+  emits: ['toggle-service-edit', 'handle-service-delete'],
   props: {
     service: {
       required: true,
@@ -63,19 +65,23 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.expense-list--item {
+.service-list--item {
   gap: 2em;
   &-text {
     width: 90%;
     display: flex;
     justify-content: space-between;
   }
-  .expense-list--actions {
+  .service-list--actions {
     display: flex;
   }
+  &-text,
+  &--actions {
+    align-items: center;
+  }
 }
-.expense-list--item,
-.expense-list--item-edit {
+.service-list--item,
+.service-list--item-edit {
   width: 100%;
   display: flex;
   justify-content: space-between;

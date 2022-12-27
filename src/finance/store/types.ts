@@ -5,14 +5,14 @@ import { TarrifDTOModel } from '../models/tarrifDTO.model';
 
 export interface TarrifService {
   editState: boolean;
-  serviceName: string;
+  serviceTitle: string;
   servicePrice: number | null;
 }
 
 export interface SelectedHouse {
   adress: string;
-  houseArea: number;
-  houseId: number;
+  houseArea: number | null;
+  houseId: number | string;
 }
 
 export interface TarrifStateInterface {
