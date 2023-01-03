@@ -102,8 +102,8 @@ export const pollTitleLenghtValidator = helpers.withMessage(lengthMessage(250, '
 export const pollDescriptionLenghtValidator = helpers.withMessage(lengthMessage(1000, 'max'), maxLength(1000));
 export const cyrillicLangTextValidator = helpers.withMessage(`${cyrillicLangMessage}`, validCyrillicLan);
 
-export const tarrifCalculatorTitle = helpers.withMessage(lengthMessage(320, 'max'), maxLength(320));
-export const tarrifCalculatorComment = helpers.withMessage(lengthMessage(320, 'max'), maxLength(320));
-export const tarrifCalculatorServiceTitle = helpers.withMessage(lengthMessage(100, 'max'), maxLength(100));
-export const tarrifCalculatorServicePrice = helpers.withMessage(lengthMessage(12, 'max'), maxLength(12));
-export const tarrifCalculatorDigitsOnly = helpers.withMessage(correctNumberMessage(''), digitsOnly);
+export const tariffCalculatorTitle = helpers.withMessage(lengthMessage(320, 'max'), maxLength(320));
+export const tariffCalculatorComment = helpers.withMessage(lengthMessage(320, 'max'), maxLength(320));
+export const tariffCalculatorServiceTitle = helpers.withMessage(lengthMessage(100, 'max'), maxLength(100));
+export const tariffCalculatorServicePrice = helpers.withMessage(lengthMessage(12, 'max'), maxLength(12));
+export const tariffCalculatorDigitsOnly = helpers.withMessage(correctNumberMessage(''), digitsOnly);

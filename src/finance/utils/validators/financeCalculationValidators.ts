@@ -1,39 +1,39 @@
 import {
   requiredValidator,
-  tarrifCalculatorTitle,
-  tarrifCalculatorComment,
-  tarrifCalculatorServicePrice,
-  tarrifCalculatorServiceTitle,
-  tarrifCalculatorDigitsOnly,
+  tariffCalculatorTitle,
+  tariffCalculatorComment,
+  tariffCalculatorServicePrice,
+  tariffCalculatorServiceTitle,
+  tariffCalculatorDigitsOnly,
 } from '@/utils/validators';
 
-export const tarrifCalculatorValidations = {
+export const tariffCalculatorValidations = {
   title: {
     requiredValidator,
-    tarrifCalculatorTitle,
+    tariffCalculatorTitle,
   },
   comment: {
-    tarrifCalculatorComment,
+    tariffCalculatorComment,
   },
   serviceTitle: {
     requiredValidator,
-    tarrifCalculatorServiceTitle,
+    tariffCalculatorServiceTitle,
   },
   servicePrice: {
     requiredValidator,
-    tarrifCalculatorServicePrice,
-    tarrifCalculatorDigitsOnly,
+    tariffCalculatorServicePrice,
+    tariffCalculatorDigitsOnly,
   },
 };
 
-export const tarrifCalculatorServiceEditValidations = {
+export const tariffCalculatorServiceEditValidations = {
   serviceTitle: {
     requiredValidator,
-    tarrifCalculatorServiceTitle,
+    tariffCalculatorServiceTitle,
   },
   servicePrice: {
     requiredValidator,
-    tarrifCalculatorServicePrice,
-    tarrifCalculatorDigitsOnly,
+    tariffCalculatorServicePrice,
+    tariffCalculatorDigitsOnly,
   },
 };

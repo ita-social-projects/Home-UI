@@ -1,11 +1,14 @@
 import { MutationTree } from 'vuex';
-import { TarrifStateInterface, TarrifMutationEnum, Mutations } from '@/finance/store/types';
+import { TariffStateInterface, TariffMutationEnum, Mutations } from '@/finance/store/types';
 
-export const mutations: MutationTree<TarrifStateInterface> & Mutations = {
-  [TarrifMutationEnum.SET_CURRENT_TARRIF]: (state, payload) => {
-    state.currentTarrif = payload;
+export const mutations: MutationTree<TariffStateInterface> & Mutations = {
+  [TariffMutationEnum.SET_CURRENT_TARIFF]: (state, payload) => {
+    state.currentTariff = payload;
   },
-  [TarrifMutationEnum.CLEAR_CURRENT_TARRIF]: (state) => {
-    state.currentTarrif = null;
+  [TariffMutationEnum.CLEAR_CURRENT_TARIFF]: (state) => {
+    state.currentTariff = null;
+  },
+  [TariffMutationEnum.CREATE_TARIFF]: (state, payload) => {
+    console.table(payload);
   },
 };

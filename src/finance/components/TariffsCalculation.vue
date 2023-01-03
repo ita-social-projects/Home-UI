@@ -10,13 +10,13 @@
       </template>
     </Breadcrumb>
     <h1>Калькулятор тарифу</h1>
-    <div class="tarrifs-calculator">
-      <div class="tarrifs-calculator--left-col">
+    <div class="tariffs-calculator">
+      <div class="tariffs-calculator--left-col">
         <form>
-          <div class="input_field tarrif_name">
-            <label for="tarrif_name" :class="{ 'p-error': v$.title.$invalid && submitted }">Назва тарифу*</label>
+          <div class="input_field tariff_name">
+            <label for="tariff_name" :class="{ 'p-error': v$.title.$invalid && submitted }">Назва тарифу*</label>
             <InputText
-              name="tarrif_name"
+              name="tariff_name"
               v-model="v$.title.$model"
               :class="{ 'p-invalid': v$.title.$invalid && submitted }"
             ></InputText>
@@ -24,7 +24,7 @@
               {{ v$.title.$silentErrors[0].$message }}
             </p>
           </div>
-          <div class="input_field tarrif_comment">
+          <div class="input_field tariff_comment">
             <label for="comment">Коментар до тарифу:</label>
             <Textarea
               v-model="v$.comment.$model"
@@ -35,12 +35,12 @@
             />
             <p v-if="v$.comment.$invalid && submitted" class="p-error">{{ v$.comment.$silentErrors[0].$message }}</p>
           </div>
-          <div class="tarrifs-calculator--area-block">
+          <div class="tariffs-calculator--area-block">
             <div class="input_field house_picker">
               <Dropdown
                 style="margin-top: 4em"
                 name="house"
-                v-model="tarrifData.house"
+                v-model="tariffData.house"
                 :options="houses"
                 optionLabel="adress"
                 placeholder="Оберіть будинок"
@@ -53,8 +53,8 @@
           </div>
         </form>
       </div>
-      <div class="tarrifs-calculator--right-col">
-        <form class="tarrifs-calculator--service-form">
+      <div class="tariffs-calculator--right-col">
+        <form class="tariffs-calculator--service-form">
           <div class="input_field service_name">
             <label for="service_name" :class="{ 'p-error': v$.serviceTitle.$invalid && isServiceAdded }"
               >Назва статті витрат*</label
@@ -94,26 +94,33 @@
           </div>
         </form>
         <div class="service-list">
-          <div class="service-list__wrapper" v-show="tarrifData.services.length">
-            <h3>{{ tarrifData.title }}</h3>
-            <blockquote>{{ tarrifData.comment }}</blockquote>
-            <ul>
-              <service-item
-                v-for="(service, idx) in tarrifData.services"
-                :key="idx"
-                :service="service"
-                @toggle-service-edit="toggleServiceEdit(service)"
-                @handle-service-delete="handleServiceDelete(service)"
-              />
-            </ul>
-            <h4>Сума статей витрат: <Chip :label="servicesTotalPrice()" /> грн.</h4>
-          </div>
+          <Transition name="fade">
+            <div class="service-list__wrapper" v-show="tariffData.services.length">
+              <h3>{{ tariffData.title }}</h3>
+              <blockquote>{{ tariffData.comment }}</blockquote>
+              <ul>
+                <TransitionGroup name="slide-fade">
+                  <service-item
+                    v-for="(service, idx) in tariffData.services"
+                    :key="idx"
+                    :service="service"
+                    @toggle-service-edit="toggleServiceEdit(service)"
+                    @handle-service-delete="handleServiceDelete(service)"
+                  />
+                </TransitionGroup>
+              </ul>
+              <h4>Сума статей витрат: <Chip :label="servicesTotalPrice()" /> грн.</h4>
+            </div>
+          </Transition>
         </div>
       </div>
       <div class="calculation_controls">
-        <h4 v-show="!Object.keys(tarrifData.house) || !tarrifData.services.length">
-          Для розрахунку потрібно: обрати будинок та принаймні одна стаття витрат!
-        </h4>
+        <Transition name="fade">
+          <h4 v-show="!Object.keys(tariffData.house).length || !tariffData.services.length">
+            Для розрахунку потрібно: обрати будинок <br />
+            та принаймні одна стаття витрат!
+          </h4>
+        </Transition>
         <h4>
           Тариф дорівнює:
           <Chip :label="finalCalculation()" style="font-size: 1.2rem" />грн/м²
@@ -122,7 +129,7 @@
           label="Згенерувати"
           icon="pi pi-check"
           class="p-button-info"
-          :disabled="!tarrifData.services.length || !Object.keys(tarrifData.house)"
+          :disabled="!tariffData.services.length || !Object.keys(tariffData.house)"
           @click="handleSubmit(!v$.title.$invalid && !v$.comment.$invalid)"
         />
       </div>
@@ -138,21 +145,22 @@ import Dropdown from 'primevue/dropdown';
 import Chip from 'primevue/chip';
 import Button from 'primevue/button';
 import Breadcrumb from 'primevue/breadcrumb';
+import { useToast } from 'primevue/usetoast';
 
 import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
-import { tarrifCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
+import { tariffCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
 import { RoutesEnum } from '@/router/types';
 import ServiceItem from '@/finance/components/ServiceItem.vue';
 
-import { TarrifService, TarrifActionEnum, SelectedHouse } from '@/finance/store/types';
+import { TariffService, TariffActionEnum, SelectedHouse } from '@/finance/store/types';
 import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
 import { HouseModel } from '@/houses/models/house.model';
 
 export default defineComponent({
-  name: 'tarrifs-calculation',
+  name: 'tariffs-calculation',
   components: {
     InputText,
     Textarea,
@@ -166,32 +174,42 @@ export default defineComponent({
     const home = ref({
       to: RoutesEnum.StartPage,
     });
-    const items = ref([{ to: RoutesEnum.FinanceSection }, { to: RoutesEnum.TarrifsCalculation }]);
-    const tarrifData = reactive({
+    const items = ref([{ to: RoutesEnum.FinanceSection }, { to: RoutesEnum.TariffsCalculation }]);
+    const tariffData = reactive({
       house: {} as SelectedHouse,
       title: '',
       comment: '',
       serviceTitle: '',
       servicePrice: null,
-      services: [] as Array<TarrifService>,
+      services: [] as Array<TariffService>,
+      tariffPrice: '0.00',
     });
-    const v$ = useVuelidate(tarrifCalculatorValidations, tarrifData);
+    const v$ = useVuelidate(tariffCalculatorValidations, tariffData);
     const submitted = ref(false);
     const isServiceAdded = ref(false);
 
     const houses = ref();
     const area = computed(() => {
-      return tarrifData.house?.houseArea ?? 0;
+      return tariffData.house?.houseArea ?? 0;
     });
     const store = useStore();
+    const toast = useToast();
 
-    const currentTarrif = JSON.parse(localStorage.getItem('current-tarrif') as string);
-    if (currentTarrif) {
-      tarrifData.services = currentTarrif.services;
-      tarrifData.title = currentTarrif.title;
-      tarrifData.comment = currentTarrif.comment;
-      tarrifData.house = currentTarrif.house;
-      // TODO dispatch set current tarrif action
+    const tariffDataFromLocalStorage = JSON.parse(localStorage.getItem('current-tariff') as string);
+    if (tariffDataFromLocalStorage) {
+      tariffData.services = tariffDataFromLocalStorage.services;
+      tariffData.title = tariffDataFromLocalStorage.tariff_title;
+      tariffData.comment = tariffDataFromLocalStorage.tariff_comment;
+      tariffData.house = tariffDataFromLocalStorage.house;
+      const currentTariffToStore = {
+        house_id: tariffDataFromLocalStorage.house?.houseId,
+        house: tariffDataFromLocalStorage.house,
+        tariff_title: tariffDataFromLocalStorage.title,
+        tariff_comment: tariffDataFromLocalStorage.tariff_comment,
+        services: tariffDataFromLocalStorage.services,
+        tariff_price: tariffDataFromLocalStorage.tariff_price,
+      };
+      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_CURRENT_TARIFF}`, currentTariffToStore);
     }
 
     const cooperationId = computed(() => {
@@ -225,25 +243,25 @@ export default defineComponent({
     });
 
     const servicesTotalPrice = (): string => {
-      const total = tarrifData.services.reduce((acc, service) => (acc += Number(service.servicePrice)), 0);
+      const total = tariffData.services.reduce((acc, service) => (acc += Number(service.servicePrice)), 0);
       return total.toString();
     };
 
     const resetServiceForm = () => {
       isServiceAdded.value = false;
-      tarrifData.serviceTitle = '';
-      tarrifData.servicePrice = null;
+      tariffData.serviceTitle = '';
+      tariffData.servicePrice = null;
     };
 
     const resetForm = (): void => {
       submitted.value = false;
-      tarrifData.title = '';
-      tarrifData.comment = '';
-      tarrifData.serviceTitle = '';
-      tarrifData.servicePrice = null;
-      tarrifData.services = [];
-      tarrifData.house = {} as SelectedHouse;
-      localStorage.removeItem('current-tarrif');
+      tariffData.house = {} as SelectedHouse;
+      tariffData.title = '';
+      tariffData.comment = '';
+      tariffData.serviceTitle = '';
+      tariffData.servicePrice = null;
+      tariffData.services = [];
+      localStorage.removeItem('current-tariff');
     };
 
     const addService = (isServiceValid: boolean): void => {
@@ -251,26 +269,26 @@ export default defineComponent({
       if (!isServiceValid) {
         return;
       }
-      const newService: TarrifService = {
+      const newService: TariffService = {
         editState: false,
-        serviceTitle: tarrifData.serviceTitle,
-        servicePrice: tarrifData.servicePrice,
+        serviceTitle: tariffData.serviceTitle,
+        servicePrice: tariffData.servicePrice,
       };
-      tarrifData.services.push(newService);
+      tariffData.services = [...tariffData.services, newService];
       resetServiceForm();
     };
 
     const updateLocalStorage = (): void => {
-      // TODO refactor current tarrif to match model / check action + mutation set the current tarrif to a store
-      const currentTarrif = {
-        houseId: tarrifData.house?.houseId,
-        house: tarrifData.house,
-        title: tarrifData.title,
-        comment: tarrifData.comment,
-        services: tarrifData.services,
+      const currentTariff = {
+        house_id: tariffData.house?.houseId,
+        house: tariffData.house,
+        tariff_title: tariffData.title,
+        tariff_comment: tariffData.comment,
+        services: tariffData.services,
+        tariff_price: tariffData.tariffPrice,
       };
-      localStorage.setItem('current-tarrif', JSON.stringify(currentTarrif));
-      // store.dispatch(`${StoreModuleEnum.tarrifStore}/${TarrifActionEnum.SET_CURRENT_TARRIF}`, currentTarrif);
+      localStorage.setItem('current-tariff', JSON.stringify(currentTariff));
+      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_CURRENT_TARIFF}`, currentTariff);
     };
 
     const handleSubmit = (isFormValid: boolean): void => {
@@ -278,32 +296,43 @@ export default defineComponent({
       if (!isFormValid) {
         return;
       }
-      store.dispatch(`${StoreModuleEnum.tarrifStore}/${TarrifActionEnum.CLEAR_CURRENT_TARRIF}`);
+      toast.add({
+        severity: 'success',
+        summary: 'Тариф додано!',
+        detail: `'${tariffData.title}' успішно згенеровано`,
+        life: 3000,
+      });
+      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.CREATE_TARIFF}`);
+      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.CLEAR_CURRENT_TARIFF}`);
       resetForm();
     };
 
     const finalCalculation = () => {
       if (!servicesTotalPrice() || !area.value) {
+        tariffData.tariffPrice = '0.00';
         return '0.00';
       }
-      const finalTarrif = Number(servicesTotalPrice()) / area.value;
-      return finalTarrif > 1 ? finalTarrif.toFixed(2) : finalTarrif.toPrecision(3);
+      const finalTariff = Number(servicesTotalPrice()) / area.value;
+      const finalTariffRounded = finalTariff > 1 ? finalTariff.toFixed(2) : finalTariff.toPrecision(3);
+      tariffData.tariffPrice = finalTariffRounded;
+      return finalTariffRounded;
     };
 
-    const handleServiceDelete = (serviceToDelete: TarrifService): void => {
-      tarrifData.services = tarrifData.services.filter((service: TarrifService) => service !== serviceToDelete);
+    const handleServiceDelete = (serviceToDelete: TariffService): void => {
+      tariffData.services = tariffData.services.filter((service: TariffService) => service !== serviceToDelete);
     };
-    const toggleServiceEdit = (service: TarrifService): void => {
-      service.editState = !service.editState;
+    const toggleServiceEdit = (serviceToEdit: TariffService): void => {
+      const indexToEdit = tariffData.services.indexOf(serviceToEdit);
+      tariffData.services[indexToEdit].editState = !tariffData.services[indexToEdit].editState;
     };
 
     watch(
-      () => ({ ...tarrifData }),
+      () => ({ ...tariffData }),
       () => updateLocalStorage()
     );
 
     return {
-      tarrifData,
+      tariffData,
       area,
       houses,
       finalCalculation,
@@ -326,27 +355,32 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.p-breadcrumb a:hover {
-  cursor: pointer;
-  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
-}
-.active-link {
-  text-shadow: 1px 1px 1px rgba(150, 150, 150, 1);
-}
-
-.tarrifs-calculator {
-  display: flex;
-  flex-wrap: wrap;
-  padding-block-end: 4em;
-  gap: 3.5em;
-  &--left-col,
-  &--right-col {
-    display: flex;
-    width: 35%;
-    flex-direction: column;
+.tariffs-calculator {
+  display: grid;
+  grid-template-columns: 40% 55%;
+  grid-template-rows: auto;
+  grid-template-areas:
+    'left-col right-col'
+    'left-col right-col'
+    'controls right-col';
+  gap: 3em;
+  padding-block-end: 2em;
+  &--left-col {
+    grid-area: left-col;
   }
   &--right-col {
-    width: 61%;
+    grid-area: right-col;
+  }
+  .calculation_controls {
+    grid-area: controls;
+  }
+  .input_field {
+    display: flex;
+    flex-direction: column;
+    padding-block-end: 1em;
+    label {
+      margin-block-end: 1em;
+    }
   }
   &--service-form {
     display: flex;
@@ -357,50 +391,72 @@ export default defineComponent({
       flex-grow: 1;
       width: 48%;
     }
+    .service_actions {
+      align-self: flex-end;
+    }
   }
   &--area-block {
     display: flex;
     justify-content: space-between;
   }
-  .input_field {
+  .service-list__wrapper {
     display: flex;
     flex-direction: column;
-    padding-block-end: 2em;
-    label {
-      margin-block-end: 1em;
-    }
-  }
-  .service-list {
-    max-height: 250px;
-    display: flex;
-    flex-direction: column;
-    &__wrapper {
-      display: flex;
-      flex-direction: column;
+    h3 {
+      text-align: center;
     }
     h4 {
       align-self: flex-end;
     }
-    h3 {
-      align-self: center;
-    }
     ul {
-      max-height: 250px;
+      max-height: 300px;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      list-style: none;
-      padding: 0 0 2em 0;
-      margin: 0;
-      margin-block-end: 1em;
-      li {
-        line-height: 1;
-        padding: 0.5em 0;
-        p {
-          margin: 0;
-        }
-      }
+      overflow-x: hidden;
+      padding: 0;
     }
+    li {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
+}
+
+@media screen and (max-width: 1400px) {
+  .tariffs-calculator--area-block {
+    flex-direction: column;
+  }
+}
+@media screen and (max-width: 1150px) {
+  .tariffs-calculator {
+    grid-template-columns: 1fr;
+    padding-block-end: 4em;
+    grid-template-areas:
+      'left-col'
+      'right-col'
+      'controls';
   }
 }
 </style>
