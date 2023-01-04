@@ -1,10 +1,19 @@
 <template>
+  <Breadcrumb :home="home" :model="items">
+    <template #item="{ item }">
+      <router-link :to="item.to" custom v-slot="{ route, navigate, isActive, isExactActive }">
+        <a @click="navigate" :class="{ 'active-link': isActive, 'active-link-exact': isExactActive }">{{
+          route.meta.title
+        }}</a>
+      </router-link>
+    </template>
+  </Breadcrumb>
   <div class="container">
     <h1 class="page-title">{{ title }}</h1>
     <div class="container-management-of-tariffs">
       <DataTable
         class="p-datatable-sm"
-        :value="tariffList"
+        :value="tariffs.list"
         responsiveLayout="stack"
         breakpoint="570px"
         stripedRows
@@ -24,7 +33,7 @@
               aria-haspopup="true"
               aria-controls="overlay_menu"
             />
-            <Menu :model="tariffActions()" id="overlay_menu" ref="menu" :popup="true" />
+            <Menu id="overlay_menu" ref="menu" :popup="true" />
           </template>
         </Column>
       </DataTable>
@@ -33,14 +42,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
 import { StoreModuleEnum } from '@/store/types';
-import { mapGetters } from 'vuex';
+import { RoutesEnum } from '@/router/types';
 import { TariffActionsEnum, TariffGettersEnum } from '@/finance/store/types';
+import Breadcrumb from 'primevue/breadcrumb';
 
 export default defineComponent({
   name: 'tariffs-management',
@@ -49,11 +59,17 @@ export default defineComponent({
     DataTable,
     Column,
     Menu,
+    Breadcrumb,
   },
-  data() {
-    return {
-      title: 'Управління тарифами',
-      tariffList: [
+
+  setup() {
+    const home = ref({
+      to: RoutesEnum.StartPage,
+    });
+    const items = ref([{ to: RoutesEnum.FinanceSection }, { to: RoutesEnum.TariffsManagement }]);
+    const title = 'Управління тарифами';
+    const tariffs = reactive({
+      list: [
         {
           tariffName: 'Тариф 1',
           tariffCost: 100,
@@ -73,39 +89,79 @@ export default defineComponent({
           tariffDate: new Date().toLocaleDateString('ek-UA'),
         },
       ],
-      tariffActions: () => {
-        return [
-          {
-            label: 'Видалити тариф',
-            icon: 'pi pi-times',
-            command: () => {
-              this.deleteTariff();
-            },
-          },
-          {
-            label: 'Використати як шаблон',
-            icon: 'pi pi-user-edit',
-          },
-        ];
-      },
+    });
+
+    return {
+      tariffs,
+      title,
+      home,
+      items,
     };
   },
+  // data() {
+  //   return {
+  //     title: 'Управління тарифами',
+  //     tariffList: [
+  //       {
+  //         tariffName: 'Тариф 1',
+  //         tariffCost: 100,
+  //         tariffComment: '1-й коментар',
+  //         tariffDate: new Date().toLocaleDateString('ek-UA'),
+  //       },
+  //       {
+  //         tariffName: 'Тариф 2',
+  //         tariffCost: 200,
+  //         tariffComment: '2-й коментар',
+  //         tariffDate: new Date().toLocaleDateString('ek-UA'),
+  //       },
+  //       {
+  //         tariffName: 'Тариф 3',
+  //         tariffCost: 300,
+  //         tariffComment: '3-й коментар',
+  //         tariffDate: new Date().toLocaleDateString('ek-UA'),
+  //       },
+  //     ],
+  //     tariffActions: () => {
+  //       return [
+  //         {
+  //           label: 'Видалити тариф',
+  //           icon: 'pi pi-times',
+  //           command: () => {
+  //             this.deleteTariff();
+  //           },
+  //         },
+  //         {
+  //           label: 'Використати як шаблон',
+  //           icon: 'pi pi-user-edit',
+  //         },
+  //       ];
+  //     },
+  //   };
+  // },
 
-  methods: {
-    async deleteTariff() {
-      await this.$store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionsEnum.DEL_TARIFF}`);
-    },
-  },
-  computed: {
-    ...mapGetters({
-      tariffList: `${StoreModuleEnum.tariffStore}/${TariffGettersEnum.getTariffsList}`,
-    }),
-  },
+  // methods: {
+  //   async deleteTariff() {
+  //     await this.$store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionsEnum.DEL_TARIFF}`);
+  //   },
+  // },
+  // computed: {
+  //   ...mapGetters({
+  //     tariffList: `${StoreModuleEnum.tariffStore}/${TariffGettersEnum.getTariffsList}`,
+  //   }),
+  // },
 });
 </script>
 
 <style scoped>
-.page-title {
+/* .page-title {
   text-align: center;
+} */
+
+.p-breadcrumb a:hover {
+  cursor: pointer;
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
+}
+.active-link {
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 1);
 }
 </style>
