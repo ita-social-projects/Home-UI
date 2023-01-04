@@ -13,8 +13,8 @@ export enum RoutesEnum {
   PageErrorInvintation = '/broken-link',
   PollInfo = '/main/polls/:id',
   FinanceSection = '/main/finance',
-  TarrifsCalculation = '/main/finance/tarrifs-calculation',
   TariffsManagement = '/main/finance/tariffs-management',
+  TariffsCalculation = '/main/finance/tariffs-calculation',
 
   NotFound = '/:catchAll(.*)',
 }

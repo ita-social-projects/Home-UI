@@ -1,33 +1,56 @@
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { TarrifModel } from '../models/tarrif.model';
+import { TariffModel } from '@/finance/models/tariff.model';
+import { TariffDTOModel } from '@/finance/models/tariffDTO.model';
 
-export interface TarrifService {
-  serviceName: string;
+export interface TariffService {
+  editState: boolean;
+  serviceTitle: string;
   servicePrice: number | null;
 }
 
-export interface TarrifStateInterface {
-  tarrifList: Array<TarrifModel> | [];
-  newTarrif: TarrifModel | null;
+export interface SelectedHouse {
+  adress: string;
+  houseArea: number | null;
+  houseId: number | string;
 }
-
-export enum TariffActionsEnum {
-  DEL_TARIFF = 'DEL_TARIFF',
-}
-
-export enum TariffMutationsEnum {
-  DEL_TARIFF = 'DEL_TARIFF',
+export interface TariffStateInterface {
+  tariffList: Array<TariffModel> | [];
+  currentTariff: TariffModel | null;
 }
 
 export enum TariffGettersEnum {
-  getTariffsList = 'getTariffsList',
+  getCurrentTariff = 'getCurrentTariff',
 }
 
-export type Getters<S = TarrifStateInterface> = {
-  [TariffGettersEnum.getTariffsList](state: S): Array<TarrifModel> | null;
+export enum TariffMutationEnum {
+  SET_CURRENT_TARIFF = 'SET_CURRENT_TARIFF',
+  CLEAR_CURRENT_TARIFF = 'CLEAR_CURRENT_TARIFF',
+  CREATE_TARIFF = 'CREATE_TARIFF',
+}
+
+export enum TariffActionEnum {
+  SET_CURRENT_TARIFF = 'SET_CURRENT_TARIFF',
+  CLEAR_CURRENT_TARIFF = 'CLEAR_CURRENT_TARIFF',
+  CREATE_TARIFF = 'CREATE_TARIFF',
+}
+
+export interface Actions {
+  [TariffActionEnum.SET_CURRENT_TARIFF]({ commit }: AugmentedActionContext, payload: TariffDTOModel): void;
+  [TariffActionEnum.CLEAR_CURRENT_TARIFF]({ commit }: AugmentedActionContext): void;
+  [TariffActionEnum.CREATE_TARIFF]({ commit, getters }: AugmentedActionContext): void;
+}
+
+export type Mutations<S = TariffStateInterface> = {
+  [TariffMutationEnum.SET_CURRENT_TARIFF](state: S, payload: TariffModel): void;
+  [TariffMutationEnum.CLEAR_CURRENT_TARIFF](state: S, payload: string): void;
+  [TariffMutationEnum.CREATE_TARIFF](state: S, payload: TariffModel | null): void;
 };
 
-export type Mutations<S = TarrifStateInterface> = {
-  [TariffMutationsEnum.DEL_TARIFF](state: S, payload: number): void;
+export type Getters<S = TariffStateInterface> = {
+  [TariffGettersEnum.getCurrentTariff](state: S): TariffModel | null;
 };
+
+export type AugmentedActionContext = {
+  commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
+} & Omit<ActionContext<TariffStateInterface, RootStateInterface>, 'commit'>;
