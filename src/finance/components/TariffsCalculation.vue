@@ -195,21 +195,13 @@ export default defineComponent({
     const store = useStore();
     const toast = useToast();
 
-    const tariffDataFromLocalStorage = JSON.parse(localStorage.getItem('current-tariff') as string);
-    if (tariffDataFromLocalStorage) {
-      tariffData.services = tariffDataFromLocalStorage.services;
-      tariffData.title = tariffDataFromLocalStorage.tariff_title;
-      tariffData.comment = tariffDataFromLocalStorage.tariff_comment;
-      tariffData.house = tariffDataFromLocalStorage.house;
-      const currentTariffToStore = {
-        house_id: tariffDataFromLocalStorage.house?.houseId,
-        house: tariffDataFromLocalStorage.house,
-        tariff_title: tariffDataFromLocalStorage.title,
-        tariff_comment: tariffDataFromLocalStorage.tariff_comment,
-        services: tariffDataFromLocalStorage.services,
-        tariff_price: tariffDataFromLocalStorage.tariff_price,
-      };
-      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_CURRENT_TARIFF}`, currentTariffToStore);
+    const currentTariff = JSON.parse(localStorage.getItem('current-tariff') as string);
+    if (currentTariff) {
+      tariffData.services = currentTariff.services;
+      tariffData.title = currentTariff.tariff_title;
+      tariffData.comment = currentTariff.tariff_comment;
+      tariffData.house = currentTariff.house;
+      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_CURRENT_TARIFF}`, currentTariff);
     }
 
     const cooperationId = computed(() => {
