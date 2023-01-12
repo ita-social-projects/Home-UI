@@ -42,7 +42,7 @@
         <input-text
           type="text"
           v-model="state.email"
-          placeholder="e-mail"
+          placeholder="john.doe@gmail.com"
           :class="{ 'p-invalid': v$.email.$error }"
           @blur="v$.email.$touch"
         />

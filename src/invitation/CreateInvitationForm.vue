@@ -22,7 +22,7 @@
       <label class="dialog-item dialog-item-address" for="user_email">Email : </label>
       <InputText
         id="user_email"
-        placeholder="Email"
+        placeholder="john.doe@gmail.com"
         v-model.trim="invitationData.email"
         :class="{
           'p-invalid': v$.invitationData.email.$error,
