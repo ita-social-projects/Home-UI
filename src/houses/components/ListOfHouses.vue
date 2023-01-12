@@ -14,7 +14,7 @@
       </template>
       <Column field="flatQuantity" style="min-width: 15rem" header="Кількість квартир в будинку" :sortable="true" />
       <Column field="houseArea" style="min-width: 15rem" header="Площа будинку" :sortable="true" />
-      <Column field="adjoiningArea" style="min-width: 15rem" header="Прибудинкової теріторії" :sortable="true" />
+      <Column field="adjoiningArea" style="min-width: 15rem" header="Прибудинкової території" :sortable="true" />
       <Column field="address" style="min-width: 20rem" header="Адреса" :sortable="true">
         <template #body="slotProps">
           {{ slotProps.data.address.region }}, {{ slotProps.data.address.city }}, {{ slotProps.data.address.district }},
