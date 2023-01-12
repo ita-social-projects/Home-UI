@@ -18,7 +18,7 @@
           <span>{{ cooperationInfo.iban }}</span>
         </div>
         <div v-if="cooperationInfo.contacts[0].email">
-          <span>Електрона адреса : </span>
+          <span>Електронна адреса : </span>
           <span>{{ cooperationInfo.contacts[0].email }}</span>
         </div>
         <div>

@@ -9,7 +9,7 @@
           <InputText
             id="email"
             type="text"
-            placeholder="Email"
+            placeholder="john.doe@gmail.com"
             v-model.trim="email"
             @blur="emailBlur"
             maxlength="320"

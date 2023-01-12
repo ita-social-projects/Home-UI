@@ -25,7 +25,7 @@
       <div class="input-field__wrapper">
         <InputText
           id="user_email"
-          placeholder="Email"
+          placeholder="john.doe@gmail.com"
           v-model.trim="invitationData.email"
           :class="{
             'p-invalid': v$.invitationData.email.$error,
