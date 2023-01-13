@@ -179,12 +179,6 @@ export default defineComponent({
     });
 
     const setHouses = async () => {
-      houses.value = [
-        { adress: 'Dnipro, Kirova str. 102', houseArea: 250, houseId: 1 },
-        { adress: 'Dnipro, Robocha str. 31', houseArea: 420, houseId: 2 },
-        { adress: 'Dnipro, Bohdana Hmelnitskogo str. 12', houseArea: 350, houseId: 3 },
-        { adress: 'Dnipro, Peremogi str. 23', houseArea: 270, houseId: 4 },
-      ];
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
       const housesList = await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
       houses.value = housesList.reduce((acc: any, house: HouseModel) => {
