@@ -1,79 +1,85 @@
 <template>
   <form id="create_invit_form">
-    <p>
+    <div class="input-field">
       <label class="dialog-item" for="invitation_type">Тип запрошення : </label>
-      <Dropdown
-        id="invitation_type"
-        optionLabel="name"
-        optionValue="code"
-        placeholder="Оберіть тип запрошення"
-        v-model="selectedData.selectedType"
-        :options="invitationData.invitationType"
-        :class="{
-          'p-invalid': v$.selectedData.selectedType.$error,
-        }"
-        @blur="v$.selectedData.selectedType.$touch"
-      />
-      <small v-if="v$.selectedData.selectedType.$error" class="p-error">{{
-        v$.selectedData.selectedType.$errors[0].$message
-      }}</small>
-    </p>
-    <p>
+      <div class="input-field__wrapper">
+        <Dropdown
+          id="invitation_type"
+          optionLabel="name"
+          optionValue="code"
+          placeholder="Оберіть тип запрошення"
+          v-model="selectedData.selectedType"
+          :options="invitationData.invitationType"
+          :class="{
+            'p-invalid': v$.selectedData.selectedType.$error,
+          }"
+          @blur="v$.selectedData.selectedType.$touch"
+        />
+        <p v-if="v$.selectedData.selectedType.$error" class="p-error">
+          {{ v$.selectedData.selectedType.$errors[0].$message }}
+        </p>
+      </div>
+    </div>
+    <div class="input-field">
       <label class="dialog-item dialog-item-address" for="user_email">Email : </label>
-      <InputText
-        id="user_email"
-        placeholder="john.doe@gmail.com"
-        v-model.trim="invitationData.email"
-        :class="{
-          'p-invalid': v$.invitationData.email.$error,
-        }"
-        @blur="v$.invitationData.email.$touch"
-      />
-      <small v-if="v$.invitationData.email.$error" class="p-error">{{
-        v$.invitationData.email.$errors[0].$message
-      }}</small>
-    </p>
-    <p>
+      <div class="input-field__wrapper">
+        <InputText
+          id="user_email"
+          placeholder="john.doe@gmail.com"
+          v-model.trim="invitationData.email"
+          :class="{
+            'p-invalid': v$.invitationData.email.$error,
+          }"
+          @blur="v$.invitationData.email.$touch"
+        />
+        <p v-if="v$.invitationData.email.$error" class="p-error">{{ v$.invitationData.email.$errors[0].$message }}</p>
+      </div>
+    </div>
+    <div class="input-field">
       <label class="dialog-item" for="list_of_houses">Список домів : </label>
-      <Dropdown
-        id="list_of_houses"
-        placeholder="Оберіть дім"
-        optionLabel="houseData"
-        emptyMessage="В цьому ОСББ немає будинків"
-        v-model="selectedData.selectedHouse"
-        :options="listOfHouses"
-        :class="{
-          'p-invalid': v$.selectedData.selectedHouse.$error,
-        }"
-        @blur="v$.selectedData.selectedHouse.$touch"
-        @change="onChangeHouse(selectedData.selectedHouse.houseId)"
-      />
-      <small v-if="v$.selectedData.selectedHouse.$error" class="p-error">{{
-        v$.selectedData.selectedHouse.$errors[0].$message
-      }}</small>
-    </p>
-    <p>
+      <div class="input-field__wrapper">
+        <Dropdown
+          id="list_of_houses"
+          placeholder="Оберіть дім"
+          optionLabel="houseData"
+          emptyMessage="В цьому ОСББ немає будинків"
+          v-model="selectedData.selectedHouse"
+          :options="listOfHouses"
+          :class="{
+            'p-invalid': v$.selectedData.selectedHouse.$error,
+          }"
+          @blur="v$.selectedData.selectedHouse.$touch"
+          @change="onChangeHouse(selectedData.selectedHouse.houseId)"
+        />
+        <p v-if="v$.selectedData.selectedHouse.$error" class="p-error">
+          {{ v$.selectedData.selectedHouse.$errors[0].$message }}
+        </p>
+      </div>
+    </div>
+    <div class="input-field">
       <label class="dialog-item" for="list_of_apartments">Список квартир : </label>
-      <Dropdown
-        id="list_of_apartments"
-        placeholder="Оберіть квартиру"
-        v-model="selectedData.selectedApartment"
-        :options="listOfApartments"
-        optionLabel="apartmentData"
-        :disabled="v$.selectedData.selectedHouse.$invalid"
-        emptyMessage="В цьому будинку немає квартир"
-        :class="{
-          'p-invalid': v$.selectedData.selectedApartment.$error,
-        }"
-        @blur="v$.selectedData.selectedApartment.$touch"
-        @change="
-          onChangeApartment(selectedData.selectedApartment.apartmentId, selectedData.selectedApartment.apartmentData)
-        "
-      />
-    </p>
-    <small v-if="v$.selectedData.selectedApartment.$error" class="p-error apartment">{{
-      v$.selectedData.selectedApartment.$errors[0].$message
-    }}</small>
+      <div class="input-field__wrapper">
+        <Dropdown
+          id="list_of_apartments"
+          placeholder="Оберіть квартиру"
+          v-model="selectedData.selectedApartment"
+          :options="listOfApartments"
+          optionLabel="apartmentData"
+          :disabled="v$.selectedData.selectedHouse.$invalid"
+          emptyMessage="В цьому будинку немає квартир"
+          :class="{
+            'p-invalid': v$.selectedData.selectedApartment.$error,
+          }"
+          @blur="v$.selectedData.selectedApartment.$touch"
+          @change="
+            onChangeApartment(selectedData.selectedApartment.apartmentId, selectedData.selectedApartment.apartmentData)
+          "
+        />
+        <p v-if="v$.selectedData.selectedApartment.$error" class="p-error apartment">
+          {{ v$.selectedData.selectedApartment.$errors[0].$message }}
+        </p>
+      </div>
+    </div>
     <div class="buttons-container">
       <Button
         label="Відправити"
@@ -234,30 +240,26 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-%error-message {
-  margin: 0.4em 0.5rem;
-  width: 80%;
-}
-
-.dialog-item {
-  display: inline-block;
-  width: 260px;
-}
-.p-error {
+#create_invit_form {
   display: flex;
-  position: absolute;
-  justify-content: right;
-  margin: -4.5em -25px 0 -50px;
-  @extend %error-message;
+  flex-direction: column;
 }
-.apartment {
-  position: absolute;
-  margin: -80px -25px 0 -50px;
+.input-field {
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 1em;
+  p {
+    margin: 0;
+  }
+  &__wrapper {
+    width: 50%;
+  }
 }
 .buttons-container {
-  float: right;
-  .p-button-outlined {
-    margin-left: 20px;
-  }
+  display: flex;
+  align-self: flex-end;
+  gap: 1em;
 }
 </style>
