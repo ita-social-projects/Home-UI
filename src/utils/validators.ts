@@ -3,7 +3,7 @@ import { helpers, required, minLength, maxLength } from '@vuelidate/validators';
 const ukrLangMessage = 'Це поле має містити українські літери';
 const cyrillicLangMessage = 'Це поле має містити літери кирилиці';
 
-const validEmail = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-\/=?^_`{|().,:;<>@[\]]+@[a-z\d.-]+\.[\w-]{2,4}$/i);
+const validEmail = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-\/=?^_`{|().,:;<>@[\]\\]+@[a-z\d.-]+\.[\w-]{2,4}$/i);
 const validEmailLastChars = helpers.regex(/^[a-z\d].*[a-z]$/i);
 const validPassword = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
 
