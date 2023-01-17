@@ -42,15 +42,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, onMounted, reactive, ref } from 'vue';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Menu from 'primevue/menu';
 import { StoreModuleEnum } from '@/store/types';
 import { RoutesEnum } from '@/router/types';
-import { TariffGettersEnum } from '@/finance/store/types';
+import { TariffGettersEnum, TariffActionEnum } from '@/finance/store/types';
 import Breadcrumb from 'primevue/breadcrumb';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'tariffs-management',
@@ -63,6 +64,7 @@ export default defineComponent({
   },
 
   setup() {
+    const store = useStore();
     const home = ref({
       to: RoutesEnum.StartPage,
     });
@@ -89,6 +91,10 @@ export default defineComponent({
           tariffDate: new Date().toLocaleDateString('ek-UA'),
         },
       ],
+    });
+
+    onMounted(() => {
+      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
     });
 
     return {
