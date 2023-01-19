@@ -155,7 +155,13 @@ export default defineComponent({
   validations() {
     return {
       invitationData: {
-        email: { requiredValidator, emailValidator, emailMinLength, emailMaxLength, emailLastCharsValidator },
+        email: {
+          requiredValidator,
+          emailLastCharsValidator,
+          emailMinLength,
+          emailMaxLength,
+          emailValidator,
+        },
       },
       selectedData: {
         selectedHouse: { requiredValidator },
