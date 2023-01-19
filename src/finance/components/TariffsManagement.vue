@@ -19,11 +19,18 @@
         stripedRows
         showGridlines
       >
-        <Column field="tariffName" header="Назва тарифу" :sortable="true" />
-        <Column field="tariffCost" header="Вартість членського внеска на 1 м. кв. (грн)" :sortable="true"> </Column>
+        <template #empty> No records found </template>
+        <Column field="tariffTitle" header="Назва тарифу" :sortable="true" />
+        <Column
+          field="tariffPrice"
+          header="Вартість членського внеска на 1 м. кв. (грн)"
+          :sortable="true"
+          style="max-width: 7rem"
+        >
+        </Column>
         <Column field="tariffComment" header="Коментар" :sortable="true" />
         <Column field="tariffDate" header="Дата" :sortable="true" />
-        <Column header="Опції">
+        <Column header="Опції" style="width: 3rem">
           <template #body="slotProps">
             <Button
               icon="pi pi-cog"
@@ -71,30 +78,19 @@ export default defineComponent({
     const items = ref([{ to: RoutesEnum.FinanceSection }, { to: RoutesEnum.TariffsManagement }]);
     const title = 'Управління тарифами';
     const tariffs = reactive({
-      list: [
-        {
-          tariffName: 'Тариф 1',
-          tariffCost: 100,
-          tariffComment: '1-й коментар',
-          tariffDate: new Date().toLocaleDateString('ek-UA'),
-        },
-        {
-          tariffName: 'Тариф 2',
-          tariffCost: 200,
-          tariffComment: '2-й коментар',
-          tariffDate: new Date().toLocaleDateString('ek-UA'),
-        },
-        {
-          tariffName: 'Тариф 3',
-          tariffCost: 300,
-          tariffComment: '3-й коментар',
-          tariffDate: new Date().toLocaleDateString('ek-UA'),
-        },
-      ],
+      list: [],
     });
 
+    const setTariffsList = async () => {
+      await store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
+      tariffs.list = store.state.tariffStore.tariffList;
+    };
+
     onMounted(() => {
-      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
+      // TODO when endpoints will exist for finance section, delete setTimeout
+      setTimeout(() => {
+        setTariffsList();
+      }, 3000);
     });
 
     return {
@@ -102,13 +98,14 @@ export default defineComponent({
       title,
       home,
       items,
+      setTariffsList,
     };
   },
 });
 </script>
 
 <style scoped>
-/* .page-title {
-  text-align: center;
-} */
+.container-management-of-tariffs {
+  padding-bottom: 4em;
+}
 </style>

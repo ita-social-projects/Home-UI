@@ -1,3 +1,4 @@
+import { state } from './../../houses/store/index';
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { TariffModel } from '@/finance/models/tariff.model';
@@ -47,6 +48,7 @@ export type Mutations<S = TariffStateInterface> = {
   [TariffMutationEnum.SET_CURRENT_TARIFF](state: S, payload: TariffModel): void;
   [TariffMutationEnum.CLEAR_CURRENT_TARIFF](state: S, payload: string): void;
   [TariffMutationEnum.CREATE_TARIFF](state: S, payload: TariffModel | null): void;
+  [TariffMutationEnum.SET_TARIFF_LIST](state: S, payload: Array<TariffModel>): void;
 };
 
 export type Getters<S = TariffStateInterface> = {
