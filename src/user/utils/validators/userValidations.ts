@@ -31,10 +31,10 @@ export const userFullNameValidations = {
 
 export const userEmailValidations = {
   requiredValidator,
-  emailValidator,
   emailMinLength,
   emailMaxLength,
   emailLastCharsValidator,
+  emailValidator,
 };
 
 export const userPasswordValidations = {
