@@ -57,9 +57,9 @@ export default defineComponent({
         description: 'Короткий опис функціоналу',
         items: [
          {
-            icon: 'pi pi-inbox',
+            icon: 'pi pi-table',
             label: 'Розрахунки',
-            to: RoutesEnum.TarrifsCalculation,
+            to: RoutesEnum.CalculationsPage,
           },
         ],
       },
