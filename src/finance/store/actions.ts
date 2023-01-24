@@ -68,7 +68,6 @@ export const actions: ActionTree<TariffStateInterface, RootStateInterface> & Act
           tariffDate: new Date().toLocaleDateString('ek-UA'),
         },
       ];
-      // commit(TariffMutationEnum.SET_TARIFF_LIST, tariffList);
 
       commit(TariffMutationEnum.SET_TARIFF_LIST, tariffs);
     } catch (err: any) {
