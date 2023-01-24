@@ -9,7 +9,7 @@
     </template>
   </Breadcrumb>
   <div class="container">
-    <h1 class="page-title">{{ title }}</h1>
+    <h1 class="page-title">{{ $route.meta.title }}</h1>
     <div class="container-management-of-tariffs">
       <DataTable
         class="p-datatable-sm"
@@ -76,7 +76,6 @@ export default defineComponent({
       to: RoutesEnum.StartPage,
     });
     const items = ref([{ to: RoutesEnum.FinanceSection }, { to: RoutesEnum.TariffsManagement }]);
-    const title = 'Управління тарифами';
     const tariffs = reactive({
       list: [],
     });
@@ -95,7 +94,6 @@ export default defineComponent({
 
     return {
       tariffs,
-      title,
       home,
       items,
       setTariffsList,
