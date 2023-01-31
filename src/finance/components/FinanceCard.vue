@@ -96,9 +96,9 @@ export default defineComponent({
   text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
 }
 
-::v-deep(.p-button:focus) {
-  color: transparent;
+::v-deep(.p-button.p-button-link:enabled:focus) {
+  background: transparent;
+  box-shadow: 0 0 0 0.2rem #fafafa;
   border-color: transparent;
-  box-shadow: 0 0 0 1px transparent;
 }
 </style>
