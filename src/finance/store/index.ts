@@ -1,15 +1,15 @@
 import { Module } from 'vuex';
 import { RootStateInterface } from '@/store/types';
-import { TarrifStateInterface } from '@/finance/store/types';
+import { TariffStateInterface } from '@/finance/store/types';
 import { actions } from '@/finance/store/actions';
 import { mutations } from '@/finance/store/mutations';
 
-export const state: TarrifStateInterface = {
-  tarrifList: [],
-  currentTarrif: null,
+export const state: TariffStateInterface = {
+  tariffList: [],
+  currentTariff: null,
 };
 
-export const tarrifStore: Module<TarrifStateInterface, RootStateInterface> = {
+export const tariffStore: Module<TariffStateInterface, RootStateInterface> = {
   namespaced: true,
   state,
   mutations,
