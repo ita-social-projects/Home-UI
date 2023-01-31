@@ -37,90 +37,128 @@ import Dropdown from 'primevue/dropdown';
 import Column from 'primevue/column';
 import { StoreModuleEnum } from '@/store/types';
 import { ApartmentInterface, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
-import { OwnershipsInterface } from '@/apartment/store/ownerships/types';
+import { OwnershipsInterface, OwnerInterface } from '@/apartment/store/ownerships/types';
+// import { TariffActionEnum } from '@/finance/store/types';
+import { HouseModel } from '@/houses/models/house.model';
+import { TarrifModel } from '../models/tarrif.model';
 
 export default defineComponent({
   components: { DataTable, Dropdown, Column },
   name: 'calculations-page',
   setup() {
-    const selectedHouse = ref();
-    const houses = [
-      { adress: 'New York', code: 'NY' },
-      { adress: 'Rome', code: 'RM' },
-      { adress: 'London', code: 'LDN' },
-      { adress: 'Istanbul', code: 'IST' },
-      { adress: 'Paris', code: 'PRS' },
-    ];
-    const items = [
-      {
-        'personal-account': '12345',
-        name: 'Сергій Сидоренко',
-        room: 1,
-        square: 28,
-        tariff: '1.25',
-        calculated: 103,
-      },
-      {
-        'personal-account': '5526',
-        name: 'Борис Джонсонюк',
-        room: 1,
-        square: 75,
-        tariff: '1.45',
-        calculated: 810,
-      },
-      {
-        'personal-account': '12345',
-        name: 'Борис Джонсонюк',
-        room: 1,
-        square: 28,
-        tariff: '1.25',
-        calculated: 1036,
-      },
-      {
-        'personal-account': '12345',
-        name: 'Борис Джонсонюк',
-        room: 1,
-        square: 28,
-        tariff: '1.25',
-        calculated: 1036,
-      },
-    ];
     const store = useStore();
-    const apartments = computed(() =>
-      store.dispatch(
-        `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`
-        // tariffData.value.houseId
-      )
-    );
-    // const tariffData = computed(
-    //   () => store.getters[`${StoreModuleEnum.tariffStore}/${TariffGettersEnum.getCurrentTariff}`]
-    // );
-
-    onMounted(() => {
-      accrued();
-      // return { tariffData, apartments };
-    });
+    const houses = ref();
+    // const houses = [
+    //     { adress: 'New York', code: 'NY' },
+    //     { adress: 'Rome', code: 'RM' },
+    //     { adress: 'London', code: 'LDN' },
+    //     { adress: 'Istanbul', code: 'IST' },
+    //     { adress: 'Paris', code: 'PRS' },
+    // ];
+    // const items = [
+    //   {
+    //     'personal-account': '12345',
+    //     name: 'Сергій Сидоренко',
+    //     room: 1,
+    //     square: 28,
+    //     tariff: '1.25',
+    //     calculated: 103,
+    //   },
+    //   {
+    //     'personal-account': '5526',
+    //     name: 'Борис Джонсонюк',
+    //     room: 1,
+    //     square: 75,
+    //     tariff: '1.45',
+    //     calculated: 810,
+    //   },
+    //   {
+    //     'personal-account': '12345',
+    //     name: 'Борис Джонсонюк',
+    //     room: 1,
+    //     square: 28,
+    //     tariff: '1.25',
+    //     calculated: 1036,
+    //   },
+    //   {
+    //     'personal-account': '12345',
+    //     name: 'Борис Джонсонюк',
+    //     room: 1,
+    //     square: 28,
+    //     tariff: '1.25',
+    //     calculated: 1036,
+    //   },
+    // ];
+    const items=reactive(
+      {
+        'personal-account': apartmentData.apartmentOwner.id,
+        name: apartmentData.apartmentOwner.owner,
+        room: apartmentData.apartmentNumber,
+        square: null,
+        tariff: null,
+        calculated: null,
+        }
+    ),
     const apartmentData = reactive({
       apartmentId: 0,
       apartmentOwner: [] as OwnershipsInterface[],
       apartmentNumber: '',
       apartmentArea: 0,
     });
-    const getApartmentsData = () => {
-      apartments.value.then((data) =>
+    //TODO? is apartmentData needed?
+
+    const tariffData = reactive({
+      tariffList: [] as TarrifModel[],
+    });
+    const averageTariff=()=>{
+      items.tariff=tariffData.tariffList.tariffPrice.reduce((acc, el)=>acc+el,0)/tariffData.tariffList.length;
+    }
+    //  const setHouses = async () => {
+    //     await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
+    //     const housesList = await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
+    //     houses.value = housesList.reduce((acc: any, house: HouseModel) => {
+    //       return (acc = [
+    //         ...acc,
+    //         {
+    //           adress: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
+    //           ${house.address.houseBlock}, ${house.address.district}`,
+    //           houseArea: house.houseArea,
+    //           houseId: house.id,
+    //         },
+    //       ]);
+    //     }, []);
+    //   };
+
+    const apartments = computed(() =>
+      store.dispatch(
+        `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`
+        tariffData.tariffList.houseId
+      )
+    );
+    const setTariffsList = async () => {
+      // await store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
+      // tariffData.tariffList = store.state.tariffStore.tariffList;
+    };
+
+    const calculated = () => {
+      items.calculated=items.tariff * apartmentData.apartmentArea);
+    };
+    onMounted(() => {
+      // setHouses();     
+      setTariffsList();
+    });
+    const getApartmentsData = async () => {
+     await apartments.value((data) =>
         data.map((apartment: ApartmentInterface) => {
-          apartmentData.apartmentId = apartment.id;
-          apartmentData.apartmentOwner = apartment.ownerships;
-          apartmentData.apartmentNumber = apartment.apartmentNumber;
-          apartmentData.apartmentArea = apartment.apartmentArea;
+          items.apartmentId = apartment.id;
+          items.apartmentOwner = apartment.ownerships;
+          items.apartmentNumber = apartment.apartmentNumber;
+          items.apartmentArea = apartment.apartmentArea;
         })
       );
     };
 
-    function accrued() {
-      // return tariffData.value.servicePrice * apartmentData.apartmentArea;
-    }
-    return { items, selectedHouse, houses, apartments, accrued, getApartmentsData };
+    return { items, houses, apartments, getApartmentsData, averageTariff, calculated };
   },
 });
 </script>
@@ -135,5 +173,11 @@ export default defineComponent({
   background: #0a65ff;
   border-radius: 3px;
   color: #ffff;
+  padding: 4px 5px;
+}
+
+::v-deep(thbody) {
+  font-family: 'Open Sans';
+  font-style: normal;
 }
 </style>
