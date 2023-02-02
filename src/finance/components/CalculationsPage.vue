@@ -38,9 +38,11 @@ import Column from 'primevue/column';
 import { StoreModuleEnum } from '@/store/types';
 import { ApartmentInterface, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
 import { OwnershipsInterface, OwnerInterface } from '@/apartment/store/ownerships/types';
-// import { TariffActionEnum } from '@/finance/store/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
+import { TariffActionEnum } from '@/finance/store/types';
 import { HouseModel } from '@/houses/models/house.model';
-import { TarrifModel } from '../models/tarrif.model';
+import { TariffModel } from '@/finance/models/tariff.model';
+import { CooperationGettersEnum } from '@/cooperation/store/types';
 
 export default defineComponent({
   components: { DataTable, Dropdown, Column },
@@ -89,76 +91,81 @@ export default defineComponent({
     //     calculated: 1036,
     //   },
     // ];
-    const items=reactive(
-      {
-        'personal-account': apartmentData.apartmentOwner.id,
-        name: apartmentData.apartmentOwner.owner,
-        room: apartmentData.apartmentNumber,
-        square: null,
-        tariff: null,
-        calculated: null,
-        }
-    ),
-    const apartmentData = reactive({
-      apartmentId: 0,
-      apartmentOwner: [] as OwnershipsInterface[],
-      apartmentNumber: '',
-      apartmentArea: 0,
+    const items = reactive({
+      'personal-account': 0,
+      name: '',
+      room: 0,
+      square: 0,
+      tariff: 0,
+      calculated: 0,
     });
+    // const apartmentData = reactive({
+    //   apartmentId: 0,
+    //   apartmentOwner: [] as OwnershipsInterface[],
+    //   apartmentNumber: '',
+    //   apartmentArea: 0,
+    // });
     //TODO? is apartmentData needed?
 
     const tariffData = reactive({
-      tariffList: [] as TarrifModel[],
+      tariffList: [] as TariffModel[],
     });
-    const averageTariff=()=>{
-      items.tariff=tariffData.tariffList.tariffPrice.reduce((acc, el)=>acc+el,0)/tariffData.tariffList.length;
-    }
-    //  const setHouses = async () => {
-    //     await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
-    //     const housesList = await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
-    //     houses.value = housesList.reduce((acc: any, house: HouseModel) => {
-    //       return (acc = [
-    //         ...acc,
-    //         {
-    //           adress: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
-    //           ${house.address.houseBlock}, ${house.address.district}`,
-    //           houseArea: house.houseArea,
-    //           houseId: house.id,
-    //         },
-    //       ]);
-    //     }, []);
-    //   };
+    const averageTariff = () => {
+      items.tariff =
+        tariffData.tariffList.reduce((acc: number, el) => acc + Number(el.tariffPrice), 0) /
+        tariffData.tariffList.length;
+    };
 
-    const apartments = computed(() =>
-      store.dispatch(
-        `${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`
-        tariffData.tariffList.houseId
-      )
-    );
+    const cooperationId = computed(() => {
+      return store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
+    });
+    const setHouses = async () => {
+      await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
+      const housesList = await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
+      houses.value = housesList.reduce((acc: any, house: HouseModel) => {
+        return (acc = [
+          ...acc,
+          {
+            adress: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
+              ${house.address.houseBlock}, ${house.address.district}`,
+            houseArea: house.houseArea,
+            houseId: house.id,
+          },
+        ]);
+      }, []);
+    };
+
+    const apartments = async () =>
+      tariffData.tariffList.map((data) => {
+        store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`, data.houseId);
+      });
     const setTariffsList = async () => {
-      // await store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
-      // tariffData.tariffList = store.state.tariffStore.tariffList;
+      await store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_CURRENT_TARIFF}`);
+      tariffData.tariffList = store.state.tariffStore.tariffList;
     };
 
-    const calculated = () => {
-      items.calculated=items.tariff * apartmentData.apartmentArea);
-    };
-    onMounted(() => {
-      // setHouses();     
-      setTariffsList();
+    const calculated = computed(() => {
+      return items.tariff * items.square;
     });
-    const getApartmentsData = async () => {
-     await apartments.value((data) =>
-        data.map((apartment: ApartmentInterface) => {
-          items.apartmentId = apartment.id;
-          items.apartmentOwner = apartment.ownerships;
-          items.apartmentNumber = apartment.apartmentNumber;
-          items.apartmentArea = apartment.apartmentArea;
-        })
-      );
+    const setCalculatedValue = () => {
+      items.calculated = calculated.value;
     };
 
-    return { items, houses, apartments, getApartmentsData, averageTariff, calculated };
+    onMounted(() => {
+      setHouses();
+      setTariffsList();
+      setCalculatedValue();
+    });
+
+    const getApartmentsData = async () => {
+      await apartments.map(({ ownerships, apartmentNumber, apartmentArea }) => {
+        items.name = ownerships;
+        items.room = apartmentNumber;
+        items.square = apartmentArea;
+      });
+    };
+
+    return { items, houses, apartments, getApartmentsData, averageTariff };
   },
 });
 </script>
