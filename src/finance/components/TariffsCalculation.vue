@@ -54,45 +54,9 @@
         </form>
       </div>
       <div class="tariffs-calculator--right-col">
-        <form class="tariffs-calculator--service-form">
-          <div class="input_field service_name">
-            <label for="service_name" :class="{ 'p-error': v$.serviceTitle.$invalid && isServiceAdded }"
-              >Назва статті витрат*</label
-            >
-            <InputText
-              name="service_name"
-              v-model="v$.serviceTitle.$model"
-              :class="{ 'p-invalid': v$.serviceTitle.$invalid && isServiceAdded }"
-            ></InputText>
-            <p v-if="v$.serviceTitle.$invalid && isServiceAdded" class="p-error">
-              {{ v$.serviceTitle.$silentErrors[0].$message }}
-            </p>
-          </div>
-          <div class="input_field service_price">
-            <label for="service_price" :class="{ 'p-error': v$.servicePrice.$invalid && isServiceAdded }"
-              >Вартість статті витрат*</label
-            >
-            <InputText
-              class="servise_price_input"
-              v-model="v$.servicePrice.$model"
-              name="service_price"
-              placeholder="0.00 грн"
-              :class="{ 'p-invalid': v$.servicePrice.$invalid && isServiceAdded }"
-            ></InputText>
-            <p v-if="v$.servicePrice.$invalid && isServiceAdded" class="p-error">
-              {{ v$.servicePrice.$silentErrors[0].$message }}
-            </p>
-          </div>
-          <div class="input_field service_actions">
-            <Button
-              class="p-button-success add-btn"
-              @click="addService(!v$.serviceTitle.$invalid && !v$.servicePrice.$invalid)"
-            >
-              Додати &nbsp;
-              <i class="pi pi-plus-circle"></i>
-            </Button>
-          </div>
-        </form>
+        <div class="tariffs-calculator--service-form">
+          <service-form />
+        </div>
         <div class="service-list">
           <Transition name="fade">
             <div class="service-list__wrapper" v-show="tariffData.services.length">
@@ -100,13 +64,19 @@
               <blockquote>{{ tariffData.comment }}</blockquote>
               <ul>
                 <TransitionGroup name="slide-fade">
-                  <service-item
-                    v-for="(service, idx) in tariffData.services"
-                    :key="idx"
-                    :service="service"
-                    @toggle-service-edit="toggleServiceEdit(service)"
-                    @handle-service-delete="handleServiceDelete(service)"
-                  />
+                  <li v-for="(service, idx) in tariffData.services" :key="idx">
+                    <div class="service-list--item" v-show="!service.editState">
+                      <div class="service-list--item-text">
+                        <p>{{ service.serviceTitle }}</p>
+                        <span>{{ service.servicePrice }} грн.</span>
+                      </div>
+                      <div class="service-list--actions">
+                        <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
+                        <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+                      </div>
+                    </div>
+                    <service-form v-show="service.editState" />
+                  </li>
                 </TransitionGroup>
               </ul>
               <h4>Сума статей витрат: <Chip :label="servicesTotalPrice()" /> грн.</h4>
@@ -151,7 +121,7 @@ import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
 import { tariffCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
 import { RoutesEnum } from '@/router/types';
-import ServiceItem from '@/finance/components/ServiceItem.vue';
+import ServiceForm from '@/finance/components/ServiceForm.vue';
 
 import { TariffService, TariffActionEnum, SelectedHouse } from '@/finance/store/types';
 import { StoreModuleEnum } from '@/store/types';
@@ -168,7 +138,7 @@ export default defineComponent({
     Chip,
     Button,
     Breadcrumb,
-    ServiceItem,
+    ServiceForm,
   },
   setup() {
     const home = ref({
@@ -201,7 +171,7 @@ export default defineComponent({
       tariffData.title = currentTariff.tariff_title;
       tariffData.comment = currentTariff.tariff_comment;
       tariffData.house = currentTariff.house;
-      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_CURRENT_TARIFF}`, currentTariff);
+      // TODO add action dispatch for update currentTariff in store (when needed)
     }
 
     const cooperationId = computed(() => {
@@ -280,7 +250,7 @@ export default defineComponent({
         tariff_price: tariffData.tariffPrice,
       };
       localStorage.setItem('current-tariff', JSON.stringify(currentTariff));
-      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_CURRENT_TARIFF}`, currentTariff);
+      // TODO add action dispatch for update currentTariff in store (when needed)
     };
 
     const handleSubmit = (isFormValid: boolean): void => {
@@ -294,9 +264,20 @@ export default defineComponent({
         detail: `'${tariffData.title}' успішно згенеровано`,
         life: 3000,
       });
-      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.CREATE_TARIFF}`);
-      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.CLEAR_CURRENT_TARIFF}`);
+      const currentTariff = {
+        house_id: tariffData.house?.houseId,
+        house: tariffData.house,
+        tariff_title: tariffData.title,
+        tariff_comment: tariffData.comment,
+        services: tariffData.services,
+        tariff_price: tariffData.tariffPrice,
+      };
+      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.CREATE_TARIFF}`, currentTariff);
       resetForm();
+    };
+
+    const roundupTariffTotal = (tariffTotal: number): string => {
+      return tariffTotal > 1 ? tariffTotal.toFixed(2) : tariffTotal.toPrecision(3);
     };
 
     const finalCalculation = () => {
@@ -305,9 +286,8 @@ export default defineComponent({
         return '0.00';
       }
       const finalTariff = Number(servicesTotalPrice()) / area.value;
-      const finalTariffRounded = finalTariff > 1 ? finalTariff.toFixed(2) : finalTariff.toPrecision(3);
-      tariffData.tariffPrice = finalTariffRounded;
-      return finalTariffRounded;
+      tariffData.tariffPrice = roundupTariffTotal(finalTariff);
+      return roundupTariffTotal(finalTariff);
     };
 
     const handleServiceDelete = (serviceToDelete: TariffService): void => {
@@ -333,6 +313,7 @@ export default defineComponent({
       addService,
       updateLocalStorage,
       servicesTotalPrice,
+      roundupTariffTotal,
       submitted,
       isServiceAdded,
       handleSubmit,
@@ -410,6 +391,35 @@ export default defineComponent({
       display: flex;
       align-items: center;
     }
+  }
+  .service-list--item {
+    padding: 0.3em 1em;
+    margin-bottom: 0.5em;
+    border: 1px solid rgb(214, 214, 214);
+    border-radius: 7px;
+    gap: 2em;
+    &-text {
+      width: 90%;
+      display: flex;
+      justify-content: space-between;
+    }
+    .service-list--actions {
+      display: flex;
+      align-items: center;
+    }
+    &-text,
+    &--actions {
+      align-items: center;
+    }
+  }
+  .service-list--item,
+  .service-list--item-edit {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .service-list--item-edit {
+    padding-block: 1em;
   }
 }
 .fade-enter-active,
