@@ -54,9 +54,7 @@
         </form>
       </div>
       <div class="tariffs-calculator--right-col">
-        <div class="tariffs-calculator--service-form">
-          <service-form />
-        </div>
+        <service-form @add-service="addService" :isEdit="false" />
         <div class="service-list">
           <Transition name="fade">
             <div class="service-list__wrapper" v-show="tariffData.services.length">
@@ -71,11 +69,24 @@
                         <span>{{ service.servicePrice }} грн.</span>
                       </div>
                       <div class="service-list--actions">
-                        <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning p-button-text" />
-                        <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+                        <Button
+                          icon="pi pi-pencil"
+                          class="p-button-rounded p-button-warning p-button-text"
+                          @click="toggleServiceEdit(service)"
+                        />
+                        <Button
+                          icon="pi pi-times"
+                          class="p-button-rounded p-button-danger p-button-text"
+                          @click="handleServiceDelete(service)"
+                        />
                       </div>
                     </div>
-                    <service-form v-show="service.editState" />
+                    <service-form
+                      v-show="service.editState"
+                      :isEdit="true"
+                      :service-to-edit="{ service, idx }"
+                      @update-service="updateService"
+                    />
                   </li>
                 </TransitionGroup>
               </ul>
@@ -156,7 +167,6 @@ export default defineComponent({
     });
     const v$ = useVuelidate(tariffCalculatorValidations, tariffData);
     const submitted = ref(false);
-    const isServiceAdded = ref(false);
 
     const houses = ref();
     const area = computed(() => {
@@ -203,12 +213,6 @@ export default defineComponent({
       return total.toString();
     };
 
-    const resetServiceForm = () => {
-      isServiceAdded.value = false;
-      tariffData.serviceTitle = '';
-      tariffData.servicePrice = null;
-    };
-
     const resetForm = (): void => {
       submitted.value = false;
       tariffData.house = {} as SelectedHouse;
@@ -220,18 +224,8 @@ export default defineComponent({
       localStorage.removeItem('current-tariff');
     };
 
-    const addService = (isServiceValid: boolean): void => {
-      isServiceAdded.value = true;
-      if (!isServiceValid) {
-        return;
-      }
-      const newService: TariffService = {
-        editState: false,
-        serviceTitle: tariffData.serviceTitle,
-        servicePrice: tariffData.servicePrice,
-      };
+    const addService = (newService: TariffService): void => {
       tariffData.services = [...tariffData.services, newService];
-      resetServiceForm();
     };
 
     const updateLocalStorage = (): void => {
@@ -292,6 +286,12 @@ export default defineComponent({
       tariffData.services[indexToEdit].editState = !tariffData.services[indexToEdit].editState;
     };
 
+    const updateService = (payload: { editedService: TariffService; idx: number }): void => {
+      tariffData.services[payload.idx].serviceTitle = payload.editedService.serviceTitle;
+      tariffData.services[payload.idx].servicePrice = payload.editedService.servicePrice;
+      tariffData.services[payload.idx].editState = !tariffData.services[payload.idx].editState;
+    };
+
     watch(
       () => ({ ...tariffData }),
       () => updateLocalStorage()
@@ -309,10 +309,9 @@ export default defineComponent({
       servicesTotalPrice,
       roundupTariffTotal,
       submitted,
-      isServiceAdded,
       handleSubmit,
       resetForm,
-      resetServiceForm,
+      updateService,
       v$,
       home,
       items,

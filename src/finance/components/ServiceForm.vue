@@ -1,40 +1,39 @@
 <template>
-  <div>
+  <div class="tariffs-calculator--service-form">
     <div class="input_field service_title">
-      <label for="service_title">Назва статті витрат*</label>
-      <InputText name="service_title"></InputText>
+      <label for="service_title" v-show="!isEdit">Назва статті витрат*</label>
+      <InputText name="service_title" v-model="service.title"></InputText>
       <!-- <p v-if="v$.serviceTitle.$invalid && isServiceAdded" class="p-error">
         {{ v$.serviceTitle.$silentErrors[0].$message }}
       </p> -->
     </div>
     <div class="input_field service_price">
-      <label for="service_price">Вартість статті витрат*</label>
-      <InputText class="servise_price_input" name="service_price" placeholder="0.00 грн"></InputText>
+      <label for="service_price" v-show="!isEdit">Вартість статті витрат*</label>
+      <InputText
+        class="servise_price_input"
+        name="service_price"
+        placeholder="0.00 грн"
+        v-model="service.price"
+      ></InputText>
       <!-- <p v-if="v$.servicePrice.$invalid && isServiceAdded" class="p-error">
         {{ v$.servicePrice.$silentErrors[0].$message }}
       </p> -->
     </div>
     <div class="input_field service_actions">
-      <Button class="p-button-success add-btn">
+      <Button class="p-button-success" @click="addService" v-show="!isEdit">
         Додати &nbsp;
         <i class="pi pi-plus-circle"></i>
       </Button>
-      <Button icon="pi pi-check" class="p-button-rounded p-button-text" />
+      <Button icon="pi pi-check" class="p-button-rounded p-button-text" v-show="isEdit" @click="updateService" />
     </div>
-    <!-- <div class="service-list--item-edit">
-      <div class="item-edit__inputs">
-        <InputText name="service-title"></InputText>
-        <InputText name="service-price"></InputText>
-      </div>
-      <Button icon="pi pi-check" class="p-button-rounded p-button-text" />
-    </div> -->
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, reactive, ref } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import { TariffService } from '@/finance/store/types';
 
 export default defineComponent({
   name: 'ServiceItem',
@@ -42,25 +41,86 @@ export default defineComponent({
     InputText,
     Button,
   },
-  // emits: ['toggle-service-edit', 'handle-service-delete'],
-  props: {},
-  setup() {
-    // const toggleServiceEdit = (service: TariffService): void => {
-    //   emit('toggle-service-edit', service);
-    // };
-    // const handleServiceDelete = (service: TariffService): void => {
-    //   emit('handle-service-delete', service);
-    // };
+  emits: ['add-service', 'update-service'],
+  props: {
+    isEdit: {
+      required: true,
+      type: Boolean,
+    },
+    serviceToEdit: {
+      required: false,
+      type: Object,
+    },
+  },
+  setup(props, { emit }) {
+    const service: { title: string; price: number | null } = reactive({
+      title: '',
+      price: null,
+    });
 
-    return {
-      // toggleServiceEdit,
-      // handleServiceDelete,
+    const isServiceAdded = ref(false);
+
+    const setServiceFields = (serviceToEdit: TariffService): void => {
+      if (!props.isEdit) return;
+
+      service.title = serviceToEdit.serviceTitle;
+      service.price = serviceToEdit.servicePrice;
     };
+
+    const resetServiceForm = (): void => {
+      service.title = '';
+      service.price = null;
+    };
+    const addService = (): void => {
+      // isServiceAdded.value = true;
+      // if (!isServiceValid) {
+      //   return;
+      // }
+      const newService: TariffService = {
+        editState: false,
+        serviceTitle: service.title,
+        servicePrice: service.price,
+      };
+      emit('add-service', newService);
+      resetServiceForm();
+    };
+
+    const updateService = (): void => {
+      const editedService: TariffService = {
+        editState: false,
+        serviceTitle: service.title,
+        servicePrice: service.price,
+      };
+      const payload = { editedService, idx: props.serviceToEdit?.idx };
+      emit('update-service', payload);
+    };
+
+    onMounted(() => {
+      setServiceFields(props.serviceToEdit?.service);
+    });
+
+    return { service, addService, resetServiceForm, updateService, isServiceAdded };
   },
 });
 </script>
 
 <style lang="scss" scoped>
+.input_field {
+  display: flex;
+  flex-direction: column;
+  padding-block-end: 1em;
+  label {
+    margin-block-end: 1em;
+  }
+}
+.service_title,
+.service_price {
+  flex-grow: 1;
+  width: 48%;
+}
+.service_actions {
+  align-self: flex-end;
+}
 .service-list--item,
 .service-list--item-edit {
   width: 100%;
