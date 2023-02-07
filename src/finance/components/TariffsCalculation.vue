@@ -110,7 +110,7 @@
           label="Згенерувати"
           icon="pi pi-check"
           class="p-button-info"
-          :disabled="!tariffData.services.length || !Object.keys(tariffData.house)"
+          :disabled="!tariffData.services.length || !Object.keys(tariffData.house).length"
           @click="handleSubmit(!v$.title.$invalid && !v$.comment.$invalid)"
         />
       </div>
@@ -160,8 +160,6 @@ export default defineComponent({
       house: {} as SelectedHouse,
       title: '',
       comment: '',
-      serviceTitle: '',
-      servicePrice: null,
       services: [] as Array<TariffService>,
       tariffPrice: '0.00',
     });
@@ -181,7 +179,7 @@ export default defineComponent({
       tariffData.title = currentTariff.tariff_title;
       tariffData.comment = currentTariff.tariff_comment;
       tariffData.house = currentTariff.house;
-      // TODO add action dispatch for update currentTariff in store (when needed)
+      // TODO add dispatch action for update currentTariff in store (when needed)
     }
 
     const cooperationId = computed(() => {
@@ -218,8 +216,6 @@ export default defineComponent({
       tariffData.house = {} as SelectedHouse;
       tariffData.title = '';
       tariffData.comment = '';
-      tariffData.serviceTitle = '';
-      tariffData.servicePrice = null;
       tariffData.services = [];
       localStorage.removeItem('current-tariff');
     };
@@ -286,10 +282,10 @@ export default defineComponent({
       tariffData.services[indexToEdit].editState = !tariffData.services[indexToEdit].editState;
     };
 
-    const updateService = (payload: { editedService: TariffService; idx: number }): void => {
-      tariffData.services[payload.idx].serviceTitle = payload.editedService.serviceTitle;
-      tariffData.services[payload.idx].servicePrice = payload.editedService.servicePrice;
-      tariffData.services[payload.idx].editState = !tariffData.services[payload.idx].editState;
+    const updateService = ({ editedService, idx }: { editedService: TariffService; idx: number }): void => {
+      tariffData.services[idx].serviceTitle = editedService.serviceTitle;
+      tariffData.services[idx].servicePrice = editedService.servicePrice;
+      tariffData.services[idx].editState = !tariffData.services[idx].editState;
     };
 
     watch(

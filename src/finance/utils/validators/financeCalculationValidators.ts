@@ -15,23 +15,14 @@ export const tariffCalculatorValidations = {
   comment: {
     tariffCalculatorComment,
   },
-  serviceTitle: {
-    requiredValidator,
-    tariffCalculatorServiceTitle,
-  },
-  servicePrice: {
-    requiredValidator,
-    tariffCalculatorServicePrice,
-    tariffCalculatorDigitsOnly,
-  },
 };
 
-export const tariffCalculatorServiceEditValidations = {
-  serviceTitle: {
+export const tariffCalculatorServiceValidations = {
+  title: {
     requiredValidator,
     tariffCalculatorServiceTitle,
   },
-  servicePrice: {
+  price: {
     requiredValidator,
     tariffCalculatorServicePrice,
     tariffCalculatorDigitsOnly,

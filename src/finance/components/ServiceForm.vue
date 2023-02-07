@@ -1,30 +1,48 @@
 <template>
   <div class="tariffs-calculator--service-form">
     <div class="input_field service_title">
-      <label for="service_title" v-show="!isEdit">Назва статті витрат*</label>
-      <InputText name="service_title" v-model="service.title"></InputText>
-      <!-- <p v-if="v$.serviceTitle.$invalid && isServiceAdded" class="p-error">
-        {{ v$.serviceTitle.$silentErrors[0].$message }}
-      </p> -->
+      <label for="service_title" v-show="!isEdit" :class="{ 'p-error': v$.title.$invalid && isServiceAdded }"
+        >Назва статті витрат*</label
+      >
+      <InputText
+        name="service_title"
+        v-model="v$.title.$model"
+        :class="{ 'p-error': isEdit ? v$.title.$invalid && isServiceEdited : v$.title.$invalid && isServiceAdded }"
+      ></InputText>
+      <p v-if="isEdit ? v$.title.$invalid && isServiceEdited : v$.title.$invalid && isServiceAdded" class="p-error">
+        {{ v$.title.$silentErrors[0].$message }}
+      </p>
     </div>
     <div class="input_field service_price">
-      <label for="service_price" v-show="!isEdit">Вартість статті витрат*</label>
+      <label for="service_price" v-show="!isEdit" :class="{ 'p-error': v$.price.$invalid && isServiceAdded }"
+        >Вартість статті витрат*</label
+      >
       <InputText
         class="servise_price_input"
         name="service_price"
         placeholder="0.00 грн"
-        v-model="service.price"
+        v-model="v$.price.$model"
+        :class="{ 'p-error': isEdit ? v$.price.$invalid && isServiceEdited : v$.price.$invalid && isServiceAdded }"
       ></InputText>
-      <!-- <p v-if="v$.servicePrice.$invalid && isServiceAdded" class="p-error">
-        {{ v$.servicePrice.$silentErrors[0].$message }}
-      </p> -->
+      <p v-if="isEdit ? v$.price.$invalid && isServiceEdited : v$.price.$invalid && isServiceAdded" class="p-error">
+        {{ v$.price.$silentErrors[0].$message }}
+      </p>
     </div>
     <div class="input_field service_actions">
-      <Button class="p-button-success" @click="addService" v-show="!isEdit">
+      <Button
+        class="p-button-success add-btn"
+        @click="addService(!v$.title.$invalid && !v$.price.$invalid)"
+        v-show="!isEdit"
+      >
         Додати &nbsp;
         <i class="pi pi-plus-circle"></i>
       </Button>
-      <Button icon="pi pi-check" class="p-button-rounded p-button-text" v-show="isEdit" @click="updateService" />
+      <Button
+        icon="pi pi-check"
+        class="p-button-rounded p-button-text"
+        v-show="isEdit"
+        @click="updateService(!v$.title.$invalid && !v$.price.$invalid)"
+      />
     </div>
   </div>
 </template>
@@ -33,7 +51,9 @@
 import { defineComponent, onMounted, reactive, ref } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import { tariffCalculatorServiceValidations } from '@/finance/utils/validators/financeCalculationValidators';
 import { TariffService } from '@/finance/store/types';
+import useVuelidate from '@vuelidate/core';
 
 export default defineComponent({
   name: 'ServiceItem',
@@ -57,8 +77,9 @@ export default defineComponent({
       title: '',
       price: null,
     });
-
     const isServiceAdded = ref(false);
+    const isServiceEdited = ref(false);
+    const v$ = useVuelidate(tariffCalculatorServiceValidations, service);
 
     const setServiceFields = (serviceToEdit: TariffService): void => {
       if (!props.isEdit) return;
@@ -68,14 +89,15 @@ export default defineComponent({
     };
 
     const resetServiceForm = (): void => {
+      isServiceAdded.value = false;
       service.title = '';
       service.price = null;
     };
-    const addService = (): void => {
-      // isServiceAdded.value = true;
-      // if (!isServiceValid) {
-      //   return;
-      // }
+    const addService = (isServiceValid: boolean): void => {
+      isServiceAdded.value = true;
+      if (!isServiceValid) {
+        return;
+      }
       const newService: TariffService = {
         editState: false,
         serviceTitle: service.title,
@@ -85,7 +107,11 @@ export default defineComponent({
       resetServiceForm();
     };
 
-    const updateService = (): void => {
+    const updateService = (isServiceEditValid: boolean): void => {
+      isServiceEdited.value = true;
+      if (!isServiceEditValid) {
+        return;
+      }
       const editedService: TariffService = {
         editState: false,
         serviceTitle: service.title,
@@ -93,13 +119,22 @@ export default defineComponent({
       };
       const payload = { editedService, idx: props.serviceToEdit?.idx };
       emit('update-service', payload);
+      isServiceEdited.value = false;
     };
 
     onMounted(() => {
       setServiceFields(props.serviceToEdit?.service);
     });
 
-    return { service, addService, resetServiceForm, updateService, isServiceAdded };
+    return {
+      service,
+      addService,
+      resetServiceForm,
+      updateService,
+      isServiceAdded,
+      isServiceEdited,
+      v$,
+    };
   },
 });
 </script>
@@ -108,7 +143,7 @@ export default defineComponent({
 .input_field {
   display: flex;
   flex-direction: column;
-  padding-block-end: 1em;
+  padding-block-end: 2em;
   label {
     margin-block-end: 1em;
   }
