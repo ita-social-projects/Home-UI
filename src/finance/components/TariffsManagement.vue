@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from 'vue';
+import { defineComponent, computed, reactive, ref, watch } from 'vue';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -80,23 +80,27 @@ export default defineComponent({
       list: [],
     });
 
-    const setTariffsList = async () => {
-      await store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
+    store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
+
+    const setTariffsList = () => {
       tariffs.list = store.state.tariffStore.tariffList;
     };
 
-    onMounted(() => {
-      // TODO when endpoints will exist for finance section, delete setTimeout
-      setTimeout(() => {
-        setTariffsList();
-      }, 3000);
+    const tariffsList = computed(() => {
+      return store.state.tariffStore.tariffList;
     });
+
+    watch(
+      () => tariffsList.value,
+      () => setTariffsList()
+    );
 
     return {
       tariffs,
       home,
       items,
       setTariffsList,
+      tariffsList,
     };
   },
 });

@@ -69,7 +69,13 @@ export const actions: ActionTree<TariffStateInterface, RootStateInterface> & Act
         },
       ];
 
-      commit(TariffMutationEnum.SET_TARIFF_LIST, tariffs);
+      // TODO when endpoints will exist for finance section - delete Promise
+      const getTariffs = new Promise((resolve) => {
+        setTimeout(() => resolve(tariffs), 5000);
+      });
+      getTariffs.then((tariffs) => {
+        commit(TariffMutationEnum.SET_TARIFF_LIST, tariffs);
+      });
     } catch (err: any) {
       console.log('error SET_TARIFF_LIST', err);
     }
