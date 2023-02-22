@@ -80,12 +80,6 @@ export default defineComponent({
       list: [],
     });
 
-    // async function loadTariffList() {
-    //   await store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
-    // }
-
-    // loadTariffList();
-
     const loadTariffList = async () => {
       await store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
     };
