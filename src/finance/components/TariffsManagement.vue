@@ -80,27 +80,38 @@ export default defineComponent({
       list: [],
     });
 
-    store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
+    // async function loadTariffList() {
+    //   await store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
+    // }
 
-    const setTariffsList = () => {
-      tariffs.list = store.state.tariffStore.tariffList;
+    // loadTariffList();
+
+    const loadTariffList = async () => {
+      await store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_TARIFF_LIST}`);
     };
 
-    const tariffsList = computed(() => {
+    loadTariffList();
+
+    const collectionOfTariffs = computed(() => {
       return store.state.tariffStore.tariffList;
     });
 
+    const setTariffs = () => {
+      tariffs.list = collectionOfTariffs.value;
+    };
+
     watch(
-      () => tariffsList.value,
-      () => setTariffsList()
+      () => collectionOfTariffs.value,
+      () => setTariffs()
     );
 
     return {
       tariffs,
       home,
       items,
-      setTariffsList,
-      tariffsList,
+      setTariffs,
+      collectionOfTariffs,
+      loadTariffList,
     };
   },
 });

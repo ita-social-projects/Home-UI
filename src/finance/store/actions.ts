@@ -71,7 +71,7 @@ export const actions: ActionTree<TariffStateInterface, RootStateInterface> & Act
 
       // TODO when endpoints will exist for finance section - delete Promise
       const getTariffs = new Promise((resolve) => {
-        setTimeout(() => resolve(tariffs), 5000);
+        setTimeout(() => resolve(tariffs), 3000);
       });
       getTariffs.then((tariffs) => {
         commit(TariffMutationEnum.SET_TARIFF_LIST, tariffs);
