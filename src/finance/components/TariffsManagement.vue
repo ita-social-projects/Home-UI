@@ -25,7 +25,7 @@
           field="tariffPrice"
           header="Вартість членського внеска на 1 м. кв. (грн)"
           :sortable="true"
-          style="max-width: 7rem"
+          style="width: 7rem"
         >
         </Column>
         <Column field="tariffComment" header="Коментар" :sortable="true" />
@@ -114,5 +114,16 @@ export default defineComponent({
 <style scoped>
 .container-management-of-tariffs {
   padding-bottom: 4em;
+}
+
+@media (max-width: 570px) {
+  h1 {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .p-datatable-sm::v-deep .p-column-title {
+    margin-right: 1.5rem;
+  }
 }
 </style>
