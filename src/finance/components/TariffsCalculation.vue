@@ -54,7 +54,6 @@
         </form>
       </div>
       <div class="tariffs-calculator--right-col">
-        <service-form @add-service="addService" :isEdit="false" />
         <div class="service-list">
           <Transition name="fade">
             <div class="service-list__wrapper" v-show="tariffData.services.length">
@@ -62,13 +61,13 @@
               <blockquote>{{ tariffData.comment }}</blockquote>
               <ul>
                 <TransitionGroup name="slide-fade">
-                  <li v-for="(service, idx) in tariffData.services" :key="idx">
-                    <div class="service-list--item" v-show="!service.editState">
-                      <div class="service-list--item-text">
-                        <p>{{ service.serviceTitle }}</p>
-                        <span>{{ service.servicePrice }} грн.</span>
-                      </div>
-                      <div class="service-list--actions">
+                  <service-form
+                    v-for="(service, idx) in tariffData.services"
+                    :key="idx"
+                    v-model:title="service.serviceTitle"
+                    v-model:price="service.servicePrice"
+                  >
+                    <!-- <div class="service-list--actions">
                         <Button
                           icon="pi pi-pencil"
                           class="p-button-rounded p-button-warning p-button-text"
@@ -79,15 +78,8 @@
                           class="p-button-rounded p-button-danger p-button-text"
                           @click="handleServiceDelete(service)"
                         />
-                      </div>
-                    </div>
-                    <service-form
-                      v-show="service.editState"
-                      :isEdit="true"
-                      :service-to-edit="{ service, idx }"
-                      @update-service="updateService"
-                    />
-                  </li>
+                      </div> -->
+                  </service-form>
                 </TransitionGroup>
               </ul>
               <h4>Сума статей витрат: <Chip :label="servicesTotalPrice()" /> грн.</h4>
@@ -274,19 +266,19 @@ export default defineComponent({
       return roundupTariffTotal(finalTariff);
     };
 
-    const handleServiceDelete = (serviceToDelete: TariffService): void => {
-      tariffData.services = tariffData.services.filter((service: TariffService) => service !== serviceToDelete);
-    };
-    const toggleServiceEdit = (serviceToEdit: TariffService): void => {
-      const indexToEdit = tariffData.services.indexOf(serviceToEdit);
-      tariffData.services[indexToEdit].editState = !tariffData.services[indexToEdit].editState;
-    };
+    // const handleServiceDelete = (serviceToDelete: TariffService): void => {
+    //   tariffData.services = tariffData.services.filter((service: TariffService) => service !== serviceToDelete);
+    // };
+    // const toggleServiceEdit = (serviceToEdit: TariffService): void => {
+    //   const indexToEdit = tariffData.services.indexOf(serviceToEdit);
+    //   tariffData.services[indexToEdit].editState = !tariffData.services[indexToEdit].editState;
+    // };
 
-    const updateService = ({ editedService, idx }: { editedService: TariffService; idx: number }): void => {
-      tariffData.services[idx].serviceTitle = editedService.serviceTitle;
-      tariffData.services[idx].servicePrice = editedService.servicePrice;
-      tariffData.services[idx].editState = !tariffData.services[idx].editState;
-    };
+    // const updateService = ({ editedService, idx }: { editedService: TariffService; idx: number }): void => {
+    //   tariffData.services[idx].serviceTitle = editedService.serviceTitle;
+    //   tariffData.services[idx].servicePrice = editedService.servicePrice;
+    //   tariffData.services[idx].editState = !tariffData.services[idx].editState;
+    // };
 
     watch(
       () => ({ ...tariffData }),
@@ -298,8 +290,8 @@ export default defineComponent({
       area,
       houses,
       finalCalculation,
-      handleServiceDelete,
-      toggleServiceEdit,
+      // handleServiceDelete,
+      // toggleServiceEdit,
       addService,
       updateLocalStorage,
       servicesTotalPrice,
@@ -307,7 +299,7 @@ export default defineComponent({
       submitted,
       handleSubmit,
       resetForm,
-      updateService,
+      // updateService,
       v$,
       home,
       items,

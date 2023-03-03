@@ -1,34 +1,34 @@
 <template>
   <div class="tariffs-calculator--service-form">
+    <div class="service-list--item">
+      <div class="service-list--item-text">
+        <p>{{ service.title }}</p>
+        <span>{{ service.price }} грн.</span>
+      </div>
+    </div>
+
     <div class="input_field service_title">
-      <label for="service_title" v-show="!isEdit" :class="{ 'p-error': v$.title.$invalid && isServiceAdded }"
-        >Назва статті витрат*</label
-      >
-      <InputText
-        name="service_title"
-        v-model="v$.title.$model"
-        :class="{ 'p-error': isEdit ? v$.title.$invalid && isServiceEdited : v$.title.$invalid && isServiceAdded }"
-      ></InputText>
-      <p v-if="isEdit ? v$.title.$invalid && isServiceEdited : v$.title.$invalid && isServiceAdded" class="p-error">
+      <label for="service_title">Назва статті витрат*</label>
+      <InputText name="service_title" v-model="service.title"></InputText>
+      <!-- <p v-if="isEdit ? v$.title.$invalid && isServiceEdited : v$.title.$invalid && isServiceAdded"
+      class="p-error">
         {{ v$.title.$silentErrors[0].$message }}
-      </p>
+      </p> -->
     </div>
     <div class="input_field service_price">
-      <label for="service_price" v-show="!isEdit" :class="{ 'p-error': v$.price.$invalid && isServiceAdded }"
-        >Вартість статті витрат*</label
-      >
+      <label for="service_price">Вартість статті витрат*</label>
       <InputText
         class="servise_price_input"
         name="service_price"
         placeholder="0.00 грн"
-        v-model="v$.price.$model"
-        :class="{ 'p-error': isEdit ? v$.price.$invalid && isServiceEdited : v$.price.$invalid && isServiceAdded }"
+        v-model="service.price"
       ></InputText>
-      <p v-if="isEdit ? v$.price.$invalid && isServiceEdited : v$.price.$invalid && isServiceAdded" class="p-error">
+      <!-- <p v-if="isEdit ? v$.price.$invalid && isServiceEdited : v$.price.$invalid && isServiceAdded"
+      class="p-error">
         {{ v$.price.$silentErrors[0].$message }}
-      </p>
+      </p> -->
     </div>
-    <div class="input_field service_actions">
+    <!-- <div class="input_field service_actions">
       <Button
         class="p-button-success add-btn"
         @click="addService(!v$.title.$invalid && !v$.price.$invalid)"
@@ -43,97 +43,54 @@
         v-show="isEdit"
         @click="updateService(!v$.title.$invalid && !v$.price.$invalid)"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from 'vue';
+import { defineComponent, onMounted, reactive } from 'vue';
+// import type { PropType } from 'vue';
 import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
-import { tariffCalculatorServiceValidations } from '@/finance/utils/validators/financeCalculationValidators';
+// import Button from 'primevue/button';
+// import { tariffCalculatorServiceValidations } from '@/finance/utils/validators/financeCalculationValidators';
 import { TariffService } from '@/finance/store/types';
-import useVuelidate from '@vuelidate/core';
+// import useVuelidate from '@vuelidate/core';
 
 export default defineComponent({
   name: 'ServiceItem',
   components: {
     InputText,
-    Button,
+    // Button,
   },
-  emits: ['add-service', 'update-service'],
   props: {
-    isEdit: {
-      required: true,
-      type: Boolean,
-    },
-    serviceToEdit: {
-      required: false,
-      type: Object,
-    },
+    title: String,
+    price: String,
   },
   setup(props, { emit }) {
-    const service: { title: string; price: number | null } = reactive({
+    const service = reactive({
       title: '',
-      price: null,
+      price: '',
     });
-    const isServiceAdded = ref(false);
-    const isServiceEdited = ref(false);
-    const v$ = useVuelidate(tariffCalculatorServiceValidations, service);
+    // const isServiceAdded = ref(false);
+    // const isServiceEdited = ref(false);
+    // const v$ = useVuelidate(tariffCalculatorServiceValidations, service);
 
-    const setServiceFields = (serviceToEdit: TariffService): void => {
-      if (!props.isEdit) return;
-
-      service.title = serviceToEdit.serviceTitle;
-      service.price = serviceToEdit.servicePrice;
-    };
-
-    const resetServiceForm = (): void => {
-      isServiceAdded.value = false;
-      service.title = '';
-      service.price = null;
-    };
-    const addService = (isServiceValid: boolean): void => {
-      isServiceAdded.value = true;
-      if (!isServiceValid) {
+    const setServiceFields = (initialTitle: string | undefined, initialPrice: string | undefined): void => {
+      if (!initialTitle || !initialPrice) {
+        service.title = '';
+        service.price = '';
         return;
       }
-      const newService: TariffService = {
-        editState: false,
-        serviceTitle: service.title,
-        servicePrice: service.price,
-      };
-      emit('add-service', newService);
-      resetServiceForm();
-    };
-
-    const updateService = (isServiceEditValid: boolean): void => {
-      isServiceEdited.value = true;
-      if (!isServiceEditValid) {
-        return;
-      }
-      const editedService: TariffService = {
-        editState: false,
-        serviceTitle: service.title,
-        servicePrice: service.price,
-      };
-      const payload = { editedService, idx: props.serviceToEdit?.idx };
-      emit('update-service', payload);
-      isServiceEdited.value = false;
+      service.title = initialTitle;
+      service.price = initialPrice;
     };
 
     onMounted(() => {
-      setServiceFields(props.serviceToEdit?.service);
+      setServiceFields(props.title, props.price);
     });
 
     return {
       service,
-      addService,
-      resetServiceForm,
-      updateService,
-      isServiceAdded,
-      isServiceEdited,
-      v$,
     };
   },
 });
@@ -155,6 +112,35 @@ export default defineComponent({
 }
 .service_actions {
   align-self: flex-end;
+}
+.service-list--item,
+.service-list--item-edit {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.service-list--item-edit {
+  padding-block: 1em;
+}
+.service-list--item {
+  padding: 0.3em 1em;
+  margin-bottom: 0.5em;
+  border: 1px solid rgb(214, 214, 214);
+  border-radius: 7px;
+  gap: 2em;
+  &-text {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .service-list--actions {
+    display: flex;
+    align-items: center;
+  }
+  &-text,
+  &--actions {
+    align-items: center;
+  }
 }
 .service-list--item,
 .service-list--item-edit {
