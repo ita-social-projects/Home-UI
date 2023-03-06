@@ -54,6 +54,14 @@
         </form>
       </div>
       <div class="tariffs-calculator--right-col">
+        <service-form :isFormHeader="true">
+          <template #form-header>
+            <Button class="p-button-success add-btn">
+              Додати &nbsp;
+              <i class="pi pi-plus-circle"></i>
+            </Button>
+          </template>
+        </service-form>
         <div class="service-list">
           <Transition name="fade">
             <div class="service-list__wrapper" v-show="tariffData.services.length">
@@ -64,21 +72,19 @@
                   <service-form
                     v-for="(service, idx) in tariffData.services"
                     :key="idx"
-                    v-model:title="service.serviceTitle"
-                    v-model:price="service.servicePrice"
+                    :service="service"
+                    :isFormHeader="false"
                   >
-                    <!-- <div class="service-list--actions">
+                    <template #service-actions="{ toggleServiceEdit }">
+                      <div class="service-list--actions">
                         <Button
                           icon="pi pi-pencil"
                           class="p-button-rounded p-button-warning p-button-text"
-                          @click="toggleServiceEdit(service)"
+                          @click="toggleServiceEdit"
                         />
-                        <Button
-                          icon="pi pi-times"
-                          class="p-button-rounded p-button-danger p-button-text"
-                          @click="handleServiceDelete(service)"
-                        />
-                      </div> -->
+                        <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
+                      </div>
+                    </template>
                   </service-form>
                 </TransitionGroup>
               </ul>
