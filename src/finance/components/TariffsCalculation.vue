@@ -54,9 +54,9 @@
         </form>
       </div>
       <div class="tariffs-calculator--right-col">
-        <service-form :isFormHeader="true">
-          <template #form-header>
-            <Button class="p-button-success add-btn">
+        <service-form :isFormHeader="true" @add-new-service="addService">
+          <template #form-header="{ addNewService }">
+            <Button class="p-button-success add-btn" @click="addNewService">
               Додати &nbsp;
               <i class="pi pi-plus-circle"></i>
             </Button>
@@ -74,17 +74,8 @@
                     :key="idx"
                     :service="service"
                     :isFormHeader="false"
+                    @handle-service-actions="handleServiceActions"
                   >
-                    <template #service-actions="{ toggleServiceEdit }">
-                      <div class="service-list--actions">
-                        <Button
-                          icon="pi pi-pencil"
-                          class="p-button-rounded p-button-warning p-button-text"
-                          @click="toggleServiceEdit"
-                        />
-                        <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" />
-                      </div>
-                    </template>
                   </service-form>
                 </TransitionGroup>
               </ul>
@@ -137,6 +128,7 @@ import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
 import { HouseModel } from '@/houses/models/house.model';
+// import { tariffCalculatorServicePrice } from '@/utils/validators';
 
 export default defineComponent({
   name: 'tariffs-calculation',
@@ -232,6 +224,7 @@ export default defineComponent({
         tariff_price: tariffData.tariffPrice,
       };
       localStorage.setItem('current-tariff', JSON.stringify(currentTariff));
+      console.log('Update local storage been triggered');
       // TODO add action dispatch for update currentTariff in store (when needed)
     };
 
@@ -272,19 +265,18 @@ export default defineComponent({
       return roundupTariffTotal(finalTariff);
     };
 
-    // const handleServiceDelete = (serviceToDelete: TariffService): void => {
-    //   tariffData.services = tariffData.services.filter((service: TariffService) => service !== serviceToDelete);
-    // };
-    // const toggleServiceEdit = (serviceToEdit: TariffService): void => {
-    //   const indexToEdit = tariffData.services.indexOf(serviceToEdit);
-    //   tariffData.services[indexToEdit].editState = !tariffData.services[indexToEdit].editState;
-    // };
-
-    // const updateService = ({ editedService, idx }: { editedService: TariffService; idx: number }): void => {
-    //   tariffData.services[idx].serviceTitle = editedService.serviceTitle;
-    //   tariffData.services[idx].servicePrice = editedService.servicePrice;
-    //   tariffData.services[idx].editState = !tariffData.services[idx].editState;
-    // };
+    const handleServiceActions = (payload: {
+      originalService: TariffService;
+      updatedService: TariffService | null;
+    }): void => {
+      if (!payload.updatedService) {
+        tariffData.services = tariffData.services.filter((service) => service !== payload.originalService);
+      } else {
+        const index = tariffData.services.indexOf(payload.originalService);
+        tariffData.services[index] = payload.updatedService;
+        updateLocalStorage();
+      }
+    };
 
     watch(
       () => ({ ...tariffData }),
@@ -296,8 +288,7 @@ export default defineComponent({
       area,
       houses,
       finalCalculation,
-      // handleServiceDelete,
-      // toggleServiceEdit,
+      handleServiceActions,
       addService,
       updateLocalStorage,
       servicesTotalPrice,
@@ -305,7 +296,6 @@ export default defineComponent({
       submitted,
       handleSubmit,
       resetForm,
-      // updateService,
       v$,
       home,
       items,

@@ -5,7 +5,20 @@
         <p>{{ currentService.serviceTitle }}</p>
         <span>{{ currentService.servicePrice }} грн.</span>
       </div>
-      <slot name="service-actions" :toggle-service-edit="toggleServiceEdit"></slot>
+      <slot>
+        <div class="service-list--actions">
+          <Button
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-warning p-button-text"
+            @click="toggleServiceEdit"
+          />
+          <Button
+            icon="pi pi-times"
+            class="p-button-rounded p-button-danger p-button-text"
+            @click="handleServiceActions"
+          />
+        </div>
+      </slot>
     </div>
 
     <div class="input_field service_title" v-show="currentService.editState || isFormHeader">
@@ -33,16 +46,16 @@
       <Button
         icon="pi pi-check"
         class="p-button-rounded p-button-text"
-        @click="updateService(service)"
+        @click="handleServiceActions"
         v-show="!isFormHeader"
       />
     </div>
-    <slot name="form-header"></slot>
+    <slot name="form-header" :add-new-service="addNewService"></slot>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive } from 'vue';
+import { defineComponent, onMounted, watch, reactive } from 'vue';
 import type { PropType } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
@@ -57,17 +70,14 @@ export default defineComponent({
     InputText,
     Button,
   },
+  emits: {
+    'handle-service-actions': null,
+    'add-new-service': null,
+  },
   props: {
     service: {
       required: false,
       type: Object as PropType<TariffService>,
-      default: () => {
-        return {
-          editState: false,
-          serviceTitle: '',
-          servicePrice: null,
-        };
-      },
     },
     isFormHeader: Boolean,
   },
@@ -82,32 +92,63 @@ export default defineComponent({
     // const v$ = useVuelidate(tariffCalculatorServiceValidations, service);
 
     const setServiceFields = (service: TariffService | undefined): void => {
-      if (!service) {
-        currentService.serviceTitle = '';
-        currentService.servicePrice = null;
-        return;
-      }
-      currentService.serviceTitle = service.serviceTitle;
-      currentService.servicePrice = service.servicePrice;
-      currentService.editState = service.editState;
+      if (!service) return;
+      Object.assign(currentService, service);
     };
 
-    const toggleServiceEdit = () => {
+    const toggleServiceEdit = (): void => {
       currentService.editState = !currentService.editState;
     };
 
-    const updateService = (serviceToUpdate: TariffService) => {
-      console.log(currentService.serviceTitle);
+    const handleServiceActions = () => {
+      if (!props.service) return;
+      type ServicePayload = {
+        originalService: TariffService;
+        updatedService: TariffService | null;
+      };
+      let payload: ServicePayload = {
+        originalService: props.service,
+        updatedService: null,
+      };
+      if (currentService.editState) {
+        payload = {
+          originalService: props.service,
+          updatedService: {
+            editState: false,
+            serviceTitle: currentService.serviceTitle,
+            servicePrice: currentService.servicePrice,
+          },
+        };
+      }
+      emit('handle-service-actions', payload);
+      currentService.editState = false;
+    };
+
+    const addNewService = (): void => {
+      const newService: TariffService = {
+        editState: false,
+        serviceTitle: currentService.serviceTitle,
+        servicePrice: currentService.servicePrice,
+      };
+      emit('add-new-service', newService);
+      currentService.serviceTitle = '';
+      currentService.servicePrice = null;
     };
 
     onMounted(() => {
       setServiceFields(props.service);
     });
 
+    watch(
+      () => ({ ...props.service }),
+      () => setServiceFields(props.service)
+    );
+
     return {
       currentService,
       toggleServiceEdit,
-      updateService,
+      handleServiceActions,
+      addNewService,
     };
   },
 });
