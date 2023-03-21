@@ -13,7 +13,7 @@
         placeholder="Обрати ОСББ"
       />
       <div>
-        <Button v-if="!isLoggedIn" label="Увійти" @click="redirectToLogin" class="p-button-info" />
+        <Button v-if="!isLoggedIn" label="Увійти" @click="redirectToLogin" class="p-button-info login_btn" />
         <Button
           label="Info"
           v-else
@@ -30,9 +30,10 @@
       </div>
       <Button
         @click="showMobSidebar"
+        v-show="!isStartPage"
         icon="pi pi-align-justify"
         label="Меню"
-        class="menu_btn p-button-rounded p-button-info p-button-lg"
+        class="menu_btn p-button-rounded p-button-info p-button"
       />
     </div>
   </header>
@@ -101,6 +102,9 @@ export default defineComponent({
     getNameFromStore(): any {
       const dataFromStore = this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
       return `${dataFromStore['firstName']} ${dataFromStore['lastName']}`;
+    },
+    isStartPage(): boolean {
+      return this.$route.path === '/';
     },
   },
   async mounted() {
@@ -206,7 +210,7 @@ export default defineComponent({
 
 @media (max-width: 570px) {
   .header {
-    padding: 20px 7px 20px 11px;
+    padding: 20px 7px 20px 7px;
   }
   .user_name {
     display: none;
@@ -221,7 +225,12 @@ export default defineComponent({
   }
 
   .header__btn .menu_btn {
-    margin: 0 0.5rem 0 1rem;
+    margin: 0 0.5rem 0 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .header__btn .login_btn {
+    padding: 0.75rem;
   }
 
   .header__logo {
