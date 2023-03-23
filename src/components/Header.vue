@@ -173,11 +173,17 @@ export default defineComponent({
     align-items: center;
     box-shadow: none;
   }
+
   .p-avatar {
     margin-right: 10px;
   }
+
   button {
     margin: 0 3rem 0 2rem;
+  }
+
+  .p-button.p-button-sm {
+    padding: 0.5rem;
   }
 }
 
@@ -208,20 +214,17 @@ export default defineComponent({
   }
 }
 
-@media (max-width: 570px) {
+@media (max-width: 590px) {
   .header {
     padding: 20px 7px 20px 7px;
   }
+
   .user_name {
     display: none;
   }
 
   .header__btn .p-avatar {
     margin-right: 0;
-  }
-
-  .header__btn .avatar_btn {
-    padding: 5px;
   }
 
   .header__btn .menu_btn {
