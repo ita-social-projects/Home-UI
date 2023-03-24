@@ -21,48 +21,62 @@
       </slot>
     </div>
 
-    <div class="input_field service_title" v-show="currentService.editState || isFormHeader">
-      <label for="service_title" v-show="isFormHeader">Назва статті витрат*</label>
-      <InputText name="service_title" v-model="currentService.serviceTitle"></InputText>
-      <!-- <p v-if="isEdit ? v$.title.$invalid && isServiceEdited : v$.title.$invalid && isServiceAdded"
-      class="p-error">
-        {{ v$.title.$silentErrors[0].$message }}
-      </p> -->
-    </div>
-    <div class="input_field service_price" v-show="currentService.editState || isFormHeader">
-      <label for="service_price" v-show="isFormHeader">Вартість статті витрат*</label>
-      <InputText
-        class="servise_price_input"
-        name="service_price"
-        placeholder="0.00 грн"
-        v-model="currentService.servicePrice"
-      ></InputText>
-      <!-- <p v-if="isEdit ? v$.price.$invalid && isServiceEdited : v$.price.$invalid && isServiceAdded"
-      class="p-error">
-        {{ v$.price.$silentErrors[0].$message }}
-      </p> -->
-    </div>
-    <div class="input_field service_actions" v-show="currentService.editState || isFormHeader">
-      <Button
-        icon="pi pi-check"
-        class="p-button-rounded p-button-text"
-        @click="handleServiceActions"
-        v-show="!isFormHeader"
-      />
+    <div class="service-form__wrapper" v-show="currentService.editState || isFormHeader">
+      <div class="input_field service_title">
+        <label for="service_title" v-show="isFormHeader" :class="{ 'p-error': v$.serviceTitle.$error }"
+          >Назва статті витрат*</label
+        >
+        <InputText
+          name="service_title"
+          v-model="currentService.serviceTitle"
+          :class="{ 'p-invalid': v$.serviceTitle.$error }"
+        ></InputText>
+        <p v-if="v$.serviceTitle.$error" class="p-error">
+          {{ v$.serviceTitle.$silentErrors[0].$message }}
+        </p>
+      </div>
+      <div class="input_field service_price">
+        <label for="service_price" v-show="isFormHeader" :class="{ 'p-error': v$.servicePrice.$error }"
+          >Вартість статті витрат*</label
+        >
+        <InputText
+          class="servise_price_input"
+          :class="{ 'p-invalid': v$.servicePrice.$error }"
+          name="service_price"
+          placeholder="0.00 грн"
+          v-model="currentService.servicePrice"
+        ></InputText>
+        <p v-if="v$.servicePrice.$error" class="p-error">
+          {{ v$.servicePrice.$silentErrors[0].$message }}
+        </p>
+      </div>
+      <div class="input_field service_actions">
+        <Button
+          icon="pi pi-check"
+          class="p-button-rounded p-button-text"
+          @click="handleServiceActions"
+          v-show="!isFormHeader"
+        />
+      </div>
     </div>
     <slot name="form-header" :add-new-service="addNewService"></slot>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, watch, reactive } from 'vue';
+import { defineComponent, onMounted, watch, reactive, computed } from 'vue';
 import type { PropType } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import { TariffService } from '../store/types';
-// import { tariffCalculatorServiceValidations } from '@/finance/utils/validators/financeCalculationValidators';
-// import { TariffService } from '@/finance/store/types';
-// import useVuelidate from '@vuelidate/core';
+
+import { useVuelidate } from '@vuelidate/core';
+import {
+  requiredValidator,
+  tariffCalculatorServicePrice,
+  tariffCalculatorServiceTitle,
+  tariffCalculatorDigitsOnly,
+} from '@/utils/validators';
+import { TariffService, ServicePayload } from '@/finance/store/types';
 
 export default defineComponent({
   name: 'ServiceItem',
@@ -75,21 +89,26 @@ export default defineComponent({
     'add-new-service': null,
   },
   props: {
-    service: {
+    originalService: {
       required: false,
-      type: Object as PropType<TariffService>,
+      type: Object as PropType<{ service: TariffService; idx: number }>,
     },
     isFormHeader: Boolean,
   },
   setup(props, { emit }) {
-    const currentService: TariffService = reactive({
+    const currentService = reactive({
+      editState: false,
       serviceTitle: '',
       servicePrice: null,
-      editState: false,
     });
-    // const isServiceAdded = ref(false);
-    // const isServiceEdited = ref(false);
-    // const v$ = useVuelidate(tariffCalculatorServiceValidations, service);
+
+    const rules = computed(() => {
+      return {
+        serviceTitle: { requiredValidator, tariffCalculatorServiceTitle },
+        servicePrice: { requiredValidator, tariffCalculatorServicePrice, tariffCalculatorDigitsOnly },
+      };
+    });
+    const v$ = useVuelidate(rules, currentService);
 
     const setServiceFields = (service: TariffService | undefined): void => {
       if (!service) return;
@@ -100,19 +119,20 @@ export default defineComponent({
       currentService.editState = !currentService.editState;
     };
 
-    const handleServiceActions = () => {
-      if (!props.service) return;
-      type ServicePayload = {
-        originalService: TariffService;
-        updatedService: TariffService | null;
-      };
+    const handleServiceActions = async (): Promise<void> => {
+      if (!props.originalService) return;
+
       let payload: ServicePayload = {
-        originalService: props.service,
+        index: props.originalService.idx,
         updatedService: null,
       };
+
       if (currentService.editState) {
+        const result = await v$.value.$validate();
+        if (!result) return;
+
         payload = {
-          originalService: props.service,
+          index: props.originalService.idx,
           updatedService: {
             editState: false,
             serviceTitle: currentService.serviceTitle,
@@ -121,27 +141,35 @@ export default defineComponent({
         };
       }
       emit('handle-service-actions', payload);
+      v$.value.$reset();
       currentService.editState = false;
     };
 
-    const addNewService = (): void => {
+    const resetForm = () => {
+      currentService.serviceTitle = '';
+      currentService.servicePrice = null;
+      v$.value.$reset();
+    };
+
+    const addNewService = async (): Promise<void> => {
+      const result = await v$.value.$validate();
+      if (!result) return;
       const newService: TariffService = {
         editState: false,
         serviceTitle: currentService.serviceTitle,
         servicePrice: currentService.servicePrice,
       };
       emit('add-new-service', newService);
-      currentService.serviceTitle = '';
-      currentService.servicePrice = null;
+      resetForm();
     };
 
     onMounted(() => {
-      setServiceFields(props.service);
+      setServiceFields(props.originalService?.service);
     });
 
     watch(
-      () => ({ ...props.service }),
-      () => setServiceFields(props.service)
+      () => ({ ...props.originalService?.service }),
+      () => setServiceFields(props.originalService?.service)
     );
 
     return {
@@ -149,6 +177,9 @@ export default defineComponent({
       toggleServiceEdit,
       handleServiceActions,
       addNewService,
+      resetForm,
+      rules,
+      v$,
     };
   },
 });
@@ -163,13 +194,16 @@ export default defineComponent({
     margin-block-end: 1em;
   }
 }
-.service_title,
-.service_price {
-  flex-grow: 1;
-  width: 48%;
+.service-form__wrapper {
+  display: flex;
+  width: 100%;
+  gap: 1em;
+  flex-wrap: wrap;
+  align-items: center;
 }
-.service_actions {
-  align-self: flex-end;
+.service_price,
+.service_title {
+  flex: auto;
 }
 .service-list--item,
 .service-list--item-edit {

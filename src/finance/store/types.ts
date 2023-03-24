@@ -15,6 +15,11 @@ export interface SelectedHouse {
   houseId: number | string;
 }
 
+export type ServicePayload = {
+  index: number;
+  updatedService: TariffService | null;
+};
+
 export interface TariffStateInterface {
   tariffList: Array<TariffModel> | [];
   currentTariff: TariffModel | null;

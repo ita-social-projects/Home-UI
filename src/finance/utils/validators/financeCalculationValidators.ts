@@ -18,11 +18,11 @@ export const tariffCalculatorValidations = {
 };
 
 export const tariffCalculatorServiceValidations = {
-  title: {
+  serviceTitle: {
     requiredValidator,
     tariffCalculatorServiceTitle,
   },
-  price: {
+  servicePrice: {
     requiredValidator,
     tariffCalculatorServicePrice,
     tariffCalculatorDigitsOnly,

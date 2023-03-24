@@ -72,7 +72,7 @@
                   <service-form
                     v-for="(service, idx) in tariffData.services"
                     :key="idx"
-                    :service="service"
+                    :original-service="{ service, idx }"
                     :isFormHeader="false"
                     @handle-service-actions="handleServiceActions"
                   >
@@ -128,7 +128,6 @@ import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
 import { HouseModel } from '@/houses/models/house.model';
-// import { tariffCalculatorServicePrice } from '@/utils/validators';
 
 export default defineComponent({
   name: 'tariffs-calculation',
@@ -224,7 +223,6 @@ export default defineComponent({
         tariff_price: tariffData.tariffPrice,
       };
       localStorage.setItem('current-tariff', JSON.stringify(currentTariff));
-      console.log('Update local storage been triggered');
       // TODO add action dispatch for update currentTariff in store (when needed)
     };
 
@@ -265,15 +263,11 @@ export default defineComponent({
       return roundupTariffTotal(finalTariff);
     };
 
-    const handleServiceActions = (payload: {
-      originalService: TariffService;
-      updatedService: TariffService | null;
-    }): void => {
+    const handleServiceActions = (payload: { index: number; updatedService: TariffService | null }): void => {
       if (!payload.updatedService) {
-        tariffData.services = tariffData.services.filter((service) => service !== payload.originalService);
+        tariffData.services = tariffData.services.filter((service, index) => index !== payload.index);
       } else {
-        const index = tariffData.services.indexOf(payload.originalService);
-        tariffData.services[index] = payload.updatedService;
+        tariffData.services[payload.index] = payload.updatedService;
         updateLocalStorage();
       }
     };
@@ -330,19 +324,6 @@ export default defineComponent({
     padding-block-end: 1em;
     label {
       margin-block-end: 1em;
-    }
-  }
-  &--service-form {
-    display: flex;
-    gap: 1em;
-    flex-wrap: wrap;
-    .service_name,
-    .service_price {
-      flex-grow: 1;
-      width: 48%;
-    }
-    .service_actions {
-      align-self: flex-end;
     }
   }
   &--area-block {
