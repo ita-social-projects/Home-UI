@@ -1,11 +1,4 @@
-import {
-  requiredValidator,
-  tariffCalculatorTitle,
-  tariffCalculatorComment,
-  tariffCalculatorServicePrice,
-  tariffCalculatorServiceTitle,
-  tariffCalculatorDigitsOnly,
-} from '@/utils/validators';
+import { requiredValidator, tariffCalculatorTitle, tariffCalculatorComment } from '@/utils/validators';
 
 export const tariffCalculatorValidations = {
   title: {
@@ -14,17 +7,5 @@ export const tariffCalculatorValidations = {
   },
   comment: {
     tariffCalculatorComment,
-  },
-};
-
-export const tariffCalculatorServiceValidations = {
-  serviceTitle: {
-    requiredValidator,
-    tariffCalculatorServiceTitle,
-  },
-  servicePrice: {
-    requiredValidator,
-    tariffCalculatorServicePrice,
-    tariffCalculatorDigitsOnly,
   },
 };

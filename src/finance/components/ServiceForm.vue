@@ -199,7 +199,6 @@ export default defineComponent({
   width: 100%;
   gap: 1em;
   flex-wrap: wrap;
-  align-items: center;
 }
 .service_price,
 .service_title {
