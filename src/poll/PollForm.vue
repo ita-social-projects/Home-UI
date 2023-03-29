@@ -451,7 +451,7 @@ export default defineComponent({
   overflow: auto;
 }
 .p-field-checkbox {
-  height: 30px;
+  min-height: 30px;
 }
 .p-error {
   display: flex;
@@ -475,7 +475,9 @@ export default defineComponent({
 }
 .buttons-container {
   padding: 1rem 0;
-  float: right;
+  // float: right;
+  display: flex;
+  justify-content: flex-end;
   .p-button-outlined {
     margin-left: 20px;
   }
@@ -497,5 +499,26 @@ export default defineComponent({
   position: absolute;
   top: 3rem;
   right: 0rem;
+}
+
+@media (max-width: 470px) {
+  .input-section section {
+    flex-direction: column;
+  }
+
+  .p-inputtext.p-component,
+  .checkbox-section {
+    width: 100%;
+  }
+
+  .buttons-container {
+    flex-direction: column;
+    align-items: flex-end;
+
+    .p-button-info {
+      width: 250px;
+      margin-top: 1rem;
+    }
+  }
 }
 </style>
