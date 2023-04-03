@@ -34,7 +34,7 @@
       <label class="dialog-item" for="adjoiningArea">Прибудинкової теріторії : </label>
       <InputText
         id="adjoiningArea"
-        placeholder="Прибудинкової теріторії"
+        placeholder="Прибудинкової території"
         v-model.trim="houseData.adjoiningArea"
         :class="{
           'p-invalid': v$.houseData.adjoiningArea.$error,

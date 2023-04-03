@@ -14,9 +14,10 @@ export const actions: ActionTree<TariffStateInterface, RootStateInterface> & Act
   [TariffActionEnum.CLEAR_CURRENT_TARIFF]: ({ commit }) => {
     commit(TariffMutationEnum.CLEAR_CURRENT_TARIFF, '');
   },
-  [TariffActionEnum.CREATE_TARIFF]: ({ commit, state }) => {
+  [TariffActionEnum.CREATE_TARIFF]: ({ commit }, payload) => {
     try {
-      const currentTariff = state.currentTariff;
+      const currentTariff: TariffModel = new TariffModel(payload);
+      // const currentTariff = state.currentTariff;
       // TODO when endpoints will exist for finance section, create request to backend -> POST axios
       commit(TariffMutationEnum.CREATE_TARIFF, currentTariff);
     } catch (error: any) {

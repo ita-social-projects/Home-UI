@@ -47,15 +47,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import {
-  edrpouValidator,
-  emailLastCharsValidator,
-  emailMaxLength,
-  emailMinLength,
-  emailValidator,
-  requiredValidator,
-} from '@/utils/validators';
-
+import { cooperationValidations } from '@/cooperation/utils/validators/cooperation-validations';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { StoreModuleEnum } from '@/store/types';
@@ -153,17 +145,8 @@ export default defineComponent({
   },
   validations() {
     return {
-      email: {
-        requiredValidator,
-        emailMinLength,
-        emailMaxLength,
-        emailLastCharsValidator,
-        emailValidator,
-      },
-      edrpou: {
-        requiredValidator,
-        edrpouValidator,
-      },
+      email: cooperationValidations.email,
+      edrpou: cooperationValidations.edrpou,
     };
   },
   watch: {

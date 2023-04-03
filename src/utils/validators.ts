@@ -3,7 +3,7 @@ import { helpers, required, minLength, maxLength } from '@vuelidate/validators';
 const ukrLangMessage = 'Це поле має містити українські літери';
 const cyrillicLangMessage = 'Це поле має містити літери кирилиці';
 
-const validEmail = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-\/=?^_`{|().,:;<>@[\]]+@[a-z\d.-]+\.[\w-]{2,4}$/i);
+const validEmail = helpers.regex(/^[a-z\d][a-z\d!#$%&'*+\-\/=?^_`{|().,:;<>@[\]\\]+@[a-z\d.-]+\.[\w-]{2,4}$/i);
 const validEmailLastChars = helpers.regex(/^[a-z\d].*[a-z]$/i);
 const validPassword = helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
 
@@ -13,6 +13,8 @@ const validUkranianLan = helpers.regex(/^[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ
 const validCyrillicLan = helpers.regex(/^[а-яА-Яа-щА-ЩЬьЮюЇїІіЄєҐґЁёЪъЫы0-9!#$%&№'"*+\-/=?^_`{|(),:;.<>@[\]\\ ]*$/);
 
 const validEdrpou = helpers.regex(/^\d{8}$/);
+const validEdrpouNotAllZeros = helpers.regex(/[1-9]+/);
+const validEdrpouNotSpecialAndLetters = helpers.regex(/[^a-z!#$%&'*+\-\/=?^_`{|().,:;<>@[\]\\]+/);
 const validIban = helpers.regex(/^UA\d{27}$/);
 
 const validHouseNumAndHouseBlock = helpers.regex(/^[/0-9а-щА-ЩЬьЮюЯяЇїІіЄєҐґ-]*$/);
@@ -48,10 +50,10 @@ export const ukrLangTitleValidator = helpers.withMessage(`${ukrLangMessage}`, va
 export const zeroValidator = helpers.withMessage('Перша цифра не може бути 0', validNonZeroFields);
 
 export const emailValidator = helpers.withMessage(
-  'Електронна пошта містить латинські букви, цифри, та спеціальні символи',
+  'Введіть адресу електронної пошти у форматі john.doe@gmail.com',
   validEmail
 );
-export const emailMinLength = helpers.withMessage(lengthMessage(5, 'min'), minLength(5));
+export const emailMinLength = helpers.withMessage(lengthMessage(7, 'min'), minLength(5));
 export const emailMaxLength = helpers.withMessage(lengthMessage(320, 'max'), maxLength(320));
 export const emailLastCharsValidator = helpers.withMessage(
   'Перший та останній символи не можуть бути спеціальними',
@@ -64,7 +66,13 @@ export const passwordValidator = helpers.withMessage(
 export const passwordMaxLenght = helpers.withMessage(lengthMessage(128, 'max'), maxLength(128));
 export const passwordMinLenght = helpers.withMessage(lengthMessage(8, 'min'), minLength(8));
 
-export const edrpouValidator = helpers.withMessage(lengthMessage(8, 'max'), validEdrpou);
+export const edrpouValidator = helpers.withMessage('Необхідна кількість цифр - 8', validEdrpou);
+export const edrpouValidatorNotAllZeros = helpers.withMessage('Необхідно ввести лише цифри', validEdrpouNotAllZeros);
+export const edrpouValidatorNotSpesialAndLetters = helpers.withMessage(
+  'Необхідно ввести лише цифри',
+  validEdrpouNotSpecialAndLetters
+);
+export const edrpouMinLenght = helpers.withMessage('Необхідна кількість цифр - 8', minLength(8));
 export const ibanValidator = helpers.withMessage('Складається з літр UA та 27 цифр', validIban);
 export const zipCodeValidator = helpers.withMessage(correctNumberMessage('5'), validZipCode);
 

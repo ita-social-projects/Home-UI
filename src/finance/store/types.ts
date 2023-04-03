@@ -15,6 +15,12 @@ export interface SelectedHouse {
   houseArea: number | null;
   houseId: number | string;
 }
+
+export type ServicePayload = {
+  index: number;
+  updatedService: TariffService | null;
+};
+
 export interface TariffStateInterface {
   tariffList: Array<TariffModel> | [];
   currentTariff: TariffModel | null;
@@ -41,7 +47,7 @@ export enum TariffActionEnum {
 export interface Actions {
   [TariffActionEnum.SET_CURRENT_TARIFF]({ commit }: AugmentedActionContext, payload: TariffDTOModel): void;
   [TariffActionEnum.CLEAR_CURRENT_TARIFF]({ commit }: AugmentedActionContext): void;
-  [TariffActionEnum.CREATE_TARIFF]({ commit, getters }: AugmentedActionContext): void;
+  [TariffActionEnum.CREATE_TARIFF]({ commit, getters }: AugmentedActionContext, payload: TariffDTOModel): void;
 }
 
 export type Mutations<S = TariffStateInterface> = {

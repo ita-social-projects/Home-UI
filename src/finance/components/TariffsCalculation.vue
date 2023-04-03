@@ -42,7 +42,7 @@
                 name="house"
                 v-model="tariffData.house"
                 :options="houses"
-                optionLabel="adress"
+                optionLabel="address"
                 placeholder="Оберіть будинок"
               />
             </div>
@@ -54,45 +54,14 @@
         </form>
       </div>
       <div class="tariffs-calculator--right-col">
-        <form class="tariffs-calculator--service-form">
-          <div class="input_field service_name">
-            <label for="service_name" :class="{ 'p-error': v$.serviceTitle.$invalid && isServiceAdded }"
-              >Назва статті витрат*</label
-            >
-            <InputText
-              name="service_name"
-              v-model="v$.serviceTitle.$model"
-              :class="{ 'p-invalid': v$.serviceTitle.$invalid && isServiceAdded }"
-            ></InputText>
-            <p v-if="v$.serviceTitle.$invalid && isServiceAdded" class="p-error">
-              {{ v$.serviceTitle.$silentErrors[0].$message }}
-            </p>
-          </div>
-          <div class="input_field service_price">
-            <label for="service_price" :class="{ 'p-error': v$.servicePrice.$invalid && isServiceAdded }"
-              >Вартість статті витрат*</label
-            >
-            <InputText
-              class="servise_price_input"
-              v-model="v$.servicePrice.$model"
-              name="service_price"
-              placeholder="0.00 грн"
-              :class="{ 'p-invalid': v$.servicePrice.$invalid && isServiceAdded }"
-            ></InputText>
-            <p v-if="v$.servicePrice.$invalid && isServiceAdded" class="p-error">
-              {{ v$.servicePrice.$silentErrors[0].$message }}
-            </p>
-          </div>
-          <div class="input_field service_actions">
-            <Button
-              class="p-button-success add-btn"
-              @click="addService(!v$.serviceTitle.$invalid && !v$.servicePrice.$invalid)"
-            >
+        <service-form :isFormHeader="true" @add-new-service="addService">
+          <template #form-header="{ addNewService }">
+            <Button class="p-button-success add-btn" @click="addNewService">
               Додати &nbsp;
               <i class="pi pi-plus-circle"></i>
             </Button>
-          </div>
-        </form>
+          </template>
+        </service-form>
         <div class="service-list">
           <Transition name="fade">
             <div class="service-list__wrapper" v-show="tariffData.services.length">
@@ -100,13 +69,14 @@
               <blockquote>{{ tariffData.comment }}</blockquote>
               <ul>
                 <TransitionGroup name="slide-fade">
-                  <service-item
+                  <service-form
                     v-for="(service, idx) in tariffData.services"
                     :key="idx"
-                    :service="service"
-                    @toggle-service-edit="toggleServiceEdit(service)"
-                    @handle-service-delete="handleServiceDelete(service)"
-                  />
+                    :original-service="{ service, idx }"
+                    :isFormHeader="false"
+                    @handle-service-actions="handleServiceActions"
+                  >
+                  </service-form>
                 </TransitionGroup>
               </ul>
               <h4>Сума статей витрат: <Chip :label="servicesTotalPrice()" /> грн.</h4>
@@ -129,7 +99,7 @@
           label="Згенерувати"
           icon="pi pi-check"
           class="p-button-info"
-          :disabled="!tariffData.services.length || !Object.keys(tariffData.house)"
+          :disabled="!tariffData.services.length || !Object.keys(tariffData.house).length"
           @click="handleSubmit(!v$.title.$invalid && !v$.comment.$invalid)"
         />
       </div>
@@ -151,7 +121,7 @@ import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
 import { tariffCalculatorValidations } from '@/finance/utils/validators/financeCalculationValidators';
 import { RoutesEnum } from '@/router/types';
-import ServiceItem from '@/finance/components/ServiceItem.vue';
+import ServiceForm from '@/finance/components/ServiceForm.vue';
 
 import { TariffService, TariffActionEnum, SelectedHouse } from '@/finance/store/types';
 import { StoreModuleEnum } from '@/store/types';
@@ -168,7 +138,7 @@ export default defineComponent({
     Chip,
     Button,
     Breadcrumb,
-    ServiceItem,
+    ServiceForm,
   },
   setup() {
     const home = ref({
@@ -179,14 +149,11 @@ export default defineComponent({
       house: {} as SelectedHouse,
       title: '',
       comment: '',
-      serviceTitle: '',
-      servicePrice: null,
       services: [] as Array<TariffService>,
       tariffPrice: '0.00',
     });
     const v$ = useVuelidate(tariffCalculatorValidations, tariffData);
     const submitted = ref(false);
-    const isServiceAdded = ref(false);
 
     const houses = ref();
     const area = computed(() => {
@@ -201,7 +168,7 @@ export default defineComponent({
       tariffData.title = currentTariff.tariff_title;
       tariffData.comment = currentTariff.tariff_comment;
       tariffData.house = currentTariff.house;
-      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_CURRENT_TARIFF}`, currentTariff);
+      // TODO add dispatch action for update currentTariff in store (when needed)
     }
 
     const cooperationId = computed(() => {
@@ -209,19 +176,13 @@ export default defineComponent({
     });
 
     const setHouses = async () => {
-      houses.value = [
-        { adress: 'Dnipro, Kirova str. 102', houseArea: 250, houseId: 1 },
-        { adress: 'Dnipro, Robocha str. 31', houseArea: 420, houseId: 2 },
-        { adress: 'Dnipro, Bohdana Hmelnitskogo str. 12', houseArea: 350, houseId: 3 },
-        { adress: 'Dnipro, Peremogi str. 23', houseArea: 270, houseId: 4 },
-      ];
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
       const housesList = await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
       houses.value = housesList.reduce((acc: any, house: HouseModel) => {
         return (acc = [
           ...acc,
           {
-            adress: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
+            address: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
             ${house.address.houseBlock}, ${house.address.district}`,
             houseArea: house.houseArea,
             houseId: house.id,
@@ -239,35 +200,17 @@ export default defineComponent({
       return total.toString();
     };
 
-    const resetServiceForm = () => {
-      isServiceAdded.value = false;
-      tariffData.serviceTitle = '';
-      tariffData.servicePrice = null;
-    };
-
     const resetForm = (): void => {
       submitted.value = false;
       tariffData.house = {} as SelectedHouse;
       tariffData.title = '';
       tariffData.comment = '';
-      tariffData.serviceTitle = '';
-      tariffData.servicePrice = null;
       tariffData.services = [];
       localStorage.removeItem('current-tariff');
     };
 
-    const addService = (isServiceValid: boolean): void => {
-      isServiceAdded.value = true;
-      if (!isServiceValid) {
-        return;
-      }
-      const newService: TariffService = {
-        editState: false,
-        serviceTitle: tariffData.serviceTitle,
-        servicePrice: tariffData.servicePrice,
-      };
-      tariffData.services = [...tariffData.services, newService];
-      resetServiceForm();
+    const addService = (newService: TariffService): void => {
+      tariffData.services.push(newService);
     };
 
     const updateLocalStorage = (): void => {
@@ -280,7 +223,7 @@ export default defineComponent({
         tariff_price: tariffData.tariffPrice,
       };
       localStorage.setItem('current-tariff', JSON.stringify(currentTariff));
-      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.SET_CURRENT_TARIFF}`, currentTariff);
+      // TODO add action dispatch for update currentTariff in store (when needed)
     };
 
     const handleSubmit = (isFormValid: boolean): void => {
@@ -294,9 +237,20 @@ export default defineComponent({
         detail: `'${tariffData.title}' успішно згенеровано`,
         life: 3000,
       });
-      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.CREATE_TARIFF}`);
-      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.CLEAR_CURRENT_TARIFF}`);
+      const currentTariff = {
+        house_id: tariffData.house?.houseId,
+        house: tariffData.house,
+        tariff_title: tariffData.title,
+        tariff_comment: tariffData.comment,
+        services: tariffData.services,
+        tariff_price: tariffData.tariffPrice,
+      };
+      store.dispatch(`${StoreModuleEnum.tariffStore}/${TariffActionEnum.CREATE_TARIFF}`, currentTariff);
       resetForm();
+    };
+
+    const roundupTariffTotal = (tariffTotal: number): string => {
+      return tariffTotal > 1 ? tariffTotal.toFixed(2) : tariffTotal.toPrecision(3);
     };
 
     const finalCalculation = () => {
@@ -305,17 +259,17 @@ export default defineComponent({
         return '0.00';
       }
       const finalTariff = Number(servicesTotalPrice()) / area.value;
-      const finalTariffRounded = finalTariff > 1 ? finalTariff.toFixed(2) : finalTariff.toPrecision(3);
-      tariffData.tariffPrice = finalTariffRounded;
-      return finalTariffRounded;
+      tariffData.tariffPrice = roundupTariffTotal(finalTariff);
+      return roundupTariffTotal(finalTariff);
     };
 
-    const handleServiceDelete = (serviceToDelete: TariffService): void => {
-      tariffData.services = tariffData.services.filter((service: TariffService) => service !== serviceToDelete);
-    };
-    const toggleServiceEdit = (serviceToEdit: TariffService): void => {
-      const indexToEdit = tariffData.services.indexOf(serviceToEdit);
-      tariffData.services[indexToEdit].editState = !tariffData.services[indexToEdit].editState;
+    const handleServiceActions = (payload: { index: number; updatedService: TariffService | null }): void => {
+      if (!payload.updatedService) {
+        tariffData.services = tariffData.services.filter((service, index) => index !== payload.index);
+      } else {
+        tariffData.services[payload.index] = payload.updatedService;
+        updateLocalStorage();
+      }
     };
 
     watch(
@@ -328,16 +282,14 @@ export default defineComponent({
       area,
       houses,
       finalCalculation,
-      handleServiceDelete,
-      toggleServiceEdit,
+      handleServiceActions,
       addService,
       updateLocalStorage,
       servicesTotalPrice,
+      roundupTariffTotal,
       submitted,
-      isServiceAdded,
       handleSubmit,
       resetForm,
-      resetServiceForm,
       v$,
       home,
       items,
@@ -357,61 +309,95 @@ export default defineComponent({
     'controls right-col';
   gap: 3em;
   padding-block-end: 2em;
+
   &--left-col {
     grid-area: left-col;
   }
+
   &--right-col {
     grid-area: right-col;
   }
+
   .calculation_controls {
     grid-area: controls;
   }
+
   .input_field {
     display: flex;
     flex-direction: column;
     padding-block-end: 1em;
+
     label {
       margin-block-end: 1em;
     }
   }
-  &--service-form {
-    display: flex;
-    gap: 1em;
-    flex-wrap: wrap;
-    .service_name,
-    .service_price {
-      flex-grow: 1;
-      width: 48%;
-    }
-    .service_actions {
-      align-self: flex-end;
-    }
-  }
+
   &--area-block {
     display: flex;
     justify-content: space-between;
   }
+
   .service-list__wrapper {
     display: flex;
     flex-direction: column;
+
     h3 {
       text-align: center;
     }
+
     h4 {
       align-self: flex-end;
     }
+
     ul {
       max-height: 300px;
       overflow-y: auto;
       overflow-x: hidden;
       padding: 0;
     }
+
     li {
       display: flex;
       align-items: center;
     }
   }
+
+  .service-list--item {
+    padding: 0.3em 1em;
+    margin-bottom: 0.5em;
+    border: 1px solid rgb(214, 214, 214);
+    border-radius: 7px;
+    gap: 2em;
+
+    &-text {
+      width: 90%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .service-list--actions {
+      display: flex;
+      align-items: center;
+    }
+
+    &-text,
+    &--actions {
+      align-items: center;
+    }
+  }
+
+  .service-list--item,
+  .service-list--item-edit {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .service-list--item-edit {
+    padding-block: 1em;
+  }
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -441,6 +427,7 @@ export default defineComponent({
     flex-direction: column;
   }
 }
+
 @media screen and (max-width: 1150px) {
   .tariffs-calculator {
     grid-template-columns: 1fr;

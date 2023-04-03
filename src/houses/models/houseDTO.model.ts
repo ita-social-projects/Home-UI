@@ -5,7 +5,7 @@ export class HouseDTOModel {
   public quantity_flat: number | null;
   public house_area: number | null;
   public adjoining_area: number | null;
-  public id?: number;
+  public id: number;
   public address: AddressDTOModel;
   public cooperationId?: number;
 
