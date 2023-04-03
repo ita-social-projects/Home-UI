@@ -42,7 +42,7 @@ export default defineComponent({
           {
             icon: 'pi pi-percentage',
             label: 'Калькулятор тарифу',
-            to: RoutesEnum.TarrifsCalculation,
+            to: RoutesEnum.TariffsCalculation,
           },
           {
             icon: 'pi pi-inbox',
@@ -56,10 +56,10 @@ export default defineComponent({
         title: 'Нарахування',
         description: 'Короткий опис функціоналу',
         items: [
-         {
+          {
             icon: 'pi pi-inbox',
             label: 'Розрахунки',
-            to: RoutesEnum.TarrifsCalculation,
+            to: RoutesEnum.TariffsCalculation,
           },
         ],
       },
