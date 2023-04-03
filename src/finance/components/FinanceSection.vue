@@ -47,7 +47,7 @@ export default defineComponent({
           {
             icon: 'pi pi-inbox',
             label: 'Управління тарифами',
-            to: RoutesEnum.TarrifsCalculation,
+            to: RoutesEnum.TariffsManagement,
           },
         ],
       },
