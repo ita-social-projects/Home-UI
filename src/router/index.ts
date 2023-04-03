@@ -16,6 +16,7 @@ import InvitationSection from '@/invitation/InvitationSection.vue';
 import FinanceSection from '@/finance/components/FinanceSection.vue';
 import ManageApartments from '@/apartment/ManageApartments.vue';
 import ApartmentInfo from '@/apartment/ApartmentInfo.vue';
+import TariffsManagement from '@/finance/components/TariffsManagement.vue';
 import TariffsCalculation from '@/finance/components/TariffsCalculation.vue';
 
 const routes: RouteRecordRaw[] = [
@@ -124,6 +125,14 @@ const routes: RouteRecordRaw[] = [
         component: TariffsCalculation,
         meta: {
           title: 'Калькулятор тарифу',
+        },
+      },
+      {
+        path: RoutesEnum.TariffsManagement,
+        name: 'tariffs-managemant',
+        component: TariffsManagement,
+        meta: {
+          title: 'Управління тарифами',
         },
       },
     ],

@@ -1,3 +1,4 @@
+import { state } from './../../houses/store/index';
 import { ActionContext } from 'vuex';
 import { RootStateInterface } from '@/store/types';
 import { TariffModel } from '@/finance/models/tariff.model';
@@ -33,12 +34,14 @@ export enum TariffMutationEnum {
   SET_CURRENT_TARIFF = 'SET_CURRENT_TARIFF',
   CLEAR_CURRENT_TARIFF = 'CLEAR_CURRENT_TARIFF',
   CREATE_TARIFF = 'CREATE_TARIFF',
+  SET_TARIFF_LIST = 'SET_TARIFF_LIST',
 }
 
 export enum TariffActionEnum {
   SET_CURRENT_TARIFF = 'SET_CURRENT_TARIFF',
   CLEAR_CURRENT_TARIFF = 'CLEAR_CURRENT_TARIFF',
   CREATE_TARIFF = 'CREATE_TARIFF',
+  SET_TARIFF_LIST = 'SET_TARIFF_LIST',
 }
 
 export interface Actions {
@@ -51,6 +54,7 @@ export type Mutations<S = TariffStateInterface> = {
   [TariffMutationEnum.SET_CURRENT_TARIFF](state: S, payload: TariffModel): void;
   [TariffMutationEnum.CLEAR_CURRENT_TARIFF](state: S, payload: string): void;
   [TariffMutationEnum.CREATE_TARIFF](state: S, payload: TariffModel | null): void;
+  [TariffMutationEnum.SET_TARIFF_LIST](state: S, payload: Array<TariffModel>): void;
 };
 
 export type Getters<S = TariffStateInterface> = {

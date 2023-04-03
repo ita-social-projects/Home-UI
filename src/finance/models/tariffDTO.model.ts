@@ -7,8 +7,9 @@ export class TariffDTOModel {
   public house?: SelectedHouse;
   public tariff_title: string;
   public tariff_comment?: string;
-  public services: Array<TariffService>;
+  public services?: Array<TariffService>;
   public tariff_price: string;
+  public tariff_date?: Date | string;
 
   constructor(tariff: TariffModel) {
     this.tariff_id = tariff.tariffId;
@@ -18,5 +19,6 @@ export class TariffDTOModel {
     this.tariff_comment = tariff.tariffComment;
     this.services = tariff.services;
     this.tariff_price = tariff.tariffPrice;
+    this.tariff_date = tariff.tariffDate;
   }
 }

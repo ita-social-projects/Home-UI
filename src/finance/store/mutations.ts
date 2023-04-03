@@ -11,4 +11,8 @@ export const mutations: MutationTree<TariffStateInterface> & Mutations = {
   [TariffMutationEnum.CREATE_TARIFF]: (state, payload) => {
     console.table(payload);
   },
+
+  [TariffMutationEnum.SET_TARIFF_LIST]: (state, payload) => {
+    state.tariffList = payload;
+  },
 };
