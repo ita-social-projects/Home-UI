@@ -32,6 +32,7 @@ const validHouseDecimal = helpers.regex(/(^(\d{1,100}){1}(\.\d{1,3})?$)/);
 const validNonZeroFields = helpers.regex(/^[^0]/);
 
 const validOwnershipPart = helpers.regex(/((^(?!(0))\d{1,4}\/(?!(0))\d{1,5})$)|(^0$)|(^1$)/);
+const digitsOnly = helpers.regex(/^[0-9]+$/);
 
 const lengthMessage = (number: number, description: string): string => {
   const max = `Максимальна кількість символів - ${number}`;
@@ -108,3 +109,9 @@ export const ownershipPartValidator = helpers.withMessage('Введіть кор
 export const pollTitleLenghtValidator = helpers.withMessage(lengthMessage(250, 'max'), maxLength(250));
 export const pollDescriptionLenghtValidator = helpers.withMessage(lengthMessage(1000, 'max'), maxLength(1000));
 export const cyrillicLangTextValidator = helpers.withMessage(`${cyrillicLangMessage}`, validCyrillicLan);
+
+export const tariffCalculatorTitle = helpers.withMessage(lengthMessage(320, 'max'), maxLength(320));
+export const tariffCalculatorComment = helpers.withMessage(lengthMessage(320, 'max'), maxLength(320));
+export const tariffCalculatorServiceTitle = helpers.withMessage(lengthMessage(100, 'max'), maxLength(100));
+export const tariffCalculatorServicePrice = helpers.withMessage(lengthMessage(12, 'max'), maxLength(12));
+export const tariffCalculatorDigitsOnly = helpers.withMessage(correctNumberMessage(''), digitsOnly);

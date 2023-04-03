@@ -9,6 +9,7 @@ import { pollsStore } from '@/poll/store';
 import { invitationsStore } from '@/invitation/store';
 import { apartmentsStore } from '@/apartment/store/apartments';
 import { ownershipsStore } from '@/apartment/store/ownerships';
+import { tariffStore } from '@/finance/store';
 import { errorsStore } from '@/core/errors/store';
 import { messagesStore } from '@/core/messages/store';
 
@@ -24,6 +25,7 @@ export default createStore<RootStateInterface>({
     invitationsStore,
     apartmentsStore,
     ownershipsStore,
+    tariffStore,
     errorsStore,
     messagesStore,
   },
