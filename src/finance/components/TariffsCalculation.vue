@@ -42,7 +42,7 @@
                 name="house"
                 v-model="tariffData.house"
                 :options="houses"
-                optionLabel="adress"
+                optionLabel="address"
                 placeholder="Оберіть будинок"
               />
             </div>
@@ -182,7 +182,7 @@ export default defineComponent({
         return (acc = [
           ...acc,
           {
-            adress: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
+            address: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
             ${house.address.houseBlock}, ${house.address.district}`,
             houseArea: house.houseArea,
             houseId: house.id,
@@ -210,7 +210,7 @@ export default defineComponent({
     };
 
     const addService = (newService: TariffService): void => {
-      tariffData.services = [...tariffData.services, newService];
+      tariffData.services.push(newService);
     };
 
     const updateLocalStorage = (): void => {
@@ -309,77 +309,95 @@ export default defineComponent({
     'controls right-col';
   gap: 3em;
   padding-block-end: 2em;
+
   &--left-col {
     grid-area: left-col;
   }
+
   &--right-col {
     grid-area: right-col;
   }
+
   .calculation_controls {
     grid-area: controls;
   }
+
   .input_field {
     display: flex;
     flex-direction: column;
     padding-block-end: 1em;
+
     label {
       margin-block-end: 1em;
     }
   }
+
   &--area-block {
     display: flex;
     justify-content: space-between;
   }
+
   .service-list__wrapper {
     display: flex;
     flex-direction: column;
+
     h3 {
       text-align: center;
     }
+
     h4 {
       align-self: flex-end;
     }
+
     ul {
       max-height: 300px;
       overflow-y: auto;
       overflow-x: hidden;
       padding: 0;
     }
+
     li {
       display: flex;
       align-items: center;
     }
   }
+
   .service-list--item {
     padding: 0.3em 1em;
     margin-bottom: 0.5em;
     border: 1px solid rgb(214, 214, 214);
     border-radius: 7px;
     gap: 2em;
+
     &-text {
       width: 90%;
       display: flex;
       justify-content: space-between;
     }
+
     .service-list--actions {
       display: flex;
       align-items: center;
     }
+
     &-text,
     &--actions {
       align-items: center;
     }
   }
+
   .service-list--item,
   .service-list--item-edit {
     width: 100%;
     display: flex;
     justify-content: space-between;
   }
+
   .service-list--item-edit {
     padding-block: 1em;
   }
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -409,6 +427,7 @@ export default defineComponent({
     flex-direction: column;
   }
 }
+
 @media screen and (max-width: 1150px) {
   .tariffs-calculator {
     grid-template-columns: 1fr;
