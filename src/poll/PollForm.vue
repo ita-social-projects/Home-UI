@@ -73,9 +73,13 @@
           v-model="startDate"
           :showIcon="true"
           :minDate="minDate"
+          :class="{
+            'p-invalid': v$.startDate.$error,
+          }"
           id="caledar-begin"
           dateFormat="dd.mm.yy"
           @date-select="changeDate"
+          @blur="v$.startDate.$touch"
         />
         <Calendar
           v-if="isEditing"
@@ -92,8 +96,11 @@
         <small v-if="isCreationDateHelpActive" id="poll_creationDate" class="p-error сreationDate-help warning-message">
           Переконайтесь, що дата стоїть не раніше, ніж завтра!
         </small>
-        <small v-if="v$.pollData.creationDateInEdition.$error" id="poll_creationDate" class="p-error">{{
+        <small v-if="v$.pollData.creationDateInEdition.$error" id="poll_creationDate" class="p-error warning-message">{{
           v$.pollData.creationDateInEdition.$errors[0].$message
+        }}</small>
+        <small v-if="v$.startDate.$error" id="poll_startDate" class="p-error warning-message">{{
+          v$.startDate.$errors[0].$message
         }}</small>
       </section>
     </div>
@@ -134,13 +141,12 @@
     <div class="buttons-container">
       <Button
         :id="!this.isEditing && 'save-button'"
-        :disabled="isDisabled || v$.pollData.$invalid"
+        :disabled="isDisabled || v$.pollData.$invalid || v$.startDate.$invalid"
         :label="this.isEditing ? 'Зберегти зміни' : 'Додати опитування'"
         icon="pi pi-check"
         class="p-button-info"
         type="submit"
         value="Submit"
-        autofocus
       />
       <Button
         :id="!this.isEditing && 'cancel-button'"
@@ -219,7 +225,6 @@ export default defineComponent({
         completionDate: '' || ('' as any),
         acceptanceCriteria: '',
       },
-      polledHouses: [],
       startDate: null,
       finishDate: new Date(),
       displayCreatePollModal: false,
@@ -228,7 +233,6 @@ export default defineComponent({
       v$: useVuelidate(),
       PollAcceptanceCriteriaEnum,
 
-      beginDateInEdition: new Date(),
       isDisabled: true,
       isCreationDateHelpActive: false,
     };
@@ -242,21 +246,10 @@ export default defineComponent({
         acceptanceCriteria: !this.isEditing ? { requiredValidator } : '',
         creationDateInEdition: this.isEditing ? { requiredValidator } : '',
       },
+      startDate: !this.isEditing ? { requiredValidator } : '',
     };
   },
   created() {
-    this.$watch(
-      () => this.startDate,
-      (newVal: Date) => {
-        if (newVal === null) {
-          this.pollData.completionDate = '';
-          return;
-        }
-        this.finishDate = new Date(newVal.getTime() + 14 * 86400000);
-        this.finishDate.setHours(23, 59, 59, 59);
-        this.pollData.completionDate = this.finishDate.toLocaleString('uk-UA').split(',')[0];
-      }
-    );
     this.minDate.setDate(this.minDate.getDate() + 1);
     this.minDate.setHours(0, 0, 0, 0);
   },
@@ -287,15 +280,12 @@ export default defineComponent({
       const dateTomorrow = new Date();
       dateTomorrow.setDate(dateTomorrow.getDate() + 1);
       dateTomorrow.setHours(0, 0, 0, 0);
-      const forteenDaysInMilliseconds = 14 * 86400000;
+      const fifteenDaysInMilliseconds = 15 * 86400000;
       if (this.pollData.creationDateInEdition < dateTomorrow) {
         this.isDisabled = true;
         this.isCreationDateHelpActive = true;
       } else {
-        this.beginDateInEdition.setHours(0, 0, 0, 0);
-
-        this.finishDate = new Date(this.pollData.creationDateInEdition.getTime() + forteenDaysInMilliseconds);
-        this.finishDate.setHours(23, 59, 59, 59);
+        this.finishDate = new Date(this.pollData.creationDateInEdition.getTime() + fifteenDaysInMilliseconds);
         this.pollData.completionDate = this.finishDate.toLocaleString('uk-UA').split(',')[0];
 
         this.isCreationDateHelpActive = false;
@@ -312,10 +302,8 @@ export default defineComponent({
       this.pollData.title = this.selectedPoll?.header;
       this.pollData.description = this.selectedPoll?.description;
       this.pollData.polledHouses = this.selectedPoll?.polledHouses;
-      this.pollData.creationDateInEdition = this.selectedPoll?.creationDate.toLocaleString('uk-UA');
-      this.pollData.completionDate = this.selectedPoll?.completionDate.toLocaleString('uk-UA');
-
-      this.beginDateInEdition = this.selectedPoll?.creationDate || new Date();
+      this.pollData.creationDateInEdition = this.selectedPoll?.creationDate;
+      this.pollData.completionDate = this.selectedPoll?.completionDate;
       this.finishDate = this.selectedPoll?.completionDate;
     },
 
@@ -332,6 +320,7 @@ export default defineComponent({
       if (!isFormValid) {
         return;
       }
+
       const payload = {
         cooperationId: this.cooperationId,
         body: {
@@ -360,11 +349,21 @@ export default defineComponent({
     },
 
     async editPoll() {
+      const yearInUTC = this.pollData.creationDateInEdition.getFullYear();
+      const monthInUTC = this.pollData.creationDateInEdition.getMonth();
+      const dateInUTC = this.pollData.creationDateInEdition.getDate();
+      const hoursInUTC = this.pollData.creationDateInEdition.getHours();
+      const minutesInUTC = this.pollData.creationDateInEdition.getMinutes();
+      const secondsInUTC = this.pollData.creationDateInEdition.getSeconds();
+      const millisecondsInUTC = this.pollData.creationDateInEdition.getMilliseconds();
+
       const poll = {
         header: this.pollData.title,
         description: this.pollData.description,
-        creationDate: new Date(this.beginDateInEdition.toLocaleString('en-US')).toISOString(),
-        completionDate: new Date(this.finishDate.toLocaleString('en-US')).toISOString(),
+        creationDate: new Date(
+          Date.UTC(yearInUTC, monthInUTC, dateInUTC, hoursInUTC, minutesInUTC, secondsInUTC, millisecondsInUTC)
+        ).toISOString(),
+        completionDate: new Date(this.finishDate.getTime()).toISOString(),
         status: this.poll.status,
         polledHouses: this.pollData.polledHouses,
       };

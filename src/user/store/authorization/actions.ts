@@ -6,6 +6,7 @@ import {
   Actions,
 } from '@/user/store/authorization/types';
 import { RootStateInterface, StoreModuleEnum } from '@/store/types';
+import { ErrorsActionEnum } from '@/core/errors/store/types';
 import { HTTP, HTTP_AUTH } from '@/core/api/http-common';
 import { UpdateUserModel } from '@/user/models/update-user.model';
 import { PostContactModel } from '@/user/models/post-contact.model';
@@ -38,6 +39,7 @@ export const actions: ActionTree<AuthorizationStateInterface, RootStateInterface
       payload.successCallback(response);
     } catch (err: any) {
       payload.errorCallback(err);
+      dispatch(`${StoreModuleEnum.errorsStore}/${ErrorsActionEnum.SET_ERROR_ACTION}`, err, { root: true });
     }
   },
   [AuthActionEnum.GET_DATA]: async ({ commit }, payload) => {

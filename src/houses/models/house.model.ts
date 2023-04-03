@@ -5,7 +5,7 @@ export class HouseModel {
   public flatQuantity: number | null;
   public houseArea: number | null;
   public adjoiningArea: number | null;
-  public id?: number;
+  public id: number;
   public address: AddressModel;
   public cooperationId?: number;
 
