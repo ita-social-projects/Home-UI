@@ -165,13 +165,12 @@ export default defineComponent({
       // }, []);
     };
     const getApartmentsByHouseId = computed(() => {
+      //TODO when backend appears, uncomment the code below and remove code under it
       // return store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`];
-      const filteredApartments = apartmentDataMocked.filter((el) => el.id === selectedHouse.value);
-
-      return filteredApartments;
+      return apartmentDataMocked.filter((el) => el.id === selectedHouse.value);
     });
 
-    //TODO when backend appears, uncomment below code and remove the same variable in this component
+    //TODO when backend appears, uncomment the code below and remove the same variable in this component
     // const tariffData = reactive({
     //   tariffList: [] as TariffModel[],
     // });
@@ -190,9 +189,7 @@ export default defineComponent({
 
       averageTariffHouse(filteredList.value);
     };
-    const spreadArray = (arr: (string | undefined) [] ) => {
-      console.log(arr.values());
-      
+    const spreadArray = (arr: (string | undefined)[]) => {
       for (const value of arr.values()) {
         return value;
       }
@@ -201,12 +198,9 @@ export default defineComponent({
     const updatedApartmentData = () => {
       const updatedApartment = getApartmentsByHouseId.value.map((apartment) => {
         const getOwnershipsByApartment = apartment.ownerships.map((el) => {
-          console.log(spreadArray(el.owner));
-          
           return spreadArray(el.owner);
         });
-        console.log(getOwnershipsByApartment);
-        
+
         return {
           personal_account: apartment.id,
           apartment_number: apartment.apartmentNumber,
@@ -240,7 +234,6 @@ export default defineComponent({
 
     onMounted(() => {
       setHouses();
-      // setTariffList();
     });
 
     return {
@@ -251,7 +244,6 @@ export default defineComponent({
       tariffData,
       apartmentDataMocked,
       selectedHouse,
-      // updatedApartmentData,
       getApartmentsByHouseId,
     };
   },
@@ -261,30 +253,20 @@ export default defineComponent({
 <style scoped>
 ::v-deep(.drop-menu) {
   margin-bottom: 22px;
-  background: #ebf2ff;
 }
-::v-deep(.drop-menu::after) {
-  content: '';
-  display: block;
-  background: #3b82f6;
-  width: 56px;
-  height: 5px;
-  transform: rotate(90deg);
-  position: absolute;
-  top: 20px;
-  left: -40px;
+::v-deep(.drop-menu:focus) {
+  background: #ffff;
 }
-::v-deep(.pi-chevron-down:before) {
-  background: #3b82f6;
-  border-radius: 3px;
-  color: #ffff;
-  padding: 4px 5px;
+::v-deep(.p-dropdown:not(.p-disabled).p-focus) {
+  border-color: #ffff;
+  box-shadow: 0 0 0 1px #d4d4d8;
 }
 
 ::v-deep(thbody) {
   font-family: 'Open Sans';
   font-style: normal;
 }
+
 .house-warning {
   display: flex;
   justify-content: center;
