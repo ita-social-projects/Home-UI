@@ -45,8 +45,9 @@ import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
 import { RoutesEnum } from '@/router/types';
 import { TariffModel } from '../models/tariff.model';
-import { ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
+import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
 import { TariffActionEnum } from '../store/types';
+import { ApartmentModel } from '@/apartment/models/apartment.model';
 
 export default defineComponent({
   components: { DataTable, Dropdown, Column, Breadcrumb },
@@ -67,6 +68,7 @@ export default defineComponent({
     const selectedHouse = ref();
     const averageTariffForSelectedHouse = ref();
     const filteredList = ref();
+    const apartmentsInTheHouse = ref([]);
 
     const apartmentDataMocked = [
       {
@@ -167,14 +169,19 @@ export default defineComponent({
       //   ]);
       // }, []);
     };
-    const getApartmentsByHouseId = computed(() => {
+    const getApartmentsByHouseId = () => {
       //TODO when backend appears, uncomment the code below and remove code under it
-      // return store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`];
+      // async () => {
+      // await store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENTS}`,
+      //  selectedHouse);
+      // return apartmentsInTheHouse.value =
+      //   store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`];
+
       return apartmentDataMocked.filter((el) => el.id === selectedHouse.value);
-    });
+    };
 
     //TODO when backend appears, uncomment the code below and remove the same variable in this component
-    // const tariffData = reactive({
+    // const tariffData = ref({
     //   tariffList: [] as TariffModel[],
     // });
 
@@ -199,11 +206,11 @@ export default defineComponent({
     };
 
     const updatedApartmentData = () => {
-      const updatedApartment = getApartmentsByHouseId.value.map((apartment) => {
-        const getOwnershipsByApartment = apartment.ownerships.map((el) => {
-          return spreadArray(el.owner);
+      const updatedApartment = apartmentDataMocked.map((apartment) => {
+        // const updatedApartment = apartmentsInTheHouse.value.map((apartment: ApartmentModel) => {
+        const getOwnershipsByApartment = apartment?.ownerships.map((el) => {
+          return spreadArray(el?.owner);
         });
-
         return {
           personal_account: apartment.id,
           apartment_number: apartment.apartmentNumber,
@@ -226,12 +233,12 @@ export default defineComponent({
     );
 
     watch(
-      () => selectedHouse.value,
+      () => tariffData.value.tariffList,
       () => averageTariffHouse(filteredList.value)
     );
 
     watch(
-      () => selectedHouse.value,
+      () => apartmentsInTheHouse,
       () => updatedApartmentData()
     );
 
