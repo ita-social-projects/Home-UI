@@ -22,12 +22,12 @@
       <p>Оберіть, будь ласка, будинок</p>
     </div>
     <DataTable :value="apartmentList" v-else>
-      <Column field="personal_account" style="min-width: 18rem" header="Особовий рахунок" />
-      <Column field="owner" style="min-width: 25rem" header="ПІП" />
-      <Column field="apartment_number" style="min-width: 15rem" header="Приміщення" />
-      <Column field="apartment_area" style="min-width: 10rem" header="Площа" />
-      <Column field="house_tariff" style="min-width: 15rem" header="Тариф" />
-      <Column field="accrued" style="min-width: 15rem" header="Нараховано" />
+      <Column field="personal_account" style="max-width: 11rem" header="Особовий рахунок" />
+      <Column field="owner" style="min-width: 17rem" header="ПІП" />
+      <Column field="apartment_number" style="min-width: 5rem" header="Приміщення" />
+      <Column field="apartment_area" style="min-width: 5rem" header="Площа" />
+      <Column field="house_tariff" style="min-width: 5rem" header="Тариф" />
+      <Column field="accrued" style="min-width: 5rem" header="Нараховано" />
     </DataTable>
   </div>
 </template>
@@ -41,10 +41,12 @@ import Column from 'primevue/column';
 import Breadcrumb from 'primevue/breadcrumb';
 
 import { StoreModuleEnum } from '@/store/types';
-import { HousesActionsEnum } from '@/houses/store/types';
+import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
 import { RoutesEnum } from '@/router/types';
 import { TariffModel } from '../models/tariff.model';
+import { ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
+import { TariffActionEnum } from '../store/types';
 
 export default defineComponent({
   components: { DataTable, Dropdown, Column, Breadcrumb },
@@ -151,6 +153,7 @@ export default defineComponent({
       ];
 
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
+      // const housesList = await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
       // await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
       // houses.value = housesList.reduce((acc: any, house: HouseModel) => {
       //   return (acc = [
@@ -257,6 +260,7 @@ export default defineComponent({
 ::v-deep(.drop-menu:focus) {
   background: #ffff;
 }
+
 ::v-deep(.p-dropdown:not(.p-disabled).p-focus) {
   border-color: #ffff;
   box-shadow: 0 0 0 1px #d4d4d8;
@@ -265,6 +269,19 @@ export default defineComponent({
 ::v-deep(thbody) {
   font-family: 'Open Sans';
   font-style: normal;
+}
+
+::v-deep(.p-datatable .p-column-header-content) {
+  display: block;
+  text-align: center;
+}
+
+::v-deep(.p-datatable .p-datatable-thead > tr > th) {
+  padding: 0.75rem;
+}
+
+::v-deep(.p-datatable .p-datatable-tbody > tr > td) {
+  text-align: center;
 }
 
 .house-warning {
