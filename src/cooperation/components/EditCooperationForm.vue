@@ -354,7 +354,8 @@ small {
   width: 280px;
 }
 .buttons-container {
-  float: right;
+  display: flex;
+  justify-content: flex-end;
   .p-button-outlined {
     margin-left: 20px;
   }
