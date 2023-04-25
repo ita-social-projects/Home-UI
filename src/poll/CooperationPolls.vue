@@ -76,7 +76,6 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .polls {
-  // @include flex-custom(flex-start, flex-start, column);
   height: calc(100vh - 80px - 4em);
   box-sizing: border-box;
   padding: 1em;
@@ -91,11 +90,7 @@ export default defineComponent({
   grid-template-columns: repeat(auto-fill, minmax(300px, 310px));
   gap: 3em 1.5em;
   justify-content: center;
-  // width: 100%;
-  // flex: 2;
-  // padding: 0 1em 1em 0.4em;
   box-sizing: border-box;
-  // overflow: hidden scroll;
 }
 
 @media (min-width: 571px) {
@@ -103,27 +98,4 @@ export default defineComponent({
     padding: 0;
   }
 }
-
-// @media (max-width: 570px) {
-//   .polls {
-//     padding: 1rem;
-//   }
-
-//   .poll-list {
-//     display: grid;
-//     grid-template-columns: 1fr;
-//     gap: 2.5em;
-//     // width: 100%;
-//     // flex: 2;
-//     padding: 0 1em 1em 0.4em;
-//     box-sizing: border-box;
-//     // overflow: hidden scroll;
-//   }
-// }
-
-// @media (min-width: 571px) and (max-width: 900px) {
-//   .poll-list {
-//     grid-template-columns: repeat(2, 1fr);
-//   }
-// }
 </style>

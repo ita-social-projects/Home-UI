@@ -151,7 +151,6 @@ export default defineComponent({
     }
 
     .poll-content-data {
-      // justify-content: start;
       .poll-content_name {
         margin-top: 0;
       }

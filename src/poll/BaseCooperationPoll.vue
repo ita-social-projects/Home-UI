@@ -200,7 +200,6 @@ export default defineComponent({
   box-sizing: border-box;
 
   .header {
-    // @include flex-center-all();
     display: flex;
     align-items: flex-end;
     justify-content: center;

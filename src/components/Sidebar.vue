@@ -142,11 +142,8 @@ export default defineComponent({
 
   .user-fullname {
     @include flex-custom(flex-end);
-    // height: 1.5em;
     text-align: right;
     margin: 1em 0 2em 0;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
   }
 }
 

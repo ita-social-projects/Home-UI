@@ -475,7 +475,6 @@ export default defineComponent({
 }
 .buttons-container {
   padding: 1rem 0;
-  // float: right;
   display: flex;
   justify-content: flex-end;
   .p-button-outlined {
