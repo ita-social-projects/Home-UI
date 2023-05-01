@@ -122,8 +122,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .sidebar {
-  display: grid;
-  grid-template-rows: 1fr 6fr 1fr;
   background: #fafafa;
   box-shadow: rgba(0, 0, 0, 0.1) 1px 3px 3px, rgba(0, 0, 0, 0.06) 1px 2px 2px;
   padding: 1em 0;
