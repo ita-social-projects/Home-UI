@@ -87,7 +87,7 @@ export default defineComponent({
 
 .poll-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 310px));
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
   gap: 3em 1.5em;
   justify-content: center;
   box-sizing: border-box;
