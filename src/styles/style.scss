@@ -73,6 +73,14 @@ label {
 .router-leave-active {
   transition: all 0.3s ease-in;
 }
+/* BREADCRUMBS STYLES */
+.p-breadcrumb a:hover {
+  cursor: pointer;
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
+}
+.active-link {
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 1);
+}
 
 /* SCROLLBAR STYLES */
 
@@ -104,4 +112,12 @@ label {
   100% {
       stroke: hsl(0,0%,98.04%);
   }
+}
+
+.p-breadcrumb a:hover {
+  cursor: pointer;
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
+}
+.active-link {
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 1);
 }

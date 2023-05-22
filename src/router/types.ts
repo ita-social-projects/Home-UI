@@ -12,6 +12,9 @@ export enum RoutesEnum {
   InvitationSection = '/main/invitations',
   PageErrorInvintation = '/broken-link',
   PollInfo = '/main/polls/:id',
+  FinanceSection = '/main/finance',
+  TariffsManagement = '/main/finance/tariffs-management',
+  TariffsCalculation = '/main/finance/tariffs-calculation',
 
   NotFound = '/:catchAll(.*)',
 }
