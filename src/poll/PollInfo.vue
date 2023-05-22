@@ -11,7 +11,7 @@
             <strong>Дата початку:</strong>
           </div>
           <div class="poll-description">
-            {{ pollInfo.creationDate.toLocaleString('uk-UA') }}
+            {{ pollInfo.creationDate.toLocaleString('uk-UA', { year: 'numeric', month: 'numeric', day: 'numeric' }) }}
           </div>
         </div>
         <div class="poll-content-data">
@@ -19,7 +19,7 @@
             <strong>Дата завершення:</strong>
           </div>
           <div class="poll-description">
-            {{ pollInfo.completionDate.toLocaleString('uk-UA') }}
+            {{ pollInfo.completionDate.toLocaleString('uk-UA', { year: 'numeric', month: 'numeric', day: 'numeric' }) }}
           </div>
         </div>
         <div class="poll-content-description">
@@ -102,7 +102,7 @@ export default defineComponent({
       padding-bottom: 35px;
       border-bottom: 1px solid #e5e5e5;
       .poll-title {
-        font-size: 35px;
+        font-size: 2rem;
         font-weight: bold;
         margin-right: 15px;
       }
@@ -143,7 +143,7 @@ export default defineComponent({
       border-bottom: 1px solid #e5e5e5;
       .poll-content_name {
         margin-right: 20px;
-        min-width: 250px;
+        min-width: 150px;
       }
       .poll-description_text {
         margin: 0;
@@ -151,7 +151,6 @@ export default defineComponent({
     }
 
     .poll-content-data {
-      justify-content: start;
       .poll-content_name {
         margin-top: 0;
       }
@@ -160,6 +159,31 @@ export default defineComponent({
   .footer {
     display: flex;
     justify-content: flex-end;
+  }
+}
+
+@media (max-width: 571px), (min-width: 769px) and (max-width: 900px) {
+  .wrapper {
+    padding: 20px 10px;
+
+    .card-poll {
+      width: 100%;
+      padding: 0;
+
+      .header {
+        .poll-title {
+          font-size: 1.5rem;
+        }
+      }
+
+      .poll-content-description,
+      .poll-content-data {
+        padding: 15px 10px;
+      }
+    }
+  }
+  .footer {
+    margin: 2rem 0 0.5rem 0;
   }
 }
 </style>
