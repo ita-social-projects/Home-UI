@@ -77,7 +77,6 @@ export default defineComponent({
 <style scoped lang="scss">
 .polls {
   height: calc(100vh - 80px - 4em);
-  box-sizing: border-box;
   padding: 1em;
 }
 
@@ -90,7 +89,7 @@ export default defineComponent({
   grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
   gap: 3em 1.5em;
   justify-content: center;
-  box-sizing: border-box;
+  padding-bottom: 3em;
 }
 
 @media (min-width: 571px) {

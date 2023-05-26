@@ -50,7 +50,7 @@ export default defineComponent({
 .content {
   padding: 2em;
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
 }
 
 @media (max-width: 768px) {
