@@ -13,6 +13,7 @@ export enum RoutesEnum {
   PageErrorInvintation = '/broken-link',
   PollInfo = '/main/polls/:id',
   FinanceSection = '/main/finance',
+  TariffsManagement = '/main/finance/tariffs-management',
   TariffsCalculation = '/main/finance/tariffs-calculation',
   CalculationsPage = '/main/finance/calculations-page',
 

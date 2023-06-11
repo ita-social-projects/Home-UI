@@ -1,6 +1,9 @@
 import {
   requiredValidator,
   edrpouValidator,
+  edrpouValidatorNotAllZeros,
+  edrpouValidatorNotSpesialAndLetters,
+  edrpouMinLenght,
   emailLastCharsValidator,
   emailMaxLength,
   emailMinLength,
@@ -22,15 +25,21 @@ export const cooperationValidations = {
     ukrLangTitleValidator,
     someTitleLenghtValidator,
   },
-  edrpou: { requiredValidator, edrpouValidator },
+  edrpou: {
+    requiredValidator,
+    edrpouValidatorNotAllZeros,
+    edrpouMinLenght,
+    edrpouValidatorNotSpesialAndLetters,
+    edrpouValidator,
+  },
   iban: { requiredValidator, ibanValidator },
   phone: { requiredValidator, userPhoneValidator },
   email: {
     requiredValidator,
     emailMinLength,
+    emailMaxLength,
     emailLastCharsValidator,
     emailValidator,
-    emailMaxLength,
   },
   address: {
     region: { requiredValidator, ukrLangTitleValidator, regionCityDistrictMaxLength },

@@ -3,11 +3,6 @@
     <div class="header__logo">
       <div class="logo" @click="redirectToMain"></div>
     </div>
-
-    <div class="header__info">
-      <span>{{ headerInfo }}</span>
-    </div>
-
     <div class="header__btn">
       <Dropdown
         v-show="isLoggedIn"
@@ -18,7 +13,7 @@
         placeholder="Обрати ОСББ"
       />
       <div>
-        <Button v-if="!isLoggedIn" label="Увійти" @click="redirectToLogin" class="p-button-info" />
+        <Button v-if="!isLoggedIn" label="Увійти" @click="redirectToLogin" class="p-button-info login_btn" />
         <Button
           label="Info"
           v-else
@@ -26,13 +21,20 @@
           @click="toggle"
           aria-haspopup="true"
           aria-controls="overlay_tmenu"
-          class="p-button-rounded p-button-info p-button-sm"
+          class="p-button-rounded p-button-info p-button-sm avatar_btn"
         >
           <Avatar icon="pi pi-user" class="p-mr-2" style="background-color: #ffffff; color: #609af8" shape="circle" />
-          <span class="p-ml-2 p-text-bold">{{ getNameFromStore }}</span>
+          <span class="user_name p-ml-2 p-text-bold">{{ getNameFromStore }}</span>
         </Button>
         <Menu id="overlay_tmenu" ref="menu" :model="items" :popup="true" />
       </div>
+      <Button
+        @click="showMobSidebar"
+        v-show="!isStartPage"
+        icon="pi pi-align-justify"
+        label="Меню"
+        class="menu_btn p-button-rounded p-button-info p-button"
+      />
     </div>
   </header>
 </template>
@@ -50,9 +52,9 @@ import { StoreModuleEnum } from '@/store/types';
 
 export default defineComponent({
   name: 'baseHeader',
+  emit: ['showMobSidebar'],
   data() {
     return {
-      headerInfo: 'Додаток для керування ОСББ.',
       items: [
         {
           label: 'Редагувати',
@@ -101,6 +103,9 @@ export default defineComponent({
       const dataFromStore = this.$store.getters[`${StoreModuleEnum.authorizationStore}/${AuthGettersEnum.userData}`];
       return `${dataFromStore['firstName']} ${dataFromStore['lastName']}`;
     },
+    isStartPage(): boolean {
+      return this.$route.path === '/';
+    },
   },
   async mounted() {
     const user: string | null = localStorage.getItem('user');
@@ -119,6 +124,10 @@ export default defineComponent({
 
     toggle(event: any) {
       (this.$refs.menu as Menu).toggle(event);
+    },
+
+    showMobSidebar() {
+      this.$emit('showMobSidebar');
     },
   },
 });
@@ -140,11 +149,8 @@ export default defineComponent({
 .header__logo {
   @include flex-custom(flex-start);
   height: 40px;
-  width: 100%;
   padding-left: 65px;
-  padding-right: 15px;
-  flex: 1 1 auto;
-
+  padding-right: 1rem;
   .logo {
     height: 100%;
     width: 10em;
@@ -153,11 +159,6 @@ export default defineComponent({
     background-position: 0 center;
     cursor: pointer;
   }
-}
-.header__info {
-  @include flex-center-all();
-  width: 100%;
-  flex: 1 1 auto;
 }
 
 .header__btn {
@@ -172,11 +173,75 @@ export default defineComponent({
     align-items: center;
     box-shadow: none;
   }
+
   .p-avatar {
     margin-right: 10px;
   }
+
   button {
-    margin: 0 65px;
+    margin: 0 3rem 0 2rem;
+  }
+
+  .p-button.p-button-sm {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header__btn .drop-menu {
+    display: none;
+  }
+
+  .header__btn .menu_btn {
+    margin: 0 2rem 0 1rem;
+  }
+  .header__btn button {
+    margin: 0;
+  }
+
+  .header__btn .p-button.p-button-lg {
+    font-size: 1rem;
+  }
+
+  .header__logo {
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 769px) {
+  .header__btn .menu_btn {
+    display: none;
+  }
+}
+
+@media (max-width: 590px) {
+  .header {
+    padding: 20px 7px 20px 7px;
+  }
+
+  .user_name {
+    display: none;
+  }
+
+  .header__btn .p-avatar {
+    margin-right: 0;
+  }
+
+  .header__btn .menu_btn {
+    margin: 0 0.5rem 0 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .header__btn .login_btn {
+    padding: 0.75rem;
+  }
+
+  .header__logo {
+    padding-right: 0;
+  }
+
+  .header .header__logo .logo {
+    width: 9em;
   }
 }
 </style>

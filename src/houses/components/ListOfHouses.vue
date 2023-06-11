@@ -7,14 +7,18 @@
       v-model:selection="selectedHouse"
       dataKey="houses.id"
       @rowSelect="onRowSelect"
-      responsiveLayout="scroll"
+      class="p-datatable-sm"
+      responsiveLayout="stack"
+      breakpoint="570px"
+      stripedRows
+      showGridlines
     >
       <template #header>
         <h4>Будинки в цьому ОСББ</h4>
       </template>
-      <Column field="flatQuantity" style="min-width: 15rem" header="Кількість квартир в будинку" :sortable="true" />
-      <Column field="houseArea" style="min-width: 15rem" header="Площа будинку" :sortable="true" />
-      <Column field="adjoiningArea" style="min-width: 15rem" header="Прибудинкової теріторії" :sortable="true" />
+      <Column field="flatQuantity" style="min-width: 8rem" header="Кількість квартир в будинку" :sortable="true" />
+      <Column field="houseArea" header="Площа будинку" :sortable="true" />
+      <Column field="adjoiningArea" header="Прибудинкової території" :sortable="true" />
       <Column field="address" style="min-width: 20rem" header="Адреса" :sortable="true">
         <template #body="slotProps">
           {{ slotProps.data.address.region }}, {{ slotProps.data.address.city }}, {{ slotProps.data.address.district }},
@@ -24,10 +28,10 @@
         </template>
       </Column>
 
-      <Column>
+      <Column header="Опції">
         <template #body="slotProps">
           <Button
-            icon="pi pi-pencil"
+            icon="pi pi-cog"
             class="p-button p-button-info p-button-text"
             type="button"
             @click="toggleOptions($event, slotProps.data)"
@@ -177,3 +181,13 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+@media (max-width: 570px) {
+  ::v-deep(.p-datatable-sm) {
+    .p-column-title {
+      margin-right: 1.5rem;
+    }
+  }
+}
+</style>

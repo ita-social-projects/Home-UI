@@ -34,7 +34,7 @@
       <label class="dialog-item" for="adjoiningArea">Прибудинкової теріторії : </label>
       <InputText
         id="adjoiningArea"
-        placeholder="Прибудинкової теріторії"
+        placeholder="Прибудинкової території"
         v-model.trim="houseData.adjoiningArea"
         :class="{
           'p-invalid': v$.houseData.adjoiningArea.$error,
@@ -154,25 +154,25 @@
         }}</small>
       </p>
     </div>
-    <div class="buttons-container">
-      <Button
-        id="add-new-house-btn"
-        label="Зберегти зміни"
-        icon="pi pi-check"
-        autofocus
-        class="p-button-info"
-        type="submit"
-        :disabled="v$.houseData.$invalid"
-      />
-      <Button
-        id="cancel-btn"
-        label="Скасувати зміни"
-        icon="pi pi-times"
-        class="p-button-outlined p-button-info"
-        @click="cancelManagingModal"
-      />
-    </div>
   </form>
+  <div class="buttons-container">
+    <Button
+      id="add-new-house-btn"
+      label="Зберегти зміни"
+      icon="pi pi-check"
+      autofocus
+      class="p-button-info"
+      type="submit"
+      :disabled="v$.houseData.$invalid"
+    />
+    <Button
+      id="cancel-btn"
+      label="Скасувати зміни"
+      icon="pi pi-times"
+      class="p-button-outlined p-button-info"
+      @click="cancelManagingModal"
+    />
+  </div>
 </template>
 
 <script lang="ts">
@@ -299,7 +299,8 @@ input {
   @extend %error-message;
 }
 .buttons-container {
-  float: right;
+  display: flex;
+  justify-content: flex-end;
   .p-button-outlined {
     margin-left: 20px;
   }

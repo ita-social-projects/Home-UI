@@ -25,14 +25,18 @@
 
       <div class="poll-field">
         <span>Дата початку:</span>
-        <div>{{ poll.creationDate.toLocaleString('uk-UA') }}</div>
+        <div>
+          {{ poll.creationDate.toLocaleString('uk-UA', { year: 'numeric', month: 'numeric', day: 'numeric' }) }}
+        </div>
       </div>
 
       <div class="poll-field">
         <span>Дата завершення:</span>
-        <div>{{ poll.completionDate.toLocaleString('uk-UA') }}</div>
+        <div>
+          {{ poll.completionDate.toLocaleString('uk-UA', { year: 'numeric', month: 'numeric', day: 'numeric' }) }}
+        </div>
       </div>
-
+      
       <div class="poll-field">
         <span>Результати опитування:</span>
         <div>
@@ -67,7 +71,7 @@
 <script lang="ts">
 import { defineComponent, VueElement } from 'vue';
 import { mapGetters } from 'vuex';
-import { PollModelWithResults } from '@/poll/models/poll.model';
+import { PollModel } from '@/poll/models/poll.model';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 import { StoreModuleEnum } from '@/store/types';
@@ -88,7 +92,7 @@ export default defineComponent({
   },
   props: {
     poll: {
-      type: PollModelWithResults,
+      type: PollModel,
       required: true,
     },
   },
@@ -207,10 +211,12 @@ export default defineComponent({
   box-sizing: border-box;
 
   .header {
-    @include flex-center-all();
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
     padding: 0.8em;
     font-size: 1.3em;
-    height: 3.6em;
+    min-height: 3.6em;
     line-height: 1.3em;
     font-weight: bold;
     border-radius: 1rem 1rem 0 0;
@@ -218,9 +224,9 @@ export default defineComponent({
     box-sizing: border-box;
     .settings-btn {
       position: absolute;
-      right: 10px;
+      right: 5px;
       padding-left: 20px;
-      top: 5px;
+      top: 0px;
     }
   }
 
@@ -234,6 +240,7 @@ export default defineComponent({
 
       span {
         font-weight: 700;
+        margin-right: 2rem;
       }
     }
 

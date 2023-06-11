@@ -1,5 +1,6 @@
 import { GetterTree } from 'vuex';
 import { RootStateInterface } from '@/store/types';
+
 import { TariffStateInterface, Getters } from '@/finance/store/types';
 import { TariffModel } from '@/finance/models/tariff.model';
 

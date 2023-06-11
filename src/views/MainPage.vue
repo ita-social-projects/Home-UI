@@ -24,6 +24,7 @@ export default defineComponent({
   components: {
     Sidebar,
   },
+
   mounted() {
     const user: string | null = localStorage.getItem('user');
     if (user !== null && !this.userData) {
@@ -49,6 +50,18 @@ export default defineComponent({
 .content {
   padding: 2em;
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
+}
+
+@media (max-width: 768px) {
+  .main-page {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 570px) {
+  .content {
+    padding: 10px;
+  }
 }
 </style>

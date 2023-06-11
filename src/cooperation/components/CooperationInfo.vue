@@ -18,7 +18,7 @@
           <span>{{ cooperationInfo.iban }}</span>
         </div>
         <div v-if="cooperationInfo.contacts[0].email">
-          <span>Електрона адреса : </span>
+          <span>Електронна адреса : </span>
           <span>{{ cooperationInfo.contacts[0].email }}</span>
         </div>
         <div>
@@ -41,7 +41,7 @@
         <Dialog
           header="Редагувати ОСББ"
           v-model:visible="displayCooperationModal"
-          :style="{ width: '580px' }"
+          :style="{ width: '92%', 'max-width': '600px', margin: '0 auto' }"
           :modal="true"
           :closable="false"
           :dismissableMask="true"
@@ -142,6 +142,24 @@ export default defineComponent({
         }
       }
     }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
+  .edit_btn {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 510px) {
+  .container {
+    flex-direction: column;
+  }
+  .edit_btn {
+    align-self: flex-end;
   }
 }
 </style>

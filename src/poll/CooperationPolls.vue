@@ -14,7 +14,7 @@
     </div>
     <Dialog
       v-model:visible="displayCreatePollModal"
-      :style="{ width: '580px' }"
+      :style="{ width: '92%', 'max-width': '600px', margin: '0 auto' }"
       :modal="true"
       :closable="false"
       :dismissableMask="true"
@@ -56,10 +56,7 @@ export default defineComponent({
     };
   },
   mounted() {
-    this.$store.dispatch(
-      `${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_COOPERATION_POLLS_WITH_RESULTS}`,
-      this.cooperationId
-    );
+    this.$store.dispatch(`${StoreModuleEnum.pollsStore}/${PollsActionEnum.SET_COOPERATION_POLLS}`, this.cooperationId);
   },
   computed: {
     cooperationId(): number {
@@ -68,7 +65,7 @@ export default defineComponent({
       ];
     },
     cooperationPolls(): Array<PollModel> {
-      return this.$store.getters[`${StoreModuleEnum.pollsStore}/${PollsGettersEnum.getPollsWithResults}`];
+      return this.$store.getters[`${StoreModuleEnum.pollsStore}/${PollsGettersEnum.getPolls}`];
     },
     displayCreatePollModal(): boolean {
       return this.displayCreatePollForm;
@@ -79,9 +76,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .polls {
-  @include flex-custom(flex-start, flex-start, column);
   height: calc(100vh - 80px - 4em);
-  box-sizing: border-box;
+  padding: 1em;
 }
 
 .add-poll-btn-wrap {
@@ -90,12 +86,15 @@ export default defineComponent({
 
 .poll-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4em 2.5em;
-  width: 100%;
-  flex: 2;
-  padding: 0 1em 1em 0.4em;
-  box-sizing: border-box;
-  overflow: hidden scroll;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 3em 1.5em;
+  justify-content: center;
+  padding-bottom: 3em;
+}
+
+@media (min-width: 571px) {
+  .polls {
+    padding: 0;
+  }
 }
 </style>
