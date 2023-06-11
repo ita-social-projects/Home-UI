@@ -295,7 +295,7 @@ export default defineComponent({
       ownershipsInfo.value = [];
       ownershipsData.value.map((el: any) => {
         const currentContact = el?.owner.contacts.find(
-          (contact: UserContactInterface) => !!contact.main && contact.type === ContactTypeEnum.email
+          (contact: UserContactInterface) => !contact.main && contact.type === ContactTypeEnum.email
         );
 
         const newElem = {

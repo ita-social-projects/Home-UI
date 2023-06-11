@@ -48,6 +48,7 @@ import { TariffModel } from '../models/tariff.model';
 import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
 import { TariffActionEnum } from '../store/types';
 import { ApartmentModel } from '@/apartment/models/apartment.model';
+import { HouseModel } from '@/houses/models/house.model';
 
 export default defineComponent({
   components: { DataTable, Dropdown, Column, Breadcrumb },
@@ -70,43 +71,11 @@ export default defineComponent({
     const filteredList = ref();
     const apartmentsInTheHouse = ref([]);
 
-    const apartmentDataMocked = [
-      {
-        id: 3,
-        apartmentNumber: '5',
-        apartmentArea: 32,
-        ownerships: [{ id: 1, owner: ['AAA', 'CCC'], ownershipPart: '' }],
-      },
-      {
-        id: 2,
-        apartmentNumber: '12',
-        apartmentArea: 45,
-        ownerships: [{ id: 1, owner: ['BBB'], ownershipPart: '' }],
-      },
-      {
-        id: 2,
-        apartmentNumber: '12',
-        apartmentArea: 15,
-        ownerships: [{ id: 1, owner: ['AAA'], ownershipPart: '' }],
-      },
-      {
-        id: 3,
-        apartmentNumber: '12',
-        apartmentArea: 5,
-        ownerships: [{ id: 2, owner: ['AAA'], ownershipPart: '' }],
-      },
-      {
-        id: 4,
-        apartmentNumber: '12',
-        apartmentArea: 45,
-        ownerships: [{ id: 3, owner: ['AAA'], ownershipPart: '' }],
-      },
-    ];
     const tariffData = ref({
       tariffList: [
         {
           tariffId: 1,
-          houseId: 2,
+          houseId: 1,
           house: selectedHouse,
           tariffTitle: 'hhhh',
           tariffComment: 'hhh',
@@ -115,7 +84,7 @@ export default defineComponent({
         },
         {
           tariffId: 1,
-          houseId: 3,
+          houseId: 2,
           house: selectedHouse,
           tariffTitle: 'hhhh',
           tariffComment: 'hhh',
@@ -133,7 +102,7 @@ export default defineComponent({
         },
         {
           tariffId: 1,
-          houseId: 4,
+          houseId: 3,
           house: selectedHouse,
           tariffTitle: 'hhhh',
           tariffComment: 'hhh',
@@ -143,47 +112,50 @@ export default defineComponent({
       ],
     });
 
+    //TODO when backend appears, uncomment the code below and remove the same variaFble in this component
+    // const tariffData = ref({
+    //   tariffList: [] as TariffModel[],
+    // });
+    
     const cooperationId = computed(() => {
       return store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
     });
 
     const setHouses = async () => {
-      houses.value = [
-        { adress: 'Dnipro, Robocha str. 31', houseArea: 420, houseId: 2 },
-        { adress: 'Dnipro, Bohdana Hmelnitskogo str. 12', houseArea: 350, houseId: 3 },
-        { adress: 'Dnipro, Peremogi str. 23', houseArea: 270, houseId: 4 },
-      ];
+      // houses.value = [
+      //   { adress: 'Dnipro, Robocha str. 31', houseArea: 420, houseId: 2 },
+      //   { adress: 'Dnipro, Bohdana Hmelnitskogo str. 12', houseArea: 350, houseId: 3 },
+      //   { adress: 'Dnipro, Peremogi str. 23', houseArea: 270, houseId: 4 },
+      // ];
 
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
-      // const housesList = await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
-      // await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
-      // houses.value = housesList.reduce((acc: any, house: HouseModel) => {
-      //   return (acc = [
-      //     ...acc,
-      //     {
-      //       adress: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
-      //         ${house.address.houseBlock}, ${house.address.district}`,
-      //       houseArea: house.houseArea,
-      //       houseId: house.id,
-      //     },
-      //   ]);
-      // }, []);
+      const housesList = await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
+      await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
+      houses.value = housesList.reduce((acc: any, house: HouseModel) => {
+        return (acc = [
+          ...acc,
+          {
+            adress: `${house.address.city}, ${house.address.street}, ${house.address.houseNumber},
+              ${house.address.houseBlock}, ${house.address.district}`,
+            houseArea: house.houseArea,
+            houseId: house.id,
+          },
+        ]);
+      }, []);
     };
+
+    const setApartmentsByHouseId = async () => {
+      await store.dispatch(
+        `${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENTS}`,
+        selectedHouse.value
+      );
+    };
+
     const getApartmentsByHouseId = () => {
-      //TODO when backend appears, uncomment the code below and remove code under it
-      // async () => {
-      // await store.dispatch(`${StoreModuleEnum.apartmentsStore}/${ApartmentsActionsEnum.SET_APARTMENTS}`,
-      //  selectedHouse);
-      // return apartmentsInTheHouse.value =
-      //   store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`];
-
-      return apartmentDataMocked.filter((el) => el.id === selectedHouse.value);
+      apartmentsInTheHouse.value =
+        store.getters[`${StoreModuleEnum.apartmentsStore}/${ApartmentsGettersEnum.getApartmentsData}`];
+      return apartmentsInTheHouse.value;
     };
-
-    //TODO when backend appears, uncomment the code below and remove the same variable in this component
-    // const tariffData = ref({
-    //   tariffList: [] as TariffModel[],
-    // });
 
     const averageTariffHouse = (listToAverage: TariffModel[]) => {
       averageTariffForSelectedHouse.value =
@@ -196,29 +168,27 @@ export default defineComponent({
       // tariffData.value.tariffList = store.state.tariffStore.tariffList;
 
       filteredList.value = tariffData.value.tariffList.filter((el) => el.houseId === selectedHouse.value);
-
       averageTariffHouse(filteredList.value);
-    };
-    const spreadArray = (arr: (string | undefined)[]) => {
-      for (const value of arr.values()) {
-        return value;
-      }
     };
 
     const updatedApartmentData = () => {
-      const updatedApartment = apartmentDataMocked.map((apartment) => {
-        // const updatedApartment = apartmentsInTheHouse.value.map((apartment: ApartmentModel) => {
-        const getOwnershipsByApartment = apartment?.ownerships.map((el) => {
-          return spreadArray(el?.owner);
-        });
-        return {
-          personal_account: apartment.id,
-          apartment_number: apartment.apartmentNumber,
-          apartment_area: apartment.apartmentArea,
-          owner: spreadArray(getOwnershipsByApartment),
-          house_tariff: averageTariffForSelectedHouse,
-          accrued: accrued(averageTariffForSelectedHouse.value, apartment.apartmentArea),
-        };
+      const updatedApartment = apartmentsInTheHouse.value.map((apartment: ApartmentModel) => {
+        let owner = 'немає даних';
+        if (apartment.ownerships == undefined) {
+          return;
+        } else {
+          apartment?.ownerships.map((el) => {
+            owner = el.owner.firstName + ' ' + el.owner.lastName + ' ' + el.owner.middleName;
+          });
+          return {
+            personal_account: apartment.id,
+            apartment_number: apartment.apartmentNumber,
+            apartment_area: apartment.apartmentArea,
+            owner,
+            house_tariff: averageTariffForSelectedHouse,
+            accrued: accrued(averageTariffForSelectedHouse.value, apartment.apartmentArea),
+          };
+        }
       });
       apartmentList.value = updatedApartment;
     };
@@ -229,7 +199,9 @@ export default defineComponent({
 
     watch(
       () => selectedHouse.value,
-      () => setTariffList()
+      () => {
+        setTariffList(), setApartmentsByHouseId(), getApartmentsByHouseId();
+      }
     );
 
     watch(
@@ -238,7 +210,7 @@ export default defineComponent({
     );
 
     watch(
-      () => apartmentsInTheHouse,
+      () => apartmentsInTheHouse.value,
       () => updatedApartmentData()
     );
 
@@ -252,9 +224,7 @@ export default defineComponent({
       houses,
       apartmentList,
       tariffData,
-      apartmentDataMocked,
       selectedHouse,
-      getApartmentsByHouseId,
     };
   },
 });
