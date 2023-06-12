@@ -116,18 +116,12 @@ export default defineComponent({
     // const tariffData = ref({
     //   tariffList: [] as TariffModel[],
     // });
-    
+
     const cooperationId = computed(() => {
       return store.getters[`${StoreModuleEnum.cooperationStore}/${CooperationGettersEnum.getSelectedCooperationId}`];
     });
 
     const setHouses = async () => {
-      // houses.value = [
-      //   { adress: 'Dnipro, Robocha str. 31', houseArea: 420, houseId: 2 },
-      //   { adress: 'Dnipro, Bohdana Hmelnitskogo str. 12', houseArea: 350, houseId: 3 },
-      //   { adress: 'Dnipro, Peremogi str. 23', houseArea: 270, houseId: 4 },
-      // ];
-
       await store.dispatch(`${StoreModuleEnum.housesStore}/${HousesActionsEnum.SET_HOUSES}`, cooperationId.value);
       const housesList = await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
       await store.getters[`${StoreModuleEnum.housesStore}/${HousesGettersEnum.getHousesData}`];
@@ -259,6 +253,10 @@ export default defineComponent({
 
 ::v-deep(.p-datatable .p-datatable-tbody > tr > td) {
   text-align: center;
+}
+
+::v-deep(.p-datatable table){
+  width: 100vh;
 }
 
 .house-warning {
