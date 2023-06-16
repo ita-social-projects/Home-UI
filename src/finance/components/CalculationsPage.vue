@@ -22,12 +22,21 @@
       <p>Оберіть, будь ласка, будинок</p>
     </div>
     <DataTable :value="apartmentList" v-else>
-      <Column field="personal_account" style="max-width: 11rem" header="Особовий рахунок" />
+      <Column field="personal_account" header="Особовий рахунок" />
       <Column field="owner" style="min-width: 17rem" header="ПІП" />
       <Column field="apartment_number" style="min-width: 5rem" header="Приміщення" />
       <Column field="apartment_area" style="min-width: 5rem" header="Площа" />
       <Column field="house_tariff" style="min-width: 5rem" header="Тариф" />
-      <Column field="accrued" style="min-width: 5rem" header="Нараховано" />
+      <Column
+        field="accrued"
+        style="
+           {
+            min-width: 5rem;
+            word-wrap: break-word;
+          }
+        "
+        header="Нараховано"
+      />
     </DataTable>
   </div>
 </template>
@@ -255,8 +264,8 @@ export default defineComponent({
   text-align: center;
 }
 
-::v-deep(.p-datatable table){
-  width: 100vh;
+::v-deep(.p-datatable table) {
+  width: 50vh;
 }
 
 .house-warning {

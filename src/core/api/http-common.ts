@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { authToken, notValidRefreshToken, notValidToken } from '@/core/interceptors';
 
 export const HTTP = axios.create({
-  baseURL: 'http://localhost:8080/api/0',
+  baseURL: 'http://home-project-academy.herokuapp.com/api/0',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -10,7 +10,7 @@ export const HTTP = axios.create({
 });
 
 export const HTTP_AUTH = axios.create({
-  baseURL: 'http://localhost:9000/api/0/oauth2/server',
+  baseURL: 'http://home-oauth-server.herokuapp.com/api/0/oauth2/server',
   headers: {
     'Content-Type': 'application/json',
   },
