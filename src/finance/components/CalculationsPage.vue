@@ -53,9 +53,9 @@ import { StoreModuleEnum } from '@/store/types';
 import { HousesActionsEnum, HousesGettersEnum } from '@/houses/store/types';
 import { CooperationGettersEnum } from '@/cooperation/store/types';
 import { RoutesEnum } from '@/router/types';
-import { TariffModel } from '../models/tariff.model';
+import { TariffModel } from '@/finance/models/tariff.model';
 import { ApartmentsActionsEnum, ApartmentsGettersEnum } from '@/apartment/store/apartments/types';
-import { TariffActionEnum } from '../store/types';
+import { TariffActionEnum } from '@/finance/store/types';
 import { ApartmentModel } from '@/apartment/models/apartment.model';
 import { HouseModel } from '@/houses/models/house.model';
 
@@ -177,21 +177,18 @@ export default defineComponent({
     const updatedApartmentData = () => {
       const updatedApartment = apartmentsInTheHouse.value.map((apartment: ApartmentModel) => {
         let owner = 'немає даних';
-        if (apartment.ownerships == undefined) {
-          return;
-        } else {
-          apartment?.ownerships.map((el) => {
-            owner = el.owner.firstName + ' ' + el.owner.lastName + ' ' + el.owner.middleName;
-          });
-          return {
-            personal_account: apartment.id,
-            apartment_number: apartment.apartmentNumber,
-            apartment_area: apartment.apartmentArea,
-            owner,
-            house_tariff: averageTariffForSelectedHouse,
-            accrued: accrued(averageTariffForSelectedHouse.value, apartment.apartmentArea),
-          };
-        }
+        if (!apartment.ownerships) return;
+        apartment?.ownerships.map((el) => {
+          owner = el.owner.firstName + ' ' + el.owner.lastName + ' ' + el.owner.middleName;
+        });
+        return {
+          personal_account: apartment.id,
+          apartment_number: apartment.apartmentNumber,
+          apartment_area: apartment.apartmentArea,
+          owner,
+          house_tariff: averageTariffForSelectedHouse,
+          accrued: accrued(averageTariffForSelectedHouse.value, apartment.apartmentArea),
+        };
       });
       apartmentList.value = updatedApartment;
     };
