@@ -18,6 +18,7 @@ import ManageApartments from '@/apartment/ManageApartments.vue';
 import ApartmentInfo from '@/apartment/ApartmentInfo.vue';
 import TariffsManagement from '@/finance/components/TariffsManagement.vue';
 import TariffsCalculation from '@/finance/components/TariffsCalculation.vue';
+import CalculationsPage from '@/finance/components/CalculationsPage.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -133,6 +134,14 @@ const routes: RouteRecordRaw[] = [
         component: TariffsManagement,
         meta: {
           title: 'Управління тарифами',
+        },
+      },
+      {
+        path: RoutesEnum.CalculationsPage,
+        name: 'calculations-page',
+        component: CalculationsPage,
+        meta: {
+          title: 'Розрахунок',
         },
       },
     ],

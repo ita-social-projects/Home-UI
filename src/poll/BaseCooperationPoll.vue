@@ -36,6 +36,17 @@
           {{ poll.completionDate.toLocaleString('uk-UA', { year: 'numeric', month: 'numeric', day: 'numeric' }) }}
         </div>
       </div>
+
+      <div class="poll-field">
+        <span>Результати опитування:</span>
+        <div>
+          <i class="pi pi-thumbs-up" style="color: green"></i>&nbsp; {{ poll.results }} &nbsp; &nbsp;<i
+            class="pi pi-thumbs-down"
+            style="color: red"
+          ></i
+          >&nbsp; {{ poll.results }}
+        </div>
+      </div>
     </div>
   </article>
 

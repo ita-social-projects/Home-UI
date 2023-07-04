@@ -54,12 +54,12 @@ export default defineComponent({
       {
         id: 2,
         title: 'Нарахування',
-        description: 'Короткий опис функціоналу',
+        description: 'Нарахування тарифів по квартирам',
         items: [
           {
-            icon: 'pi pi-inbox',
+            icon: 'pi pi-table',
             label: 'Розрахунки',
-            to: RoutesEnum.TariffsCalculation,
+            to: RoutesEnum.CalculationsPage,
           },
         ],
       },
